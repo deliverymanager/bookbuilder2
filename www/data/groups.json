@@ -1,51 +1,47 @@
 {
-  "cdnUrl":"",
-  "lessonGroups":[
+  "cdnUrl": "https://s3-eu-west-1.amazonaws.com/engrlikeenglishb1/data/assets/",
+  "lessonGroups": [
     {
       "groupTitle": "Lessons 1-4",
-
-      "lessons":[
+      "lessons": [
         {
-          "title":"Lesson 1",
-          "lessonId":"lesson1"
+          "title": "Lesson 1",
+          "lessonId": "lesson1"
         },
         {
-          "title":"Lesson 2",
-          "lessonId":"lesson2"
+          "title": "Lesson 2",
+          "lessonId": "lesson2"
         },
         {
-          "title":"Lesson 3",
-          "lessonId":"lesson3"
+          "title": "Lesson 3",
+          "lessonId": "lesson3"
         },
         {
-          "title":"Lesson 4",
-          "lessonId":"lesson4"
+          "title": "Lesson 4",
+          "lessonId": "lesson4"
         }
       ]
-
     },
     {
       "groupTitle": "Lessons 5-8",
-
-      "lessons":[
+      "lessons": [
         {
-          "title":"Lesson 5",
-          "lessonId":"lesson5"
+          "title": "Lesson 5",
+          "lessonId": "lesson5"
         },
         {
-          "title":"Lesson 6",
-          "lessonId":"lesson6"
+          "title": "Lesson 6",
+          "lessonId": "lesson6"
         },
         {
-          "title":"Lesson 7",
-          "lessonId":"lesson7"
+          "title": "Lesson 7",
+          "lessonId": "lesson7"
         },
         {
-          "title":"Lesson 8",
-          "lessonId":"lesson8"
+          "title": "Lesson 8",
+          "lessonId": "lesson8"
         }
       ]
-
     }
   ]
 }
