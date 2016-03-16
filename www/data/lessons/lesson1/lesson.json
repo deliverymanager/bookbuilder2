@@ -1,0 +1,41 @@
+{
+  "lessonTitle" : "Lesson 1",
+  "title": "Family shopping",
+  "lessonMenu": [
+    {
+      "name":"Vocabulary 1",
+      "buttonFileName": "orange.png"
+    },
+    {
+      "name":"Vocabulary 2",
+      "buttonFileName": "orange.png"
+    },
+    {
+      "name":"Vocabulary 3",
+      "buttonFileName": "orange.png"
+    },
+    {
+      "name":"Grammar 1",
+      "buttonFileName": "yellow.png"
+    },
+    {
+      "name":"Grammar 2",
+      "buttonFileName": "yellow.png"
+    }
+  ],
+  "lessonButtons":[
+    {
+      "name":"Results",
+      "buttonFileName": "result.png"
+    },
+    {
+      "name":"Vocabulary",
+      "buttonFileName": "vocabulary.png"
+    },
+    {
+      "name":"Reading",
+      "buttonFileName": "reading.png"
+    }
+  ]
+
+}

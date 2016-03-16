@@ -46,6 +46,7 @@ angular.module("bookbuilder2")
 
           console.log("image Loaded");
 
+          //Image
           var bgimg = new createjs.Bitmap("img/" + "ben.png");
           bgimg.x = 0;
           bgimg.y = 0;
@@ -54,6 +55,7 @@ angular.module("bookbuilder2")
             $state.go('lessongroup');
           });
           stage.addChild(bgimg);
+
           createjs.Ticker.addEventListener("tick", handleTick);
 
           function handleTick() {

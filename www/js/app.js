@@ -49,12 +49,6 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
         templateUrl: "templates/groups/groups.html",
         controller: "GroupsController"
       })
-      .state('lessongroup', {
-        cache: false,
-        url: "/lessongroup",
-        templateUrl: "templates/lessongroup/lessongroup.html",
-        controller: "LessonGroupController"
-      })
       .state('lesson', {
         cache: false,
         url: "/lesson",
