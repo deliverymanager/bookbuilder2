@@ -88,6 +88,116 @@
           "lessonId": "lesson8"
         }
       ]
+    },
+    {
+      "groupTitle": "Lessons 13-16",
+      "groupButtonSprite": "first_menu_choose_lesson_13-16_sprite.json",
+      "lessons": [
+        {
+          "title": "Lesson 13",
+          "lessonId": "lesson5"
+        },
+        {
+          "title": "Lesson 14",
+          "lessonId": "lesson6"
+        },
+        {
+          "title": "Lesson 15",
+          "lessonId": "lesson7"
+        },
+        {
+          "title": "Lesson 16",
+          "lessonId": "lesson8"
+        }
+      ]
+    },
+    {
+      "groupTitle": "Lessons 13-16",
+      "groupButtonSprite": "first_menu_choose_lesson_13-16_sprite.json",
+      "lessons": [
+        {
+          "title": "Lesson 13",
+          "lessonId": "lesson5"
+        },
+        {
+          "title": "Lesson 14",
+          "lessonId": "lesson6"
+        },
+        {
+          "title": "Lesson 15",
+          "lessonId": "lesson7"
+        },
+        {
+          "title": "Lesson 16",
+          "lessonId": "lesson8"
+        }
+      ]
+    },
+    {
+      "groupTitle": "Lessons 13-16",
+      "groupButtonSprite": "first_menu_choose_lesson_13-16_sprite.json",
+      "lessons": [
+        {
+          "title": "Lesson 13",
+          "lessonId": "lesson5"
+        },
+        {
+          "title": "Lesson 14",
+          "lessonId": "lesson6"
+        },
+        {
+          "title": "Lesson 15",
+          "lessonId": "lesson7"
+        },
+        {
+          "title": "Lesson 16",
+          "lessonId": "lesson8"
+        }
+      ]
+    },
+    {
+      "groupTitle": "Lessons 13-16",
+      "groupButtonSprite": "first_menu_choose_lesson_13-16_sprite.json",
+      "lessons": [
+        {
+          "title": "Lesson 13",
+          "lessonId": "lesson5"
+        },
+        {
+          "title": "Lesson 14",
+          "lessonId": "lesson6"
+        },
+        {
+          "title": "Lesson 15",
+          "lessonId": "lesson7"
+        },
+        {
+          "title": "Lesson 16",
+          "lessonId": "lesson8"
+        }
+      ]
+    },
+    {
+      "groupTitle": "Lessons 13-16",
+      "groupButtonSprite": "first_menu_choose_lesson_13-16_sprite.json",
+      "lessons": [
+        {
+          "title": "Lesson 13",
+          "lessonId": "lesson5"
+        },
+        {
+          "title": "Lesson 14",
+          "lessonId": "lesson6"
+        },
+        {
+          "title": "Lesson 15",
+          "lessonId": "lesson7"
+        },
+        {
+          "title": "Lesson 16",
+          "lessonId": "lesson8"
+        }
+      ]
     }
   ]
 }
