@@ -5,14 +5,21 @@ angular.module("bookbuilder2")
 
 
     $timeout(function () {
-      var stage = new createjs.Stage(document.getElementById("canvas"));
+      var stage = new createjs.Stage(document.getElementById("lessonCanvas"));
+
       stage.canvas.width = window.innerWidth;
       stage.canvas.height = window.innerHeight;
+
+      //Fixed size for stage canvas
+      /*
+       stage.canvas.width = 1024;
+       stage.canvas.height = 600;
+       */
 
       stage.enableDOMEvents(true);
       createjs.Touch.enable(stage);
 
-      var ctx = document.getElementById("canvas").getContext("2d");
+      var ctx = document.getElementById("lessonCanvas").getContext("2d");
       ctx.mozImageSmoothingEnabled = false;
       ctx.webkitImageSmoothingEnabled = false;
       ctx.msImageSmoothingEnabled = false;
@@ -21,8 +28,8 @@ angular.module("bookbuilder2")
       stage.regX = stage.width / 2;
       stage.regY = stage.height / 2;
 
-      console.log("innerWidth", window.innerWidth);
-      console.log("innerHeight", window.innerHeight);
+      console.log("innerWidth: ", window.innerWidth);
+      console.log("innerHeight: ", window.innerHeight);
 
       createjs.MotionGuidePlugin.install();
       createjs.Touch.enable(stage);
@@ -31,33 +38,22 @@ angular.module("bookbuilder2")
 
       stage.mouseMoveOutside = false;
 
+      /*Image Loader*/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-        src: "img/" + "mike.png"
+        src: "data/assets/lesson_menu_background_image_2_blue.png"
       }));
       imageLoader.load();
 
       imageLoader.on("complete", function (r) {
 
-        console.log("image Loaded");
+        console.log("Image Loaded...");
 
-        var bgimg = new createjs.Bitmap("img/" + "mike.png");
-        bgimg.x = 0;
-        bgimg.y = 0;
-
-        bgimg.on("click", function () {
-          $state.go('groups');
-        });
-
-        stage.addChild(bgimg);
-        createjs.Ticker.addEventListener("tick", handleTick);
-
-        function handleTick() {
-          //Circle will move 10 units to the right.
-          bgimg.x += 10;
-          //Will cause the circle to wrap back
-          if (bgimg.x > stage.canvas.width) { bgimg.x = 0; }
-          stage.update();
-        }
+        /*Creating Bitmap Background for Canvas*/
+        var background = new createjs.Bitmap("data/assets/lesson_menu_background_image_2_blue.png");
+        background.x = 0;
+        background.y = 0;
+        stage.addChild(background);
+        stage.update();
 
       });
     }, 500);

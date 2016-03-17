@@ -20,3 +20,51 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
+
+.yellowBackground{
+  background: url("../data/assets/first_menu_background.png") no-repeat center top;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+}
+
+.purpleBackground{
+  background: url("../data/assets/background_image_1_purple.png") no-repeat center top;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+}
+
+#groupCanvas{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  padding-top: 0;
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  height: 100%;
+  background: transparent;
+  border: 3px solid orangered;
+}
+
+#lessonCanvas{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  top: 35px;
+  padding-top: 0;
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  height: 100%;
+  background: transparent;
+  border: 3px solid orangered;
+}

@@ -3,6 +3,7 @@
   "lessonGroups": [
     {
       "groupTitle": "Lessons 1-4",
+      "groupButtonSprite": "first_menu_choose_lesson_1-4_sprite.json",
       "lessons": [
         {
           "title": "Lesson 1",
@@ -24,6 +25,7 @@
     },
     {
       "groupTitle": "Lessons 5-8",
+      "groupButtonSprite": "first_menu_choose_lesson_5-8_sprite.json",
       "lessons": [
         {
           "title": "Lesson 5",
@@ -39,6 +41,50 @@
         },
         {
           "title": "Lesson 8",
+          "lessonId": "lesson8"
+        }
+      ]
+    },
+    {
+      "groupTitle": "Lessons 9-12",
+      "groupButtonSprite": "first_menu_choose_lesson_9-12_sprite.json",
+      "lessons": [
+        {
+          "title": "Lesson 9",
+          "lessonId": "lesson5"
+        },
+        {
+          "title": "Lesson 10",
+          "lessonId": "lesson6"
+        },
+        {
+          "title": "Lesson 11",
+          "lessonId": "lesson7"
+        },
+        {
+          "title": "Lesson 12",
+          "lessonId": "lesson8"
+        }
+      ]
+    },
+    {
+      "groupTitle": "Lessons 13-16",
+      "groupButtonSprite": "first_menu_choose_lesson_13-16_sprite.json",
+      "lessons": [
+        {
+          "title": "Lesson 13",
+          "lessonId": "lesson5"
+        },
+        {
+          "title": "Lesson 14",
+          "lessonId": "lesson6"
+        },
+        {
+          "title": "Lesson 15",
+          "lessonId": "lesson7"
+        },
+        {
+          "title": "Lesson 16",
           "lessonId": "lesson8"
         }
       ]
