@@ -68,7 +68,6 @@ angular.module("bookbuilder2")
 
 
         /* -------------------------------- EXIT BUTTON -------------------------------- */
-
         //Getting the element
         $http.get("data/assets/first_menu_exit_button_sprite.json")
           .success(function (response) {
@@ -118,6 +117,11 @@ angular.module("bookbuilder2")
 
 
         /* -------------------------------- LEFT SIDE GROUP MENU -------------------------------- */
+
+        /*Initializing savedGroupButtonsArray that will hold all the instances of buttons on the left sideMenu*/
+        var savedGroupButtonsArray = [];
+        var selectedGroupLessons =
+
         $http.get("data/groups.json")
           .success(function (response) {
 
@@ -165,8 +169,8 @@ angular.module("bookbuilder2")
             stage.addChild(groupsMenuContainer);
             stage.update();
 
-            /* -------------------- ADDING GROUP BUTTONS -------------------- */
 
+            /* ---------------------------------------- ADDING GROUP BUTTONS ---------------------------------------- */
 
             _.each(response.lessonGroups, function (lessonGroup) {
 
@@ -190,24 +194,39 @@ angular.module("bookbuilder2")
                     selected: 2,
                     tap: {
                       frames: [1],
-                      next: "normal"
+                      next: "selected"
                     }
                   };
 
                   var groupButtonSpriteSheet = new createjs.SpriteSheet(response);
                   var groupButton = new createjs.Sprite(groupButtonSpriteSheet, "normal");
 
-
                   /* -------------------------------- GROUP BUTTON EVENTS -------------------------------- */
                   groupButton.addEventListener("click", function (event) {
                     console.log("Click event on a group button !");
+
+                    _.each(savedGroupButtonsArray, function(button, key, list){
+                      savedGroupButtonsArray[key].groupButton.gotoAndPlay("normal");
+                    });
+                    stage.update();
+
                     groupButton.gotoAndPlay("tap");
+
                   });
+
 
                   var groupButtonContainer = new createjs.Container(groupButtonSpriteSheet);
 
                   //Adding groupButton
                   groupButtonContainer.addChild(groupButton);
+
+                  savedGroupButtonsArray.push({
+                    "groupButton": groupButton,
+                    "lessons":lessonGroup.lessons
+                  });
+
+                  //Printing savedGroupsArray
+                  console.info("savedGroupButtonsArray: ",savedGroupButtonsArray);
 
                   groupButtonContainer.scaleX = buttonsToContainerRatio > 1 ? 1 : buttonsToContainerRatio;
                   groupButtonContainer.scaleY = buttonsToContainerRatio > 1 ? 1 : buttonsToContainerRatio;
@@ -227,25 +246,49 @@ angular.module("bookbuilder2")
 
                   stage.update();
 
+                  /*Function for handling group selection and summons the appropriate lesson buttons on the right side menu*/
+
                 })
                 .error(function (error) {
                   console.log("Error on getting json data for group button...");
                 });
 
-            });
+            }); //end of _.each (groupLessons)
 
-
-          })//Success of get groups.json
+          })//Success of getting groups.json
           .error(function (error) {
             console.error("There was an error getting groups.json: ", error);
           });
 
 
-        /* -------------------------------- RESPONSIVENESS TESTING -------------------------------- */
-        /*stage.scaleX = 0.5;
-         stage.scaleY = 0.5;
-         stage.update();*/
-        /* -------------------------------- RESPONSIVENESS TESTING -------------------------------- */
+        /* -------------------------------- RIGHT SIDE GROUP MENU -------------------------------- */
+
+
+        /* ------------------ Creation of the right side menu container ------------------ */
+        //groupsMenuContainer CREATION
+        var lessonsMenuContainer = new createjs.Container();
+
+        /*It's important too define containers height before start calculating buttons*/
+        lessonsMenuContainer.width = 236;
+        lessonsMenuContainer.height = 480;
+
+        lessonsMenuContainer.regX = lessonsMenuContainer.width / 2;
+        lessonsMenuContainer.regY = lessonsMenuContainer.height / 2;
+        lessonsMenuContainer.x = stage.canvas.width / 1.25;
+        lessonsMenuContainer.y = stage.canvas.height / 1.96;
+
+        var graphics = new createjs.Graphics().beginFill("#ff0000").drawRect(0, 0, lessonsMenuContainer.width, lessonsMenuContainer.height);
+        var shape = new createjs.Shape(graphics);
+        shape.alpha = 0.5;
+
+        lessonsMenuContainer.addChild(shape);
+
+        stage.addChild(lessonsMenuContainer);
+        stage.update();
+
+
+        /*Populating side menu with the selected group lessons*/
+
 
       });//end of image on complete
     }, 500);//end of timeout
