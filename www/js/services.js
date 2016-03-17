@@ -18,6 +18,71 @@ angular.module("bookbuilder2")
       };
     }
   )
+  .factory("Download",
+    function DownloadFactory(_, $cordovaFile, $rootScope, $cordovaFileTransfer) {
+      return {
+        assets: function (assetsArray, cdnUrl, callback) {
+
+          var checkFileAndDownload = function (prefolder, folder, file, cdnUrl, callback) {
+
+            $cordovaFile.checkFile(window.cordova.file.dataDirectory + prefolder + "/" + folder + "/", file)
+              .then(function (success) {
+                callback(true);
+              }, function (error) {
+                $cordovaFileTransfer.download(cdnUrl + prefolder + "/" + folder + "/" + file, window.cordova.file.dataDirectory + prefolder + "/" + folder + "/" + file, {}, true)
+                  .then(function (result) {
+                    callback(true);
+                  }, function (error) {
+                    console.log(error);
+                    callback(false);
+                  }, function (progress) {
+                    //console.log(progress);
+                  });
+              });
+          };
+
+
+          if (window.cordova && window.cordova.platformId !== "browser") {
+
+            var seriesFunctions = [];
+
+            _.each(assetsArray, function (fileName, key, list) {
+
+              seriesFunctions.push(function (seriesCallback) {
+
+                checkFileAndDownload("data", "assets", fileName, cdnUrl, function (callbackResponse) {
+
+                  console.log(fileName);
+                  $rootScope.downloading++;
+
+                  if (callbackResponse) {
+                    seriesCallback(null);
+                  } else {
+                    seriesCallback(true);
+                  }
+                });
+              });
+            });
+
+            $rootScope.totalFiles = seriesFunctions.length;
+            console.log("$rootScope.totalFiles", $rootScope.totalFiles);
+            $rootScope.downloading = 0;
+
+            async.parallelLimit(seriesFunctions, 5, function (err, response) {
+              console.log("Downloading FINISHED!!!");
+              if (err) {
+                return callback(false);
+              } else {
+                return callback(true);
+              }
+            });
+          } else {
+            return callback(true);
+          }
+        }
+      };
+    }
+  )
   .factory('Toast', function ($rootScope, $timeout, $ionicLoading) {
     return {
       show: function (message, duration, position) {

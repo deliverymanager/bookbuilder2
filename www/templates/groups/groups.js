@@ -120,55 +120,32 @@ angular.module("bookbuilder2")
 
         /*Initializing savedGroupButtonsArray that will hold all the instances of buttons on the left sideMenu*/
         var savedGroupButtonsArray = [];
-        var selectedGroupLessons =
 
         $http.get("data/groups.json")
           .success(function (response) {
-
-
-            console.log("Response from getting data groups: ", response);
-
             //groupsMenuContainer CREATION
             var groupsMenuContainer = new createjs.Container();
-
             /*It's important too define containers height before start calculating buttons*/
             groupsMenuContainer.width = 236;
             groupsMenuContainer.height = 480;
-            var buttonHeight = 50;
-            console.log("buttonHeight: ", buttonHeight);
 
+            var buttonHeight = 50;
             /*Group Buttons sideMenu calculation*/
             var buttonsLength = response.lessonGroups.length;
-            console.log("How many group buttons: ", buttonsLength);
-
-            console.log("groupsMenuContainer height: ", groupsMenuContainer.height);
-            console.log("Group buttons total height: ", buttonsLength * buttonHeight);
-
             var buttonsToContainerRatio = groupsMenuContainer.height / (buttonsLength * buttonHeight);
 
-            console.info("buttons/container RATIO: ", buttonsToContainerRatio);
-
             //yPosition is the starting offset for sideMenu buttons
-            var yPosition = buttonsToContainerRatio > 1 ? (groupsMenuContainer.height - buttonsLength * buttonHeight)/2 : 0;
-            console.info("Calculated yPosition: ", yPosition);
-
-
-            groupsMenuContainer.regX = groupsMenuContainer.width / 2;
-            groupsMenuContainer.regY = groupsMenuContainer.height / 2;
-            groupsMenuContainer.x = stage.canvas.width / 4.4;
-            groupsMenuContainer.y = stage.canvas.height / 1.96;
-
-            var graphics = new createjs.Graphics().beginFill("#ff0000").drawRect(0, 0, groupsMenuContainer.width, groupsMenuContainer.height);
-            var shape = new createjs.Shape(graphics);
-            shape.alpha = 0.5;
-
-            groupsMenuContainer.addChild(shape);
-
-            /*groupsMenuContainer.shadow = new createjs.Shadow("red", 5, 5, 10);*/
-
+            var yPosition = buttonsToContainerRatio > 1 ? (groupsMenuContainer.height - buttonsLength * buttonHeight) / 2 : 0;
+            groupsMenuContainer.x = 110;
+            groupsMenuContainer.y = 170;
+            /*
+             var graphics = new createjs.Graphics().beginFill("#ff0000").drawRect(0, 0, groupsMenuContainer.width, groupsMenuContainer.height);
+             var shape = new createjs.Shape(graphics);
+             shape.alpha = 0.5;
+             groupsMenuContainer.addChild(shape);
+             */
             stage.addChild(groupsMenuContainer);
             stage.update();
-
 
             /* ---------------------------------------- ADDING GROUP BUTTONS ---------------------------------------- */
 
@@ -205,7 +182,7 @@ angular.module("bookbuilder2")
                   groupButton.addEventListener("click", function (event) {
                     console.log("Click event on a group button !");
 
-                    _.each(savedGroupButtonsArray, function(button, key, list){
+                    _.each(savedGroupButtonsArray, function (button, key, list) {
                       savedGroupButtonsArray[key].groupButton.gotoAndPlay("normal");
                     });
                     stage.update();
@@ -214,7 +191,6 @@ angular.module("bookbuilder2")
 
                   });
 
-
                   var groupButtonContainer = new createjs.Container(groupButtonSpriteSheet);
 
                   //Adding groupButton
@@ -222,32 +198,14 @@ angular.module("bookbuilder2")
 
                   savedGroupButtonsArray.push({
                     "groupButton": groupButton,
-                    "lessons":lessonGroup.lessons
+                    "lessons": lessonGroup.lessons
                   });
 
-                  //Printing savedGroupsArray
-                  console.info("savedGroupButtonsArray: ",savedGroupButtonsArray);
-
-                  groupButtonContainer.scaleX = buttonsToContainerRatio > 1 ? 1 : buttonsToContainerRatio;
-                  groupButtonContainer.scaleY = buttonsToContainerRatio > 1 ? 1 : buttonsToContainerRatio;
-                  groupButtonContainer.regX = groupButtonContainer.width / 2;
-                  groupButtonContainer.regY = 0;
-                  groupButtonContainer.x = groupsMenuContainer.width / 2;
                   groupButtonContainer.y = yPosition;
+                  groupButtonContainer.x = 120;
                   yPosition += buttonHeight;
-
-                  console.log("y position: ", yPosition);
-
                   groupsMenuContainer.addChild(groupButtonContainer);
-
-                  console.log("Button Container: ", groupButtonContainer.getBounds());
-                  console.log("Button : ", groupButton.getBounds());
-                  console.log("groupsMenuContainer information: ",groupsMenuContainer.getBounds());
-
                   stage.update();
-
-                  /*Function for handling group selection and summons the appropriate lesson buttons on the right side menu*/
-
                 })
                 .error(function (error) {
                   console.log("Error on getting json data for group button...");

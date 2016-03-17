@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-transitions'])
+angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-transitions', 'ngCordova'])
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -36,13 +36,15 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
       type: 'fade'
     });
 
-    $ionicConfigProvider.navBar.alignTitle('center');
-    $ionicConfigProvider.tabs.position('bottom');
-
-    //
     $ionicConfigProvider.views.swipeBackEnabled(false);
 
     $stateProvider
+      .state('preloading', {
+        cache: false,
+        url: "/preloading",
+        templateUrl: "templates/preloading/preloading.html",
+        controller: "PreloadingController"
+      })
       .state('groups', {
         cache: false,
         url: "/groups",
@@ -56,6 +58,6 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
         controller: "LessonController"
       });
 
-    $urlRouterProvider.otherwise('/groups');
+    $urlRouterProvider.otherwise('/preloading');
 
   });
