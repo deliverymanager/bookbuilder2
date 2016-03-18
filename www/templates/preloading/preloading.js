@@ -5,15 +5,14 @@ angular.module("bookbuilder2")
 
     $rootScope.showPopup = function () {
       $ionicLoading.hide();
-      $ionicPopup.alert({
+      var errorPopUp = $ionicPopup.alert({
         template: 'Please make sure your have a stable connection to the internet!',
         title: 'Connectivity Error!',
-        okType: 'button-dark',
+        okType: 'button-dark'
       });
-      $ionicLoading.then(function () {
-
+      errorPopUp.then(function () {
+        $state.go("groups");
       });
-      ionic.Platform.exitApp();
     };
 
     $ionicPlatform.ready(function () {
@@ -69,6 +68,14 @@ angular.module("bookbuilder2")
 
                                 $scope.deploy.update().then(function (res) {
                                   console.log('Ionic Deploy: Update Success! ', res);
+
+                                  $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "assets")
+                                    .then(function (success) {
+                                      console.log("assets directory deleted!");
+                                    }, function (error) {
+                                      console.log(error);
+                                    });
+
                                 }, function (err) {
                                   console.log('Ionic Deploy: Update error! ', err);
                                   $ionicLoading.hide();
@@ -87,6 +94,7 @@ angular.module("bookbuilder2")
                         $state.go("groups");
                       }
                     }, function (error) {
+                      console.log(error);
                       $state.go("groups");
                     });
                   } else {

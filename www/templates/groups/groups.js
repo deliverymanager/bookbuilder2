@@ -99,12 +99,13 @@ angular.module("bookbuilder2")
 
             var exitButtonSpriteSheet = new createjs.SpriteSheet(response);
             var exitButton = new createjs.Sprite(exitButtonSpriteSheet, "normal");
-
+            exitButton.visible = ionic.Platform.isAndroid();
 
             /* -------------------------------- ANIMATION EVENT -------------------------------- */
             exitButton.addEventListener("click", function (event) {
               console.log("Click event!");
               exitButton.gotoAndPlay("tap");
+              ionic.Platform.exitApp();
             });
 
             var exitButtonContainer = new createjs.Container(exitButtonSpriteSheet);
