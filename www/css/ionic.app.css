@@ -9742,11 +9742,3 @@ a.button {
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover; }
-
-#groupCanvas {
-  background: transparent;
-  border: 3px solid orangered; }
-
-#lessonCanvas {
-  background: transparent;
-  border: 3px solid orangered; }

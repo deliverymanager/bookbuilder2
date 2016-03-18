@@ -11,10 +11,10 @@ angular.module("bookbuilder2")
 
       stage.enableDOMEvents(true);
       var ctx = document.getElementById("groupCanvas").getContext("2d");
-      ctx.mozImageSmoothingEnabled = false;
-      ctx.webkitImageSmoothingEnabled = false;
-      ctx.msImageSmoothingEnabled = false;
-      ctx.imageSmoothingEnabled = false;
+      ctx.mozImageSmoothingEnabled = true;
+      ctx.webkitImageSmoothingEnabled = true;
+      ctx.msImageSmoothingEnabled = true;
+      ctx.imageSmoothingEnabled = true;
 
       stage.regX = stage.width / 2;
       stage.regY = stage.height / 2;
