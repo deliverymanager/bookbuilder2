@@ -119,7 +119,7 @@ angular.module("bookbuilder2")
             exitButtonContainer.scaleX = exitButtonContainer.scaleY = scale;
             exitButtonContainer.regX = exitButtonContainer.width / 2;
             exitButtonContainer.regY = exitButtonContainer.height / 2;
-            exitButtonContainer.x = -500 * scale;
+            exitButtonContainer.x = -1500 * scale;
             exitButtonContainer.y = backgroundPosition.y + (backgroundPosition.height / 1.07);
 
             stage.addChild(exitButtonContainer);
@@ -203,7 +203,7 @@ angular.module("bookbuilder2")
                     stage.update();
 
                     _.each(savedLessonButtonsArray, function (lesson, key, list) {
-                      createjs.Tween.get(lesson, {loop: false}).to({x: 500 * scale}, 200, createjs.Ease.getPowIn(2));
+                      createjs.Tween.get(lesson, {loop: false}).to({x: 1500 * scale}, 200, createjs.Ease.getPowIn(2));
                     });
 
                     var selectedGroup = _.findWhere(savedGroupButtonsArray, {"id": groupButton.id});
@@ -231,7 +231,7 @@ angular.module("bookbuilder2")
                   savedGroupButtonsArray.push(groupButton);
 
                   groupButtonContainer.y = yPosition;
-                  groupButtonContainer.x = -500 * scale;
+                  groupButtonContainer.x = -1500 * scale;
 
                   createjs.Tween.get(groupButtonContainer, {loop: false}).wait(yPosition)
                     .to({x: 120}, 1000, createjs.Ease.getPowIn(2));
@@ -348,7 +348,7 @@ angular.module("bookbuilder2")
                 lessonButtonContainer.regX = 0;
                 lessonButtonContainer.regY = 0;
                 lessonButtonContainer.y = yPosition;
-                lessonButtonContainer.x = 500 * scale;
+                lessonButtonContainer.x = 1500 * scale;
 
                 createjs.Tween.get(lessonButtonContainer, {loop: false}).wait(yPosition)
                   .to({x: 120}, 500, createjs.Ease.getPowIn(2));
