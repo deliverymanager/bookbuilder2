@@ -42,12 +42,50 @@ angular.module("bookbuilder2")
 
         console.log("Image Loaded...");
 
+
+        createjs.Ticker.addEventListener("tick", handleTick);
+
+        function handleTick() {
+          stage.update();
+        }
+
         /*Creating Bitmap Background for Canvas*/
         var background = new createjs.Bitmap("data/assets/lesson_menu_background_image_2_blue.png");
-        background.x = 0;
-        background.y = 0;
+
+
+
+        /*************** CALCULATING SCALING *********************/
+        var scaleY = stage.canvas.height / background.image.height;
+        scaleY = scaleY.toFixed(2);
+        var scaleX = stage.canvas.width / background.image.width;
+        scaleX = scaleX.toFixed(2);
+        var scale = 1;
+        if (scaleX >= scaleY) {
+          scale = scaleY;
+        } else {
+          scale = scaleX;
+        }
+        console.log("GENERAL SCALING FACTOR", scale);
+        //IN ORDER TO FIND THE CORRECT COORDINATES FIRST WE NEED TO ENTER THE EXACT SAME DIMENSIONS IN THE EMULATOR OF THE BACKGROUND IMAGE
+
+
+        background.scaleX = scale;
+        background.scaleY = scale;
+        background.regX = background.image.width / 2;
+        background.regY = background.image.height / 2;
+        background.x = stage.canvas.width / 2;
+        background.y = stage.canvas.height / 1.85;
         stage.addChild(background);
         stage.update();
+        var backgroundPosition = background.getTransformedBounds();
+        console.log("backgroundPosition", backgroundPosition);
+
+        /*** End of scaling calculation ***/
+
+        /*Before navigating the selected lessonID has been calculated and it's $rootScope.selectedLessonId*/
+
+        //Getting the right lesson json
+
 
       });
     }, 500);

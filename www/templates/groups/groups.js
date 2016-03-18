@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-  .controller("GroupsController", function ($scope, $ionicPlatform, $timeout, $http, _, $rootScope) {
+  .controller("GroupsController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope) {
 
     console.log("GroupsController loaded!");
 
@@ -64,6 +64,7 @@ angular.module("bookbuilder2")
         }
         console.log("GENERAL SCALING FACTOR", scale);
         //IN ORDER TO FIND THE CORRECT COORDINATES FIRST WE NEED TO ENTER THE EXACT SAME DIMENSIONS IN THE EMULATOR OF THE BACKGROUND IMAGE
+
 
 
         background.scaleX = scale;
@@ -199,7 +200,6 @@ angular.module("bookbuilder2")
                     });
 
                     //ADDING SELECTED GROUP'S LESSONS ON THE RIGHT SIDEMENU
-                    console.log("Selected group's lessons: ", selectedGroupLessons);
                     addSelectedGroupLessonsButtons();
 
                     stage.update();
@@ -248,23 +248,29 @@ angular.module("bookbuilder2")
         lessonsMenuContainer.width = 236;
         lessonsMenuContainer.height = 480;
 
-        lessonsMenuContainer.regX = lessonsMenuContainer.width / 2;
-        lessonsMenuContainer.regY = lessonsMenuContainer.height / 2;
-        lessonsMenuContainer.x = stage.canvas.width / 1.25;
-        lessonsMenuContainer.y = stage.canvas.height / 1.96;
+        lessonsMenuContainer.scaleX = lessonsMenuContainer.scaleY = scale;
+        lessonsMenuContainer.x = backgroundPosition.x + (backgroundPosition.width / 1.4);
+        lessonsMenuContainer.y = backgroundPosition.y + (backgroundPosition.height / 7);
 
-        var graphics = new createjs.Graphics().beginFill("#ff0000").drawRect(0, 0, lessonsMenuContainer.width, lessonsMenuContainer.height);
+        /*var graphics = new createjs.Graphics().beginFill("#ff0000").drawRect(0, 0, lessonsMenuContainer.width, lessonsMenuContainer.height);
         var shape = new createjs.Shape(graphics);
         shape.alpha = 0.5;
 
-        lessonsMenuContainer.addChild(shape);
+        lessonsMenuContainer.addChild(shape);*/
 
         stage.addChild(lessonsMenuContainer);
         stage.update();
 
 
-        /*FUNCTION FOR POPULATING RIGHT SIDE MENU*/
-        function addSelectedGroupLessonsButtons() {
+        function addSelectedGroupLessonsButtons(){
+          /* ----------------------------------------------------- START RIGHT SIDE MENU HANDLING-----------------------------------------------------*/
+
+          console.log("selectedGroupLessons: ",selectedGroupLessons);
+
+          /*Array for saving the lesson buttons references*/
+          var savedLessonButtonsArray = [];
+          var yPosition = 150;
+
 
           _.each(selectedGroupLessons, function (lesson, key, list) {
             var spriteResourceUrl = "data/assets/" + lesson.lessonButtonSprite;
@@ -272,7 +278,58 @@ angular.module("bookbuilder2")
             $http.get(spriteResourceUrl)
               .success(function (response) {
 
-                console.log(response);
+
+                //Reassigning images with the rest of resource
+                response.images[0] = "data/assets/" + response.images[0];
+
+                //Reassigning animations
+                response.animations = {
+                  normal: 0,
+                  onSelection: 1,
+                  selected: 2,
+                  tap: {
+                    frames: [1],
+                    next: "selected"
+                  }
+                };
+
+                var lessonButtonSpriteSheet = new createjs.SpriteSheet(response);
+                var lessonButton = new createjs.Sprite(lessonButtonSpriteSheet, "normal");
+
+                /* -------------------------------- CLICK ON LESSON BUTTON -------------------------------- */
+                lessonButton.addEventListener("click", function (event) {
+                  console.log("Click event on a lesson button !");
+
+                  _.each(savedLessonButtonsArray, function (button, key, list) {
+                    savedLessonButtonsArray[key].gotoAndPlay("normal");
+                  });
+
+                  stage.update();
+
+                  lessonButton.gotoAndPlay("tap");
+
+                  $rootScope.selectedLessonId = lessonButton.id;
+                  console.log($rootScope.selectedLessonId);
+                  $state.go("lesson");
+
+                });
+
+
+                var lessonButtonContainer = new createjs.Container(lessonButtonSpriteSheet);
+
+                //Adding groupButton
+                lessonButton.id = lesson.lessonId;
+                lessonButtonContainer.addChild(lessonButton);
+
+                savedLessonButtonsArray.push(lessonButton);
+
+                lessonButtonContainer.regX = 0;
+                lessonButtonContainer.regY = 0;
+                lessonButtonContainer.y = yPosition;
+                lessonButtonContainer.x = 120;
+                yPosition += 55;
+                lessonsMenuContainer.addChild(lessonButtonContainer);
+                stage.update();
 
               }).error(function (error) {
 
@@ -282,7 +339,10 @@ angular.module("bookbuilder2")
 
           });//end of _.each(selectedGroupLessons)
 
-        }
+          /* ----------------------------------------------------- END RIGHT SIDE MENU HANDLING-----------------------------------------------------*/
+
+        }//End of function
+
 
       });//end of image on complete
     }, 500);//end of timeout
