@@ -9744,33 +9744,9 @@ a.button {
   background-size: cover; }
 
 #groupCanvas {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  padding-top: 0;
-  padding-left: 0;
-  padding-right: 0;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  height: 100%;
   background: transparent;
   border: 3px solid orangered; }
 
 #lessonCanvas {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 10px;
-  top: 35px;
-  padding-top: 0;
-  padding-left: 0;
-  padding-right: 0;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  height: 100%;
   background: transparent;
   border: 3px solid orangered; }

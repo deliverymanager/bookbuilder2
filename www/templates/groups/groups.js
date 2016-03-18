@@ -66,7 +66,6 @@ angular.module("bookbuilder2")
         //IN ORDER TO FIND THE CORRECT COORDINATES FIRST WE NEED TO ENTER THE EXACT SAME DIMENSIONS IN THE EMULATOR OF THE BACKGROUND IMAGE
 
 
-
         background.scaleX = scale;
         background.scaleY = scale;
         background.regX = background.image.width / 2;
@@ -75,7 +74,8 @@ angular.module("bookbuilder2")
         background.y = stage.canvas.height / 2;
         stage.addChild(background);
         stage.update();
-
+        var backgroundPosition = background.getTransformedBounds();
+        console.log("backgroundPosition", backgroundPosition);
 
         /* -------------------------------- EXIT BUTTON -------------------------------- */
         //Getting the element
@@ -108,12 +108,15 @@ angular.module("bookbuilder2")
             });
 
             var exitButtonContainer = new createjs.Container(exitButtonSpriteSheet);
+
             exitButtonContainer.addChild(exitButton);
 
+            //We need to scale every container!
+            exitButtonContainer.scaleX = exitButtonContainer.scaleY = scale;
             exitButtonContainer.regX = exitButtonContainer.width / 2;
             exitButtonContainer.regY = exitButtonContainer.height / 2;
-            exitButtonContainer.x = stage.canvas.width / 2;
-            exitButtonContainer.y = stage.canvas.height / 1.14;
+            exitButtonContainer.x = backgroundPosition.x + (backgroundPosition.width / 2);
+            exitButtonContainer.y = backgroundPosition.y + (backgroundPosition.height / 1.07);
 
             stage.addChild(exitButtonContainer);
             stage.update();
@@ -140,20 +143,13 @@ angular.module("bookbuilder2")
             groupsMenuContainer.width = 236;
             groupsMenuContainer.height = 480;
 
+            groupsMenuContainer.scaleX = groupsMenuContainer.scaleY = scale;
+
             var buttonHeight = 50;
-            /*Group Buttons sideMenu calculation*/
-            var buttonsLength = response.lessonGroups.length;
-            var buttonsToContainerRatio = groupsMenuContainer.height / (buttonsLength * buttonHeight);
+            var yPosition = 40;
 
-            //yPosition is the starting offset for sideMenu buttons
-            var yPosition = buttonsToContainerRatio > 1 ? (groupsMenuContainer.height - buttonsLength * buttonHeight) / 2 : 0;
-            groupsMenuContainer.x = 110;
-            groupsMenuContainer.y = 170;
-
-            var graphics = new createjs.Graphics().beginFill("#ff0000").drawRect(0, 0, groupsMenuContainer.width, groupsMenuContainer.height);
-            var shape = new createjs.Shape(graphics);
-            shape.alpha = 0.5;
-            groupsMenuContainer.addChild(shape);
+            groupsMenuContainer.x = backgroundPosition.x + (backgroundPosition.width / 17);
+            groupsMenuContainer.y = backgroundPosition.y + (backgroundPosition.height / 7);
 
             stage.addChild(groupsMenuContainer);
             stage.update();
