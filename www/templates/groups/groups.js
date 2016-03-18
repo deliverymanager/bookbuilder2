@@ -120,6 +120,7 @@ angular.module("bookbuilder2")
 
         /*Initializing savedGroupButtonsArray that will hold all the instances of buttons on the left sideMenu*/
         var savedGroupButtonsArray = [];
+        var selectedGroupLessons = [];
 
         $http.get("data/groups.json")
           .success(function (response) {
@@ -163,7 +164,6 @@ angular.module("bookbuilder2")
                   //Reassigning images with the rest of resource
                   response.images[0] = "data/assets/" + response.images[0];
 
-
                   //Reassigning animations
                   response.animations = {
                     normal: 0,
@@ -178,28 +178,39 @@ angular.module("bookbuilder2")
                   var groupButtonSpriteSheet = new createjs.SpriteSheet(response);
                   var groupButton = new createjs.Sprite(groupButtonSpriteSheet, "normal");
 
-                  /* -------------------------------- GROUP BUTTON EVENTS -------------------------------- */
+                  /* -------------------------------- CLICK ON BUTTON -------------------------------- */
                   groupButton.addEventListener("click", function (event) {
                     console.log("Click event on a group button !");
 
+                    var selectedGroup = _.findWhere(savedGroupButtonsArray, {"id" : groupButton.id});
+                    selectedGroupLessons = selectedGroup.lessons;
+                    console.log("selectedGroupLessons: ", selectedGroupLessons);
+
+                    //Making all buttons appear in normal state again
                     _.each(savedGroupButtonsArray, function (button, key, list) {
-                      savedGroupButtonsArray[key].groupButton.gotoAndPlay("normal");
+                      savedGroupButtonsArray[key].gotoAndPlay("normal");
                     });
+
+                    //ADDING SELECTED GROUP'S LESSONS ON THE RIGHT SIDEMENU
+                    console.log("Selected group's lessons: ", selectedGroupLessons);
+                    addSelectedGroupLessonsButtons();
+
                     stage.update();
 
                     groupButton.gotoAndPlay("tap");
 
                   });
 
+
                   var groupButtonContainer = new createjs.Container(groupButtonSpriteSheet);
 
                   //Adding groupButton
                   groupButtonContainer.addChild(groupButton);
 
-                  savedGroupButtonsArray.push({
-                    "groupButton": groupButton,
-                    "lessons": lessonGroup.lessons
-                  });
+                  /*Application keeps in a custom array the groupButton object and lessons for every group*/
+
+                  groupButton.lessons = lessonGroup.lessons;
+                  savedGroupButtonsArray.push(groupButton);
 
                   groupButtonContainer.y = yPosition;
                   groupButtonContainer.x = 120;
@@ -245,8 +256,26 @@ angular.module("bookbuilder2")
         stage.update();
 
 
-        /*Populating side menu with the selected group lessons*/
+        /*FUNCTION FOR POPULATING RIGHT SIDE MENU*/
+        function addSelectedGroupLessonsButtons(){
 
+          _.each(selectedGroupLessons, function(lesson, key, list){
+             var spriteResourceUrl = "data/assets/"+lesson.lessonButtonSprite;
+
+            $http.get(spriteResourceUrl)
+              .success(function(response){
+
+                console.log(response);
+
+            }).error(function(error){
+
+              console.log("There was an error on getting lesson json");
+
+            })
+
+          });//end of _.each(selectedGroupLessons)
+
+        }
 
       });//end of image on complete
     }, 500);//end of timeout
