@@ -8,22 +8,22 @@
         {
           "title": "Lesson 1",
           "lessonButtonSprite": "first_menu_lesson_1_button_sprite.json",
-          "lessonId": "lesson1"
+          "id": "lesson1"
         },
         {
           "title": "Lesson 2",
           "lessonButtonSprite": "first_menu_lesson_2_button_sprite.json",
-          "lessonId": "lesson2"
+          "id": "lesson2"
         },
         {
           "title": "Lesson 3",
           "lessonButtonSprite": "first_menu_lesson_3_button_sprite.json",
-          "lessonId": "lesson3"
+          "id": "lesson3"
         },
         {
           "title": "Lesson 4",
           "lessonButtonSprite": "first_menu_lesson_4_button_sprite.json",
-          "lessonId": "lesson4"
+          "id": "lesson4"
         }
       ]
     },
@@ -34,22 +34,22 @@
         {
           "title": "Lesson 5",
           "lessonButtonSprite": "first_menu_lesson_5_button_sprite.json",
-          "lessonId": "lesson5"
+          "id": "lesson5"
         },
         {
           "title": "Lesson 6",
           "lessonButtonSprite": "first_menu_lesson_6_button_sprite.json",
-          "lessonId": "lesson6"
+          "id": "lesson6"
         },
         {
           "title": "Lesson 7",
           "lessonButtonSprite": "first_menu_lesson_7_button_sprite.json",
-          "lessonId": "lesson7"
+          "id": "lesson7"
         },
         {
           "title": "Lesson 8",
           "lessonButtonSprite": "first_menu_lesson_8_button_sprite.json",
-          "lessonId": "lesson8"
+          "id": "lesson8"
         }
       ]
     },
@@ -60,22 +60,22 @@
         {
           "title": "Lesson 9",
           "lessonButtonSprite": "first_menu_lesson_9_button_sprite.json",
-          "lessonId": "lesson9"
+          "id": "lesson9"
         },
         {
           "title": "Lesson 10",
           "lessonButtonSprite": "first_menu_lesson_10_button_sprite.json",
-          "lessonId": "lesson10"
+          "id": "lesson10"
         },
         {
           "title": "Lesson 11",
           "lessonButtonSprite": "first_menu_lesson_11_button_sprite.json",
-          "lessonId": "lesson11"
+          "id": "lesson11"
         },
         {
           "title": "Lesson 12",
           "lessonButtonSprite": "first_menu_lesson_12_button_sprite.json",
-          "lessonId": "lesson12"
+          "id": "lesson12"
         }
       ]
     },
@@ -86,22 +86,22 @@
         {
           "title": "Lesson 13",
           "lessonButtonSprite": "first_menu_lesson_13_button_sprite.json",
-          "lessonId": "lesson13"
+          "id": "lesson13"
         },
         {
           "title": "Lesson 14",
           "lessonButtonSprite": "first_menu_lesson_14_button_sprite.json",
-          "lessonId": "lesson14"
+          "id": "lesson14"
         },
         {
           "title": "Lesson 15",
           "lessonButtonSprite": "first_menu_lesson_15_button_sprite.json",
-          "lessonId": "lesson15"
+          "id": "lesson15"
         },
         {
           "title": "Lesson 16",
           "lessonButtonSprite": "first_menu_lesson_16_button_sprite.json",
-          "lessonId": "lesson16"
+          "id": "lesson16"
         }
       ]
     },
@@ -112,22 +112,22 @@
         {
           "title": "Lesson 17",
           "lessonButtonSprite": "first_menu_lesson_17_button_sprite.json",
-          "lessonId": "lesson17"
+          "id": "lesson17"
         },
         {
           "title": "Lesson 18",
           "lessonButtonSprite": "first_menu_lesson_18_button_sprite.json",
-          "lessonId": "lesson18"
+          "id": "lesson18"
         },
         {
           "title": "Lesson 19",
           "lessonButtonSprite": "first_menu_lesson_19_button_sprite.json",
-          "lessonId": "lesson19"
+          "id": "lesson19"
         },
         {
           "title": "Lesson 20",
           "lessonButtonSprite": "first_menu_lesson_20_button_sprite.json",
-          "lessonId": "lesson20"
+          "id": "lesson20"
         }
       ]
     },
@@ -138,22 +138,22 @@
         {
           "title": "Lesson 21",
           "lessonButtonSprite": "first_menu_lesson_21_button_sprite.json",
-          "lessonId": "lesson21"
+          "id": "lesson21"
         },
         {
           "title": "Lesson 22",
           "lessonButtonSprite": "first_menu_lesson_22_button_sprite.json",
-          "lessonId": "lesson22"
+          "id": "lesson22"
         },
         {
           "title": "Lesson 23",
           "lessonButtonSprite": "first_menu_lesson_23_button_sprite.json",
-          "lessonId": "lesson23"
+          "id": "lesson23"
         },
         {
           "title": "Lesson 24",
           "lessonButtonSprite": "first_menu_lesson_24_button_sprite.json",
-          "lessonId": "lesson24"
+          "id": "lesson24"
         }
       ]
     },
@@ -164,22 +164,22 @@
         {
           "title": "Lesson 25",
           "lessonButtonSprite": "first_menu_lesson_25_button_sprite.json",
-          "lessonId": "lesson25"
+          "id": "lesson25"
         },
         {
           "title": "Lesson 26",
           "lessonButtonSprite": "first_menu_lesson_26_button_sprite.json",
-          "lessonId": "lesson26"
+          "id": "lesson26"
         },
         {
           "title": "Lesson 27",
           "lessonButtonSprite": "first_menu_lesson_27_button_sprite.json",
-          "lessonId": "lesson27"
+          "id": "lesson27"
         },
         {
           "title": "Lesson 28",
           "lessonButtonSprite": "first_menu_lesson_28_button_sprite.json",
-          "lessonId": "lesson28"
+          "id": "lesson28"
         }
       ]
     },
@@ -190,22 +190,22 @@
         {
           "title": "Lesson 29",
           "lessonButtonSprite": "first_menu_lesson_29_button_sprite.json",
-          "lessonId": "lesson29"
+          "id": "lesson29"
         },
         {
           "title": "Lesson 30",
           "lessonButtonSprite": "first_menu_lesson_30_button_sprite.json",
-          "lessonId": "lesson30"
+          "id": "lesson30"
         },
         {
           "title": "Lesson 31",
           "lessonButtonSprite": "first_menu_lesson_31_button_sprite.json",
-          "lessonId": "lesson31"
+          "id": "lesson31"
         },
         {
           "title": "Lesson 32",
           "lessonButtonSprite": "first_menu_lesson_32_button_sprite.json",
-          "lessonId": "lesson32"
+          "id": "lesson32"
         }
       ]
     },
@@ -216,22 +216,22 @@
         {
           "title": "Lesson 33",
           "lessonButtonSprite": "first_menu_lesson_33_button_sprite.json",
-          "lessonId": "lesson33"
+          "id": "lesson33"
         },
         {
           "title": "Lesson 34",
           "lessonButtonSprite": "first_menu_lesson_34_button_sprite.json",
-          "lessonId": "lesson34"
+          "id": "lesson34"
         },
         {
           "title": "Lesson 35",
           "lessonButtonSprite": "first_menu_lesson_35_button_sprite.json",
-          "lessonId": "lesson35"
+          "id": "lesson35"
         },
         {
           "title": "Lesson 36",
           "lessonButtonSprite": "first_menu_lesson_36_button_sprite.json",
-          "lessonId": "lesson36"
+          "id": "lesson36"
         }
       ]
     }

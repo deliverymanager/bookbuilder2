@@ -20,6 +20,7 @@ angular.module("bookbuilder2")
 
       if (window.cordova && window.cordova.platformId !== "browser") {
 
+        console.log("hide SplashScreen");
         navigator.splashscreen.hide();
 
         window.cordova.getAppVersion.getPackageName(function (name) {

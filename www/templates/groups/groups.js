@@ -27,6 +27,9 @@ angular.module("bookbuilder2")
       // enabled mouse over / out events
       stage.enableMouseOver(0);
 
+      createjs.Ticker.setFPS(60);
+      createjs.Ticker.addEventListener("tick", stage);
+
       stage.mouseMoveOutside = false;
 
       /*Image Loader*/
@@ -40,13 +43,6 @@ angular.module("bookbuilder2")
       imageLoader.on("complete", function (r) {
 
         console.log("Image Loaded...");
-
-
-        createjs.Ticker.addEventListener("tick", handleTick);
-
-        function handleTick() {
-          stage.update();
-        }
 
         /*Creating Bitmap Background for Canvas*/
         var background = new createjs.Bitmap("data/assets/first_menu_background_b1.png");
@@ -64,7 +60,6 @@ angular.module("bookbuilder2")
         }
         console.log("GENERAL SCALING FACTOR", scale);
         //IN ORDER TO FIND THE CORRECT COORDINATES FIRST WE NEED TO ENTER THE EXACT SAME DIMENSIONS IN THE EMULATOR OF THE BACKGROUND IMAGE
-
 
 
         background.scaleX = scale;
@@ -100,12 +95,19 @@ angular.module("bookbuilder2")
 
             var exitButtonSpriteSheet = new createjs.SpriteSheet(response);
             var exitButton = new createjs.Sprite(exitButtonSpriteSheet, "normal");
-            exitButton.visible = ionic.Platform.isAndroid();
+            //exitButton.visible = ionic.Platform.isAndroid();
 
             /* -------------------------------- ANIMATION EVENT -------------------------------- */
-            exitButton.addEventListener("click", function (event) {
-              console.log("Click event!");
-              exitButton.gotoAndPlay("tap");
+
+            exitButton.addEventListener("mousedown", function (event) {
+              console.log("mousedown event on a button !");
+              exitButton.gotoAndPlay("pressed");
+              stage.update();
+            });
+
+            exitButton.addEventListener("pressup", function (event) {
+              console.log("pressup event!");
+              exitButton.gotoAndPlay("normal");
               ionic.Platform.exitApp();
             });
 
@@ -117,7 +119,7 @@ angular.module("bookbuilder2")
             exitButtonContainer.scaleX = exitButtonContainer.scaleY = scale;
             exitButtonContainer.regX = exitButtonContainer.width / 2;
             exitButtonContainer.regY = exitButtonContainer.height / 2;
-            exitButtonContainer.x = backgroundPosition.x + (backgroundPosition.width / 2);
+            exitButtonContainer.x = -500 * scale;
             exitButtonContainer.y = backgroundPosition.y + (backgroundPosition.height / 1.07);
 
             stage.addChild(exitButtonContainer);
@@ -135,6 +137,7 @@ angular.module("bookbuilder2")
 
         /*Initializing savedGroupButtonsArray that will hold all the instances of buttons on the left sideMenu*/
         var savedGroupButtonsArray = [];
+        var savedLessonButtonsArray = [];
         var selectedGroupLessons = [];
 
         $http.get("data/groups.json")
@@ -187,25 +190,33 @@ angular.module("bookbuilder2")
                   var groupButton = new createjs.Sprite(groupButtonSpriteSheet, "normal");
 
                   /* -------------------------------- CLICK ON BUTTON -------------------------------- */
-                  groupButton.addEventListener("click", function (event) {
-                    console.log("Click event on a group button !");
+
+                  groupButton.addEventListener("mousedown", function (event) {
+                    console.log("mousedown event on a button !");
+                    groupButton.gotoAndPlay("onSelection");
+                    stage.update();
+                  });
+
+                  groupButton.addEventListener("pressup", function (event) {
+                    console.log("pressup event on a group button !");
+                    groupButton.gotoAndPlay("selected");
+                    stage.update();
+
+                    _.each(savedLessonButtonsArray, function (lesson, key, list) {
+                      createjs.Tween.get(lesson, {loop: false}).to({x: 500 * scale}, 200, createjs.Ease.getPowIn(2));
+                    });
 
                     var selectedGroup = _.findWhere(savedGroupButtonsArray, {"id": groupButton.id});
                     selectedGroupLessons = selectedGroup.lessons;
-                    console.log("selectedGroupLessons: ", selectedGroupLessons);
 
                     //Making all buttons appear in normal state again
                     _.each(savedGroupButtonsArray, function (button, key, list) {
-                      savedGroupButtonsArray[key].gotoAndPlay("normal");
+                      if (button.id !== groupButton.id) {
+                        savedGroupButtonsArray[key].gotoAndPlay("normal");
+                      }
                     });
 
-                    //ADDING SELECTED GROUP'S LESSONS ON THE RIGHT SIDEMENU
                     addSelectedGroupLessonsButtons();
-
-                    stage.update();
-
-                    groupButton.gotoAndPlay("tap");
-
                   });
 
 
@@ -220,7 +231,11 @@ angular.module("bookbuilder2")
                   savedGroupButtonsArray.push(groupButton);
 
                   groupButtonContainer.y = yPosition;
-                  groupButtonContainer.x = 120;
+                  groupButtonContainer.x = -500 * scale;
+
+                  createjs.Tween.get(groupButtonContainer, {loop: false}).wait(yPosition)
+                    .to({x: 120}, 1000, createjs.Ease.getPowIn(2));
+
                   yPosition += buttonHeight;
                   groupsMenuContainer.addChild(groupButtonContainer);
                   stage.update();
@@ -253,22 +268,22 @@ angular.module("bookbuilder2")
         lessonsMenuContainer.y = backgroundPosition.y + (backgroundPosition.height / 7);
 
         /*var graphics = new createjs.Graphics().beginFill("#ff0000").drawRect(0, 0, lessonsMenuContainer.width, lessonsMenuContainer.height);
-        var shape = new createjs.Shape(graphics);
-        shape.alpha = 0.5;
+         var shape = new createjs.Shape(graphics);
+         shape.alpha = 0.5;
 
-        lessonsMenuContainer.addChild(shape);*/
+         lessonsMenuContainer.addChild(shape);*/
 
         stage.addChild(lessonsMenuContainer);
         stage.update();
 
 
-        function addSelectedGroupLessonsButtons(){
-          /* ----------------------------------------------------- START RIGHT SIDE MENU HANDLING-----------------------------------------------------*/
+        function addSelectedGroupLessonsButtons() {
 
-          console.log("selectedGroupLessons: ",selectedGroupLessons);
+
+
+          console.log("selectedGroupLessons: ", selectedGroupLessons);
 
           /*Array for saving the lesson buttons references*/
-          var savedLessonButtonsArray = [];
           var yPosition = 150;
 
 
@@ -297,16 +312,24 @@ angular.module("bookbuilder2")
                 var lessonButton = new createjs.Sprite(lessonButtonSpriteSheet, "normal");
 
                 /* -------------------------------- CLICK ON LESSON BUTTON -------------------------------- */
-                lessonButton.addEventListener("click", function (event) {
-                  console.log("Click event on a lesson button !");
-
-                  _.each(savedLessonButtonsArray, function (button, key, list) {
-                    savedLessonButtonsArray[key].gotoAndPlay("normal");
-                  });
-
+                lessonButton.addEventListener("mousedown", function (event) {
+                  console.log("mousedown event on a lesson button!");
+                  lessonButton.gotoAndPlay("onSelection");
                   stage.update();
+                });
+
+                lessonButton.addEventListener("pressup", function (event) {
+                  console.log("pressup event on a lesson button !");
 
                   lessonButton.gotoAndPlay("tap");
+                  stage.update();
+
+                  _.each(savedLessonButtonsArray, function (button, key, list) {
+                    if (button.id !== lessonButton.id) {
+                      savedLessonButtonsArray[key].gotoAndPlay("normal");
+                    }
+                  });
+                  stage.update();
 
                   $rootScope.selectedLessonId = lessonButton.id;
                   console.log($rootScope.selectedLessonId);
@@ -318,15 +341,18 @@ angular.module("bookbuilder2")
                 var lessonButtonContainer = new createjs.Container(lessonButtonSpriteSheet);
 
                 //Adding groupButton
-                lessonButton.id = lesson.lessonId;
+                lessonButton.id = lesson.id;
                 lessonButtonContainer.addChild(lessonButton);
-
                 savedLessonButtonsArray.push(lessonButton);
 
                 lessonButtonContainer.regX = 0;
                 lessonButtonContainer.regY = 0;
                 lessonButtonContainer.y = yPosition;
-                lessonButtonContainer.x = 120;
+                lessonButtonContainer.x = 500 * scale;
+
+                createjs.Tween.get(lessonButtonContainer, {loop: false}).wait(yPosition)
+                  .to({x: 120}, 500, createjs.Ease.getPowIn(2));
+
                 yPosition += 55;
                 lessonsMenuContainer.addChild(lessonButtonContainer);
                 stage.update();
