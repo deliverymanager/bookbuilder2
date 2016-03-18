@@ -1,24 +1,15 @@
 angular.module("bookbuilder2")
-  .controller("GroupsController", function ($scope, $ionicPlatform, $timeout, $http, _) {
+  .controller("GroupsController", function ($scope, $ionicPlatform, $timeout, $http, _, $rootScope) {
 
     console.log("GroupsController loaded!");
 
-
     $timeout(function () {
+
       var stage = new createjs.Stage(document.getElementById("groupCanvas"));
-
-      stage.canvas.width = window.innerWidth;
       stage.canvas.height = window.innerHeight;
-
-      //Fixed size for stage canvas
-      /*
-       stage.canvas.width = 1024;
-       stage.canvas.height = 600;
-       */
+      stage.canvas.width = window.innerWidth;
 
       stage.enableDOMEvents(true);
-      createjs.Touch.enable(stage);
-
       var ctx = document.getElementById("groupCanvas").getContext("2d");
       ctx.mozImageSmoothingEnabled = false;
       ctx.webkitImageSmoothingEnabled = false;
@@ -59,6 +50,25 @@ angular.module("bookbuilder2")
 
         /*Creating Bitmap Background for Canvas*/
         var background = new createjs.Bitmap("data/assets/first_menu_background_b1.png");
+
+        /****   CALCULATING SCALING ****/
+        var scaleY = stage.canvas.height / background.image.height;
+        scaleY = scaleY.toFixed(2);
+        var scaleX = stage.canvas.width / background.image.width;
+        scaleX = scaleX.toFixed(2);
+        var scale = 1;
+        if (scaleX >= scaleY) {
+          scale = scaleY;
+        } else {
+          scale = scaleX;
+        }
+        console.log("GENERAL SCALING FACTOR", scale);
+        //IN ORDER TO FIND THE CORRECT COORDINATES FIRST WE NEED TO ENTER THE EXACT SAME DIMENSIONS IN THE EMULATOR OF THE BACKGROUND IMAGE
+
+
+
+        background.scaleX = scale;
+        background.scaleY = scale;
         background.regX = background.image.width / 2;
         background.regY = background.image.height / 2;
         background.x = stage.canvas.width / 2;
@@ -139,12 +149,12 @@ angular.module("bookbuilder2")
             var yPosition = buttonsToContainerRatio > 1 ? (groupsMenuContainer.height - buttonsLength * buttonHeight) / 2 : 0;
             groupsMenuContainer.x = 110;
             groupsMenuContainer.y = 170;
-            /*
-             var graphics = new createjs.Graphics().beginFill("#ff0000").drawRect(0, 0, groupsMenuContainer.width, groupsMenuContainer.height);
-             var shape = new createjs.Shape(graphics);
-             shape.alpha = 0.5;
-             groupsMenuContainer.addChild(shape);
-             */
+
+            var graphics = new createjs.Graphics().beginFill("#ff0000").drawRect(0, 0, groupsMenuContainer.width, groupsMenuContainer.height);
+            var shape = new createjs.Shape(graphics);
+            shape.alpha = 0.5;
+            groupsMenuContainer.addChild(shape);
+
             stage.addChild(groupsMenuContainer);
             stage.update();
 
@@ -182,7 +192,7 @@ angular.module("bookbuilder2")
                   groupButton.addEventListener("click", function (event) {
                     console.log("Click event on a group button !");
 
-                    var selectedGroup = _.findWhere(savedGroupButtonsArray, {"id" : groupButton.id});
+                    var selectedGroup = _.findWhere(savedGroupButtonsArray, {"id": groupButton.id});
                     selectedGroupLessons = selectedGroup.lessons;
                     console.log("selectedGroupLessons: ", selectedGroupLessons);
 
@@ -257,17 +267,17 @@ angular.module("bookbuilder2")
 
 
         /*FUNCTION FOR POPULATING RIGHT SIDE MENU*/
-        function addSelectedGroupLessonsButtons(){
+        function addSelectedGroupLessonsButtons() {
 
-          _.each(selectedGroupLessons, function(lesson, key, list){
-             var spriteResourceUrl = "data/assets/"+lesson.lessonButtonSprite;
+          _.each(selectedGroupLessons, function (lesson, key, list) {
+            var spriteResourceUrl = "data/assets/" + lesson.lessonButtonSprite;
 
             $http.get(spriteResourceUrl)
-              .success(function(response){
+              .success(function (response) {
 
                 console.log(response);
 
-            }).error(function(error){
+              }).error(function (error) {
 
               console.log("There was an error on getting lesson json");
 

@@ -13,8 +13,6 @@ angular.module("bookbuilder2")
     };
 
     $ionicPlatform.ready(function () {
-
-
       console.log("bookbuilder2 ready!");
 
       if (window.cordova && window.cordova.platformId !== "browser") {
@@ -37,7 +35,6 @@ angular.module("bookbuilder2")
                   } else {
                     $rootScope.showPopup();
                   }
-
                 });
               });
             });

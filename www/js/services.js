@@ -104,17 +104,6 @@ angular.module("bookbuilder2")
             duration: duration
           });
 
-          /*
-           var myPopup = $ionicPopup.show({
-           title: message,
-           scope: $rootScope,
-           buttons: []
-           });
-
-           $timeout(function() {
-           myPopup.close();
-           }, duration);
-           */
         } else if (window.cordova) {
           window.plugins.toast.show(message, duration, position);
         }

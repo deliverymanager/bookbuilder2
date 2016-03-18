@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <ion-view>
   <ion-content scroll="false" has-bouncing="false" class="padding" style="background-color: white; height: 100%;">
-    <div class="row row-center" style="text-align: center; height: 100%">
-      <div class="col col-center">
+    <div class="row row-center" style="text-align: center; height: 50%">
+      <div class="col col-bottom">
         <ion-spinner icon="lines" align="center"></ion-spinner>
       </div>
     </div>
-    <div class="row row-center" style="text-align: center;  height: 100%">
-      <div class="col col-center">
+    <div class="row row-center" style="text-align: center;  height: 50%">
+      <div class="col col-top">
         <strong>LOADING {{downloading && totalFiles ? ((downloading / totalFiles) * 100).toFixed() : 0}} %</strong>
       </div>
     </div>

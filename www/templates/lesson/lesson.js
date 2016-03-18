@@ -10,12 +10,6 @@ angular.module("bookbuilder2")
       stage.canvas.width = window.innerWidth;
       stage.canvas.height = window.innerHeight;
 
-      //Fixed size for stage canvas
-      /*
-       stage.canvas.width = 1024;
-       stage.canvas.height = 600;
-       */
-
       stage.enableDOMEvents(true);
       createjs.Touch.enable(stage);
 
