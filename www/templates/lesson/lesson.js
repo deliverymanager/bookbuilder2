@@ -149,12 +149,6 @@ angular.module("bookbuilder2")
             stage.update();
 
 
-
-
-
-            /*----------------------------------------READING BUTTON-----------------------------------------*/
-
-
             $http.get("data/assets/"+response.lessonButtons.readingButtonFileName)
               .success(function(response){
 
@@ -180,37 +174,18 @@ angular.module("bookbuilder2")
 
                 });
 
-                var readingButtonContainer = new createjs.Container(readingButtonSpriteSheet);
-
-                readingButtonContainer.addChild(readingButton);
-
                 //We need to scale every container!
-                readingButtonContainer.scaleX = readingButtonContainer.scaleY = scale;
-                readingButtonContainer.regX = readingButtonContainer.width / 2;
-                readingButtonContainer.regY = readingButtonContainer.height / 2;
-                readingButtonContainer.x = backgroundPosition.x + (backgroundPosition.width / 2);
-                readingButtonContainer.y = backgroundPosition.y + (backgroundPosition.height / 1.5);
+                readingButton.scaleX = readingButton.scaleY = scale;
+                readingButton.x = backgroundPosition.x + (backgroundPosition.width / 2);
+                readingButton.y = backgroundPosition.y + (backgroundPosition.height / 1.5);
 
-
-                var graphics = new createjs.Graphics().beginFill("#ffb000").drawRect(0, 0, readingButtonContainer.width, readingButtonContainer.height);
-                var shape = new createjs.Shape(graphics);
-                shape.alpha = 0.5;
-                readingButtonContainer.addChild(shape);
-
-
-                stage.addChild(readingButtonContainer);
+                stage.addChild(readingButton);
                 stage.update();
 
               })
               .error(function(error){
                 console.error("Error on getting json for reading button...",error);
               });
-
-
-
-
-
-
 
             /*-----------------------------------------VOCABULARY BUTTON----------------------------------------*/
 

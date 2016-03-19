@@ -207,25 +207,17 @@ angular.module("bookbuilder2")
                     addSelectedGroupLessonsButtons();
                   });
 
-
-                  var groupButtonContainer = new createjs.Container(groupButtonSpriteSheet);
-
-                  //Adding groupButton
-                  groupButtonContainer.addChild(groupButton);
-
-                  /*Application keeps in a custom array the groupButton object and lessons for every group*/
-
                   groupButton.lessons = lessonGroup.lessons;
                   savedGroupButtonsArray.push(groupButton);
 
-                  groupButtonContainer.y = yPosition;
-                  groupButtonContainer.x = -1500 * scale;
+                  groupButton.y = yPosition;
+                  groupButton.x = -1500 * scale;
 
-                  createjs.Tween.get(groupButtonContainer, {loop: false}).wait(yPosition)
+                  createjs.Tween.get(groupButton, {loop: false}).wait(yPosition)
                     .to({x: 120}, 1000, createjs.Ease.getPowIn(2));
 
                   yPosition += buttonHeight;
-                  groupsMenuContainer.addChild(groupButtonContainer);
+                  groupsMenuContainer.addChild(groupButton);
                   stage.update();
                 })
                 .error(function (error) {
@@ -324,24 +316,17 @@ angular.module("bookbuilder2")
 
                 });
 
-
-                var lessonButtonContainer = new createjs.Container(lessonButtonSpriteSheet);
-
-                //Adding groupButton
                 lessonButton.id = lesson.id;
-                lessonButtonContainer.addChild(lessonButton);
                 savedLessonButtonsArray.push(lessonButton);
 
-                lessonButtonContainer.regX = 0;
-                lessonButtonContainer.regY = 0;
-                lessonButtonContainer.y = yPosition;
-                lessonButtonContainer.x = 1500 * scale;
+                lessonButton.y = yPosition;
+                lessonButton.x = 1500 * scale;
 
-                createjs.Tween.get(lessonButtonContainer, {loop: false}).wait(yPosition)
+                createjs.Tween.get(lessonButton, {loop: false}).wait(yPosition)
                   .to({x: 120}, 500, createjs.Ease.getPowIn(2));
 
                 yPosition += 55;
-                lessonsMenuContainer.addChild(lessonButtonContainer);
+                lessonsMenuContainer.addChild(lessonButton);
                 stage.update();
 
               }).error(function (error) {
