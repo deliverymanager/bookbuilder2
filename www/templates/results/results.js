@@ -74,18 +74,10 @@ angular.module("bookbuilder2")
         console.log("backgroundPosition", backgroundPosition);
 
 
-
-
-
-
-
-
-
-
         /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
 
         $http.get("data/assets/head_menu_button_sprite.json")
-          .success(function(response){
+          .success(function (response) {
 
             //Reassigning images with the rest of resource
             response.images[0] = "data/assets/" + response.images[0];
@@ -103,9 +95,6 @@ angular.module("bookbuilder2")
             var menuButtonSpriteSheet = new createjs.SpriteSheet(response);
             var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
 
-            /* ------------------------ EVENT ------------------------ */
-
-
             menuButton.addEventListener("mousedown", function (event) {
               console.log("mousedown event on a button !");
               menuButton.gotoAndPlay("pressed");
@@ -118,29 +107,15 @@ angular.module("bookbuilder2")
               $state.go("results");
             });
 
+            menuButton.scaleX = menuButton.scaleY = scale;
+            menuButton.x = 0;
+            menuButton.y = -menuButton.getTransformedBounds().height / 5;
 
-            var menuButtonContainer = new createjs.Container(menuButtonSpriteSheet);
-
-            menuButtonContainer.addChild(menuButton);
-
-            //We need to scale every container!
-            menuButtonContainer.scaleX = menuButtonContainer.scaleY = scale;
-            menuButtonContainer.regX = menuButtonContainer.getTransformedBounds().width / 2;
-            menuButtonContainer.regY = menuButtonContainer.getTransformedBounds().height / 2;
-            /*menuButtonContainer.x = backgroundPosition.x + (backgroundPosition.width / 6.5);
-            menuButtonContainer.y = backgroundPosition.y + (backgroundPosition.height / 80);*/
-            menuButtonContainer.x = 0;
-            menuButtonContainer.y = -menuButtonContainer.height / 10;
-
-            stage.addChild(menuButtonContainer);
+            stage.addChild(menuButton);
             stage.update();
-
-            console.log("menuButtonContainer.height: ",menuButtonContainer.getTransformedBounds());
-
-
           })
-          .error(function(error){
-            console.error("Error on getting json for results button...",error);
+          .error(function (error) {
+            console.error("Error on getting json for results button...", error);
           });//end of get menu button
 
 
