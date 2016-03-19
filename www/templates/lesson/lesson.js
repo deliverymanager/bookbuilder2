@@ -1,35 +1,26 @@
 angular.module("bookbuilder2")
-  .controller("LessonController", function ($scope, $ionicPlatform, $timeout, $rootScope, $http, $state) {
+  .controller("LessonController", function ($scope, $ionicPlatform, $timeout, $rootScope, $http, $state, $ionicHistory) {
 
     console.log("LessonController loaded!");
 
 
     $timeout(function () {
       var stage = new createjs.Stage(document.getElementById("lessonCanvas"));
-
-      stage.canvas.width = window.innerWidth;
-      stage.canvas.height = window.innerHeight;
-
-      stage.enableDOMEvents(true);
-      createjs.Touch.enable(stage);
-
       var ctx = document.getElementById("lessonCanvas").getContext("2d");
-      ctx.mozImageSmoothingEnabled = false;
-      ctx.webkitImageSmoothingEnabled = false;
-      ctx.msImageSmoothingEnabled = false;
-      ctx.imageSmoothingEnabled = false;
-
+      stage.canvas.height = window.innerHeight;
+      stage.canvas.width = window.innerWidth;
+      stage.enableDOMEvents(true);
+      ctx.mozImageSmoothingEnabled = true;
+      ctx.webkitImageSmoothingEnabled = true;
+      ctx.msImageSmoothingEnabled = true;
+      ctx.imageSmoothingEnabled = true;
       stage.regX = stage.width / 2;
       stage.regY = stage.height / 2;
-
-      console.log("innerWidth: ", window.innerWidth);
-      console.log("innerHeight: ", window.innerHeight);
-
       createjs.MotionGuidePlugin.install();
       createjs.Touch.enable(stage);
-      // enabled mouse over / out events
       stage.enableMouseOver(0);
-
+      createjs.Ticker.setFPS(60);
+      createjs.Ticker.addEventListener("tick", stage);
       stage.mouseMoveOutside = false;
 
       /*Image Loader*/
@@ -40,18 +31,8 @@ angular.module("bookbuilder2")
 
       imageLoader.on("complete", function (r) {
 
-        console.log("Image Loaded...");
-
-
-        createjs.Ticker.addEventListener("tick", handleTick);
-
-        function handleTick() {
-          stage.update();
-        }
-
         /*Creating Bitmap Background for Canvas*/
         var background = new createjs.Bitmap("data/assets/lesson_menu_background_image_2_blue.png");
-
 
         /*************** CALCULATING SCALING *********************/
         var scaleY = stage.canvas.height / background.image.height;
@@ -81,7 +62,49 @@ angular.module("bookbuilder2")
 
         /*** End of scaling calculation ***/
 
-        /*Before navigating the selected lessonID has been calculated and it's $rootScope.selectedLessonId*/
+        /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
+
+        $http.get("data/assets/head_menu_button_sprite.json")
+          .success(function (response) {
+
+            //Reassigning images with the rest of resource
+            response.images[0] = "data/assets/" + response.images[0];
+
+            //Reassigning animations
+            response.animations = {
+              normal: 0,
+              pressed: 1,
+              tap: {
+                frames: [1],
+                next: "normal"
+              }
+            };
+
+            var menuButtonSpriteSheet = new createjs.SpriteSheet(response);
+            var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
+
+            menuButton.addEventListener("mousedown", function (event) {
+              console.log("mousedown event on a button !");
+              menuButton.gotoAndPlay("pressed");
+              stage.update();
+            });
+
+            menuButton.addEventListener("pressup", function (event) {
+              console.log("pressup event!");
+              menuButton.gotoAndPlay("normal");
+              $ionicHistory.goBack();
+            });
+
+            menuButton.scaleX = menuButton.scaleY = scale;
+            menuButton.x = 0;
+            menuButton.y = -menuButton.getTransformedBounds().height / 5;
+
+            stage.addChild(menuButton);
+            stage.update();
+          })
+          .error(function (error) {
+            console.error("Error on getting json for results button...", error);
+          });//end of get menu button
 
 
         /*-------------------------------------------ACTIVITIES MENU CONTAINER--------------------------------------*/
@@ -108,19 +131,19 @@ angular.module("bookbuilder2")
 
 
         /*********************************************** GETTING JSON FOR THE SELECTED LESSON ***********************************************/
-        //Getting the right lesson json
+          //Getting the right lesson json
         console.log($rootScope.selectedLessonId);
-        var lessonResourceUrl = 'data/lessons/'+$rootScope.selectedLessonId+"/lesson.json";
+        var lessonResourceUrl = 'data/lessons/' + $rootScope.selectedLessonId + "/lesson.json";
         console.log("URL for selected lesson's json: ", lessonResourceUrl);
 
         $http.get(lessonResourceUrl)
-          .success(function(response){
+          .success(function (response) {
             console.log("Success on getting json for the selected lesson! ", response);
 
 
             /*---------------------------------------LESSON TITLE CREATION------------------------------------------*/
 
-            console.log("Lesson Title: ",response.lessonTitle);
+            console.log("Lesson Title: ", response.lessonTitle);
             var lessonTitle = new createjs.Text(response.lessonTitle, "33px Arial", "white");
 
             background.scaleX = background.scaleY = scale;
@@ -135,7 +158,7 @@ angular.module("bookbuilder2")
 
             /*-------------------------------------TITLE CREATION--------------------------------------------*/
 
-            console.log("Lesson Title: ",response.title);
+            console.log("Lesson Title: ", response.title);
             var title = new createjs.Text(response.title, "25px Arial", "white");
 
             background.scaleX = background.scaleY = scale;
@@ -147,8 +170,8 @@ angular.module("bookbuilder2")
             stage.update();
 
 
-            $http.get("data/assets/"+response.lessonButtons.readingButtonFileName)
-              .success(function(response){
+            $http.get("data/assets/" + response.lessonButtons.readingButtonFileName)
+              .success(function (response) {
 
                 //Reassigning images with the rest of resource
                 response.images[0] = "data/assets/" + response.images[0];
@@ -181,14 +204,14 @@ angular.module("bookbuilder2")
                 stage.update();
 
               })
-              .error(function(error){
-                console.error("Error on getting json for reading button...",error);
+              .error(function (error) {
+                console.error("Error on getting json for reading button...", error);
               });
 
             /*-----------------------------------------VOCABULARY BUTTON----------------------------------------*/
 
-            $http.get("data/assets/"+response.lessonButtons.vocabularyButtonFileName)
-              .success(function(response){
+            $http.get("data/assets/" + response.lessonButtons.vocabularyButtonFileName)
+              .success(function (response) {
 
                 //Reassigning images with the rest of resource
                 response.images[0] = "data/assets/" + response.images[0];
@@ -204,7 +227,7 @@ angular.module("bookbuilder2")
                   }
                 };
 
-                console.log("Response for vocabulary button: ",response);
+                console.log("Response for vocabulary button: ", response);
 
                 var vocabularyButtonSpriteSheet = new createjs.SpriteSheet(response);
                 var vocabularyButton = new createjs.Sprite(vocabularyButtonSpriteSheet, "normal");
@@ -236,22 +259,15 @@ angular.module("bookbuilder2")
                 stage.update();
 
               })
-              .error(function(error){
-                console.error("Error on getting json for vocabulary button...",error);
+              .error(function (error) {
+                console.error("Error on getting json for vocabulary button...", error);
               });
-
-
-
-
-
-
-
 
 
             /*-----------------------------------------RESULTS BUTTON----------------------------------------*/
 
-            $http.get("data/assets/"+response.lessonButtons.resultsButtonFileName)
-              .success(function(response){
+            $http.get("data/assets/" + response.lessonButtons.resultsButtonFileName)
+              .success(function (response) {
 
                 //Reassigning images with the rest of resource
                 response.images[0] = "data/assets/" + response.images[0];
@@ -307,10 +323,9 @@ angular.module("bookbuilder2")
                 stage.update();
 
               })
-              .error(function(error){
-                console.error("Error on getting json for results button...",error);
+              .error(function (error) {
+                console.error("Error on getting json for results button...", error);
               });
-
 
 
             /*-------------------------------- Populating Activities Menu -----------------------------------*/
@@ -394,9 +409,8 @@ angular.module("bookbuilder2")
             });//end of _.each(selectedGroupLessons)
 
 
-
           })
-          .error(function(error){
+          .error(function (error) {
             console.error("Error on getting json for the selected lesson...", error);
           });
 

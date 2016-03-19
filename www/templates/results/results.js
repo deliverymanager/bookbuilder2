@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-  .controller("ResultsController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope) {
+  .controller("ResultsController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory) {
 
     console.log("ResultsController loaded!");
 
@@ -71,8 +71,6 @@ angular.module("bookbuilder2")
         stage.addChild(background);
         stage.update();
         var backgroundPosition = background.getTransformedBounds();
-        console.log("backgroundPosition", backgroundPosition);
-
 
         /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
 
@@ -104,7 +102,7 @@ angular.module("bookbuilder2")
             menuButton.addEventListener("pressup", function (event) {
               console.log("pressup event!");
               menuButton.gotoAndPlay("normal");
-              $state.go("results");
+              $ionicHistory.goBack();
             });
 
             menuButton.scaleX = menuButton.scaleY = scale;
