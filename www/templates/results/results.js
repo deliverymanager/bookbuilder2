@@ -67,7 +67,7 @@ angular.module("bookbuilder2")
         background.regX = background.image.width / 2;
         background.regY = background.image.height / 2;
         background.x = stage.canvas.width / 2;
-        background.y = stage.canvas.height / 1.85;
+        background.y = stage.canvas.height / 2;
         stage.addChild(background);
         stage.update();
         var backgroundPosition = background.getTransformedBounds();

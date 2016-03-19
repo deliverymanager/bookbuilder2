@@ -53,7 +53,6 @@ angular.module("bookbuilder2")
         var background = new createjs.Bitmap("data/assets/lesson_menu_background_image_2_blue.png");
 
 
-
         /*************** CALCULATING SCALING *********************/
         var scaleY = stage.canvas.height / background.image.height;
         scaleY = scaleY.toFixed(2);
@@ -74,7 +73,7 @@ angular.module("bookbuilder2")
         background.regX = background.image.width / 2;
         background.regY = background.image.height / 2;
         background.x = stage.canvas.width / 2;
-        background.y = stage.canvas.height / 1.85;
+        background.y = stage.canvas.height / 2;
         stage.addChild(background);
         stage.update();
         var backgroundPosition = background.getTransformedBounds();
@@ -93,7 +92,6 @@ angular.module("bookbuilder2")
 
         activitiesMenuContainer.scaleX = activitiesMenuContainer.scaleY = scale;
 
-        var buttonHeight = 50;
         var yPosition = 40;
 
         activitiesMenuContainer.x = backgroundPosition.x + (backgroundPosition.width / 24);
@@ -141,7 +139,7 @@ angular.module("bookbuilder2")
             var title = new createjs.Text(response.title, "25px Arial", "white");
 
             background.scaleX = background.scaleY = scale;
-            title.x = backgroundPosition.x + (backgroundPosition.width / 3);
+            title.x = backgroundPosition.x + (backgroundPosition.width / 2.9);
             title.y = backgroundPosition.y + (backgroundPosition.height / 13);
             title.textBaseline = "alphabetic";
 
