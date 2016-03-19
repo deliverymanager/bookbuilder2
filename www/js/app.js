@@ -56,6 +56,12 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
         url: "/lesson",
         templateUrl: "templates/lesson/lesson.html",
         controller: "LessonController"
+      })
+      .state('results', {
+        cache: false,
+        url: "/results",
+        templateUrl: "templates/results/results.html",
+        controller: "ResultsController"
       });
 
     $urlRouterProvider.otherwise('/preloading');

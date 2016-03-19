@@ -47,7 +47,7 @@ angular.module("bookbuilder2")
         /*Creating Bitmap Background for Canvas*/
         var background = new createjs.Bitmap("data/assets/first_menu_background_b1.png");
 
-        /****   CALCULATING SCALING ****/
+        /**** CALCULATING SCALING ****/
         var scaleY = stage.canvas.height / background.image.height;
         scaleY = scaleY.toFixed(2);
         var scaleX = stage.canvas.width / background.image.width;
@@ -122,8 +122,13 @@ angular.module("bookbuilder2")
             exitButtonContainer.x = -1500 * scale;
             exitButtonContainer.y = backgroundPosition.y + (backgroundPosition.height / 1.07);
 
+            console.log("exitButtonContainer.regX before stage update: ",exitButtonContainer.regX);
+
             stage.addChild(exitButtonContainer);
             stage.update();
+
+            console.log("exitButtonContainer.regX after stage update: ",exitButtonContainer.regX);
+
 
           })
           .error(function (error) {
