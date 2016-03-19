@@ -108,6 +108,124 @@ angular.module("bookbuilder2")
           });//end of get menu button
 
 
+        /*********************************************** GETTING JSON FOR THE SELECTED LESSON ***********************************************/
+          //Getting the right lesson json
+        console.log($rootScope.selectedLessonId);
+        var lessonResourceUrl = 'data/lessons/' + $rootScope.selectedLessonId + "/lesson.json";
+        console.log("URL for selected lesson's json: ", lessonResourceUrl);
+
+        $http.get(lessonResourceUrl)
+          .success(function (response) {
+            console.log("Success on getting json for the selected lesson! ", response);
+
+
+            /*---------------------------------------LESSON TITLE CREATION------------------------------------------*/
+
+            console.log("Lesson Title: ", response.lessonTitle);
+            var lessonTitle = new createjs.Text(response.lessonTitle, "33px Arial", "white");
+
+            /*background.scaleX = background.scaleY = scale;*/
+            lessonTitle.scaleX = lessonTitle.scaleY = scale;
+            lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 10);
+            lessonTitle.y = backgroundPosition.y + (backgroundPosition.height / 9.8);
+            lessonTitle.rotation = -4;
+            lessonTitle.textBaseline = "alphabetic";
+
+            stage.addChild(lessonTitle);
+            stage.update();
+
+
+            /*-------------------------------------TITLE CREATION--------------------------------------------*/
+
+            console.log("Lesson Title: ", response.title);
+            var title = new createjs.Text(response.title, "25px Arial", "white");
+
+            /*background.scaleX = background.scaleY = scale;*/
+            title.scaleX = title.scaleY = scale;
+            title.x = backgroundPosition.x + (backgroundPosition.width / 3);
+            title.y = backgroundPosition.y + (backgroundPosition.height / 13);
+            title.textBaseline = "alphabetic";
+
+            stage.addChild(title);
+            stage.update();
+
+          });//end of $http.get(lessonResourceUrl)
+
+
+
+
+
+
+
+
+        /* ------------------------------------------ vocabularyReading Shape ---------------------------------------------- */
+
+        //Starting and making it transparent
+        var vocabularyReadingGraphics = new createjs.Graphics().beginFill(null);
+        //Setting Stroke
+        vocabularyReadingGraphics.setStrokeStyle(3).beginStroke("white");
+
+        //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+        vocabularyReadingGraphics.drawRoundRect(0, 0, 430, 110, 15);
+
+        var vocabularyReadingShape = new createjs.Shape(vocabularyReadingGraphics);
+        vocabularyReadingShape.setTransform(backgroundPosition.x + (backgroundPosition.width / 20), backgroundPosition.y + (backgroundPosition.height / 7), scale, scale, 0, 0, 0, 0, 0);
+        stage.addChild(vocabularyReadingShape);
+        stage.update();
+
+
+
+
+
+        /* ------------------------------------------ totalScore Shape ---------------------------------------------- */
+
+        var totalScoreGraphics = new createjs.Graphics().beginFill("blue").drawRect(0, 0, 430, 100);
+        var totalScoreShape = new createjs.Shape(totalScoreGraphics);
+        totalScoreShape.setTransform(backgroundPosition.x + (backgroundPosition.width / 2), backgroundPosition.y + (backgroundPosition.height / 6.5), scale, scale, 0, 0, 0, 0, 0);
+        //Setting Shadow
+        totalScoreShape.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+        stage.addChild(totalScoreShape);
+        stage.update();
+
+        //Text for the totalScore
+        var totalScoreTitle = new createjs.Text("Total Score:", "25px Arial", "white");
+
+        /*background.scaleX = background.scaleY = scale;*/
+        totalScoreTitle.scaleX = totalScoreTitle.scaleY = scale;
+        totalScoreTitle.x = backgroundPosition.x + (backgroundPosition.width / 3);
+        totalScoreTitle.y = backgroundPosition.y + (backgroundPosition.height / 13);
+        totalScoreTitle.textBaseline = "alphabetic";
+
+        stage.addChild(totalScoreTitle);
+        stage.update();
+
+
+
+
+        /* ------------------------------------------ activitiesScore Shape ---------------------------------------------- */
+
+        //Starting and making it transparent
+        var activitiesScoreGraphics = new createjs.Graphics().beginFill(null);
+        //Setting Stroke
+        activitiesScoreGraphics.setStrokeStyle(3).beginStroke("white");
+
+        //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+        activitiesScoreGraphics.drawRoundRect(0, 0, 900, 400, 15);
+
+        var activitiesScoreShape = new createjs.Shape(activitiesScoreGraphics);
+
+        activitiesScoreShape.setTransform(backgroundPosition.x + (backgroundPosition.width / 20), backgroundPosition.y
+          + (backgroundPosition.height / 3), scale, scale, 0, 0, 0, 0, 0);
+
+        console.log("Shape transformed bounds: ",activitiesScoreShape.getTransformedBounds());
+
+        stage.addChild(activitiesScoreShape);
+        stage.update();
+
+
+
+
+
       });//end of image on complete
     }, 500);//end of timeout
   });

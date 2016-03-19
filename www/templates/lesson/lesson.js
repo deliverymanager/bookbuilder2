@@ -60,7 +60,7 @@ angular.module("bookbuilder2")
         var backgroundPosition = background.getTransformedBounds();
         console.log("backgroundPosition", backgroundPosition);
 
-        /*** End of scaling calculation ***/
+        /****** End of scaling calculation ******/
 
         /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
 
@@ -145,7 +145,8 @@ angular.module("bookbuilder2")
             console.log("Lesson Title: ", response.lessonTitle);
             var lessonTitle = new createjs.Text(response.lessonTitle, "33px Arial", "white");
 
-            background.scaleX = background.scaleY = scale;
+            /*background.scaleX = background.scaleY = scale;*/
+            lessonTitle.scaleX = lessonTitle.scaleY = scale;
             lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 10);
             lessonTitle.y = backgroundPosition.y + (backgroundPosition.height / 9.8);
             lessonTitle.rotation = -4;
@@ -160,7 +161,8 @@ angular.module("bookbuilder2")
             console.log("Lesson Title: ", response.title);
             var title = new createjs.Text(response.title, "25px Arial", "white");
 
-            background.scaleX = background.scaleY = scale;
+            /*background.scaleX = background.scaleY = scale;*/
+            title.scaleX = title.scaleY = scale;
             title.x = backgroundPosition.x + (backgroundPosition.width / 2.9);
             title.y = backgroundPosition.y + (backgroundPosition.height / 13);
             title.textBaseline = "alphabetic";
@@ -188,6 +190,13 @@ angular.module("bookbuilder2")
 
                 var readingButtonSpriteSheet = new createjs.SpriteSheet(response);
                 var readingButton = new createjs.Sprite(readingButtonSpriteSheet, "normal");
+
+                /* ------------------------ EVENT --------------------------- */
+                readingButton.addEventListener("click", function (event) {
+
+                });
+
+                //We need to scale every container!
                 readingButton.scaleX = readingButton.scaleY = scale;
                 readingButton.x = backgroundPosition.x + (backgroundPosition.width / 2);
                 readingButton.y = backgroundPosition.y + (backgroundPosition.height / 1.5);
