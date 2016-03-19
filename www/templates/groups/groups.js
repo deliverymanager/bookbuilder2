@@ -97,8 +97,6 @@ angular.module("bookbuilder2")
             var exitButton = new createjs.Sprite(exitButtonSpriteSheet, "normal");
             //exitButton.visible = ionic.Platform.isAndroid();
 
-            /* -------------------------------- ANIMATION EVENT -------------------------------- */
-
             exitButton.addEventListener("mousedown", function (event) {
               console.log("mousedown event on a button !");
               exitButton.gotoAndPlay("pressed");
@@ -110,26 +108,11 @@ angular.module("bookbuilder2")
               exitButton.gotoAndPlay("normal");
               ionic.Platform.exitApp();
             });
-
-            var exitButtonContainer = new createjs.Container(exitButtonSpriteSheet);
-
-            exitButtonContainer.addChild(exitButton);
-
-            //We need to scale every container!
-            exitButtonContainer.scaleX = exitButtonContainer.scaleY = scale;
-            exitButtonContainer.regX = exitButtonContainer.width / 2;
-            exitButtonContainer.regY = exitButtonContainer.height / 2;
-            exitButtonContainer.x = -1500 * scale;
-            exitButtonContainer.y = backgroundPosition.y + (backgroundPosition.height / 1.07);
-
-            console.log("exitButtonContainer.regX before stage update: ",exitButtonContainer.regX);
-
-            stage.addChild(exitButtonContainer);
+            exitButton.scaleX = exitButton.scaleY = scale;
+            exitButton.x = backgroundPosition.x + (backgroundPosition.width / 2);
+            exitButton.y = backgroundPosition.y + (backgroundPosition.height / 1.07);
+            stage.addChild(exitButton);
             stage.update();
-
-            console.log("exitButtonContainer.regX after stage update: ",exitButtonContainer.regX);
-
-
           })
           .error(function (error) {
 
@@ -283,7 +266,6 @@ angular.module("bookbuilder2")
 
 
         function addSelectedGroupLessonsButtons() {
-
 
 
           console.log("selectedGroupLessons: ", selectedGroupLessons);
