@@ -19,9 +19,16 @@ angular.module("bookbuilder2")
       createjs.MotionGuidePlugin.install();
       createjs.Touch.enable(stage);
       stage.enableMouseOver(0);
-      createjs.Ticker.setFPS(60);
-      createjs.Ticker.addEventListener("tick", stage);
       stage.mouseMoveOutside = false;
+
+      createjs.Ticker.framerate = 20;
+      var handleTick = function () {
+        $scope.fps = createjs.Ticker.getMeasuredFPS().toFixed(2);
+        $scope.$apply();
+        stage.update();
+      };
+      createjs.Ticker.addEventListener("tick", handleTick);
+
 
       /*Image Loader*/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
@@ -139,83 +146,94 @@ angular.module("bookbuilder2")
             stage.update();
 
             /* ---------------------------------------- ADDING GROUP BUTTONS ---------------------------------------- */
-
+            var waterfallFunctions = [];
             _.each(response.lessonGroups, function (lessonGroup) {
 
-              var spriteUrl = "data/assets/" + lessonGroup.groupButtonSprite;
-              console.log("spriteUrl: ", spriteUrl);
+              waterfallFunctions.push(function (waterfallCallback) {
 
-              //Getting the element
-              $http.get(spriteUrl)
-                .success(function (response) {
+                var spriteUrl = "data/assets/" + lessonGroup.groupButtonSprite;
+                console.log("spriteUrl: ", spriteUrl);
 
-                  console.log("Success on getting data for lessonGroup.groupButtonSprite!");
+                //Getting the element
+                $http.get(spriteUrl)
+                  .success(function (response) {
 
-                  //Reassigning images with the rest of resource
-                  response.images[0] = "data/assets/" + response.images[0];
+                    console.log("Success on getting data for lessonGroup.groupButtonSprite!");
 
-                  //Reassigning animations
-                  response.animations = {
-                    normal: 0,
-                    onSelection: 1,
-                    selected: 2,
-                    tap: {
-                      frames: [1],
-                      next: "selected"
-                    }
-                  };
+                    //Reassigning images with the rest of resource
+                    response.images[0] = "data/assets/" + response.images[0];
 
-                  var groupButtonSpriteSheet = new createjs.SpriteSheet(response);
-                  var groupButton = new createjs.Sprite(groupButtonSpriteSheet, "normal");
-
-                  /* -------------------------------- CLICK ON BUTTON -------------------------------- */
-
-                  groupButton.addEventListener("mousedown", function (event) {
-                    console.log("mousedown event on a button !");
-                    groupButton.gotoAndPlay("onSelection");
-                    stage.update();
-                  });
-
-                  groupButton.addEventListener("pressup", function (event) {
-                    console.log("pressup event on a group button !");
-                    groupButton.gotoAndPlay("selected");
-                    stage.update();
-
-                    _.each(savedLessonButtonsArray, function (lesson, key, list) {
-                      createjs.Tween.get(lesson, {loop: false}).to({x: 1500 * scale}, 200, createjs.Ease.getPowIn(2));
-                    });
-
-                    var selectedGroup = _.findWhere(savedGroupButtonsArray, {"id": groupButton.id});
-                    selectedGroupLessons = selectedGroup.lessons;
-
-                    //Making all buttons appear in normal state again
-                    _.each(savedGroupButtonsArray, function (button, key, list) {
-                      if (button.id !== groupButton.id) {
-                        savedGroupButtonsArray[key].gotoAndPlay("normal");
+                    //Reassigning animations
+                    response.animations = {
+                      normal: 0,
+                      onSelection: 1,
+                      selected: 2,
+                      tap: {
+                        frames: [1],
+                        next: "selected"
                       }
+                    };
+
+                    var groupButtonSpriteSheet = new createjs.SpriteSheet(response);
+                    var groupButton = new createjs.Sprite(groupButtonSpriteSheet, "normal");
+
+                    /* -------------------------------- CLICK ON BUTTON -------------------------------- */
+
+                    groupButton.addEventListener("mousedown", function (event) {
+                      console.log("mousedown event on a button !");
+                      groupButton.gotoAndPlay("onSelection");
+                      stage.update();
                     });
 
-                    addSelectedGroupLessonsButtons();
+                    groupButton.addEventListener("pressup", function (event) {
+                      console.log("pressup event on a group button !");
+                      groupButton.gotoAndPlay("selected");
+                      stage.update();
+
+                      _.each(savedLessonButtonsArray, function (lesson, key, list) {
+                        createjs.Tween.get(lesson, {loop: false}).to({x: 1500 * scale}, 200, createjs.Ease.getPowIn(2));
+                      });
+
+                      var selectedGroup = _.findWhere(savedGroupButtonsArray, {"id": groupButton.id});
+                      selectedGroupLessons = selectedGroup.lessons;
+
+                      //Making all buttons appear in normal state again
+                      _.each(savedGroupButtonsArray, function (button, key, list) {
+                        if (button.id !== groupButton.id) {
+                          savedGroupButtonsArray[key].gotoAndPlay("normal");
+                        }
+                      });
+
+                      addSelectedGroupLessonsButtons();
+                    });
+
+                    groupButton.lessons = lessonGroup.lessons;
+                    savedGroupButtonsArray.push(groupButton);
+
+                    groupButton.y = yPosition;
+                    groupButton.x = -1500 * scale;
+
+                    createjs.Tween.get(groupButton, {loop: false}).to({x: 120}, 1000, createjs.Ease.getPowIn(2));
+
+                    yPosition += buttonHeight;
+                    groupsMenuContainer.addChild(groupButton);
+                    stage.update();
+
+                    $timeout(function () {
+                      waterfallCallback();
+                    }, 100);
+
+                  })
+                  .error(function (error) {
+                    console.log("Error on getting json data for group button...");
                   });
-
-                  groupButton.lessons = lessonGroup.lessons;
-                  savedGroupButtonsArray.push(groupButton);
-
-                  groupButton.y = yPosition;
-                  groupButton.x = -1500 * scale;
-
-                  createjs.Tween.get(groupButton, {loop: false}).wait(yPosition)
-                    .to({x: 120}, 1000, createjs.Ease.getPowIn(2));
-
-                  yPosition += buttonHeight;
-                  groupsMenuContainer.addChild(groupButton);
-                  stage.update();
-                })
-                .error(function (error) {
-                  console.log("Error on getting json data for group button...");
-                });
-
+              });
             }); //end of _.each (groupLessons)
+
+
+            async.waterfall(waterfallFunctions, function (callback) {
+              console.log("Lesson Groups Inserted!");
+            });
 
           })//Success of getting groups.json
           .error(function (error) {
@@ -256,79 +274,90 @@ angular.module("bookbuilder2")
           /*Array for saving the lesson buttons references*/
           var yPosition = 150;
 
-
+          var waterfallFunctions = [];
           _.each(selectedGroupLessons, function (lesson, key, list) {
-            var spriteResourceUrl = "data/assets/" + lesson.lessonButtonSprite;
 
-            $http.get(spriteResourceUrl)
-              .success(function (response) {
+            waterfallFunctions.push(function (waterfallCallback) {
+
+              var spriteResourceUrl = "data/assets/" + lesson.lessonButtonSprite;
+
+              $http.get(spriteResourceUrl)
+                .success(function (response) {
 
 
-                //Reassigning images with the rest of resource
-                response.images[0] = "data/assets/" + response.images[0];
+                  //Reassigning images with the rest of resource
+                  response.images[0] = "data/assets/" + response.images[0];
 
-                //Reassigning animations
-                response.animations = {
-                  normal: 0,
-                  onSelection: 1,
-                  selected: 2,
-                  tap: {
-                    frames: [1],
-                    next: "selected"
-                  }
-                };
-
-                var lessonButtonSpriteSheet = new createjs.SpriteSheet(response);
-                var lessonButton = new createjs.Sprite(lessonButtonSpriteSheet, "normal");
-
-                /* -------------------------------- CLICK ON LESSON BUTTON -------------------------------- */
-                lessonButton.addEventListener("mousedown", function (event) {
-                  console.log("mousedown event on a lesson button!");
-                  lessonButton.gotoAndPlay("onSelection");
-                  stage.update();
-                });
-
-                lessonButton.addEventListener("pressup", function (event) {
-                  console.log("pressup event on a lesson button !");
-
-                  lessonButton.gotoAndPlay("tap");
-                  stage.update();
-
-                  _.each(savedLessonButtonsArray, function (button, key, list) {
-                    if (button.id !== lessonButton.id) {
-                      savedLessonButtonsArray[key].gotoAndPlay("normal");
+                  //Reassigning animations
+                  response.animations = {
+                    normal: 0,
+                    onSelection: 1,
+                    selected: 2,
+                    tap: {
+                      frames: [1],
+                      next: "selected"
                     }
+                  };
+
+                  var lessonButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  var lessonButton = new createjs.Sprite(lessonButtonSpriteSheet, "normal");
+
+                  /* -------------------------------- CLICK ON LESSON BUTTON -------------------------------- */
+                  lessonButton.addEventListener("mousedown", function (event) {
+                    console.log("mousedown event on a lesson button!");
+                    lessonButton.gotoAndPlay("onSelection");
+                    stage.update();
                   });
+
+                  lessonButton.addEventListener("pressup", function (event) {
+                    console.log("pressup event on a lesson button !");
+
+                    lessonButton.gotoAndPlay("tap");
+                    stage.update();
+
+                    _.each(savedLessonButtonsArray, function (button, key, list) {
+                      if (button.id !== lessonButton.id) {
+                        savedLessonButtonsArray[key].gotoAndPlay("normal");
+                      }
+                    });
+                    stage.update();
+
+                    $rootScope.selectedLessonId = lessonButton.id;
+                    console.log($rootScope.selectedLessonId);
+                    $state.go("lesson");
+
+                  });
+
+                  lessonButton.id = lesson.id;
+                  savedLessonButtonsArray.push(lessonButton);
+
+                  lessonButton.y = yPosition;
+                  lessonButton.x = 1500 * scale;
+
+                  createjs.Tween.get(lessonButton, {loop: false}).wait(yPosition)
+                    .to({x: 120}, 500, createjs.Ease.getPowIn(2));
+
+                  yPosition += 55;
+                  lessonsMenuContainer.addChild(lessonButton);
                   stage.update();
 
-                  $rootScope.selectedLessonId = lessonButton.id;
-                  console.log($rootScope.selectedLessonId);
-                  $state.go("lesson");
+                  $timeout(function () {
+                    waterfallCallback();
+                  }, 100);
 
-                });
+                }).error(function (error) {
 
-                lessonButton.id = lesson.id;
-                savedLessonButtonsArray.push(lessonButton);
+                console.log("There was an error on getting lesson json");
 
-                lessonButton.y = yPosition;
-                lessonButton.x = 1500 * scale;
+              });
 
-                createjs.Tween.get(lessonButton, {loop: false}).wait(yPosition)
-                  .to({x: 120}, 500, createjs.Ease.getPowIn(2));
-
-                yPosition += 55;
-                lessonsMenuContainer.addChild(lessonButton);
-                stage.update();
-
-              }).error(function (error) {
-
-              console.log("There was an error on getting lesson json");
-
-            })
+            });
 
           });//end of _.each(selectedGroupLessons)
 
-          /* ----------------------------------------------------- END RIGHT SIDE MENU HANDLING-----------------------------------------------------*/
+          async.waterfall(waterfallFunctions, function (callback) {
+            console.log("Lessons Of a group are  Inserted!");
+          });
 
         }//End of function
 

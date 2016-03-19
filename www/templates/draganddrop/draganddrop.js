@@ -19,9 +19,15 @@ angular.module("bookbuilder2")
       createjs.MotionGuidePlugin.install();
       createjs.Touch.enable(stage);
       stage.enableMouseOver(0);
-      createjs.Ticker.setFPS(60);
-      createjs.Ticker.addEventListener("tick", stage);
       stage.mouseMoveOutside = false;
+
+      createjs.Ticker.framerate = 20;
+      var handleTick = function () {
+        $scope.fps = createjs.Ticker.getMeasuredFPS().toFixed(2);
+        $scope.$apply();
+        stage.update();
+      };
+      createjs.Ticker.addEventListener("tick", handleTick);
 
       /*Image Loader*/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({

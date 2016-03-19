@@ -19,9 +19,16 @@ angular.module("bookbuilder2")
       createjs.MotionGuidePlugin.install();
       createjs.Touch.enable(stage);
       stage.enableMouseOver(0);
-      createjs.Ticker.setFPS(60);
-      createjs.Ticker.addEventListener("tick", stage);
       stage.mouseMoveOutside = false;
+
+
+      createjs.Ticker.framerate = 20;
+      var handleTick = function () {
+        $scope.fps = createjs.Ticker.getMeasuredFPS().toFixed(2);
+        $scope.$apply();
+        stage.update();
+      };
+      createjs.Ticker.addEventListener("tick", handleTick);
 
       /*Image Loader*/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
@@ -316,60 +323,74 @@ angular.module("bookbuilder2")
               });
 
             /*-------------------------------- Populating Activities Menu -----------------------------------*/
+            var waterfallFunctions = [];
             _.each(response.lessonMenu, function (activity, key, list) {
-              var spriteResourceUrl = "data/assets/" + activity.buttonFileName;
 
-              $http.get(spriteResourceUrl)
-                .success(function (response) {
+              waterfallFunctions.push(function (waterfallCallback) {
+                var spriteResourceUrl = "data/assets/" + activity.buttonFileName;
+
+                $http.get(spriteResourceUrl)
+                  .success(function (response) {
 
 
-                  //Reassigning images with the rest of resource
-                  response.images[0] = "data/assets/" + response.images[0];
+                    //Reassigning images with the rest of resource
+                    response.images[0] = "data/assets/" + response.images[0];
 
-                  //Reassigning animations
-                  response.animations = {
-                    normal: 0,
-                    onSelection: 1,
-                    selected: 2,
-                    tap: {
-                      frames: [1],
-                      next: "selected"
-                    }
-                  };
+                    //Reassigning animations
+                    response.animations = {
+                      normal: 0,
+                      onSelection: 1,
+                      selected: 2,
+                      tap: {
+                        frames: [1],
+                        next: "selected"
+                      }
+                    };
 
-                  var activityButtonSpriteSheet = new createjs.SpriteSheet(response);
-                  var activityButton = new createjs.Sprite(activityButtonSpriteSheet, "normal");
-                  activityButton.activityFolder = activity.activityFolder;
-                  activityButton.activityTemplate = activity.activityTemplate;
-                  activityButton.y = yPosition;
-                  activityButton.x = -1500 * scale;
-                  createjs.Tween.get(activityButton, {loop: false}).wait(yPosition)
-                    .to({x: 120}, 500, createjs.Ease.getPowIn(2));
-                  yPosition += 75;
-                  activitiesMenuContainer.addChild(activityButton);
-                  stage.update();
+                    var activityButtonSpriteSheet = new createjs.SpriteSheet(response);
+                    var activityButton = new createjs.Sprite(activityButtonSpriteSheet, "normal");
+                    activityButton.activityFolder = activity.activityFolder;
+                    activityButton.activityTemplate = activity.activityTemplate;
+                    activityButton.y = yPosition;
+                    activityButton.x = -1500 * scale;
+                    createjs.Tween.get(activityButton, {loop: false}).wait(yPosition)
+                      .to({x: 120}, 500, createjs.Ease.getPowIn(2));
+                    yPosition += 75;
 
-                  /* -------------------------------- CLICK ON LESSON BUTTON -------------------------------- */
-                  activityButton.addEventListener("mousedown", function (event) {
-                    console.log("mousedown event on a lesson button!");
-                    activityButton.gotoAndPlay("onSelection");
+                    /* -------------------------------- CLICK ON LESSON BUTTON -------------------------------- */
+                    activityButton.addEventListener("mousedown", function (event) {
+                      console.log("mousedown event on a lesson button!");
+                      activityButton.gotoAndPlay("onSelection");
+                      stage.update();
+                    });
+
+                    activityButton.addEventListener("pressup", function (event) {
+                      console.log("pressup event on a lesson button !");
+                      activityButton.gotoAndPlay("selected");
+                      stage.update();
+                      $rootScope.activityFolder = activityButton.activityFolder;
+                      console.log($rootScope.selectedLessonId);
+                      console.log($rootScope.activityFolder);
+                      $state.go(activityButton.activityTemplate);
+                    });
+
+                    activitiesMenuContainer.addChild(activityButton);
                     stage.update();
-                  });
 
-                  activityButton.addEventListener("pressup", function (event) {
-                    console.log("pressup event on a lesson button !");
-                    activityButton.gotoAndPlay("selected");
-                    stage.update();
-                    $rootScope.activityFolder = activityButton.activityFolder;
-                    console.log($rootScope.selectedLessonId);
-                    console.log($rootScope.activityFolder);
-                    $state.go(activityButton.activityTemplate);
-                  });
+                    $timeout(function () {
+                      waterfallCallback();
+                    }, 100);
 
-                }).error(function (error) {
-                console.log("There was an error on getting lesson json");
-              })
+                  }).error(function (error) {
+                  console.log("There was an error on getting lesson json");
+                })
+              });
+            });//end of _.each(selectedGroupLessons)
+
+            async.waterfall(waterfallFunctions, function (callback) {
+              console.log("Lessons Of a group are  Inserted!");
             });
+
           })
           .error(function (error) {
             console.error("Error on getting json for the selected lesson...", error);
@@ -377,4 +398,5 @@ angular.module("bookbuilder2")
 
       });
     }, 500);
-  });
+  })
+;
