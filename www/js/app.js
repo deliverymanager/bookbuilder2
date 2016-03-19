@@ -57,6 +57,30 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
         templateUrl: "templates/lesson/lesson.html",
         controller: "LessonController"
       })
+      .state('vocabulary', {
+        cache: false,
+        url: "/vocabulary",
+        templateUrl: "templates/vocabulary/vocabulary.html",
+        controller: "VocabularyController"
+      })
+      .state('reading', {
+        cache: false,
+        url: "/reading",
+        templateUrl: "templates/reading/reading.html",
+        controller: "ReadingController"
+      })
+      .state('multiple', {
+        cache: false,
+        url: "/multiple",
+        templateUrl: "templates/multiple/multiple.html",
+        controller: "MultipleController"
+      })
+      .state('draganddrop', {
+        cache: false,
+        url: "/draganddrop",
+        templateUrl: "templates/draganddrop/draganddrop.html",
+        controller: "DraganddropController"
+      })
       .state('results', {
         cache: false,
         url: "/results",

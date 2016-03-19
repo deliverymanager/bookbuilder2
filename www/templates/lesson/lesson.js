@@ -115,17 +115,16 @@ angular.module("bookbuilder2")
 
         activitiesMenuContainer.scaleX = activitiesMenuContainer.scaleY = scale;
 
-        var yPosition = 40;
+        var yPosition = 60;
 
         activitiesMenuContainer.x = backgroundPosition.x + (backgroundPosition.width / 24);
         activitiesMenuContainer.y = backgroundPosition.y + (backgroundPosition.height / 7);
-
-        var graphics = new createjs.Graphics().beginFill("#ff0000").drawRect(0, 0, activitiesMenuContainer.width, activitiesMenuContainer.height);
-        var shape = new createjs.Shape(graphics);
-        shape.alpha = 0.5;
-
-        activitiesMenuContainer.addChild(shape);
-
+        /*
+         var graphics = new createjs.Graphics().beginFill("#ff0000").drawRect(0, 0, activitiesMenuContainer.width, activitiesMenuContainer.height);
+         var shape = new createjs.Shape(graphics);
+         shape.alpha = 0.5;
+         activitiesMenuContainer.addChild(shape);
+         */
         stage.addChild(activitiesMenuContainer);
         stage.update();
 
@@ -189,16 +188,24 @@ angular.module("bookbuilder2")
 
                 var readingButtonSpriteSheet = new createjs.SpriteSheet(response);
                 var readingButton = new createjs.Sprite(readingButtonSpriteSheet, "normal");
-
-                /* ------------------------ EVENT --------------------------- */
-                readingButton.addEventListener("click", function (event) {
-
-                });
-
-                //We need to scale every container!
                 readingButton.scaleX = readingButton.scaleY = scale;
                 readingButton.x = backgroundPosition.x + (backgroundPosition.width / 2);
                 readingButton.y = backgroundPosition.y + (backgroundPosition.height / 1.5);
+
+
+                /* ------------------------ EVENT ------------------------ */
+                readingButton.addEventListener("mousedown", function (event) {
+                  console.log("mousedown event on a lesson button!");
+                  readingButton.gotoAndPlay("onSelection");
+                  stage.update();
+                });
+
+                readingButton.addEventListener("pressup", function (event) {
+                  readingButton.gotoAndPlay("selected");
+                  stage.update();
+                  console.log($rootScope.selectedLessonId);
+                  $state.go("vocabulary");
+                });
 
                 stage.addChild(readingButton);
                 stage.update();
@@ -227,35 +234,28 @@ angular.module("bookbuilder2")
                   }
                 };
 
-                console.log("Response for vocabulary button: ", response);
-
                 var vocabularyButtonSpriteSheet = new createjs.SpriteSheet(response);
                 var vocabularyButton = new createjs.Sprite(vocabularyButtonSpriteSheet, "normal");
+                vocabularyButton.scaleX = vocabularyButton.scaleY = scale;
+                vocabularyButton.x = backgroundPosition.x + (backgroundPosition.width / 2);
+                vocabularyButton.y = backgroundPosition.y + (backgroundPosition.height / 2.5);
+
 
                 /* ------------------------ EVENT ------------------------ */
-                vocabularyButton.addEventListener("click", function (event) {
-
+                vocabularyButton.addEventListener("mousedown", function (event) {
+                  console.log("mousedown event on a lesson button!");
+                  vocabularyButton.gotoAndPlay("onSelection");
+                  stage.update();
                 });
 
-                var vocabularyButtonContainer = new createjs.Container(vocabularyButtonSpriteSheet);
+                vocabularyButton.addEventListener("pressup", function (event) {
+                  vocabularyButton.gotoAndPlay("selected");
+                  stage.update();
+                  console.log($rootScope.selectedLessonId);
+                  $state.go("vocabulary");
+                });
 
-                vocabularyButtonContainer.addChild(vocabularyButton);
-
-                //We need to scale every container!
-                vocabularyButtonContainer.scaleX = vocabularyButtonContainer.scaleY = scale;
-                vocabularyButtonContainer.regX = vocabularyButtonContainer.width / 2;
-                vocabularyButtonContainer.regY = vocabularyButtonContainer.height / 2;
-                vocabularyButtonContainer.x = backgroundPosition.x + (backgroundPosition.width / 2);
-                vocabularyButtonContainer.y = backgroundPosition.y + (backgroundPosition.height / 2.5);
-
-
-                var rgraphics = new createjs.Graphics().beginFill("#fff000").drawRect(0, 0, vocabularyButtonContainer.width, vocabularyButtonContainer.height);
-                var rshape = new createjs.Shape(rgraphics);
-                rshape.alpha = 0.5;
-                vocabularyButtonContainer.addChild(rshape);
-
-
-                stage.addChild(vocabularyButtonContainer);
+                stage.addChild(vocabularyButton);
                 stage.update();
 
               })
@@ -284,54 +284,31 @@ angular.module("bookbuilder2")
 
                 var resultsButtonSpriteSheet = new createjs.SpriteSheet(response);
                 var resultsButton = new createjs.Sprite(resultsButtonSpriteSheet, "normal");
+                resultsButton.scaleX = resultsButton.scaleY = scale;
+                resultsButton.x = backgroundPosition.x + (backgroundPosition.width / 6.5);
+                resultsButton.y = backgroundPosition.y + (backgroundPosition.height / 1.1);
+                stage.addChild(resultsButton);
+                stage.update();
 
                 /* ------------------------ EVENT ------------------------ */
-
-
                 resultsButton.addEventListener("mousedown", function (event) {
                   console.log("mousedown event on a button !");
                   resultsButton.gotoAndPlay("pressed");
                   stage.update();
                 });
-
                 resultsButton.addEventListener("pressup", function (event) {
                   console.log("pressup event!");
                   resultsButton.gotoAndPlay("normal");
                   $state.go("results");
                 });
-
-
-                var resultsButtonContainer = new createjs.Container(resultsButtonSpriteSheet);
-
-                resultsButtonContainer.addChild(resultsButton);
-
-                //We need to scale every container!
-                resultsButtonContainer.scaleX = resultsButtonContainer.scaleY = scale;
-                resultsButtonContainer.regX = resultsButtonContainer.width / 2;
-                resultsButtonContainer.regY = resultsButtonContainer.height / 2;
-                resultsButtonContainer.x = backgroundPosition.x + (backgroundPosition.width / 6.5);
-                resultsButtonContainer.y = backgroundPosition.y + (backgroundPosition.height / 1.1);
-
-
-                var rsgraphics = new createjs.Graphics().beginFill("#fff000").drawRect(0, 0, resultsButtonContainer.width, resultsButtonContainer.height);
-                var rsshape = new createjs.Shape(rsgraphics);
-                rsshape.alpha = 0.5;
-                resultsButtonContainer.addChild(rsshape);
-
-
-                stage.addChild(resultsButtonContainer);
-                stage.update();
-
               })
               .error(function (error) {
                 console.error("Error on getting json for results button...", error);
               });
 
-
             /*-------------------------------- Populating Activities Menu -----------------------------------*/
-            var savedLessonButtonsArray = [];
-            _.each(response.lessonMenu, function (lesson, key, list) {
-              var spriteResourceUrl = "data/assets/" + lesson.buttonFileName;
+            _.each(response.lessonMenu, function (activity, key, list) {
+              var spriteResourceUrl = "data/assets/" + activity.buttonFileName;
 
               $http.get(spriteResourceUrl)
                 .success(function (response) {
@@ -351,64 +328,39 @@ angular.module("bookbuilder2")
                     }
                   };
 
-                  var lessonButtonSpriteSheet = new createjs.SpriteSheet(response);
-                  var lessonButton = new createjs.Sprite(lessonButtonSpriteSheet, "normal");
-
-                  /* -------------------------------- CLICK ON LESSON BUTTON -------------------------------- */
-                  lessonButton.addEventListener("mousedown", function (event) {
-                    console.log("mousedown event on a lesson button!");
-                    lessonButton.gotoAndPlay("onSelection");
-                    stage.update();
-                  });
-
-                  lessonButton.addEventListener("pressup", function (event) {
-                    console.log("pressup event on a lesson button !");
-
-                    lessonButton.gotoAndPlay("tap");
-                    stage.update();
-
-                    _.each(savedLessonButtonsArray, function (button, key, list) {
-                      if (button.id !== lessonButton.id) {
-                        savedLessonButtonsArray[key].gotoAndPlay("normal");
-                      }
-                    });
-                    stage.update();
-
-                    $rootScope.selectedLessonId = lessonButton.id;
-                    console.log($rootScope.selectedLessonId);
-                    $state.go("lesson");
-
-                  });
-
-
-                  var lessonButtonContainer = new createjs.Container(lessonButtonSpriteSheet);
-
-                  //Adding groupButton
-                  lessonButton.id = lesson.id;
-                  lessonButtonContainer.addChild(lessonButton);
-                  savedLessonButtonsArray.push(lessonButton);
-
-                  lessonButtonContainer.regX = 0;
-                  lessonButtonContainer.regY = 0;
-                  lessonButtonContainer.y = yPosition;
-                  lessonButtonContainer.x = 1500 * scale;
-
-                  createjs.Tween.get(lessonButtonContainer, {loop: false}).wait(yPosition)
+                  var activityButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  var activityButton = new createjs.Sprite(activityButtonSpriteSheet, "normal");
+                  activityButton.activityFolder = activity.activityFolder;
+                  activityButton.activityTemplate = activity.activityTemplate;
+                  activityButton.y = yPosition;
+                  activityButton.x = -1500 * scale;
+                  createjs.Tween.get(activityButton, {loop: false}).wait(yPosition)
                     .to({x: 120}, 500, createjs.Ease.getPowIn(2));
-
-                  yPosition += 55;
-                  activitiesMenuContainer.addChild(lessonButtonContainer);
+                  yPosition += 75;
+                  activitiesMenuContainer.addChild(activityButton);
                   stage.update();
 
+                  /* -------------------------------- CLICK ON LESSON BUTTON -------------------------------- */
+                  activityButton.addEventListener("mousedown", function (event) {
+                    console.log("mousedown event on a lesson button!");
+                    activityButton.gotoAndPlay("onSelection");
+                    stage.update();
+                  });
+
+                  activityButton.addEventListener("pressup", function (event) {
+                    console.log("pressup event on a lesson button !");
+                    activityButton.gotoAndPlay("selected");
+                    stage.update();
+                    $rootScope.activityFolder = activityButton.activityFolder;
+                    console.log($rootScope.selectedLessonId);
+                    console.log($rootScope.activityFolder);
+                    $state.go(activityButton.activityTemplate);
+                  });
+
                 }).error(function (error) {
-
                 console.log("There was an error on getting lesson json");
-
               })
-
-            });//end of _.each(selectedGroupLessons)
-
-
+            });
           })
           .error(function (error) {
             console.error("Error on getting json for the selected lesson...", error);
