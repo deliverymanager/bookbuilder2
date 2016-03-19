@@ -6,30 +6,21 @@ angular.module("bookbuilder2")
     $timeout(function () {
 
       var stage = new createjs.Stage(document.getElementById("vocabularyCanvas"));
+      var ctx = document.getElementById("vocabularyCanvas").getContext("2d");
       stage.canvas.height = window.innerHeight;
       stage.canvas.width = window.innerWidth;
-
       stage.enableDOMEvents(true);
-      var ctx = document.getElementById("vocabularyCanvas").getContext("2d");
       ctx.mozImageSmoothingEnabled = true;
       ctx.webkitImageSmoothingEnabled = true;
       ctx.msImageSmoothingEnabled = true;
       ctx.imageSmoothingEnabled = true;
-
       stage.regX = stage.width / 2;
       stage.regY = stage.height / 2;
-
-      console.log("innerWidth: ", window.innerWidth);
-      console.log("innerHeight: ", window.innerHeight);
-
       createjs.MotionGuidePlugin.install();
       createjs.Touch.enable(stage);
-      // enabled mouse over / out events
       stage.enableMouseOver(0);
-
       createjs.Ticker.setFPS(60);
       createjs.Ticker.addEventListener("tick", stage);
-
       stage.mouseMoveOutside = false;
 
       /*Image Loader*/
