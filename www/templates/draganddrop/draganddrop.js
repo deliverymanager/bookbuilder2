@@ -1,11 +1,15 @@
 angular.module("bookbuilder2")
-    .controller("DraganddropController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory) {
+    .controller("DraganddropController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, LocalStorage) {
 
         console.log("Draganddrop loaded!");
 
         /*Each activity projected to activityData and application retrieves it from localStorage
          if it's not located in localStorage controller initializes an object */
         var activityData = {};
+
+        /*Name of activity in localStorage*/
+        var activityNameInLocalStorage = $rootScope.selectedLesson.lessonId + "_" + $rootScope.activityFolder;
+        console.log("Name of activity in localStorage: ", activityNameInLocalStorage);
 
         $timeout(function () {
 
@@ -122,10 +126,10 @@ angular.module("bookbuilder2")
 
                 init();
                 function init() {
-                    var activityNameInLocalStorage = $rootScope.selectedLesson.lessonId + "_" + $rootScope.activityFolder;
+
                     console.log("Searching in localStorage fo activity: ", activityNameInLocalStorage);
-                    if (localStorage.getItem(activityNameInLocalStorage)) {
-                        activityData = localStorage.getItem(activityNameInLocalStorage);
+                    if (LocalStorage.get(activityNameInLocalStorage)) {
+                        activityData = JSON.parse(LocalStorage.get(activityNameInLocalStorage));
                         console.log("Activity data exist in localStorage and its: ", activityData);
                     } else {
                         var activityUrl = "data/lessons/" + $rootScope.selectedLesson.lessonId + "/" + $rootScope.activityFolder + "/draganddrop.json";
@@ -133,36 +137,72 @@ angular.module("bookbuilder2")
                         $http.get(activityUrl)
                             .success(function (response) {
                                 console.log("Success on getting json for the url. The response object is: ", response);
+
+                                /*Adding the userAnswer attribute to response object before assigning it to activityData*/
+                                _.each(response.questions, function (question, key, value) {
+                                    question.userAnswer = "";
+                                });
+
+                                //Assigning configured response to activityData
+                                activityData = response;
+
+                                //Saving it to localStorage
+                                LocalStorage.set(activityNameInLocalStorage, JSON.stringify(activityData));
+
+                                console.log("Newly created activityData with userAnswer attribute: ", activityData);
+
                             })
                             .error(function (error) {
-
+                                console.log("Error on getting json for the url...", error);
                             });
                     }
                 }
 
-
                 /*Function that restarts the exercise*/
                 function restart() {
-                }
 
+                    _.each(activityData.questions, function (question, key, value) {
+                        question.userAnswer = "";
+                    });
+
+                    //Saving to localStorage
+                    LocalStorage.set(activityNameInLocalStorage, JSON.stringify(activityData));
+                }
 
                 /*Function that checks user answers and calls score function and showAnswers function*/
                 function check() {
+                    score();
+                    showAnswers()
                 }
 
 
                 /*Function that calculates score*/
                 function score() {
+
+                    var rightAnswers = 0;
+                    _.each(activityData.questions, function (question, key, value) {
+                        if (question.userAnswer === question.answer) {
+                            rightAnswers++;
+                        }
+                    });
+
+                    return rightAnswers + " / " + activityData.questions.length;
                 }
 
 
                 /*Function that fills activity questions with the right answers*/
                 function showAnswers() {
+                    _.each(activityData.questions, function (question, key, value) {
+                        question.userAnswer = question.answer;
+                    });
                 }
 
 
                 /*Function that goes to the next activity*/
                 function next() {
+
+
+
                 }
 
 
