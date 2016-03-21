@@ -1,0 +1,24 @@
+{
+
+"images": [
+    "menu_vocabulary_bubble_button.sprite.png"
+],
+
+"frames": [
+    [1, 1, 231, 202, 0, 0, 0],
+    [234, 1, 228, 199, 0, 0, 0],
+    [464, 1, 231, 192, 0, 0, 0]
+],
+
+"animations": {
+    "Symbol 4": [0],
+    "Symbol 3": [1],
+    "Symbol 5": [2]
+},
+
+"texturepacker": [
+        "SmartUpdateHash: $TexturePacker:SmartUpdate:91b936a25df60754f6be76c0777b8fdf:c6f54edf8b72b3faba8446754d6ca354:5fa603d128e4629ad62b8eb44870066a$",
+        "Created with TexturePacker (https://www.codeandweb.com/texturepacker) for EaselJS"
+]
+
+}
