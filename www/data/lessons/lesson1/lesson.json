@@ -1,6 +1,7 @@
 {
   "lessonTitle" : "Lesson 1",
   "title": "Family shopping",
+  "lessonId":"lesson1",
   "lessonMenu": [
     {
       "name":"Vocabulary 1",
