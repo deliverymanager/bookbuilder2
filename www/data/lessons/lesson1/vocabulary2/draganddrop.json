@@ -1,41 +1,53 @@
 {
   "title": "Lesson 1 - Family Shopping",
   "description": "Drag and drop.",
-  "questions": [{
-    "pretext": "The kids made so much noise yesterday. They ",
-    "postext": "!",
-    "answer": "5"
-  }, {
-    "pretext": "I should ask my father if he'll let me go out tonight. He always ",
-    "postext": ".",
-    "answer": "3"
-  }, {
-    "pretext": "Ann talks too much! Every time we meet for a coffe she ",
-    "posttext": ".",
-    "answer": "4"
-  }, {
-    "pretext": "My sister and I ",
-    "posttext": "yesterday to buy some new clothes and have fun!",
-    "answer": "2"
-  }, {
-    "pretext": "Henry's trip to london was amazing! He ",
-    "posttext": "!",
-    "answer": "1"
-  }],
-  "answers": [{
-      "text":"had a great time",
-      "answer": "1"
-  }, {
-      "text":"went on a shopping spree",
-      "answer": "2"
-  }, {
-      "text":"has the final say",
-      "answer": "3"
-  }, {
-      "text":"drove me crazy",
-      "answer": "4"
-  }, {
-      "text":"gives me a headache",
+  "questions": [
+    {
+      "pretext": "The kids made so much noise yesterday. They ",
+      "postext": "!",
       "answer": "5"
-  }]
+    },
+    {
+      "pretext": "I should ask my father if he'll let me go out tonight. He always ",
+      "postext": ".",
+      "answer": "3"
+    },
+    {
+      "pretext": "Ann talks too much! Every time we meet for a coffe she ",
+      "posttext": ".",
+      "answer": "4"
+    },
+    {
+      "pretext": "My sister and I ",
+      "posttext": "yesterday to buy some new clothes and have fun!",
+      "answer": "2"
+    },
+    {
+      "pretext": "Henry's trip to london was amazing! He ",
+      "posttext": "!",
+      "answer": "1"
+    }
+  ],
+  "answers": [
+    {
+      "text": "had a great time",
+      "answer": "1"
+    },
+    {
+      "text": "went on a shopping spree",
+      "answer": "2"
+    },
+    {
+      "text": "has the final say",
+      "answer": "3"
+    },
+    {
+      "text": "drove me crazy",
+      "answer": "4"
+    },
+    {
+      "text": "gives me a headache",
+      "answer": "5"
+    }
+  ]
 }

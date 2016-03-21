@@ -1,0 +1,24 @@
+{
+
+"images": [
+    "menu_vocabulary_1_choose_button_sprite.png"
+],
+
+"frames": [
+    [1, 1, 190, 40, 0, 0, 0],
+    [193, 1, 190, 40, 0, 0, 0],
+    [193, 1, 190, 40, 0, 0, 0]
+],
+
+"animations": {
+    "Symbol 4": [0],
+    "Symbol 5": [1],
+    "Symbol 8": [2]
+},
+
+"texturepacker": [
+        "SmartUpdateHash: $TexturePacker:SmartUpdate:ae4aef8d5c87ec6ade61eb6b39c9313b:85474cd416d1609000ad6e2127878be5:7c4b29b89c073cbf121f806c6140210f$",
+        "Created with TexturePacker (https://www.codeandweb.com/texturepacker) for EaselJS"
+]
+
+}

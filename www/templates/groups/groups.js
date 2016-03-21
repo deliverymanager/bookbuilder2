@@ -227,6 +227,9 @@ angular.module("bookbuilder2")
 
                     groupButton.lessons = lessonGroup.lessons;
                     savedGroupButtonsArray.push(groupButton);
+                    if (!groupButton.active) {
+                      groupButton.alpha(0.5);
+                    }
 
                     groupButton.y = yPosition;
                     groupButton.x = -1500 * scale;
@@ -347,6 +350,10 @@ angular.module("bookbuilder2")
 
                   lessonButton.id = lesson.id;
                   savedLessonButtonsArray.push(lessonButton);
+
+                  if (!lessonButton.active) {
+                    lessonButton.alpha(0.5);
+                  }
 
                   lessonButton.y = yPosition;
                   lessonButton.x = 1500 * scale;
