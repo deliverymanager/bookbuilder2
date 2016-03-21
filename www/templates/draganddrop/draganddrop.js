@@ -3,6 +3,15 @@ angular.module("bookbuilder2")
 
         console.log("Draganddrop loaded!");
 
+
+        /*- TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST -*/
+
+        $rootScope.selectedLessonId = "lesson1";
+        $rootScope.activityFolder = "vocabulary2";
+
+        /*- TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST -*/
+
+
         /*Each activity projected to activityData and application retrieves it from localStorage
          if it's not located in localStorage controller initializes an object */
         var activityData = {};

@@ -2,7 +2,7 @@ angular.module("bookbuilder2")
     .factory("LocalStorage",
         function LocalStorageFactory() {
             return {
-                save: function (name, data) {
+                set: function (name, data) {
                     localStorage.setItem(name,data);
                 },
                 get: function(name){
