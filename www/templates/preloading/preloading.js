@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-  .controller("PreloadingController", function ($scope, Download, $ionicPlatform, $ionicPopup, $rootScope, $http, $state, $ionicLoading) {
+  .controller("PreloadingController", function ($scope, Download, $ionicPlatform, $ionicPopup, $rootScope, $http, $state, $ionicLoading, $cordovaFile) {
 
     console.log("PreloadingController loaded!");
 
@@ -24,12 +24,21 @@ angular.module("bookbuilder2")
         console.log("hide SplashScreen");
         navigator.splashscreen.hide();
 
+        $rootScope.rootDir = window.cordova.file.dataDirectory;
+        console.log($rootScope.rootDir);
+
         window.cordova.getAppVersion.getPackageName(function (name) {
           console.log(name);
           var TempGroup = name.split(".");
 
           window.cordova.getAppVersion.getVersionNumber(function (versionNumber) {
-            $rootScope.versionNumber = versionNumber;
+            if (window.localStorage.getItem("versionNumber")) {
+              $rootScope.versionNumber = window.localStorage.getItem("versionNumber");
+            } else {
+              window.localStorage.setItem("versionNumber", versionNumber);
+              $rootScope.versionNumber = versionNumber;
+            }
+
 
             $http.get(window.cordova.file.applicationDirectory + "www/data/groups.json").success(function (book) {
               $http.get(window.cordova.file.applicationDirectory + "www/data/assets.json").success(function (assets) {
@@ -43,66 +52,76 @@ angular.module("bookbuilder2")
                     $scope.deploy = new Ionic.Deploy();
                     //deploy.setChannel("dev");
 
-                    $scope.deploy.info().then(function (deployInfo) {
-                      // deployInfo will be a JSON object that contains
-                      // information relating to the latest update deployed
-                      // on the device
-
-                      console.log(deployInfo);
-                    }, function (response) {
-                      console.log("callback 1 ", response);
-                    }, function (response) {
-                      console.log("callback 2", response);
-                    });
-
                     $scope.deploy.check().then(function (hasUpdate) {
 
                       if (hasUpdate) {
 
-                        $scope.popupRegisterVar = $ionicPopup.show({
-                          "template": $rootScope.selectedLanguage === 'el' ? 'Να κατεβεί και να ενημερωθεί η συσκευή σας με τη νέα έκδοση της εφαρμογής μας;' : 'Download and install the new version?',
-                          'title': $rootScope.selectedLanguage === 'el' ? 'Διαθέσιμη Ενημέρωση' : 'Update Available',
-                          "scope": $scope,
-                          "buttons": [
-                            {
-                              "text": $rootScope.selectedLanguage === 'el' ? 'ΟΧΙ' : 'NO',
-                              "type": "button-dark button-outline",
-                              "onTap": function (e) {
-                                $state.go("groups");
-                              }
-                            },
-                            {
-                              "text": $rootScope.selectedLanguage === 'el' ? 'ΝΑΙ' : 'YES',
-                              "type": "button-dark",
-                              "onTap": function (e) {
+                        $scope.deploy.getMetadata().then(function (metadata) {
+                          // metadata will be a JSON object
+                          console.log(metadata);
+                          if (!metadata || !metadata.version) {
+                            metadata = {
+                              version: ""
+                            }
+                          }
 
-                                $ionicLoading.show({
-                                  template: "Downloading ..."
-                                });
+                          $scope.popupRegisterVar = $ionicPopup.show({
+                            "template": $rootScope.selectedLanguage === 'el' ? 'Να κατεβεί και να ενημερωθεί η συσκευή σας με τη νέα έκδοση της εφαρμογής μας;' : 'Download and install the new version ' + metadata.version + '?',
+                            'title': $rootScope.selectedLanguage === 'el' ? 'Διαθέσιμη Ενημέρωση' : 'Update Available',
+                            "scope": $scope,
+                            "buttons": [
+                              {
+                                "text": $rootScope.selectedLanguage === 'el' ? 'ΟΧΙ' : 'NO',
+                                "type": "button-dark button-outline",
+                                "onTap": function (e) {
+                                  $state.go("groups");
+                                }
+                              },
+                              {
+                                "text": $rootScope.selectedLanguage === 'el' ? 'ΝΑΙ' : 'YES',
+                                "type": "button-dark",
+                                "onTap": function (e) {
 
-                                $scope.deploy.update().then(function (res) {
-                                  console.log('Ionic Deploy: Update Success! ', res);
 
-                                  $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "assets")
+                                  window.localStorage.setItem("versionNumber", metadata.version);
+                                  if (window.localStorage.getItem("versionNumber")) {
+                                    $rootScope.versionNumber = window.localStorage.getItem("versionNumber");
+                                  }
+
+                                  $ionicLoading.show({
+                                    template: "Downloading ..."
+                                  });
+
+                                  $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data")
                                     .then(function (success) {
                                       console.log("assets directory deleted!");
+                                      $scope.deploy.update().then(function (res) {
+                                        console.log('Ionic Deploy: Update Success! ', res);
+
+                                      }, function (err) {
+                                        console.log('Ionic Deploy: Update error! ', err);
+                                        $ionicLoading.hide();
+                                        $state.go("groups");
+                                      }, function (prog) {
+                                        console.log('Ionic Deploy: Progress... ', prog);
+                                        $ionicLoading.show({
+                                          template: "Downloading " + parseInt(prog) + "%"
+                                        });
+                                      });
                                     }, function (error) {
                                       console.log(error);
+                                      $state.go("groups");
                                     });
-
-                                }, function (err) {
-                                  console.log('Ionic Deploy: Update error! ', err);
-                                  $ionicLoading.hide();
-                                  $state.go("groups");
-                                }, function (prog) {
-                                  console.log('Ionic Deploy: Progress... ', prog);
-                                  $ionicLoading.show({
-                                    template: "Downloading " + parseInt(prog) + "%"
-                                  });
-                                });
+                                }
                               }
-                            }
-                          ]
+                            ]
+                          });
+                        }, function (response) {
+                          console.log("callback meta 1 ", response);
+                          $state.go("groups");
+                        }, function (response) {
+                          console.log("callback meta 2", response);
+                          $state.go("groups");
                         });
                       } else {
                         $state.go("groups");
@@ -121,11 +140,9 @@ angular.module("bookbuilder2")
         }, function (error) {
           console.log(error);
         });
-
       } else {
+        $rootScope.rootDir = "";
         $state.go("groups");
       }
-
     });
-
   });

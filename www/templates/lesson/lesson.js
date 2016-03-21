@@ -9,7 +9,7 @@ angular.module("bookbuilder2")
       var ctx = document.getElementById("lessonCanvas").getContext("2d");
       stage.canvas.height = window.innerHeight;
       stage.canvas.width = window.innerWidth;
-      stage.enableDOMEvents(true);
+      stage.enableDOMEvents(false);
       ctx.mozImageSmoothingEnabled = true;
       ctx.webkitImageSmoothingEnabled = true;
       ctx.msImageSmoothingEnabled = true;
@@ -21,7 +21,6 @@ angular.module("bookbuilder2")
       stage.enableMouseOver(0);
       stage.mouseMoveOutside = false;
 
-
       createjs.Ticker.framerate = 20;
       var handleTick = function () {
         $scope.fps = createjs.Ticker.getMeasuredFPS().toFixed(2);
@@ -30,16 +29,34 @@ angular.module("bookbuilder2")
       };
       createjs.Ticker.addEventListener("tick", handleTick);
 
+      //EVENTS THAT SHOULD BE USED TO CONTROL THE APP
+      $scope.$on('$destroy', function () {
+        console.log('destroy');
+        createjs.Ticker.framerate = 0;
+      });
+
+      $ionicPlatform.on('pause', function () {
+        console.log('pause');
+        createjs.Ticker.framerate = 0;
+      });
+
+      $ionicPlatform.on('resume', function () {
+        console.log('resume');
+        $timeout(function () {
+          createjs.Ticker.framerate = 20;
+        }, 2000);
+      });
+
       /*Image Loader*/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-        src: "data/assets/lesson_menu_background_image_2_blue.png"
+        src: $rootScope.rootDir + "data/assets/lesson_menu_background_image_2_blue.png"
       }));
       imageLoader.load();
 
       imageLoader.on("complete", function (r) {
 
         /*Creating Bitmap Background for Canvas*/
-        var background = new createjs.Bitmap("data/assets/lesson_menu_background_image_2_blue.png");
+        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/lesson_menu_background_image_2_blue.png");
 
         /*************** CALCULATING SCALING *********************/
         var scaleY = stage.canvas.height / background.image.height;
@@ -71,11 +88,11 @@ angular.module("bookbuilder2")
 
         /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
 
-        $http.get("data/assets/head_menu_button_sprite.json")
+        $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
           .success(function (response) {
 
             //Reassigning images with the rest of resource
-            response.images[0] = "data/assets/" + response.images[0];
+            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
 
             //Reassigning animations
             response.animations = {
@@ -178,11 +195,11 @@ angular.module("bookbuilder2")
             stage.update();
 
 
-            $http.get("data/assets/" + response.lessonButtons.readingButtonFileName)
+            $http.get($rootScope.rootDir + "data/assets/" + response.lessonButtons.readingButtonFileName)
               .success(function (response) {
 
                 //Reassigning images with the rest of resource
-                response.images[0] = "data/assets/" + response.images[0];
+                response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
 
                 //Reassigning animations
                 response.animations = {
@@ -233,11 +250,11 @@ angular.module("bookbuilder2")
 
             /*-----------------------------------------VOCABULARY BUTTON----------------------------------------*/
 
-            $http.get("data/assets/" + response.lessonButtons.vocabularyButtonFileName)
+            $http.get($rootScope.rootDir + "data/assets/" + response.lessonButtons.vocabularyButtonFileName)
               .success(function (response) {
 
                 //Reassigning images with the rest of resource
-                response.images[0] = "data/assets/" + response.images[0];
+                response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
 
                 //Reassigning animations
                 response.animations = {
@@ -282,11 +299,11 @@ angular.module("bookbuilder2")
 
             /*-----------------------------------------RESULTS BUTTON----------------------------------------*/
 
-            $http.get("data/assets/" + response.lessonButtons.resultsButtonFileName)
+            $http.get($rootScope.rootDir + "data/assets/" + response.lessonButtons.resultsButtonFileName)
               .success(function (response) {
 
                 //Reassigning images with the rest of resource
-                response.images[0] = "data/assets/" + response.images[0];
+                response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
 
                 //Reassigning animations
                 response.animations = {
@@ -327,14 +344,14 @@ angular.module("bookbuilder2")
             _.each(response.lessonMenu, function (activity, key, list) {
 
               waterfallFunctions.push(function (waterfallCallback) {
-                var spriteResourceUrl = "data/assets/" + activity.buttonFileName;
+                var spriteResourceUrl = $rootScope.rootDir + "data/assets/" + activity.buttonFileName;
 
                 $http.get(spriteResourceUrl)
                   .success(function (response) {
 
 
                     //Reassigning images with the rest of resource
-                    response.images[0] = "data/assets/" + response.images[0];
+                    response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
 
                     //Reassigning animations
                     response.animations = {

@@ -11,5 +11,6 @@
         <strong>LOADING {{downloading && totalFiles ? ((downloading / totalFiles) * 100).toFixed() : 0}} %</strong>
       </div>
     </div>
+    <div style="float:right; bottom: 0px" ng-if="versionNumber">v{{versionNumber}}</div>
   </ion-content>
 </ion-view>

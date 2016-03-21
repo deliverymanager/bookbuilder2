@@ -3,48 +3,63 @@
   "description": "Choose the correct answer.",
   "questions": [{
     "pretext": "Ben ",
+    "midtext":"",
     "postext": "my party. I wish I hadn't invited him.",
     "aChoice": "required",
     "bChoice": "earned",
-    "cChoice": "ruined"
+    "cChoice": "ruined",
+    "dChoice": ""
   }, {
     "pretext": "My new shoes are very ",
+    "midtext":"",
     "postext": "! I always wear them when I go jogging.",
     "aChoice": "comfortable",
     "bChoice": "awake",
-    "cChoice": "strict"
+    "cChoice": "strict",
+    "dChoice": ""
   }, {
     "pretext": "Jill will always be there for you. You can ",
+    "midtext":"",
     "posttext": " her.",
     "aChoice": "try on",
     "bChoice": "count on",
-    "cChoice": "require"
+    "cChoice": "require",
+    "dChoice": ""
   }, {
     "pretext": "It's not ",
+    "midtext":"",
     "posttext": "to take an umbrella with you. It's sunny today!",
     "aChoice": "enjoyable",
     "bChoice": "unlike",
-    "cChoice": "necessary"
+    "cChoice": "necessary",
+    "dChoice": ""
   }, {
     "pretext": "The car accident was a frightening ",
+    "midtext":"",
     "posttext": "for Elizabeth.",
     "aChoice": "expedition",
     "bChoice": "experience",
-    "cChoice": "shopping mall"
+    "cChoice": "shopping mall",
+    "dChoice": ""
   }, {
     "pretext": "I think you should ",
+    "midtext":"",
     "posttext": "this dress. It's beautiful and cheap, as well!",
     "aChoice": "ruin",
     "bChoice": "try on",
-    "cChoice": "count on"
+    "cChoice": "count on",
+    "dChoice": ""
   }, {
     "pretext": "if you don't follow the ",
+    "midtext":"",
     "posttext": ", you will be punished.",
     "aChoice": "rules",
     "bChoice": "encouragements",
-    "cChoice": "stores"
+    "cChoice": "stores",
+    "dChoice": ""
   }, {
     "pretext": "Our new teacher is ",
+    "midtext":"",
     "posttext": ", but very helpful.",
     "aChoice": "comfortable",
     "bChoice": "strict",
@@ -54,12 +69,15 @@
     "posttext": "a lot of money.",
     "aChoice": "ruins",
     "bChoice": "requires",
-    "cChoice": "earns"
+    "cChoice": "earns",
+    "dChoice": ""
   }, {
     "pretext": "I should go to the bank, get some ",
+    "midtext":"",
     "posttext": "and pay the bills.",
     "aChoice": "cash",
     "bChoice": "tradition",
-    "cChoice": "petrol"
+    "cChoice": "petrol",
+    "dChoice": ""
   }]
 }
