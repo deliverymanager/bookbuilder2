@@ -324,6 +324,10 @@ angular.module("bookbuilder2")
                   var lessonButton = new createjs.Sprite(lessonButtonSpriteSheet, "normal");
 
                   /* -------------------------------- CLICK ON LESSON BUTTON -------------------------------- */
+                  lessonButton.addEventListener("rollover", function (event) {
+                    console.log("rollover event on a lesson button!");
+                  });
+
                   lessonButton.addEventListener("mousedown", function (event) {
                     console.log("mousedown event on a lesson button!");
                     lessonButton.gotoAndPlay("onSelection");
