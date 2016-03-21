@@ -20,6 +20,7 @@ angular.module("bookbuilder2")
 
       if (window.cordova && window.cordova.platformId !== "browser") {
 
+        window.plugins.insomnia.keepAwake();
         console.log("hide SplashScreen");
         navigator.splashscreen.hide();
 
@@ -41,6 +42,18 @@ angular.module("bookbuilder2")
 
                     $scope.deploy = new Ionic.Deploy();
                     //deploy.setChannel("dev");
+
+                    $scope.deploy.info().then(function (deployInfo) {
+                      // deployInfo will be a JSON object that contains
+                      // information relating to the latest update deployed
+                      // on the device
+
+                      console.log(deployInfo);
+                    }, function (response) {
+                      console.log("callback 1 ", response);
+                    }, function (response) {
+                      console.log("callback 2", response);
+                    });
 
                     $scope.deploy.check().then(function (hasUpdate) {
 

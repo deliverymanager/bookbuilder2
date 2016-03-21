@@ -21,13 +21,32 @@ angular.module("bookbuilder2")
       stage.enableMouseOver(0);
       stage.mouseMoveOutside = false;
 
-      createjs.Ticker.framerate = 20;
+      var Ticker = createjs.Ticker;
+      Ticker.framerate = 20;
+
       var handleTick = function () {
-        $scope.fps = createjs.Ticker.getMeasuredFPS().toFixed(2);
+        $scope.fps = Ticker.getMeasuredFPS().toFixed(2);
         $scope.$apply();
         stage.update();
       };
-      createjs.Ticker.addEventListener("tick", handleTick);
+      Ticker.addEventListener("tick", handleTick);
+
+      //EVENTS THAT SHOULD BE USED TO CONTROL THE APP
+      $scope.$on('$destroy', function () {
+        console.log('destroy');
+      });
+
+      $ionicPlatform.on('pause', function () {
+        console.log('pause');
+        Ticker.framerate = 0;
+      });
+
+      $ionicPlatform.on('resume', function () {
+        console.log('resume');
+        $timeout(function () {
+          Ticker.framerate = 20;
+        }, 2000);
+      });
 
 
       /*Image Loader*/
@@ -311,7 +330,6 @@ angular.module("bookbuilder2")
 
                   lessonButton.addEventListener("pressup", function (event) {
                     console.log("pressup event on a lesson button !");
-
                     lessonButton.gotoAndPlay("tap");
                     stage.update();
 
