@@ -113,13 +113,13 @@
         },
         {
           "title": "Lesson 15",
-          "active": true,
+          "active": false,
           "lessonButtonSprite": "first_menu_lesson_15_button_sprite.json",
           "id": "lesson15"
         },
         {
           "title": "Lesson 16",
-          "active": true,
+          "active": false,
           "lessonButtonSprite": "first_menu_lesson_16_button_sprite.json",
           "id": "lesson16"
         }

@@ -43,8 +43,7 @@ angular.module("bookbuilder2")
             $http.get(window.cordova.file.applicationDirectory + "www/data/groups.json").success(function (book) {
               $http.get(window.cordova.file.applicationDirectory + "www/data/assets.json").success(function (assets) {
 
-
-                Download.assets(assets, book.cdnUrl, function (response) {
+                Download.assets(assets, book.cdnUrl, "data", "assets", function (response) {
                   console.log("response", response);
                   if (response) {
 
@@ -145,4 +144,11 @@ angular.module("bookbuilder2")
         $state.go("groups");
       }
     });
+
+    var checkLessonAssets = function (lessonId) {
+
+
+
+    };
+
   });

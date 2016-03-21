@@ -228,7 +228,7 @@ angular.module("bookbuilder2")
                     groupButton.lessons = lessonGroup.lessons;
                     savedGroupButtonsArray.push(groupButton);
                     if (!groupButton.active) {
-                      groupButton.alpha(0.5);
+                      groupButton.alpha = 0.5;
                     }
 
                     groupButton.y = yPosition;
@@ -352,7 +352,7 @@ angular.module("bookbuilder2")
                   savedLessonButtonsArray.push(lessonButton);
 
                   if (!lessonButton.active) {
-                    lessonButton.alpha(0.5);
+                    lessonButton.alpha = 0.5;
                   }
 
                   lessonButton.y = yPosition;
