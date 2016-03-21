@@ -185,7 +185,7 @@ angular.module("bookbuilder2")
                         stage.update();
 
 
-                        /*-------------------------------------TITLE CREATION--------------------------------------------*/
+                        /*-------------------------------------TITLE CREATION---------------------------------------*/
 
                         console.log("Lesson Title: ", response.title);
                         var title = new createjs.Text(response.title, "25px Arial", "white");
@@ -200,8 +200,9 @@ angular.module("bookbuilder2")
                         stage.update();
 
 
-            $http.get($rootScope.rootDir + "data/assets/" + response.lessonButtons.readingButtonFileName)
-              .success(function (response) {
+                        /*-----------------------------------------READING BUTTON----------------------------------------*/
+                        $http.get("data/assets/" + response.lessonButtons.readingButtonFileName)
+                            .success(function (response) {
 
                 //Reassigning images with the rest of resource
                 response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
@@ -227,7 +228,7 @@ angular.module("bookbuilder2")
 
                                 //We need to scale every container!
                                 readingButton.scaleX = readingButton.scaleY = scale;
-                                readingButton.x = backgroundPosition.x + (backgroundPosition.width / 2);
+                                readingButton.x = backgroundPosition.x + (backgroundPosition.width / 1.5);
                                 readingButton.y = backgroundPosition.y + (backgroundPosition.height / 1.5);
 
 

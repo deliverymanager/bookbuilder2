@@ -14,17 +14,17 @@
     },
     {
       "pretext": "Ann talks too much! Every time we meet for a coffe she ",
-      "posttext": ".",
+      "postext": ".",
       "answer": "4"
     },
     {
       "pretext": "My sister and I ",
-      "posttext": "yesterday to buy some new clothes and have fun!",
+      "postext": "yesterday to buy some new clothes and have fun!",
       "answer": "2"
     },
     {
       "pretext": "Henry's trip to london was amazing! He ",
-      "posttext": "!",
+      "postext": "!",
       "answer": "1"
     }
   ],

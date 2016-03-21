@@ -373,7 +373,8 @@ angular.module("bookbuilder2")
                     waterfallCallback();
                   }, 100);
 
-                }).error(function (error) {
+                })
+                  .error(function (error) {
 
                 console.log("There was an error on getting lesson json");
 
