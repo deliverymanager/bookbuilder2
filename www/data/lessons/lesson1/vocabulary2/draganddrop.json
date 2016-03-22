@@ -3,27 +3,27 @@
   "description": "Drag and drop.",
   "questions": [
     {
-      "pretext": "The kids made so much noise yesterday. They ",
+      "pretext": "The kids made so much noise yesterday.\nThey ",
       "postext": "!",
       "answer": "5"
     },
     {
-      "pretext": "I should ask my father if he'll let me go out tonight. He always ",
+      "pretext": "I should ask my father if he'll let me go out tonight.\nHe always ",
       "postext": ".",
       "answer": "3"
     },
     {
-      "pretext": "Ann talks too much! Every time we meet for a coffe she ",
+      "pretext": "Ann talks too much! Every time we meet for a coffee \nshe ",
       "postext": ".",
       "answer": "4"
     },
     {
       "pretext": "My sister and I ",
-      "postext": "yesterday to buy some new clothes and have fun!",
+      "postext": "yesterday to buy \nsome new clothes and have fun!",
       "answer": "2"
     },
     {
-      "pretext": "Henry's trip to london was amazing! He ",
+      "pretext": "Henry's trip to london was amazing!\nHe ",
       "postext": "!",
       "answer": "1"
     }

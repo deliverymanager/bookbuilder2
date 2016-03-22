@@ -196,7 +196,7 @@ angular.module("bookbuilder2")
                     });//end of get menu button
 
 
-                /************************************** Initializing Page & Functions**************************************/
+                /************************************** Initializing Page & Functions **************************************/
 
                 init();
                 function init() {
@@ -204,6 +204,7 @@ angular.module("bookbuilder2")
                     console.log("Searching in localStorage fo activity: ", activityNameInLocalStorage);
                     if (LocalStorage.get(activityNameInLocalStorage)) {
                         activityData = JSON.parse(LocalStorage.get(activityNameInLocalStorage));
+                        addScoreText();
                         console.log("Activity data exist in localStorage and its: ", activityData);
                     } else {
                         var activityUrl = "data/lessons/" + $rootScope.selectedLesson.lessonId + "/" + $rootScope.activityFolder + "/draganddrop.json";
@@ -219,6 +220,8 @@ angular.module("bookbuilder2")
 
                                 //Assigning configured response to activityData
                                 activityData = response;
+
+                                addScoreText();
 
                                 //Saving it to localStorage
                                 LocalStorage.set(activityNameInLocalStorage, JSON.stringify(activityData));
@@ -263,6 +266,22 @@ angular.module("bookbuilder2")
                     return "Score: " + rightAnswers + " / " + activityData.questions.length;
                 }
 
+                /* ------------------------------------------ SCORE ---------------------------------------------- */
+                function addScoreText() {
+                    console.log("Title: ", score());
+                    var scoreText = new createjs.Text(score(), "27px Arial", "white");
+
+                    /*background.scaleX = background.scaleY = scale;*/
+                    scoreText.scaleX = scoreText.scaleY = scale;
+                    scoreText.x = backgroundPosition.x + (backgroundPosition.width / 1.3);
+                    scoreText.y = backgroundPosition.y + (backgroundPosition.height / 15);
+                    scoreText.textBaseline = "alphabetic";
+
+                    stage.addChild(scoreText);
+                    stage.update();
+
+                }
+
 
                 /*Function that fills activity questions with the right answers*/
                 function showAnswers() {
@@ -299,21 +318,6 @@ angular.module("bookbuilder2")
                 title.textBaseline = "alphabetic";
 
                 stage.addChild(title);
-                stage.update();
-
-                /* ------------------------------------------ SCORE ---------------------------------------------- */
-
-
-                console.log("Title: ", score());
-                var scoreText = new createjs.Text(score(), "27px Arial", "white");
-
-                /*background.scaleX = background.scaleY = scale;*/
-                scoreText.scaleX = scoreText.scaleY = scale;
-                scoreText.x = backgroundPosition.x + (backgroundPosition.width / 1.3);
-                scoreText.y = backgroundPosition.y + (backgroundPosition.height / 15);
-                scoreText.textBaseline = "alphabetic";
-
-                stage.addChild(scoreText);
                 stage.update();
 
 
@@ -365,7 +369,7 @@ angular.module("bookbuilder2")
 
                 /*Populating template with questions*/
 
-                //QUESTIONS
+                /********** QUESTIONS *********/
                 var questionsContainer = new createjs.Container();
                 /*It's important too define containers height before start calculating buttons*/
                 questionsContainer.width = 700;
@@ -380,42 +384,61 @@ angular.module("bookbuilder2")
                 stage.update();
 
 
-                //Starting and making it transparent
-                var testGraphics = new createjs.Graphics().beginFill("red");
+                /*//Starting and making it transparent
+                 var testGraphics = new createjs.Graphics().beginFill("red");
 
 
-                //Drawing the shape !!!NOTE Every optimization before drawRoundRect
-                testGraphics.drawRoundRect(0, 0, questionsContainer.width, questionsContainer.height, 1);
+                 //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+                 testGraphics.drawRoundRect(0, 0, questionsContainer.width, questionsContainer.height, 1);
 
-                var testShape = new createjs.Shape(testGraphics);
-                testShape.setTransform(questionsContainer.x, questionsContainer.y, scale, scale, 0, 0, 0, 0, 0);
-                questionsContainer.addChild(testShape);
-                stage.update();
+                 var testShape = new createjs.Shape(testGraphics);
+                 testShape.setTransform(questionsContainer.x, questionsContainer.y, scale, scale, 0, 0, 0, 0, 0);
+                 questionsContainer.addChild(testShape);
+                 stage.update();*/
+
 
                 var someGap = "__________";
 
-                /*Starting to filling questions*/
+                var waterfallFunctions = [];
 
-                var questionY = 0;
+                /*Starting to filling questions*/
+                var questionHeight = 80;
+                var questionY = backgroundPosition.y + (backgroundPosition.height / 19);
 
                 _.each(activityData.questions, function (question, key, list) {
-                    var formattedQuestion = question.pretext + someGap + question.postext;
-                    console.log("Question that it will be added: ", formattedQuestion);
 
-                    var questionText = new createjs.Text(formattedQuestion, "20px Arial", "black");
+                    //Filling the waterfall
+                    waterfallFunctions.push(function (waterfallCallback) {
 
-                    /*background.scaleX = background.scaleY = scale;*/
-                    questionText.scaleX = questionText.scaleY = scale;
-                    questionText.x = backgroundPosition.x + (backgroundPosition.width / 30);
-                    questionText.y = backgroundPosition.y + (backgroundPosition.height / (questionY += 1));
-                    questionText.textBaseline = "alphabetic";
+                        var formattedQuestion = question.pretext + someGap + question.postext;
+                        console.log("Question that it will be added: ", formattedQuestion);
 
-                    questionsContainer.addChild(questionText);
-                    stage.update();
+                        var questionText = new createjs.Text(formattedQuestion, "27px Arial", "black");
+
+                        /*background.scaleX = background.scaleY = scale;*/
+                        questionText.scaleX = questionText.scaleY = scale;
+                        questionText.x = backgroundPosition.x + (backgroundPosition.width / 25);
+                        questionText.y = questionY;
+                        questionText.textBaseline = "alphabetic";
+                        questionText.maxWidth = questionsContainer.width;
+
+                        questionY += questionHeight;
+
+                        questionsContainer.addChild(questionText);
+                        stage.update();
+
+                        waterfallCallback();
+
+                    });
+
+                });
+
+                async.waterfall(waterfallFunctions, function (callback) {
+                    console.log("Questions Inserted!");
                 });
 
 
-                //ANSWERS
+                /******** ANSWERS ********/
                 var answersContainer = new createjs.Container();
                 /*It's important too define containers height before start calculating buttons*/
                 answersContainer.width = 270;
@@ -426,21 +449,58 @@ angular.module("bookbuilder2")
                 answersContainer.x = backgroundPosition.x + (backgroundPosition.width / 2.75);
                 answersContainer.y = backgroundPosition.y + (backgroundPosition.height / 30);
 
+
                 stage.addChild(answersContainer);
                 stage.update();
 
 
-                //Starting and making it transparent
-                var test2Graphics = new createjs.Graphics().beginFill("orange");
+                var answerWaterfallFunctions = [];
+
+                var answerY = 100;
+                var answerHeight = backgroundPosition.y + (backgroundPosition.height / 40);
+
+                //Populating container with answers
+                _.each(activityData.answers, function (answer, key, list) {
+                    //Filling the waterfall
+                    answerWaterfallFunctions.push(function (waterfallCallback) {
 
 
-                //Drawing the shape !!!NOTE Every optimization before drawRoundRect
-                test2Graphics.drawRoundRect(0, 0, answersContainer.width, answersContainer.height, 1);
+                        var answerText = new createjs.Text(answer.text, "20px Arial", "blue");
 
-                var test2Shape = new createjs.Shape(test2Graphics);
-                test2Shape.setTransform(answersContainer.x, answersContainer.y, scale, scale, 0, 0, 0, 0, 0);
-                answersContainer.addChild(test2Shape);
-                stage.update();
+                        /*background.scaleX = background.scaleY = scale;*/
+                        answerText.scaleX = answerText.scaleY = scale;
+                        answerText.x = backgroundPosition.x + (backgroundPosition.width / 2.6);
+                        answerText.y = answerY;
+                        answerText.textBaseline = "alphabetic";
+                        answerText.maxWidth = answersContainer.width;
+                        answerText.textAlign = "left";
+
+                        answerY += answerHeight;
+
+                        answersContainer.addChild(answerText);
+                        stage.update();
+
+                        waterfallCallback();
+
+                    });
+                });
+
+                async.waterfall(answerWaterfallFunctions, function (callback) {
+                    console.log("answers Inserted!");
+                });
+
+
+                /* //Starting and making it transparent
+                 var test2Graphics = new createjs.Graphics().beginFill("orange");
+
+
+                 //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+                 test2Graphics.drawRoundRect(0, 0, answersContainer.width, answersContainer.height, 1);
+
+                 var test2Shape = new createjs.Shape(test2Graphics);
+                 test2Shape.setTransform(answersContainer.x, answersContainer.y, scale, scale, 0, 0, 0, 0, 0);
+                 answersContainer.addChild(test2Shape);
+                 stage.update();*/
 
 
                 /* ------------------------------------------ BUTTONS ---------------------------------------------- */
