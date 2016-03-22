@@ -385,16 +385,16 @@ angular.module("bookbuilder2")
         stage.update();
 
         /*//Starting and making it transparent
-        var testGraphics = new createjs.Graphics().beginFill("red");
+         var testGraphics = new createjs.Graphics().beginFill("red");
 
 
-        //Drawing the shape !!!NOTE Every optimization before drawRoundRect
-        testGraphics.drawRoundRect(0, 0, questionsContainer.width, questionsContainer.height, 1);
+         //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+         testGraphics.drawRoundRect(0, 0, questionsContainer.width, questionsContainer.height, 1);
 
-        var testShape = new createjs.Shape(testGraphics);
-        testShape.setTransform(questionsContainer.x, questionsContainer.y, scale, scale, 0, 0, 0, 0, 0);
-        questionsContainer.addChild(testShape);
-        stage.update();*/
+         var testShape = new createjs.Shape(testGraphics);
+         testShape.setTransform(questionsContainer.x, questionsContainer.y, scale, scale, 0, 0, 0, 0, 0);
+         questionsContainer.addChild(testShape);
+         stage.update();*/
 
 
         //backgroundPage
@@ -426,7 +426,7 @@ angular.module("bookbuilder2")
         stage.addChild(answersContainer);
         stage.update();
 
-        //Starting and making it transparent
+       /* //Starting and making it transparent
         var test2Graphics = new createjs.Graphics().beginFill("orange");
 
 
@@ -436,10 +436,38 @@ angular.module("bookbuilder2")
         var test2Shape = new createjs.Shape(test2Graphics);
         test2Shape.setTransform(answersContainer.x, answersContainer.y, scale, scale, 0, 0, 0, 0, 0);
         answersContainer.addChild(test2Shape);
+        stage.update();*/
+
+        //Adding answer bitmaps for a b c options
+        var choiceABitmap = new createjs.Bitmap("data/assets/multiple_choices_a_choice.png");
+        choiceABitmap.scaleX = scale;
+        choiceABitmap.scaleY = scale;
+        choiceABitmap.regX = choiceABitmap.image.width/2;
+        choiceABitmap.regY = choiceABitmap.image.height/2;
+        choiceABitmap.x = answersContainer.x;
+        choiceABitmap.y = answersContainer.y;
+        answersContainer.addChild(choiceABitmap);
         stage.update();
 
-        //backgroundPage
+        var choiceBBitmap = new createjs.Bitmap("data/assets/multiple_choices_b_choice.png");
+        choiceBBitmap.scaleX = scale;
+        choiceBBitmap.scaleY = scale;
+        choiceBBitmap.regX = choiceBBitmap.image.width/2;
+        choiceBBitmap.regY = choiceBBitmap.image.height/2;
+        choiceBBitmap.x = answersContainer.x/0.07;
+        choiceBBitmap.y = answersContainer.y;
+        answersContainer.addChild(choiceBBitmap);
+        stage.update();
 
+        var choiceCBitmap = new createjs.Bitmap("data/assets/multiple_choices_c_choice.png");
+        choiceCBitmap.scaleX = scale;
+        choiceCBitmap.scaleY = scale;
+        choiceCBitmap.regX = choiceCBitmap.image.width/2;
+        choiceCBitmap.regY = choiceCBitmap.image.height/2;
+        choiceCBitmap.x = answersContainer.x/0.13;
+        choiceCBitmap.y = answersContainer.y/0.7;
+        answersContainer.addChild(choiceCBitmap);
+        stage.update();
 
         //Text
 
