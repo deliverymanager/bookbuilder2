@@ -7,102 +7,56 @@ angular.module("bookbuilder2")
     /*- TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST -*/
 
     $rootScope.selectedLesson = {
-      "title": "Lesson 1 - Family Shopping",
-      "description": "Choose the correct answer.",
-      "questions": [
+      "lessonTitle": "Lesson 1",
+      "title": "Family shopping",
+      "lessonId": "lesson1",
+      "lessonMenu": [
         {
-          "pretext": "Ben ",
-          "midtext": "",
-          "postext": "my party. I wish I hadn't invited him.",
-          "aChoice": "required",
-          "bChoice": "earned",
-          "cChoice": "ruined",
-          "dChoice": ""
+          "name": "Vocabulary 1",
+          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
+          "activityFolder": "vocabulary1",
+          "activityTemplate": "multiple",
+          "numberOfQuestions": 10
         },
         {
-          "pretext": "My new shoes are very ",
-          "midtext": "",
-          "postext": "! I always wear them when I go jogging.",
-          "aChoice": "comfortable",
-          "bChoice": "awake",
-          "cChoice": "strict",
-          "dChoice": ""
+          "name": "Vocabulary 2",
+          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
+          "activityFolder": "vocabulary2",
+          "activityTemplate": "draganddrop",
+          "numberOfQuestions": 5
         },
         {
-          "pretext": "Jill will always be there for you. You can ",
-          "midtext": "",
-          "posttext": " her.",
-          "aChoice": "try on",
-          "bChoice": "count on",
-          "cChoice": "require",
-          "dChoice": ""
+          "name": "Vocabulary 3",
+          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
+          "activityFolder": "vocabulary3",
+          "activityTemplate": "multiple",
+          "numberOfQuestions": 5
         },
         {
-          "pretext": "It's not ",
-          "midtext": "",
-          "posttext": "to take an umbrella with you. It's sunny today!",
-          "aChoice": "enjoyable",
-          "bChoice": "unlike",
-          "cChoice": "necessary",
-          "dChoice": ""
+          "name": "Grammar 1",
+          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
+          "activityFolder": "grammar1",
+          "activityTemplate": "multiple",
+          "numberOfQuestions": 15
         },
         {
-          "pretext": "The car accident was a frightening ",
-          "midtext": "",
-          "posttext": "for Elizabeth.",
-          "aChoice": "expedition",
-          "bChoice": "experience",
-          "cChoice": "shopping mall",
-          "dChoice": ""
-        },
-        {
-          "pretext": "I think you should ",
-          "midtext": "",
-          "posttext": "this dress. It's beautiful and cheap, as well!",
-          "aChoice": "ruin",
-          "bChoice": "try on",
-          "cChoice": "count on",
-          "dChoice": ""
-        },
-        {
-          "pretext": "if you don't follow the ",
-          "midtext": "",
-          "posttext": ", you will be punished.",
-          "aChoice": "rules",
-          "bChoice": "encouragements",
-          "cChoice": "stores",
-          "dChoice": ""
-        },
-        {
-          "pretext": "Our new teacher is ",
-          "midtext": "",
-          "posttext": ", but very helpful.",
-          "aChoice": "comfortable",
-          "bChoice": "strict",
-          "cChoice": "essential"
-        },
-        {
-          "pretext": "Michael's job is tiring, but he ",
-          "posttext": "a lot of money.",
-          "aChoice": "ruins",
-          "bChoice": "requires",
-          "cChoice": "earns",
-          "dChoice": ""
-        },
-        {
-          "pretext": "I should go to the bank, get some ",
-          "midtext": "",
-          "posttext": "and pay the bills.",
-          "aChoice": "cash",
-          "bChoice": "tradition",
-          "cChoice": "petrol",
-          "dChoice": ""
+          "name": "Grammar 2",
+          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
+          "activityFolder": "grammar2",
+          "activityTemplate": "multiple",
+          "numberOfQuestions": 15
         }
-      ]
+      ],
+      "lessonButtons": {
+        "resultsButtonFileName": "lesson_results_button_sprite.json",
+        "vocabularyButtonFileName": "lesson_results_button_sprite.json",
+        "readingButtonFileName": "lesson_results_button_sprite.json"
+      }
     };
 
     $rootScope.activityFolder = "vocabulary1";
     $rootScope.rootDir = "";
+
 
     /*- TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST -*/
 
@@ -244,7 +198,7 @@ angular.module("bookbuilder2")
           });//end of get menu button
 
 
-        /************************************** Initializing Page & Functions**************************************/
+        /************************************** Initializing Page & Functions **************************************/
 
         init();
         function init() {
@@ -252,10 +206,11 @@ angular.module("bookbuilder2")
           console.log("Searching in localStorage fo activity: ", activityNameInLocalStorage);
           if (LocalStorage.get(activityNameInLocalStorage)) {
             activityData = JSON.parse(LocalStorage.get(activityNameInLocalStorage));
+            addScoreText();
             console.log("Activity data exist in localStorage and its: ", activityData);
           } else {
             var activityUrl = "data/lessons/" + $rootScope.selectedLesson.lessonId + "/" + $rootScope.activityFolder + "/multiple.json";
-            console.log("trying to get json for the url: ", activityUrl);
+            console.log("Trying to get json for the url: ", activityUrl);
             $http.get(activityUrl)
               .success(function (response) {
                 console.log("Success on getting json for the url. The response object is: ", response);
@@ -268,6 +223,8 @@ angular.module("bookbuilder2")
                 //Assigning configured response to activityData
                 activityData = response;
 
+                addScoreText();
+
                 //Saving it to localStorage
                 LocalStorage.set(activityNameInLocalStorage, JSON.stringify(activityData));
 
@@ -275,7 +232,7 @@ angular.module("bookbuilder2")
 
               })
               .error(function (error) {
-                console.log("Error on getting json for the url...", error);
+                console.log("Error on getting json for the url...:", error);
               });
           }
         }
@@ -352,18 +309,19 @@ angular.module("bookbuilder2")
         /* ------------------------------------------ SCORE ---------------------------------------------- */
 
 
-        console.log("Title: ", score());
-        var scoreText = new createjs.Text(score(), "27px Arial", "white");
+        function addScoreText() {
+          console.log("Title: ", score());
+          var scoreText = new createjs.Text(score(), "27px Arial", "white");
 
-        /*background.scaleX = background.scaleY = scale;*/
-        scoreText.scaleX = scoreText.scaleY = scale;
-        scoreText.x = backgroundPosition.x + (backgroundPosition.width / 1.3);
-        scoreText.y = backgroundPosition.y + (backgroundPosition.height / 15);
-        scoreText.textBaseline = "alphabetic";
+          /*background.scaleX = background.scaleY = scale;*/
+          scoreText.scaleX = scoreText.scaleY = scale;
+          scoreText.x = backgroundPosition.x + (backgroundPosition.width / 1.3);
+          scoreText.y = backgroundPosition.y + (backgroundPosition.height / 15);
+          scoreText.textBaseline = "alphabetic";
 
-        stage.addChild(scoreText);
-        stage.update();
-
+          stage.addChild(scoreText);
+          stage.update();
+        }
 
         /* ------------------------------------------ Lesson Title ---------------------------------------------- */
 
@@ -401,7 +359,7 @@ angular.module("bookbuilder2")
 
         /*background.scaleX = background.scaleY = scale;*/
         descriptionText.scaleX = descriptionText.scaleY = scale;
-        descriptionText.x = backgroundPosition.x + (backgroundPosition.width / 1.3);
+        descriptionText.x = backgroundPosition.x + (backgroundPosition.width / 1.4);
         descriptionText.y = backgroundPosition.y + (backgroundPosition.height / 9);
         descriptionText.textBaseline = "alphabetic";
 
@@ -411,14 +369,111 @@ angular.module("bookbuilder2")
 
         /* ------------------------------------------ QUESTIONS & ANSWERS ---------------------------------------------- */
 
-        /*Populating template with questions*/
+        /***----------------------------------- QUESTIONS -----------------------------------***/
+        //Container
+        var questionsContainer = new createjs.Container();
+        /*It's important too define containers height before start calculating buttons*/
+        questionsContainer.width = 975;
+        questionsContainer.height = 265;
 
-        //QUESTIONS
+        questionsContainer.scaleX = questionsContainer.scaleY = scale;
+
+        questionsContainer.x = backgroundPosition.x + (backgroundPosition.width / 30);
+        questionsContainer.y = backgroundPosition.y + (backgroundPosition.height / 30);
+
+        stage.addChild(questionsContainer);
+        stage.update();
+
+        /*//Starting and making it transparent
+        var testGraphics = new createjs.Graphics().beginFill("red");
 
 
-        //ANSWERS
+        //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+        testGraphics.drawRoundRect(0, 0, questionsContainer.width, questionsContainer.height, 1);
+
+        var testShape = new createjs.Shape(testGraphics);
+        testShape.setTransform(questionsContainer.x, questionsContainer.y, scale, scale, 0, 0, 0, 0, 0);
+        questionsContainer.addChild(testShape);
+        stage.update();*/
 
 
+        //backgroundPage
+        var questionBackground = new createjs.Bitmap("data/assets/multiple_choice_text_bubble.png");
+        questionBackground.scaleX = scale;
+        questionBackground.scaleY = scale;
+        questionBackground.regX = questionsContainer.regX;
+        questionBackground.regY = questionsContainer.regY;
+        questionBackground.x = questionsContainer.x;
+        questionBackground.y = questionsContainer.y;
+        questionsContainer.addChild(questionBackground);
+        stage.update();
+
+        //Text
+
+
+        /***----------------------------------- ANSWERS -----------------------------------***/
+        //Container
+        var answersContainer = new createjs.Container();
+        /*It's important too define containers height before start calculating buttons*/
+        answersContainer.width = 975;
+        answersContainer.height = 185;
+
+        answersContainer.scaleX = answersContainer.scaleY = scale;
+
+        answersContainer.x = backgroundPosition.x + (backgroundPosition.width / 30);
+        answersContainer.y = backgroundPosition.y + (backgroundPosition.height / 4.45);
+
+        stage.addChild(answersContainer);
+        stage.update();
+
+        //Starting and making it transparent
+        var test2Graphics = new createjs.Graphics().beginFill("orange");
+
+
+        //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+        test2Graphics.drawRoundRect(0, 0, answersContainer.width, answersContainer.height, 1);
+
+        var test2Shape = new createjs.Shape(test2Graphics);
+        test2Shape.setTransform(answersContainer.x, answersContainer.y, scale, scale, 0, 0, 0, 0, 0);
+        answersContainer.addChild(test2Shape);
+        stage.update();
+
+        //backgroundPage
+
+
+        //Text
+
+        /***----------------------------------- BOTTOM BAR -----------------------------------***/
+        //Container
+        var bottomBarContainer = new createjs.Container();
+        /*It's important too define containers height before start calculating buttons*/
+        bottomBarContainer.width = 975;
+        bottomBarContainer.height = 80;
+
+        bottomBarContainer.scaleX = bottomBarContainer.scaleY = scale;
+
+        bottomBarContainer.x = backgroundPosition.x + (backgroundPosition.width / 30);
+        bottomBarContainer.y = backgroundPosition.y + (backgroundPosition.height / 2.78);
+
+        stage.addChild(bottomBarContainer);
+        stage.update();
+
+        //Starting and making it transparent
+        var test3Graphics = new createjs.Graphics().beginFill("yellow");
+
+
+        //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+        test3Graphics.drawRoundRect(0, 0, bottomBarContainer.width, bottomBarContainer.height, 1);
+
+        var test3Shape = new createjs.Shape(test3Graphics);
+        test3Shape.setTransform(bottomBarContainer.x, bottomBarContainer.y, scale, scale, 0, 0, 0, 0, 0);
+        bottomBarContainer.addChild(test3Shape);
+        stage.update();
+
+        //backgroundPage
+
+
+        //Text
 
         /* ------------------------------------------ BUTTONS ---------------------------------------------- */
 

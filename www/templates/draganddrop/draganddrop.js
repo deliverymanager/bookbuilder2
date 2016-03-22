@@ -208,7 +208,7 @@ angular.module("bookbuilder2")
                         console.log("Activity data exist in localStorage and its: ", activityData);
                     } else {
                         var activityUrl = "data/lessons/" + $rootScope.selectedLesson.lessonId + "/" + $rootScope.activityFolder + "/draganddrop.json";
-                        console.log("trying to get json for the url: ", activityUrl);
+                        console.log("Trying to get json for the url: ", activityUrl);
                         $http.get(activityUrl)
                             .success(function (response) {
                                 console.log("Success on getting json for the url. The response object is: ", response);
@@ -230,7 +230,7 @@ angular.module("bookbuilder2")
 
                             })
                             .error(function (error) {
-                                console.log("Error on getting json for the url...", error);
+                                console.log("Error on getting json for the url...:", error);
                             });
                     }
                 }
@@ -336,8 +336,7 @@ angular.module("bookbuilder2")
                 stage.update();
 
 
-                /* ------------------------------------------ DESCRIPTION SHAPE AND TITLE ---------------------------------------------- */
-
+                /* ---------------------------------- DESCRIPTION SHAPE AND TITLE -----------------------------------------*/
                 //Starting and making it transparent
                 var descriptionGraphics = new createjs.Graphics().beginFill("#69B8C7");
 
@@ -402,7 +401,7 @@ angular.module("bookbuilder2")
                 var waterfallFunctions = [];
 
                 /*Starting to filling questions*/
-                var questionHeight = 80;
+                var questionHeight = 100;
                 var questionY = backgroundPosition.y + (backgroundPosition.height / 19);
 
                 _.each(activityData.questions, function (question, key, list) {
@@ -413,7 +412,7 @@ angular.module("bookbuilder2")
                         var formattedQuestion = question.pretext + someGap + question.postext;
                         console.log("Question that it will be added: ", formattedQuestion);
 
-                        var questionText = new createjs.Text(formattedQuestion, "27px Arial", "black");
+                        var questionText = new createjs.Text(formattedQuestion, "23px Arial", "black");
 
                         /*background.scaleX = background.scaleY = scale;*/
                         questionText.scaleX = questionText.scaleY = scale;
@@ -421,6 +420,7 @@ angular.module("bookbuilder2")
                         questionText.y = questionY;
                         questionText.textBaseline = "alphabetic";
                         questionText.maxWidth = questionsContainer.width;
+                        questionText.lineHeight = 30;
 
                         questionY += questionHeight;
 
@@ -469,13 +469,29 @@ angular.module("bookbuilder2")
 
                         /*background.scaleX = background.scaleY = scale;*/
                         answerText.scaleX = answerText.scaleY = scale;
-                        answerText.x = backgroundPosition.x + (backgroundPosition.width / 2.6);
+                        answerText.x = backgroundPosition.x + (backgroundPosition.width / 2.1);
                         answerText.y = answerY;
                         answerText.textBaseline = "alphabetic";
                         answerText.maxWidth = answersContainer.width;
-                        answerText.textAlign = "left";
+                        answerText.regX = answerText.width/2;
+                        answerText.textAlign = "center";
 
                         answerY += answerHeight;
+
+                        /*DRAG AND DROP EVENT*/
+                        answerText.on("pressmove", function (evt) {
+
+                            console.log("this: ", this);
+
+                            var local = stage.globalToLocal(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
+                            this.x = local.x;
+                            this.y = local.y;
+
+                            $scope.stage.update();
+                        });
+
+
+                        answerText.on("pressup", function(evt) { console.log("up"); });
 
                         answersContainer.addChild(answerText);
                         stage.update();
