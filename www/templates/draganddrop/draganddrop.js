@@ -106,7 +106,7 @@ angular.module("bookbuilder2")
 
                 /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
 
-                $http.get("data/assets/head_menu_button_sprite.json")
+                $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
                     .success(function (response) {
 
             //Reassigning images with the rest of resource
@@ -159,7 +159,7 @@ angular.module("bookbuilder2")
                         activityData = JSON.parse(LocalStorage.get(activityNameInLocalStorage));
                         console.log("Activity data exist in localStorage and its: ", activityData);
                     } else {
-                        var activityUrl = "data/lessons/" + $rootScope.selectedLesson.lessonId + "/" + $rootScope.activityFolder + "/draganddrop.json";
+                        var activityUrl = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.lessonId + "/" + $rootScope.activityFolder + "/draganddrop.json";
                         console.log("trying to get json for the url: ", activityUrl);
                         $http.get(activityUrl)
                             .success(function (response) {

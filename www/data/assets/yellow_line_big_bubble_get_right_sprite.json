@@ -1,0 +1,24 @@
+{
+
+"images": [
+    "yellow_line_big_bubble_get_right_sprite.png"
+],
+
+"frames": [
+    [1, 1, 51, 73, 0, 0, 0],
+    [1, 76, 51, 73, 0, 0, 0],
+    [1, 151, 51, 73, 0, 0, 0]
+],
+
+"animations": {
+    "0": [0],
+    "1": [1],
+    "3": [2]
+},
+
+"texturepacker": [
+        "SmartUpdateHash: $TexturePacker:SmartUpdate:a57aa324258a877f28070aa129ac3d45:e2bba2b2628db45dff47170844dd45a8:9d985e5ec355d76a4fa2be537c10bc4e$",
+        "Created with TexturePacker (https://www.codeandweb.com/texturepacker) for EaselJS"
+]
+
+}

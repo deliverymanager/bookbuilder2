@@ -1,0 +1,24 @@
+{
+
+"images": [
+    "multiple_choice_choice_button_get_wrong_sprite.png.png"
+],
+
+"frames": [
+    [1, 1, 405, 67, 0, -2, -1],
+    [1, 70, 405, 67, 0, -2, -1],
+    [1, 139, 405, 67, 0, -2, -1]
+],
+
+"animations": {
+    "0": [0],
+    "1": [1],
+    "2": [2]
+},
+
+"texturepacker": [
+        "SmartUpdateHash: $TexturePacker:SmartUpdate:246c3e2a59a748b53bdce3558c6793e9:47b4e69b757a545c1d7b6a9caa7a1855:e796021849eba41ba6b5cd6980da6372$",
+        "Created with TexturePacker (https://www.codeandweb.com/texturepacker) for EaselJS"
+]
+
+}

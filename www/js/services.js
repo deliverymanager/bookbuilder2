@@ -64,10 +64,6 @@ angular.module("bookbuilder2")
               });
             });
 
-            $rootScope.totalFiles = seriesFunctions.length;
-            console.log("$rootScope.totalFiles", $rootScope.totalFiles);
-            $rootScope.downloading = 0;
-
             async.parallelLimit(seriesFunctions, 5, function (err, response) {
               console.log("Downloading FINISHED!!!");
               if (err) {

@@ -1,0 +1,51 @@
+{
+  "title": "Lesson 1 - Family Shopping",
+  "description": "Choose the correct answer.",
+  "questions": [
+    {
+      "pretext": "Eating all together on Christmas Day is a family ",
+      "midtext": "",
+      "postext": ".",
+      "aChoice": "traditional",
+      "bChoice": "tradition",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "Computer skills are a ",
+      "midtext": "",
+      "postext": "for this job.",
+      "aChoice": "requirement",
+      "bChoice": "require",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "Our teachers always ",
+      "midtext": "",
+      "posttext": "us to participate in group activities.",
+      "aChoice": "encourage",
+      "bChoice": "encouragement",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "Some people still wear ",
+      "midtext": "",
+      "posttext": "clothes in some villages.",
+      "aChoice": "tradition",
+      "bChoice": "traditional",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "Working with children ",
+      "midtext": "",
+      "posttext": "a lot o patience.",
+      "aChoice": "requirements",
+      "bChoice": "requires",
+      "cChoice": "",
+      "dChoice": ""
+    }
+  ]
+}
