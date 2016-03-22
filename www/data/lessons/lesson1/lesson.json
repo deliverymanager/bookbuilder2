@@ -41,7 +41,7 @@
   ],
   "lessonButtons": {
       "resultsButtonFileName": "lesson_results_button_sprite.json",
-      "vocabularyButtonFileName": "lesson_results_button_sprite.json",
-      "readingButtonFileName": "lesson_results_button_sprite.json"
+      "vocabularyButtonFileName": "menu_vocabulary_bubble_button.sprite.json",
+      "readingButtonFileName": "menu_reading_bubble_button.sprite.json"
     }
 }
