@@ -9,7 +9,8 @@
             "aChoice": "required",
             "bChoice": "earned",
             "cChoice": "ruined",
-            "dChoice": ""
+            "dChoice": "",
+            "answerChoice": "bChoice"
     },
         {
             "pretext": "My new shoes are very ",
@@ -18,7 +19,8 @@
             "aChoice": "comfortable",
             "bChoice": "awake",
             "cChoice": "strict",
-            "dChoice": ""
+            "dChoice": "",
+            "answerChoice": "cChoice"
     },
         {
             "pretext": "Jill will always be there for you. You can ",
@@ -27,7 +29,8 @@
             "aChoice": "try on",
             "bChoice": "count on",
             "cChoice": "require",
-            "dChoice": ""
+            "dChoice": "",
+            "answerChoice": "aChoice"
     },
         {
             "pretext": "It's not ",
@@ -36,7 +39,8 @@
             "aChoice": "enjoyable",
             "bChoice": "unlike",
             "cChoice": "necessary",
-            "dChoice": ""
+            "dChoice": "",
+            "answerChoice": "cChoice"
     },
         {
             "pretext": "The car accident was a frightening ",
@@ -45,7 +49,8 @@
             "aChoice": "expedition",
             "bChoice": "experience",
             "cChoice": "shopping mall",
-            "dChoice": ""
+            "dChoice": "",
+            "answerChoice": "cChoice"
     },
         {
             "pretext": "I think you should ",
@@ -54,7 +59,8 @@
             "aChoice": "ruin",
             "bChoice": "try on",
             "cChoice": "count on",
-            "dChoice": ""
+            "dChoice": "",
+            "answerChoice": "cChoice"
     },
         {
             "pretext": "If you don't follow the ",
@@ -63,7 +69,8 @@
             "aChoice": "rules",
             "bChoice": "encouragements",
             "cChoice": "stores",
-            "dChoice": ""
+            "dChoice": "",
+            "answerChoice": "aChoice"
     },
         {
             "pretext": "Our new teacher is ",
@@ -71,7 +78,9 @@
             "posttext": ", but very helpful.",
             "aChoice": "comfortable",
             "bChoice": "strict",
-            "cChoice": "essential"
+            "cChoice": "essential",
+            "dChoice": "",
+            "answerChoice": "bChoice"
     },
         {
             "pretext": "Michael's job is tiring, but he ",
@@ -79,7 +88,8 @@
             "aChoice": "ruins",
             "bChoice": "requires",
             "cChoice": "earns",
-            "dChoice": ""
+            "dChoice": "",
+            "answerChoice": "bChoice"
     },
         {
             "pretext": "I should go to the bank, get some ",
@@ -88,7 +98,8 @@
             "aChoice": "cash",
             "bChoice": "tradition",
             "cChoice": "petrol",
-            "dChoice": ""
+            "dChoice": "",
+            "answerChoice": "bChoice"
     }
   ]
 }
