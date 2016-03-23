@@ -33,6 +33,7 @@ angular.module("bookbuilder2")
       $scope.$on('$destroy', function () {
         console.log('destroy');
         createjs.Ticker.framerate = 0;
+        createjs.Sound.removeAllSounds();
       });
 
       $ionicPlatform.on('pause', function () {
@@ -52,7 +53,6 @@ angular.module("bookbuilder2")
         src: $rootScope.rootDir + "data/assets/lesson_menu_background_image_2_blue.png"
       }));
       imageLoader.load();
-
 
       /*IMAGE LOADER COMPLETED*/
       imageLoader.on("complete", function (r) {
@@ -126,12 +126,37 @@ angular.module("bookbuilder2")
 
             stage.addChild(menuButton);
             stage.update();
+
+
+            $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/vocabulary.json")
+              .success(function (vocabularyJson) {
+
+                console.log("vocabularyJson", vocabularyJson);
+
+                var assetPath = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/";
+
+                var sounds = [];
+                _.each(vocabularyJson, function (tabWords, tab, list) {
+                  _.each(tabWords, function (word, key, list) {
+                    sounds.push({src: word + ".mp3", id: word});
+                  });
+                });
+                createjs.Sound.registerSounds(sounds, assetPath);
+              })
+              .error(function (error) {
+                console.error("Error on getting json for results button...", error);
+              });//end of get menu button
+
+
+            $timeout(function () {
+              createjs.Sound.play("w11");
+            }, 3000);
+
+
           })
           .error(function (error) {
             console.error("Error on getting json for results button...", error);
           });//end of get menu button
-
-
       });//end of image on complete
     }, 500);//end of timeout
   });

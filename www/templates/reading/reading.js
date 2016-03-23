@@ -126,6 +126,25 @@ angular.module("bookbuilder2")
 
             stage.addChild(menuButton);
             stage.update();
+
+
+            var assetsPath = "./assets/";
+            var sounds = [{
+              src: "MyAudioSprite.ogg", data: {
+                audioSprite: [
+                  {id: "sound1", startTime: 0, duration: 500},
+                  {id: "sound2", startTime: 1000, duration: 400},
+                  {id: "sound3", startTime: 1700, duration: 1000}
+                ]
+              }
+            }
+            ];
+            createjs.Sound.alternateExtensions = ["mp3"];
+            createjs.Sound.on("fileload", loadSound);
+            createjs.Sound.registerSounds(sounds, assetsPath);
+            // after load is complete
+            createjs.Sound.play("sound2");
+
           })
           .error(function (error) {
             console.error("Error on getting json for results button...", error);

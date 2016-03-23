@@ -1,51 +1,56 @@
 {
-  "title": "Lesson 1 - Family Shopping",
-  "description": "Choose the correct answer.",
-  "questions": [
-    {
-      "pretext": "Before booking at this hotel, I need to check the ",
-      "midtext": "",
-      "postext": "of rooms.",
-      "aChoice": "available",
-      "bChoice": "availability",
-      "cChoice": "",
-      "dChoice": ""
+    "title": "Lesson 1 - Family Shopping",
+    "description": "Choose the correct answer.",
+    "questions": [
+        {
+            "pretext": "Before booking at this hotel, I need to check the ",
+            "midtext": "",
+            "postext": "of rooms.",
+            "aChoice": "available",
+            "bChoice": "availability",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
     },
-    {
-      "pretext": "Don't worry! You can solve this problem in ",
-      "midtext": "",
-      "postext": "ways.",
-      "aChoice": "variety",
-      "bChoice": "various",
-      "cChoice": "",
-      "dChoice": ""
+        {
+            "pretext": "Don't worry! You can solve this problem in ",
+            "midtext": "",
+            "postext": "ways.",
+            "aChoice": "variety",
+            "bChoice": "various",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
     },
-    {
-      "pretext": "We changed the whole ",
-      "midtext": "",
-      "posttext": "of the room by painting it a brighter colour.",
-      "aChoice": "appear",
-      "bChoice": "appearance",
-      "cChoice": "",
-      "dChoice": ""
+        {
+            "pretext": "We changed the whole ",
+            "midtext": "",
+            "posttext": "of the room by painting it a brighter colour.",
+            "aChoice": "appear",
+            "bChoice": "appearance",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
     },
-    {
-      "pretext": "The goal of this organisation is to ",
-      "midtext": "",
-      "posttext": "poor people.",
-      "aChoice": "assistant",
-      "bChoice": "assist",
-      "cChoice": "",
-      "dChoice": ""
+        {
+            "pretext": "The goal of this organisation is to ",
+            "midtext": "",
+            "posttext": "poor people.",
+            "aChoice": "assistant",
+            "bChoice": "assist",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
     },
-    {
-      "pretext": "Mark and Bil are both ",
-      "midtext": "",
-      "posttext": "of this town.",
-      "aChoice": "residential",
-      "bChoice": "residents",
-      "cChoice": "",
-      "dChoice": ""
+        {
+            "pretext": "Mark and Bil are both ",
+            "midtext": "",
+            "posttext": "of this town.",
+            "aChoice": "residential",
+            "bChoice": "residents",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
     }
   ]
 }

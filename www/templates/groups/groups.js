@@ -441,6 +441,8 @@ angular.module("bookbuilder2")
 
                   if (!lessonButton.active) {
                     lessonButton.alpha = 0.15;
+                  }else{
+                    lessonButton.alpha = 0.5;
                   }
 
                   lessonButton.y = yPosition;
@@ -545,7 +547,7 @@ angular.module("bookbuilder2")
 
         })
         .error(function (error) {
-          console.log("Error on getting json data for exit button...", error);
+          console.log("Error on getting json data for lessonassets...", error);
           callback(false)
         });
     };

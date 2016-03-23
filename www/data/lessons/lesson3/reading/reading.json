@@ -1,0 +1,88 @@
+{
+   "CuePoint": [
+      {
+        "Time": "1",
+        "Type": "actionscript",
+        "Name": "1",
+        "Parameters": {
+          "Parameter": [
+            {
+              "Name": "source",
+              "Value": "transcription"
+            },
+            {
+              "Name": "duration",
+              "Value": "110"
+            },
+            {
+              "Name": "confidence",
+              "Value": "50"
+            }
+          ]
+        }
+      },
+      {
+        "Time": "62305",
+        "Type": "actionscript",
+        "Name": "2",
+        "Parameters": {
+          "Parameter": [
+            {
+              "Name": "source",
+              "Value": "transcription"
+            },
+            {
+              "Name": "duration",
+              "Value": "130"
+            },
+            {
+              "Name": "confidence",
+              "Value": "50"
+            }
+          ]
+        }
+      },
+      {
+        "Time": "95775",
+        "Type": "actionscript",
+        "Name": "3",
+        "Parameters": {
+          "Parameter": [
+            {
+              "Name": "source",
+              "Value": "transcription"
+            },
+            {
+              "Name": "duration",
+              "Value": "110"
+            },
+            {
+              "Name": "confidence",
+              "Value": "50"
+            }
+          ]
+        }
+      },
+      {
+        "Time": "131252",
+        "Type": "actionscript",
+        "Name": "4",
+        "Parameters": {
+          "Parameter": [
+            {
+              "Name": "source",
+              "Value": "transcription"
+            },
+            {
+              "Name": "duration",
+              "Value": "103"
+            },
+            {
+              "Name": "confidence",
+              "Value": "50"
+            }
+          ]
+        }
+      }
+    ]
+}

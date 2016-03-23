@@ -1,9 +1,19 @@
 {
-  "vocabulary1": [],
-  "vocabulary2": [],
-  "vocabulary3": [],
-  "grammar1": [],
-  "grammar2": [],
+  "vocabulary1": [
+    "multiple.json"
+  ],
+  "vocabulary2": [
+    "draganddrop.json"
+  ],
+  "vocabulary3": [
+    "multiple.json"
+  ],
+  "grammar1": [
+    "multiple.json"
+  ],
+  "grammar2": [
+    "multiple.json"
+  ],
   "vocabulary": [
     "w1.png",
     "w2.png",
@@ -40,6 +50,41 @@
     "p3.png",
     "p4.png",
     "p5.png",
+    "w1_gr.png",
+    "w2_gr.png",
+    "w3_gr.png",
+    "w4_gr.png",
+    "w5_gr.png",
+    "w6_gr.png",
+    "w7_gr.png",
+    "w8_gr.png",
+    "w9_gr.png",
+    "w10_gr.png",
+    "w11_gr.png",
+    "w12_gr.png",
+    "w13_gr.png",
+    "w14_gr.png",
+    "w15_gr.png",
+    "w16_gr.png",
+    "w17_gr.png",
+    "w18_gr.png",
+    "w19_gr.png",
+    "w20_gr.png",
+    "w21_gr.png",
+    "w22_gr.png",
+    "d1_gr.png",
+    "d2_gr.png",
+    "d3_gr.png",
+    "d4_gr.png",
+    "d5_gr.png",
+    "d6_gr.png",
+    "d7_gr.png",
+    "d8_gr.png",
+    "p1_gr.png",
+    "p2_gr.png",
+    "p3_gr.png",
+    "p4_gr.png",
+    "p5_gr.png",
     "w1.mp3",
     "w2.mp3",
     "w3.mp3",
@@ -74,7 +119,8 @@
     "p2.mp3",
     "p3.mp3",
     "p4.mp3",
-    "p5.mp3"
+    "p5.mp3",
+    "vocabulary.json"
   ],
   "reading": [
     "reading_book_1.png",
@@ -83,6 +129,7 @@
     "reading_book_4.png",
     "reading_book_5.png",
     "reading_book_6.png",
-    "reading01.mp3"
+    "reading.mp3",
+    "reading.json"
   ]
 }

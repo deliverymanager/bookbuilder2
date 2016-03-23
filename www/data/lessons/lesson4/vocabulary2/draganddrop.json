@@ -1,0 +1,53 @@
+{
+    "title": "Lesson 1 - Family Shopping",
+    "description": "Drag and drop.",
+    "questions": [
+        {
+            "pretext": "directly ",
+            "postext": "",
+            "answer": "4"
+    },
+        {
+            "pretext": "excursion ",
+            "postext": "",
+            "answer": "5"
+    },
+        {
+            "pretext": "recent ",
+            "posttext": "",
+            "answer": "2"
+    },
+        {
+            "pretext": "apartment ",
+            "posttext": "Don’t miss it!",
+            "answer": "3"
+    },
+        {
+            "pretext": "attractive ",
+            "posttext": "",
+            "answer": "1"
+    }
+  ],
+    "answers": [
+        {
+            "text": "good-looking",
+            "answer": "1"
+    },
+        {
+            "text": "new",
+            "answer": "2"
+    },
+        {
+            "text": "flat",
+            "answer": "3"
+    },
+        {
+            "text": "immediately",
+            "answer": "4"
+    },
+        {
+            "text": "trip",
+            "answer": "5"
+    }
+  ]
+}

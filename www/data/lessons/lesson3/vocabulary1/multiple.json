@@ -1,0 +1,105 @@
+{
+    "title": "Lesson 1 - Family Shopping",
+    "description": "Choose the correct answer.",
+    "questions": [
+        {
+            "pretext": "I didn’t ",
+            "midtext": "",
+            "postext": "that I had left the cage open, so the parrot escaped.",
+            "aChoice": "notice",
+            "bChoice": "set out",
+            "cChoice": "rescue",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "If our economic  ",
+            "midtext": "",
+            "postext": "were better, we could go on holiday.",
+            "aChoice": "lifeboat",
+            "bChoice": "situation",
+            "cChoice": "location",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    },
+        {
+            "pretext": "Could I see the doctor, please? It’s a(n)",
+            "midtext": "",
+            "posttext": ".",
+            "aChoice": "shipwreck",
+            "bChoice": "signal",
+            "cChoice": "emergency",
+            "dChoice": "",
+            "answerChoice": "cChoice"
+    },
+        {
+            "pretext": "You shouldn’t have bought me such an expensive ring. It must have cost you a ",
+            "midtext": "",
+            "posttext": ".",
+            "aChoice": "storm",
+            "bChoice": "second",
+            "cChoice": "fortune",
+            "dChoice": "",
+            "answerChoice": "cChoice"
+    },
+        {
+            "pretext": "The temperatures here in summer often ",
+            "midtext": "",
+            "posttext": "40°C.",
+            "aChoice": "shock",
+            "bChoice": "approach",
+            "cChoice": "realise",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    },
+        {
+            "pretext": "Please wait a ",
+            "midtext": "",
+            "posttext": ",Ted! I'll just get my bag and then we can go.",
+            "aChoice": "location",
+            "bChoice": "sailing ship",
+            "cChoice": "second",
+            "dChoice": "",
+            "answerChoice": "cChoice"
+    },
+        {
+            "pretext": "I will prepare the salad, and ",
+            "midtext": "",
+            "posttext": ", you can serve the food.",
+            "aChoice": "anxiously",
+            "bChoice": "meanwhile",
+            "cChoice": "automatically",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    },
+        {
+            "pretext": "Mr Smith's boat ",
+            "midtext": "",
+            "posttext": "because it hit a rock.",
+            "aChoice": "sank",
+            "bChoice": "set out",
+            "cChoice": "approached",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "Last week's ",
+            "posttext": "caused a lot of damage.",
+            "aChoice": "survivor",
+            "bChoice": "emergency",
+            "cChoice": "storm",
+            "dChoice": "",
+            "answerChoice": "cChoice"
+    },
+        {
+            "pretext": "The police ",
+            "midtext": "",
+            "posttext": "the whole area to find the lost child.",
+            "aChoice": "rocked",
+            "bChoice": "searched",
+            "cChoice": "rescued",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    }
+  ]
+}

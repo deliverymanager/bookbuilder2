@@ -1,53 +1,53 @@
 {
-  "title": "Lesson 1 - Family Shopping",
-  "description": "Drag and drop.",
-  "questions": [
-    {
-      "pretext": "introduce ",
-      "postext": "",
-      "answer": "3"
+    "title": "Lesson 1 - Family Shopping",
+    "description": "Drag and drop.",
+    "questions": [
+        {
+            "pretext": "introduce ",
+            "postext": "",
+            "answer": "3"
     },
-    {
-      "pretext": "find out ",
-      "postext": "",
-      "answer": "2"
+        {
+            "pretext": "find out ",
+            "postext": "",
+            "answer": "2"
     },
-    {
-      "pretext": "purchase ",
-      "posttext": "",
-      "answer": "4"
+        {
+            "pretext": "purchase ",
+            "posttext": "",
+            "answer": "4"
     },
-    {
-      "pretext": "item ",
-      "posttext": "",
-      "answer": "1"
+        {
+            "pretext": "item ",
+            "posttext": "",
+            "answer": "1"
     },
-    {
-      "pretext": "resident ",
-      "posttext": "",
-      "answer": "5"
+        {
+            "pretext": "resident ",
+            "posttext": "",
+            "answer": "5"
     }
   ],
-  "answers": [
-    {
-      "text": "object",
-      "answer": "1"
+    "answers": [
+        {
+            "text": "object",
+            "answer": "1"
     },
-    {
-      "text": "discover",
-      "answer": "2"
+        {
+            "text": "discover",
+            "answer": "2"
     },
-    {
-      "text": "present",
-      "answer": "3"
+        {
+            "text": "present",
+            "answer": "3"
     },
-    {
-      "text": "buy",
-      "answer": "4"
+        {
+            "text": "buy",
+            "answer": "4"
     },
-    {
-      "text": "inhabitant",
-      "answer": "5"
+        {
+            "text": "inhabitant",
+            "answer": "5"
     }
   ]
 }

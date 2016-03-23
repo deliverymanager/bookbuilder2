@@ -1,0 +1,53 @@
+{
+    "title": "Lesson 1 - Family Shopping",
+    "description": "Drag and drop.",
+    "questions": [
+        {
+            "pretext": "It was ",
+            "postext": "a great party, but in the end, nobody had much fun.",
+            "answer": "5"
+    },
+        {
+            "pretext": "The comedy was amazing! ",
+            "postext": "in the cinema laughed.",
+            "answer": "1"
+    },
+        {
+            "pretext": "It will take Mark  ",
+            "posttext": "days to get used to his new school. ",
+            "answer": "2"
+    },
+        {
+            "pretext": "This job is the chance ",
+            "posttext": "Don’t miss it!",
+            "answer": "4"
+    },
+        {
+            "pretext": " ",
+            "posttext": "to work, I met Linda.",
+            "answer": "3"
+    }
+  ],
+    "answers": [
+        {
+            "text": "every single person",
+            "answer": "1"
+    },
+        {
+            "text": "a couple of",
+            "answer": "2"
+    },
+        {
+            "text": "on the way",
+            "answer": "3"
+    },
+        {
+            "text": "of a lifetime",
+            "answer": "4"
+    },
+        {
+            "text": "supposed to be",
+            "answer": "5"
+    }
+  ]
+}

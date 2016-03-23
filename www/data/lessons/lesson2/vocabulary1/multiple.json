@@ -1,94 +1,105 @@
 {
-  "title": "Lesson 1 - Family Shopping",
-  "description": "Choose the correct answer.",
-  "questions": [
-    {
-      "pretext": "Kim has been coming to our shop regularly for years. She's a really good ",
-      "midtext": "",
-      "postext": ".",
-      "aChoice": "assistant",
-      "bChoice": "teen",
-      "cChoice": "customer",
-      "dChoice": ""
+    "title": "Lesson 1 - Family Shopping",
+    "description": "Choose the correct answer.",
+    "questions": [
+        {
+            "pretext": "Kim has been coming to our shop regularly for years. She's a really good ",
+            "midtext": "",
+            "postext": ".",
+            "aChoice": "assistant",
+            "bChoice": "teen",
+            "cChoice": "customer",
+            "dChoice": "",
+            "answerChoice": "bChoice"
     },
-    {
-      "pretext": "Don't be selfish, Tom! You should ",
-      "midtext": "",
-      "postext": "your stuff with your sister.",
-      "aChoice": "appear",
-      "bChoice": "share",
-      "cChoice": "cover",
-      "dChoice": ""
+        {
+            "pretext": "Don't be selfish, Tom! You should ",
+            "midtext": "",
+            "postext": "your stuff with your sister.",
+            "aChoice": "appear",
+            "bChoice": "share",
+            "cChoice": "cover",
+            "dChoice": "",
+            "answerChoice": "bChoice"
     },
-    {
-      "pretext": "I prefer to pay in ",
-      "midtext": "",
-      "posttext": " for my purchases.",
-      "aChoice": "credit card",
-      "bChoice": "cash",
-      "cChoice": "allowance",
-      "dChoice": ""
+        {
+            "pretext": "I prefer to pay in ",
+            "midtext": "",
+            "posttext": " for my purchases.",
+            "aChoice": "credit card",
+            "bChoice": "cash",
+            "cChoice": "allowance",
+            "dChoice": "",
+            "answerChoice": "aChoice"
     },
-    {
-      "pretext": "Is this book ",
-      "midtext": "",
-      "posttext": "in bookshops?",
-      "aChoice": "untidy",
-      "bChoice": "available",
-      "cChoice": "digital",
-      "dChoice": ""
+        {
+            "pretext": "Is this book ",
+            "midtext": "",
+            "posttext": "in bookshops?",
+            "aChoice": "untidy",
+            "bChoice": "available",
+            "cChoice": "digital",
+            "dChoice": "",
+            "answerChoice": "bChoice"
     },
-    {
-      "pretext": "I ",
-      "midtext": "",
-      "posttext": "that my train had been cancelled when I reached the station.",
-      "aChoice": "purchased",
-      "bChoice": "found out",
-      "cChoice": "introduced",
-      "dChoice": ""
+        {
+            "pretext": "I ",
+            "midtext": "",
+            "posttext": "that my train had been cancelled when I reached the station.",
+            "aChoice": "purchased",
+            "bChoice": "found out",
+            "cChoice": "introduced",
+            "dChoice": "",
+            "answerChoice": "cChoice"
     },
-    {
-      "pretext": "Shoes in bright colours are in  ",
-      "midtext": "",
-      "posttext": "this year.",
-      "aChoice": "resident",
-      "bChoice": "item",
-      "cChoice": "fashion",
-      "dChoice": ""
+        {
+            "pretext": "Shoes in bright colours are in  ",
+            "midtext": "",
+            "posttext": "this year.",
+            "aChoice": "resident",
+            "bChoice": "item",
+            "cChoice": "fashion",
+            "dChoice": "",
+            "answerChoice": "bChoice"
     },
-    {
-      "pretext": "Do you have any ",
-      "midtext": "",
-      "posttext": "questions you would like to discuss.",
-      "aChoice": "digital",
-      "bChoice": "monthly",
-      "cChoice": "particular",
-      "dChoice": ""
+        {
+            "pretext": "Do you have any ",
+            "midtext": "",
+            "posttext": "questions you would like to discuss.",
+            "aChoice": "digital",
+            "bChoice": "monthly",
+            "cChoice": "particular",
+            "dChoice": "",
+            "answerChoice": "cChoice"
     },
-    {
-      "pretext": "There is a ",
-      "midtext": "",
-      "posttext": "of food to choose from in this restaurant.",
-      "aChoice": "bargain",
-      "bChoice": "stuff",
-      "cChoice": "variety"
+        {
+            "pretext": "There is a ",
+            "midtext": "",
+            "posttext": "of food to choose from in this restaurant.",
+            "aChoice": "bargain",
+            "bChoice": "stuff",
+            "cChoice": "variety",
+            "dChoice": "",
+            "answerChoice": "bChoice"
     },
-    {
-      "pretext": "Henry finally ",
-      "posttext": "his goal to become a successful businessman.",
-      "aChoice": "shared",
-      "bChoice": "covered",
-      "cChoice": "achieved",
-      "dChoice": ""
+        {
+            "pretext": "Henry finally ",
+            "posttext": "his goal to become a successful businessman.",
+            "aChoice": "shared",
+            "bChoice": "covered",
+            "cChoice": "achieved",
+            "dChoice": "",
+            "answerChoice": "aChoice"
     },
-    {
-      "pretext": "Judy tried her ",
-      "midtext": "",
-      "posttext": "to pass the exams.",
-      "aChoice": "trainers",
-      "bChoice": "best",
-      "cChoice": "athletes",
-      "dChoice": ""
+        {
+            "pretext": "Judy tried her ",
+            "midtext": "",
+            "posttext": "to pass the exams.",
+            "aChoice": "trainers",
+            "bChoice": "best",
+            "cChoice": "athletes",
+            "dChoice": "",
+            "answerChoice": "cChoice"
     }
   ]
 }

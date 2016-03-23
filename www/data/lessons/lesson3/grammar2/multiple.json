@@ -1,0 +1,156 @@
+{
+    "title": "Lesson 1 - Family Shopping",
+    "description": "Choose the correct answer.",
+    "questions": [
+        {
+            "pretext": "Patrick and Lynn ",
+            "midtext": "",
+            "postext": "married in 2006.",
+            "aChoice": "got",
+            "bChoice": "were getting",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "They ",
+            "midtext": "",
+            "postext": "while Kevin was playing the guitar.",
+            "aChoice": "were dancing",
+            "bChoice": "danced",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "We ",
+            "midtext": "and ",
+            "posttext": "a cup of coffee.",
+            "aChoice": "sat ... ordered",
+            "bChoice": "were sitting ... were ordering",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "Ryan and Jessie ",
+            "midtext": "",
+            "posttext": "in the pool between 5:00 and 6:00 yesterday afternoon.",
+            "aChoice": "swam",
+            "bChoice": "were swimming",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    },
+        {
+            "pretext": "When I arrived in London, it ",
+            "midtext": "",
+            "posttext": "heavily",
+            "aChoice": "rained",
+            "bChoice": "was raining",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    },
+        {
+            "pretext": "My dad was feeding the dog while my mum ",
+            "midtext": "",
+            "posttext": "the dishes.",
+            "aChoice": "was doing",
+            "bChoice": "did",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "When I ",
+            "midtext": "",
+            "posttext": "the hotel, I met my friend Ted.",
+            "aChoice": "was reaching",
+            "bChoice": "reached",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    },
+        {
+            "pretext": "While Mr Higgs was driving his car, he ",
+            "midtext": "",
+            "posttext": "to music.",
+            "aChoice": "listened",
+            "bChoice": "was listening",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    },
+        {
+            "pretext": "Leonardo da Vinci ",
+            "midtext": "",
+            "posttext": "the Mona Lisa",
+            "aChoice": "painted",
+            "bChoice": "was painting",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "When I was a child, I ",
+            "midtext": "",
+            "posttext": "a lot of toys",
+            "aChoice": "had",
+            "bChoice": "was having",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "The students ",
+            "midtext": "",
+            "posttext": "when the teacher came in.",
+            "aChoice": "were talking",
+            "bChoice": "talked",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "After the Spanish lesson, I",
+            "midtext": "",
+            "posttext": "some lunch.",
+            "aChoice": "was having",
+            "bChoice": "had",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    },
+        {
+            "pretext": "When we ",
+            "midtext": "",
+            "posttext": "for the museum, the sun was shining.",
+            "aChoice": "were setting out",
+            "bChoice": "set out",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    },
+        {
+            "pretext": "Mrs Johnson ",
+            "midtext": "",
+            "posttext": "in a post office when she was a young woman.",
+            "aChoice": "was working",
+            "bChoice": "worked",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    },
+        {
+            "pretext": "Sue and Ben ",
+            "midtext": "",
+            "posttext": "up and down on their beds when their mum came into their room.",
+            "aChoice": "jumped",
+            "bChoice": "were jumping",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    }
+  ]
+}

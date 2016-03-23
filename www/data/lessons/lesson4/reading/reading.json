@@ -1,0 +1,109 @@
+{
+   "CuePoint": [
+      {
+        "Time": "0",
+        "Type": "actionscript",
+        "Name": "1",
+        "Parameters": {
+          "Parameter": [
+            {
+              "Name": "source",
+              "Value": "transcription"
+            },
+            {
+              "Name": "duration",
+              "Value": "111"
+            },
+            {
+              "Name": "confidence",
+              "Value": "50"
+            }
+          ]
+        }
+      },
+      {
+        "Time": "38724",
+        "Type": "actionscript",
+        "Name": "2",
+        "Parameters": {
+          "Parameter": [
+            {
+              "Name": "source",
+              "Value": "transcription"
+            },
+            {
+              "Name": "duration",
+              "Value": "119"
+            },
+            {
+              "Name": "confidence",
+              "Value": "50"
+            }
+          ]
+        }
+      },
+      {
+        "Time": "63431",
+        "Type": "actionscript",
+        "Name": "3",
+        "Parameters": {
+          "Parameter": [
+            {
+              "Name": "source",
+              "Value": "transcription"
+            },
+            {
+              "Name": "duration",
+              "Value": "142"
+            },
+            {
+              "Name": "confidence",
+              "Value": "50"
+            }
+          ]
+        }
+      },
+      {
+        "Time": "114688",
+        "Type": "actionscript",
+        "Name": "4",
+        "Parameters": {
+          "Parameter": [
+            {
+              "Name": "source",
+              "Value": "transcription"
+            },
+            {
+              "Name": "duration",
+              "Value": "101"
+            },
+            {
+              "Name": "confidence",
+              "Value": "50"
+            }
+          ]
+        }
+      },
+      {
+        "Time": "149011",
+        "Type": "actionscript",
+        "Name": "5",
+        "Parameters": {
+          "Parameter": [
+            {
+              "Name": "source",
+              "Value": "transcription"
+            },
+            {
+              "Name": "duration",
+              "Value": "150"
+            },
+            {
+              "Name": "confidence",
+              "Value": "50"
+            }
+          ]
+        }
+      }
+    ]
+}

@@ -57,11 +57,8 @@ angular.module("bookbuilder2")
                       waterfallFunctions.push(function (waterfallCallback) {
 
                         Download.assets(["lesson.json", "lessonassets.json"], $rootScope.book.cdnUrl, "data/lessons", lesson.id, function (response) {
-                          if (response) {
-                            waterfallCallback(null);
-                          } else {
-                            waterfallCallback(true);
-                          }
+                          console.log(lesson.id + " downloaded basic lesson file lesson.json and lessonassets.json ", response);
+                          waterfallCallback();
                         });
                       });
                     }

@@ -1,0 +1,156 @@
+{
+    "title": "Lesson 1 - Family Shopping",
+    "description": "Choose the correct answer.",
+    "questions": [
+        {
+            "pretext": "Our team ",
+            "midtext": "",
+            "postext": "the basketball game yesterday.",
+            "aChoice": "won",
+            "bChoice": "was winning",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "When I was young, I ",
+            "midtext": "",
+            "postext": "to my village every summer.",
+            "aChoice": "went",
+            "bChoice": "was going",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "Diana",
+            "midtext": "",
+            "posttext": "a cake at eight o'clock yesterday morning",
+            "aChoice": "baked",
+            "bChoice": "was baking",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    },
+        {
+            "pretext": "Norman ",
+            "midtext": "his jacket, took his bag and",
+            "posttext": "the house.",
+            "aChoice": "put on ... left",
+            "bChoice": "was putting on ... was leaving",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "I finally ",
+            "midtext": "",
+            "posttext": "my dog in our neighbour's garden.",
+            "aChoice": "found",
+            "bChoice": "was finding",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "Fortunately, all the victims of the train crash ",
+            "midtext": "",
+            "posttext": ".",
+            "aChoice": "was surving",
+            "bChoice": "survived",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    },
+        {
+            "pretext": "I was relaxing in the garden when an insect ",
+            "midtext": "",
+            "posttext": "me.",
+            "aChoice": "bit",
+            "bChoice": "was biting",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "Peter was fixing his car as his sister ",
+            "midtext": "",
+            "posttext": ".",
+            "aChoice": "was ironing",
+            "bChoice": "ironed",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "What ",
+            "midtext": "you ",
+            "posttext": "when I called you last night?",
+            "aChoice": "were ... doing",
+            "bChoice": "did ... do",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "Mr Owen ",
+            "midtext": "his coat ",
+            "posttext": "to his office.",
+            "aChoice": "took off ... went",
+            "bChoice": "was taking off ... was going",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "Bruce",
+            "midtext": "",
+            "posttext": "how to ride a bike when he was three",
+            "aChoice": "was knowing",
+            "bChoice": "knew",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    },
+        {
+            "pretext": "Mark ",
+            "midtext": "",
+            "posttext": "his office two years ago.",
+            "aChoice": "decorated",
+            "bChoice": "was decorating",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "It was beautiful Sunday morning. We ",
+            "midtext": "",
+            "posttext": "coffee and the children were playing in the garden.",
+            "aChoice": "had",
+            "bChoice": "were having",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    },
+        {
+            "pretext": "While we ",
+            "midtext": "",
+            "posttext": ", Jack sprained his ankle.",
+            "aChoice": "hiked",
+            "bChoice": "were hiking",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    },
+        {
+            "pretext": "During the meeting Steven ",
+            "midtext": "",
+            "posttext": "on the phone.",
+            "aChoice": "was talking",
+            "bChoice": "talked",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    }
+  ]
+}

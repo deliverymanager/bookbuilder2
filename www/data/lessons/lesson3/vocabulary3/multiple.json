@@ -1,0 +1,56 @@
+{
+    "title": "Lesson 1 - Family Shopping",
+    "description": "Choose the correct answer.",
+    "questions": [
+        {
+            "pretext": "We should all care about the ",
+            "midtext": "",
+            "postext": "of endangered species.",
+            "aChoice": "survival",
+            "bChoice": "survive",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "The rescue team tried to ",
+            "midtext": "",
+            "postext": "the survivors.",
+            "aChoice": "locate",
+            "bChoice": "location",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "Betty is really ",
+            "midtext": "",
+            "posttext": "about the test results.",
+            "aChoice": "anxious",
+            "bChoice": "anxiety",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "aChoice"
+    },
+        {
+            "pretext": "When Kathy left Bob, he suddenly ",
+            "midtext": "",
+            "posttext": "how much he loved her.",
+            "aChoice": "realisation",
+            "bChoice": "realised",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    },
+        {
+            "pretext": "Few people ",
+            "midtext": "",
+            "posttext": "the terrible accident.",
+            "aChoice": "survivor",
+            "bChoice": "survived",
+            "cChoice": "",
+            "dChoice": "",
+            "answerChoice": "bChoice"
+    }
+  ]
+}
