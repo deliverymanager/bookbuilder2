@@ -1,0 +1,141 @@
+{
+  "title": "Lesson 1 - Family Shopping",
+  "description": "Choose the correct answer.",
+  "questions": [
+    {
+      "pretext": "Brenda ",
+      "midtext": "",
+      "postext": "the flowers that Steven has given her.",
+      "aChoice": "is smelling",
+      "bChoice": "smells",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "My sister ",
+      "midtext": "",
+      "postext": "cartoons and funny stories.",
+      "aChoice": "is loving",
+      "bChoice": "loves",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "Please speak more slowly. I",
+      "midtext": "",
+      "posttext": "what you are saying.",
+      "aChoice": "don't understand",
+      "bChoice": "am not understanding",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "The Smiths are in Crete on holiday now. They ",
+      "midtext": "",
+      "posttext": "a great time here.",
+      "aChoice": "are having",
+      "bChoice": "have",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "I ",
+      "midtext": "",
+      "posttext": "you are busy at the moment",
+      "aChoice": "am seeing",
+      "bChoice": "see",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "It's unbelievable! Carl ",
+      "midtext": "",
+      "posttext": "just like his grandfather.",
+      "aChoice": "is looking",
+      "bChoice": "looks",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "It ",
+      "midtext": "",
+      "posttext": "that Christina has changed her mind again.",
+      "aChoice": "is appearing",
+      "bChoice": "appears",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "Both Jennifer and Claire ",
+      "midtext": "",
+      "posttext": "iPhones.",
+      "aChoice": "are having",
+      "bChoice": "have",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "Do you know who this purse ",
+      "midtext": "",
+      "posttext": "to?",
+      "aChoice": "belongs",
+      "bChoice": "is belonging",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "What's the matter? What ",
+      "midtext": "",
+      "posttext": "at?",
+      "aChoice": "do you look",
+      "bChoice": "are you looking",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "They've checked our tickets and ",
+      "midtext": "",
+      "posttext": "our suitcases now.",
+      "aChoice": "are weighing",
+      "bChoice": "weigh",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "Lady Gaga",
+      "midtext": "",
+      "posttext": "in Berlin next month.",
+      "aChoice": "is appearing",
+      "bChoice": "appears",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "The manager of my company ",
+      "midtext": "",
+      "posttext": "two cars.",
+      "aChoice": "owns",
+      "bChoice": "is owning",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "How ",
+      "midtext": "you ",
+      "posttext": "my name? Who are you?.",
+      "aChoice": "do ... know",
+      "bChoice": "are ... knowing",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "The customer ",
+      "midtext": "",
+      "posttext": "the wine now.",
+      "aChoice": "tastes",
+      "bChoice": "is tasting",
+      "cChoice": "",
+      "dChoice": ""
+    }
+  ]
+}

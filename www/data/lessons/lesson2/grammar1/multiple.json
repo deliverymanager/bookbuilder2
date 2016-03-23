@@ -1,0 +1,141 @@
+{
+  "title": "Lesson 1 - Family Shopping",
+  "description": "Choose the correct answer.",
+  "questions": [
+    {
+      "pretext": "Jack and his wife ",
+      "midtext": "",
+      "postext": "breakfast now.",
+      "aChoice": "are having",
+      "bChoice": "have",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "Susan has been on a diet and now she ",
+      "midtext": "",
+      "postext": "only 60 kilos.",
+      "aChoice": "weighs",
+      "bChoice": "is weighing",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "You",
+      "midtext": "",
+      "posttext": "worried. Is something wrong?",
+      "aChoice": "are looking",
+      "bChoice": "look",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "Your perfume ",
+      "midtext": "",
+      "posttext": "really nice.",
+      "aChoice": "smells",
+      "bChoice": "is smelling",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "I ",
+      "midtext": "",
+      "posttext": "about going on an expedition to the countryside one of these days.",
+      "aChoice": "am thinking",
+      "bChoice": "think",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "Can you please answer the phone? I ",
+      "midtext": "",
+      "posttext": "a shower.",
+      "aChoice": "have",
+      "bChoice": "am having",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "It is easier for me to remember things if I ",
+      "midtext": "",
+      "posttext": "them first.",
+      "aChoice": "am hearing",
+      "bChoice": "hear",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "This milk ",
+      "midtext": "",
+      "posttext": "awful. Don't drink it!",
+      "aChoice": "is tasting",
+      "bChoice": "tastes",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "I need an expert's advice! I ",
+      "midtext": "",
+      "posttext": "my lawyer tomorrow morning.",
+      "aChoice": "am seeing",
+      "bChoice": "see",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "I hate it that my husband ",
+      "midtext": "",
+      "posttext": "my birthday.",
+      "aChoice": "is never remembering",
+      "bChoice": "never remembers",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "Although the clothes were in the sun for a long time, they ",
+      "midtext": "",
+      "posttext": "wet.",
+      "aChoice": "are still feeling",
+      "bChoice": "still feel",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": " ",
+      "midtext": "you ",
+      "posttext": "that Mr Peterson is lying?",
+      "aChoice": "Do ... believe",
+      "bChoice": "Are ... believing",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": " ",
+      "midtext": "you ",
+      "posttext": "that you will win the contest.",
+      "aChoice": "Are ... thinking",
+      "bChoice": "Do ... think",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "Mum ",
+      "midtext": "",
+      "posttext": "the food to see if it needs more salt.",
+      "aChoice": "is tasting",
+      "bChoice": "tastes",
+      "cChoice": "",
+      "dChoice": ""
+    },
+    {
+      "pretext": "Jenny ",
+      "midtext": "",
+      "posttext": "relaxing at home on Sunday nights.",
+      "aChoice": "prefers",
+      "bChoice": "is preferring",
+      "cChoice": "",
+      "dChoice": ""
+    }
+  ]
+}

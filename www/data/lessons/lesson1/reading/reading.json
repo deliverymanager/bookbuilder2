@@ -1,0 +1,130 @@
+{
+  "CuePoint": [
+    {
+      "Time": "0",
+      "Type": "actionscript",
+      "Name": "1",
+      "Parameters": {
+        "Parameter": [
+          {
+            "Name": "source",
+            "Value": "transcription"
+          },
+          {
+            "Name": "duration",
+            "Value": "111"
+          },
+          {
+            "Name": "confidence",
+            "Value": "50"
+          }
+        ]
+      }
+    },
+    {
+      "Time": "26110",
+      "Type": "actionscript",
+      "Name": "2",
+      "Parameters": {
+        "Parameter": [
+          {
+            "Name": "source",
+            "Value": "transcription"
+          },
+          {
+            "Name": "duration",
+            "Value": "109"
+          },
+          {
+            "Name": "confidence",
+            "Value": "50"
+          }
+        ]
+      }
+    },
+    {
+      "Time": "42809",
+      "Type": "actionscript",
+      "Name": "3",
+      "Parameters": {
+        "Parameter": [
+          {
+            "Name": "source",
+            "Value": "transcription"
+          },
+          {
+            "Name": "duration",
+            "Value": "119"
+          },
+          {
+            "Name": "confidence",
+            "Value": "50"
+          }
+        ]
+      }
+    },
+    {
+      "Time": "62478",
+      "Type": "actionscript",
+      "Name": "4",
+      "Parameters": {
+        "Parameter": [
+          {
+            "Name": "source",
+            "Value": "transcription"
+          },
+          {
+            "Name": "duration",
+            "Value": "103"
+          },
+          {
+            "Name": "confidence",
+            "Value": "50"
+          }
+        ]
+      }
+    },
+    {
+      "Time": "78657",
+      "Type": "actionscript",
+      "Name": "5",
+      "Parameters": {
+        "Parameter": [
+          {
+            "Name": "source",
+            "Value": "transcription"
+          },
+          {
+            "Name": "duration",
+            "Value": "119"
+          },
+          {
+            "Name": "confidence",
+            "Value": "50"
+          }
+        ]
+      }
+    },
+    {
+      "Time": "111200",
+      "Type": "actionscript",
+      "Name": "6",
+      "Parameters": {
+        "Parameter": [
+          {
+            "Name": "source",
+            "Value": "transcription"
+          },
+          {
+            "Name": "duration",
+            "Value": "111"
+          },
+          {
+            "Name": "confidence",
+            "Value": "50"
+          }
+        ]
+      }
+    }
+  ]
+}

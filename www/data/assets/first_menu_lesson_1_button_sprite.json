@@ -1,8 +1,8 @@
 {
-  "images": [
+    "images": [
     "first_menu_lesson_1_button_sprite.png"
   ],
-  "frames": [
+    "frames": [
     [
       0,
       0,
@@ -30,5 +30,10 @@
       118.94999999999999,
       27.65
     ]
-  ]
+  ],
+    "animations": {
+        "normal": [0],
+        "onSelection": [1],
+        "selected": [2]
+    }
 }

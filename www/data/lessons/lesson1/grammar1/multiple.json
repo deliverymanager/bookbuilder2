@@ -9,7 +9,8 @@
       "aChoice": "always buys",
       "bChoice": "is always buying",
       "cChoice": "",
-      "dChoice": ""
+      "dChoice": "",
+      "answerChoice": ""
     },
     {
       "pretext": "What time ",
