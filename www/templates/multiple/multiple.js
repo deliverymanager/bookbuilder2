@@ -435,7 +435,6 @@ angular.module("bookbuilder2")
                                     child.gotoAndPlay("white");
                                 }
                             });
-
                             /*Button plays the grey animation indicating that is the user's choice*/
                             answerAButton.gotoAndPlay("grey");
                             $ionicHistory.goBack();
