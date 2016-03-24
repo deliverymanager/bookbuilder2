@@ -20,17 +20,3 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
-
-.yellowBackground{
-  background: url("../data/assets/first_menu_background.png") no-repeat center top;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
-}
-
-.purpleBackground{
-  background: url("../data/assets/background_image_1_purple.png") no-repeat center top;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
-}

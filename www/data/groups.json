@@ -1,5 +1,5 @@
 {
-  "cdnUrl": "https://s3-eu-west-1.amazonaws.com/engrlikeenglishb1/",
+  "cdnUrl": "http://engrlikeenglishb1.s3-website-eu-west-1.amazonaws.com/",
   "lessonGroups": [
     {
       "groupTitle": "Lessons 1-4",
@@ -39,25 +39,25 @@
       "lessons": [
         {
           "title": "Lesson 5",
-          "active": true,
+          "active": false,
           "lessonButtonSprite": "first_menu_lesson_5_button_sprite.json",
           "id": "lesson5"
         },
         {
           "title": "Lesson 6",
-          "active": true,
+          "active": false,
           "lessonButtonSprite": "first_menu_lesson_6_button_sprite.json",
           "id": "lesson6"
         },
         {
           "title": "Lesson 7",
-          "active": true,
+          "active": false,
           "lessonButtonSprite": "first_menu_lesson_7_button_sprite.json",
           "id": "lesson7"
         },
         {
           "title": "Lesson 8",
-          "active": true,
+          "active": false,
           "lessonButtonSprite": "first_menu_lesson_8_button_sprite.json",
           "id": "lesson8"
         }
@@ -70,25 +70,25 @@
       "lessons": [
         {
           "title": "Lesson 9",
-          "active": true,
+          "active": false,
           "lessonButtonSprite": "first_menu_lesson_9_button_sprite.json",
           "id": "lesson9"
         },
         {
           "title": "Lesson 10",
-          "active": true,
+          "active": false,
           "lessonButtonSprite": "first_menu_lesson_10_button_sprite.json",
           "id": "lesson10"
         },
         {
           "title": "Lesson 11",
-          "active": true,
+          "active": false,
           "lessonButtonSprite": "first_menu_lesson_11_button_sprite.json",
           "id": "lesson11"
         },
         {
           "title": "Lesson 12",
-          "active": true,
+          "active": false,
           "lessonButtonSprite": "first_menu_lesson_12_button_sprite.json",
           "id": "lesson12"
         }
@@ -101,13 +101,13 @@
       "lessons": [
         {
           "title": "Lesson 13",
-          "active": true,
+          "active": false,
           "lessonButtonSprite": "first_menu_lesson_13_button_sprite.json",
           "id": "lesson13"
         },
         {
           "title": "Lesson 14",
-          "active": true,
+          "active": false,
           "lessonButtonSprite": "first_menu_lesson_14_button_sprite.json",
           "id": "lesson14"
         },
@@ -243,7 +243,7 @@
         },
         {
           "title": "Lesson 32",
-          "active": true,
+          "active": false,
           "lessonButtonSprite": "first_menu_lesson_32_button_sprite.json",
           "id": "lesson32"
         }

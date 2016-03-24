@@ -6,6 +6,13 @@ angular.module("bookbuilder2")
     //Initialization of $rootScope.selectedLesson
     $rootScope.selectedLesson = {};
 
+    $scope.backgroundView = {
+      "background": "url(" + $rootScope.rootDir + "data/assets/background_image_1_purple.png) no-repeat center top",
+      "-webkit-background-size": "cover",
+      "-moz-background-size": "cover",
+      "background-size": "cover"
+    };
+
     $timeout(function () {
       var stage = new createjs.Stage(document.getElementById("lessonCanvas"));
       var ctx = document.getElementById("lessonCanvas").getContext("2d");
