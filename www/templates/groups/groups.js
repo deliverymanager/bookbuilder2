@@ -54,7 +54,7 @@ angular.module("bookbuilder2")
         }, 2000);
       });
 
-      $scope.savedGroupButtonsArray = [];
+      $scope.savedGroupButtonsArray = {};
       $scope.savedLessonButtonsArray = {};
 
       /*Image Loader*/
@@ -103,29 +103,15 @@ angular.module("bookbuilder2")
           //Getting the element
           $http.get($rootScope.rootDir + "data/assets/first_menu_exit_button_sprite.json")
             .success(function (response) {
-
-              console.log("Success on getting data for exitButton!");
-
               //Reassigning images with the rest of resource
               response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-
-              //Reassigning animations
-              response.animations = {
-                normal: 0,
-                pressed: 1,
-                tap: {
-                  frames: [1],
-                  next: "normal"
-                }
-              };
-
               var exitButtonSpriteSheet = new createjs.SpriteSheet(response);
               var exitButton = new createjs.Sprite(exitButtonSpriteSheet, "normal");
               //exitButton.visible = ionic.Platform.isAndroid();
 
               exitButton.addEventListener("mousedown", function (event) {
                 console.log("mousedown event on a button !");
-                exitButton.gotoAndPlay("pressed");
+                exitButton.gotoAndPlay("onSelection");
                 $scope.stage.update();
               });
 
@@ -141,9 +127,7 @@ angular.module("bookbuilder2")
               $scope.stage.update();
             })
             .error(function (error) {
-
               console.log("Error on getting json data for exit button...");
-
             });
 
 
@@ -169,6 +153,10 @@ angular.module("bookbuilder2")
               $scope.stage.addChild(groupsMenuContainer);
               $scope.stage.update();
 
+              var completedTween = function () {
+                console.log("Completed Tween");
+              };
+
               /* ---------------------------------------- ADDING GROUP BUTTONS ---------------------------------------- */
               var waterFallFunctions = [];
               _.each(response.lessonGroups, function (lessonGroup) {
@@ -181,66 +169,56 @@ angular.module("bookbuilder2")
                   //Getting the element
                   $http.get(spriteUrl)
                     .success(function (response) {
-
-                      console.log("Success on getting data for lessonGroup.groupButtonSprite!");
-
                       //Reassigning images with the rest of resource
                       response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-
-                      //Reassigning animations
-                      response.animations = {
-                        normal: 0,
-                        onSelection: 1,
-                        selected: 2,
-                        tap: {
-                          frames: [1],
-                          next: "selected"
-                        }
-                      };
-
                       var groupButtonSpriteSheet = new createjs.SpriteSheet(response);
-                      var groupButton = new createjs.Sprite(groupButtonSpriteSheet, "normal");
 
-                      /* -------------------------------- CLICK ON BUTTON -------------------------------- */
+                      $scope.savedGroupButtonsArray[lessonGroup.groupId] = new createjs.Sprite(groupButtonSpriteSheet, "normal");
 
-                      groupButton.addEventListener("mousedown", function (event) {
+                      $scope.savedGroupButtonsArray[lessonGroup.groupId].addEventListener("mousedown", function (event) {
                         console.log("mousedown event on a button !");
-                        groupButton.gotoAndPlay("onSelection");
+                        $scope.savedGroupButtonsArray[lessonGroup.groupId].gotoAndPlay("onSelection");
                         $scope.stage.update();
                       });
 
-                      groupButton.addEventListener("pressup", function (event) {
+                      $scope.savedGroupButtonsArray[lessonGroup.groupId].addEventListener("pressup", function (event) {
                         console.log("pressup event on a group button !");
-                        groupButton.gotoAndPlay("selected");
+                        $scope.savedGroupButtonsArray[lessonGroup.groupId].gotoAndPlay("selected");
 
-                        $rootScope.selectedGroupId = groupButton.groupId;
-                        $scope.stage.update();
+                        $rootScope.selectedGroupId = lessonGroup.groupId;
 
-                        //Make all lessons dissappear from the screen
-                        _.each($scope.savedLessonButtonsArray, function (lesson, key, list) {
-                          createjs.Tween.get($scope.savedLessonButtonsArray[key], {loop: false}).to({x: 1500 * scale}, 200, createjs.Ease.getPowIn(2));
-                        });
-
-                        //Making all buttons appear in normal state again
                         _.each($scope.savedGroupButtonsArray, function (button, key, list) {
-                          if (button.groupId !== groupButton.groupId) {
+                          if (key !== lessonGroup.groupId) {
                             $scope.savedGroupButtonsArray[key].gotoAndPlay("normal");
                           }
                         });
+                        $scope.stage.update();
 
-                        addSelectedGroupLessonsButtons(_.findWhere($scope.savedGroupButtonsArray, {"groupId": groupButton.groupId}).lessons);
+                        var parallelFunctions = [];
+                        //Make all lessons dissappear from the screen
+                        console.log("$scope.savedLessonButtonsArray", $scope.savedLessonButtonsArray);
+                        _.each($scope.savedLessonButtonsArray, function (lesson, key, list) {
+                          parallelFunctions.push(function (parallelCallback) {
+                            createjs.Tween.get($scope.savedLessonButtonsArray[key], {loop: false}).to({x: 1500 * scale}, 200, createjs.Ease.getPowIn(2)).call(parallelCallback);
+                          });
+                        });
+
+                        async.parallel(parallelFunctions, function (err, response) {
+                          console.log("parallelFunctions savedLessonButtonsArray finished");
+                          $scope.savedLessonButtonsArray = {};
+                          addSelectedGroupLessonsButtons($scope.savedGroupButtonsArray[lessonGroup.groupId].lessons);
+                        });
                       });
 
-                      groupButton.lessons = lessonGroup.lessons;
-                      groupButton.groupId = lessonGroup.groupId;
-                      $scope.savedGroupButtonsArray.push(groupButton);
-                      groupButton.y = yPosition;
-                      groupButton.x = -1500 * scale;
+                      $scope.savedGroupButtonsArray[lessonGroup.groupId].lessons = lessonGroup.lessons;
+                      $scope.savedGroupButtonsArray[lessonGroup.groupId].groupId = lessonGroup.groupId;
+                      $scope.savedGroupButtonsArray[lessonGroup.groupId].y = yPosition;
+                      $scope.savedGroupButtonsArray[lessonGroup.groupId].x = -1500 * scale;
 
-                      createjs.Tween.get(groupButton, {loop: false}).to({x: 120}, 1000, createjs.Ease.getPowIn(2));
+                      createjs.Tween.get($scope.savedGroupButtonsArray[lessonGroup.groupId], {loop: false}).to({x: 120}, 1000, createjs.Ease.getPowIn(2));
 
                       yPosition += buttonHeight;
-                      groupsMenuContainer.addChild(groupButton);
+                      groupsMenuContainer.addChild($scope.savedGroupButtonsArray[lessonGroup.groupId]);
                       $scope.stage.update();
 
                       $timeout(function () {
@@ -286,6 +264,9 @@ angular.module("bookbuilder2")
 
           function addSelectedGroupLessonsButtons(selectedGroupLessons) {
 
+            lessonsMenuContainer.removeAllEventListeners();
+            lessonsMenuContainer.removeAllChildren();
+            console.log("lessonsMenuContainer", lessonsMenuContainer.numChildren);
             /*Array for saving the lesson buttons references*/
             var yPosition = 150;
 
@@ -299,20 +280,8 @@ angular.module("bookbuilder2")
                 $http.get(spriteResourceUrl)
                   .success(function (response) {
 
-
                     //Reassigning images with the rest of resource
                     response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-
-                    //Reassigning animations
-                    response.animations = {
-                      normal: 0,
-                      onSelection: 1,
-                      selected: 2,
-                      tap: {
-                        frames: [1],
-                        next: "selected"
-                      }
-                    };
 
                     var lessonButtonSpriteSheet = new createjs.SpriteSheet(response);
 
@@ -328,7 +297,7 @@ angular.module("bookbuilder2")
 
                     $scope.savedLessonButtonsArray[lesson.id].addEventListener("pressup", function (event) {
                       console.log("pressup event on a lesson button !");
-                      $scope.savedLessonButtonsArray[lesson.id].gotoAndPlay("tap");
+                      $scope.savedLessonButtonsArray[lesson.id].gotoAndPlay("selected");
                       $scope.stage.update();
 
                       _.each($scope.savedLessonButtonsArray, function (button, key, list) {
@@ -649,11 +618,13 @@ angular.module("bookbuilder2")
     var downloadLessonGroup = function (groupId, callback) {
       var waterFallFunctions = [];
       _.each(_.findWhere($rootScope.book.lessonGroups, {"groupId": groupId}).lessons, function (lesson, key, list) {
-        waterFallFunctions.push(function (waterFallCallback) {
-          downloadLessonAssets(lesson, function () {
-            waterFallCallback();
+        if (lesson.active) {
+          waterFallFunctions.push(function (waterFallCallback) {
+            downloadLessonAssets(lesson, function () {
+              waterFallCallback();
+            });
           });
-        });
+        }
       });
       async.waterfall(waterFallFunctions, function (err, res) {
         callback();
