@@ -412,16 +412,32 @@ angular.module("bookbuilder2")
                         /**------------- A -------------**/
                         var answerAButton = new createjs.Sprite(answerButtonSpriteSheet, "white");
 
-                        answerAButton.addEventListener("mousedown", function (event) {
-                            console.log("mousedown event on a button !");
-                            answerAButton.gotoAndPlay("grey");
-                            stage.update();
-                        });
 
+                        /*Button event when it's clicked*/
                         answerAButton.addEventListener("pressup", function (event) {
-                            console.log("pressup event!");
-                            //Check if answer is correct
-                            answerAButton.gotoAndPlay("green");
+                            console.log("Answer button fires pressup event!");
+
+                            console.log("Event information: ", event);
+
+                            /*Updating the properties regarding question after user selected an answer*/
+                            $scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer = true;
+                            $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer
+                                = $scope.activityData.questions[$scope.activeQuestionIndex].aChoice;
+
+                            console.log("Has user answered the selected question? : ",$scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer);
+                            if($scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer){
+                                console.log("The user's choice is :",$scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
+                            }
+
+                            /*Before the button goes and plays "grey" animation all buttons have to play "white" animation*/
+                            _.each(answersContainer.children, function(child, key, list){
+                                if(child.currentAnimation){
+                                    child.gotoAndPlay("white");
+                                }
+                            });
+
+                            /*Button plays the grey animation indicating that is the user's choice*/
+                            answerAButton.gotoAndPlay("grey");
                             $ionicHistory.goBack();
                         });
 
@@ -450,16 +466,32 @@ angular.module("bookbuilder2")
                         /**------------- B -------------**/
                         var answerBButton = new createjs.Sprite(answerButtonSpriteSheet, "white");
 
-                        answerBButton.addEventListener("mousedown", function (event) {
-                            console.log("mousedown event on a button !");
-                            answerBButton.gotoAndPlay("grey");
-                            stage.update();
-                        });
 
+                        /*Button event when it's clicked*/
                         answerBButton.addEventListener("pressup", function (event) {
-                            console.log("pressup event!");
-                            //Check if answer is correct
-                            answerBButton.gotoAndPlay("green");
+                            console.log("Answer button fires pressup event!");
+
+                            console.log("Event information: ", event);
+
+                            /*Updating the properties regarding question after user selected an answer*/
+                            $scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer = true;
+                            $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer
+                                = $scope.activityData.questions[$scope.activeQuestionIndex].bChoice;
+
+                            console.log("Has user answered the selected question? : ",$scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer);
+                            if($scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer){
+                                console.log("The user's choice is :",$scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
+                            }
+
+                            /*Before the button goes and plays "grey" animation all buttons have to play "white" animation*/
+                            _.each(answersContainer.children, function(child, key, list){
+                                if(child.currentAnimation){
+                                    child.gotoAndPlay("white");
+                                }
+                            });
+
+                            /*Button plays the grey animation indicating that is the user's choice*/
+                            answerBButton.gotoAndPlay("grey");
                             $ionicHistory.goBack();
                         });
 
@@ -487,19 +519,33 @@ angular.module("bookbuilder2")
                         if ($scope.activityData.questions[$scope.activeQuestionIndex].cChoice !== "" && $scope.activityData.questions[$scope.activeQuestionIndex].dChoice !== "") {
                             var answerC1Button = new createjs.Sprite(answerButtonSpriteSheet, "white");
 
-                            answerC1Button.addEventListener("mousedown", function (event) {
-                                console.log("mousedown event on a button !");
-                                answerC1Button.gotoAndPlay("grey");
-                                stage.update();
-                            });
-
+                            /*Button event when it's clicked*/
                             answerC1Button.addEventListener("pressup", function (event) {
-                                console.log("pressup event!");
-                                //Check if answer is correct
-                                answerC1Button.gotoAndPlay("green");
+                                console.log("Answer button fires pressup event!");
+
+                                console.log("Event information: ", event);
+
+                                /*Updating the properties regarding question after user selected an answer*/
+                                $scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer = true;
+                                $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer
+                                    = $scope.activityData.questions[$scope.activeQuestionIndex].cChoice;
+
+                                console.log("Has user answered the selected question? : ",$scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer);
+                                if($scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer){
+                                    console.log("The user's choice is :",$scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
+                                }
+
+                                /*Before the button goes and plays "grey" animation all buttons have to play "white" animation*/
+                                _.each(answersContainer.children, function(child, key, list){
+                                    if(child.currentAnimation){
+                                        child.gotoAndPlay("white");
+                                    }
+                                });
+
+                                /*Button plays the grey animation indicating that is the user's choice*/
+                                answerC1Button.gotoAndPlay("grey");
                                 $ionicHistory.goBack();
                             });
-
                             answerC1Button.x = answersContainer.x + 10 * scale;
                             answerC1Button.y = answersContainer.y + 100 * scale;
 
@@ -529,16 +575,31 @@ angular.module("bookbuilder2")
                         if ($scope.activityData.questions[$scope.activeQuestionIndex].cChoice !== "" && $scope.activityData.questions[$scope.activeQuestionIndex].dChoice === "") {
                             var answerC2Button = new createjs.Sprite(answerButtonSpriteSheet, "white");
 
-                            answerC2Button.addEventListener("mousedown", function (event) {
-                                console.log("mousedown event on a button !");
-                                answerC2Button.gotoAndPlay("grey");
-                                stage.update();
-                            });
-
+                            /*Button event when it's clicked*/
                             answerC2Button.addEventListener("pressup", function (event) {
-                                console.log("pressup event!");
-                                //Check if answer is correct
-                                answerC2Button.gotoAndPlay("green");
+                                console.log("Answer button fires pressup event!");
+
+                                console.log("Event information: ", event);
+
+                                /*Updating the properties regarding question after user selected an answer*/
+                                $scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer = true;
+                                $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer
+                                    = $scope.activityData.questions[$scope.activeQuestionIndex].cChoice;
+
+                                console.log("Has user answered the selected question? : ",$scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer);
+                                if($scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer){
+                                    console.log("The user's choice is :",$scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
+                                }
+
+                                /*Before the button goes and plays "grey" animation all buttons have to play "white" animation*/
+                                _.each(answersContainer.children, function(child, key, list){
+                                    if(child.currentAnimation){
+                                        child.gotoAndPlay("white");
+                                    }
+                                });
+
+                                /*Button plays the grey animation indicating that is the user's choice*/
+                                answerC2Button.gotoAndPlay("grey");
                                 $ionicHistory.goBack();
                             });
 
@@ -569,19 +630,33 @@ angular.module("bookbuilder2")
                         if ($scope.activityData.questions[$scope.activeQuestionIndex].dChoice !== "") {
                             var answerDButton = new createjs.Sprite(answerButtonSpriteSheet, "white");
 
-                            answerDButton.addEventListener("mousedown", function (event) {
-                                console.log("mousedown event on a button !");
-                                answerDButton.gotoAndPlay("grey");
-                                stage.update();
-                            });
-
+                            /*Button event when it's clicked*/
                             answerDButton.addEventListener("pressup", function (event) {
-                                console.log("pressup event!");
-                                //Check if answer is correct
-                                answerDButton.gotoAndPlay("green");
+                                console.log("Answer button fires pressup event!");
+
+                                console.log("Event information: ", event);
+
+                                /*Updating the properties regarding question after user selected an answer*/
+                                $scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer = true;
+                                $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer
+                                    = $scope.activityData.questions[$scope.activeQuestionIndex].dChoice;
+
+                                console.log("Has user answered the selected question? : ",$scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer);
+                                if($scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer){
+                                    console.log("The user's choice is :",$scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
+                                }
+
+                                /*Before the button goes and plays "grey" animation all buttons have to play "white" animation*/
+                                _.each(answersContainer.children, function(child, key, list){
+                                    if(child.currentAnimation){
+                                        child.gotoAndPlay("white");
+                                    }
+                                });
+
+                                /*Button plays the grey animation indicating that is the user's choice*/
+                                answerDButton.gotoAndPlay("grey");
                                 $ionicHistory.goBack();
                             });
-
                             answerDButton.x = answersContainer.x + 470 * scale;
                             answerDButton.y = answersContainer.y + 100 * scale;
 
@@ -624,8 +699,7 @@ angular.module("bookbuilder2")
                     });//end of get menu button
 
 
-                /*Function that dynamically updates the text of buttons*/
-
+                /******* Function that dynamically updates the text of buttons *********/
                 function updateQuestionAnswersTexts() {
 
                     //For A button
@@ -741,10 +815,14 @@ angular.module("bookbuilder2")
 
                             var yellowBarButton = new createjs.Sprite(yellowBarButtonSpriteSheet, "white");
 
-
                             //Button event for pressing the button and selecting new question
                             yellowBarButton.addEventListener("pressup", function (event) {
                                 console.log("Button fires a pressup event!");
+
+                                //Reinitializing scale for all yellowBar buttons
+                                _.each(bottomBarContainer.children, function(button, key, list){
+                                    button.scaleX = button.scaleY = scale;
+                                });
 
                                 console.log("Getting question for index: ", key);
                                 loadNewQuestion(key);
@@ -965,6 +1043,7 @@ angular.module("bookbuilder2")
                 }
 
 
+                /*Function for filling questions with the attribute hasAnswer */
                 function questionsConfiguration() {
                     _.each($scope.activityData.questions, function (question, key, list) {
                         $scope.activityData.questions[key].hasAnswer = false;
