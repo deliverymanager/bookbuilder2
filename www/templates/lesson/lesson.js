@@ -6,7 +6,7 @@ angular.module("bookbuilder2")
     //Initialization of $rootScope.selectedLesson
     $rootScope.selectedLesson = {};
 
-    $scope.backgroundView = {
+    $rootScope.backgroundView = {
       "background": "url(" + $rootScope.rootDir + "data/assets/background_image_1_purple.png) no-repeat center top",
       "-webkit-background-size": "cover",
       "-moz-background-size": "cover",
