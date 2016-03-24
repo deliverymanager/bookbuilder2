@@ -1,26 +1,61 @@
 {
-
-    "images": [
+  "images": [
     "multiple_choice_choice_button_sprite.png"
-],
-
-    "frames": [
-    [1, 1, 405, 67, 0, -2, -1],
-    [408, 1, 405, 67, 0, -2, -1],
-    [815, 1, 405, 67, 0, -2, -1],
-    [1222, 1, 405, 67, 0, -2, -1]
-],
-
-    "animations": {
-        "white": [0],
-        "grey": [1],
-        "red": [2],
-        "green": [3]
-    },
-
-    "texturepacker": [
-        "SmartUpdateHash: $TexturePacker:SmartUpdate:1482078a9ca8b6d50c90128f83331987:ac53500bafb62399e32b7b00048a2c2b:bf9649774bed181a35d58bd7e2c1bf9f$",
-        "Created with TexturePacker (https://www.codeandweb.com/texturepacker) for EaselJS"
-]
-
+  ],
+  "frames": [
+    [
+      1,
+      1,
+      405,
+      67,
+      0,
+      -2,
+      -1
+    ],
+    [
+      408,
+      1,
+      405,
+      67,
+      0,
+      -2,
+      -1
+    ],
+    [
+      815,
+      1,
+      405,
+      67,
+      0,
+      -2,
+      -1
+    ],
+    [
+      1222,
+      1,
+      405,
+      67,
+      0,
+      -2,
+      -1
+    ]
+  ],
+  "animations": {
+    "white": [
+      0
+    ],
+    "grey": [
+      1
+    ],
+    "red": [
+      2
+    ],
+    "green": [
+      3
+    ]
+  },
+  "texturepacker": [
+    "SmartUpdateHash: $TexturePacker:SmartUpdate:1482078a9ca8b6d50c90128f83331987:ac53500bafb62399e32b7b00048a2c2b:bf9649774bed181a35d58bd7e2c1bf9f$",
+    "Created with TexturePacker (https://www.codeandweb.com/texturepacker) for EaselJS"
+  ]
 }
