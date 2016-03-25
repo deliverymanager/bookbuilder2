@@ -62,6 +62,7 @@ angular.module("bookbuilder2")
 
         /*Page Initializations*/
         $scope.activeQuestionIndex = 0;
+        var answersContainer;
 
         /*Each activity projected to activityData and application retrieves it from localStorage
          if it's not located in localStorage controller initializes an object */
@@ -94,6 +95,7 @@ angular.module("bookbuilder2")
                 $scope.fps = createjs.Ticker.getMeasuredFPS().toFixed(2);
                 $scope.$apply();
                 stage.update();
+                /*console.info("Stage children: "+ stage.numChildren+ " | answersContainer children"+answersContainer.numChildren ? answersContainer.numChildren : 0);*/
             };
             createjs.Ticker.addEventListener("tick", handleTick);
 
@@ -353,21 +355,20 @@ angular.module("bookbuilder2")
                     var emptyString = "__________";
                     var formattedQuestion = $scope.activityData.questions[$scope.activeQuestionIndex].pretext
                         + emptyString
-                        + $scope.activityData.questions[$scope.activeQuestionIndex].midtext
                         + ($scope.activityData.questions[$scope.activeQuestionIndex].midtext === '' ? '' : emptyString)
                         + $scope.activityData.questions[$scope.activeQuestionIndex].postext;
                     $scope.questionText = new createjs.Text(formattedQuestion, "23px Arial", "#69B8C7");
 
-                    $scope.questionText.x = backgroundPosition.x + (backgroundPosition.width / 5);
+                    $scope.questionText.x = backgroundPosition.x + (backgroundPosition.width / 5.5);
                     $scope.questionText.y = backgroundPosition.y + (backgroundPosition.height / 5);
                     $scope.questionText.textBaseline = "alphabetic";
-                    $scope.questionText.maxWidth = questionsContainer.width;
+                    $scope.questionText.maxWidth = questionBackground.width;
                     $scope.questionText.lineHeight = 30;
 
                     questionsContainer.addChild($scope.questionText);
                     stage.update();
 
-                    //Index
+                    //Question index
                     $scope.indexText = new createjs.Text($scope.activeQuestionIndex + 1, "33px Arial", "orange");
 
                     $scope.indexText.x = backgroundPosition.x + (backgroundPosition.width / 16.5);
@@ -385,7 +386,7 @@ angular.module("bookbuilder2")
 
                 /***----------------------------------- ANSWERS -----------------------------------***/
                 //Container
-                var answersContainer = new createjs.Container();
+                answersContainer = new createjs.Container();
                 /*It's important too define containers height before start calculating buttons*/
                 answersContainer.width = 975;
                 answersContainer.height = 185;
@@ -410,11 +411,11 @@ angular.module("bookbuilder2")
 
 
                         /**------------- A -------------**/
-                        var answerAButton = new createjs.Sprite(answerButtonSpriteSheet, "white");
+                        $scope.answerAButton = new createjs.Sprite(answerButtonSpriteSheet, "white");
 
 
                         /*Button event when it's clicked*/
-                        answerAButton.addEventListener("pressup", function (event) {
+                        $scope.answerAButton.addEventListener("pressup", function (event) {
                             console.log("Answer button fires pressup event!");
 
                             console.log("Event information: ", event);
@@ -424,26 +425,35 @@ angular.module("bookbuilder2")
                             $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer
                                 = $scope.activityData.questions[$scope.activeQuestionIndex].aChoice;
 
-                            console.log("Has user answered the selected question? : ",$scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer);
-                            if($scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer){
-                                console.log("The user's choice is :",$scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
+
+                            /*Animation for bottom bar button when user selects an answer
+                             * the +1 in children[$scope.activeQuestionIndex+1] is for letting out the bg Image of the container
+                             * children[0] is for getting the Sprite of the container, children[1] is the Text
+                             * */
+                            bottomBarContainer.children[$scope.activeQuestionIndex + 1].children[0].gotoAndPlay("grey");
+
+
+                            console.log("Has user answered the selected question? : ", $scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer);
+                            if ($scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer) {
+                                console.log("The user's choice is :", $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
                             }
 
                             /*Before the button goes and plays "grey" animation all buttons have to play "white" animation*/
-                            _.each(answersContainer.children, function(child, key, list){
-                                if(child.currentAnimation){
+                            _.each(answersContainer.children, function (child, key, list) {
+                                if (child.currentAnimation) {
                                     child.gotoAndPlay("white");
                                 }
                             });
                             /*Button plays the grey animation indicating that is the user's choice*/
-                            answerAButton.gotoAndPlay("grey");
-                            $ionicHistory.goBack();
+                            $scope.answerAButton.gotoAndPlay("grey");
+
                         });
 
-                        answerAButton.x = answersContainer.x + 10 * scale;
-                        answerAButton.y = answersContainer.y + 10 * scale;
+                        //Button Calculations
+                        $scope.answerAButton.x = answersContainer.x + 10 * scale;
+                        $scope.answerAButton.y = answersContainer.y + 10 * scale;
 
-                        answersContainer.addChild(answerAButton);
+                        answersContainer.addChild($scope.answerAButton);
                         stage.update();
 
                         //Answer button Letter + Text
@@ -459,15 +469,13 @@ angular.module("bookbuilder2")
                         answersContainer.addChild(answerAButtonLetter);
                         stage.update();
 
-                        //
-
 
                         /**------------- B -------------**/
-                        var answerBButton = new createjs.Sprite(answerButtonSpriteSheet, "white");
+                        $scope.answerBButton = new createjs.Sprite(answerButtonSpriteSheet, "white");
 
 
                         /*Button event when it's clicked*/
-                        answerBButton.addEventListener("pressup", function (event) {
+                        $scope.answerBButton.addEventListener("pressup", function (event) {
                             console.log("Answer button fires pressup event!");
 
                             console.log("Event information: ", event);
@@ -477,27 +485,34 @@ angular.module("bookbuilder2")
                             $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer
                                 = $scope.activityData.questions[$scope.activeQuestionIndex].bChoice;
 
-                            console.log("Has user answered the selected question? : ",$scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer);
-                            if($scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer){
-                                console.log("The user's choice is :",$scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
+
+                            /*Animation for bottom bar button when user selects an answer
+                             * the +1 in children[$scope.activeQuestionIndex+1] is for letting out the bg Image of the container
+                             * children[0] is for getting the Sprite of the container, children[1] is the Text
+                             * */
+                            bottomBarContainer.children[$scope.activeQuestionIndex + 1].children[0].gotoAndPlay("grey");
+
+
+                            console.log("Has user answered the selected question? : ", $scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer);
+                            if ($scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer) {
+                                console.log("The user's choice is :", $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
                             }
 
                             /*Before the button goes and plays "grey" animation all buttons have to play "white" animation*/
-                            _.each(answersContainer.children, function(child, key, list){
-                                if(child.currentAnimation){
+                            _.each(answersContainer.children, function (child, key, list) {
+                                if (child.currentAnimation) {
                                     child.gotoAndPlay("white");
                                 }
                             });
 
                             /*Button plays the grey animation indicating that is the user's choice*/
-                            answerBButton.gotoAndPlay("grey");
-                            $ionicHistory.goBack();
+                            $scope.answerBButton.gotoAndPlay("grey");
                         });
 
-                        answerBButton.x = answersContainer.x + 470 * scale;
-                        answerBButton.y = answersContainer.y + 10 * scale;
+                        $scope.answerBButton.x = answersContainer.x + 470 * scale;
+                        $scope.answerBButton.y = answersContainer.y + 10 * scale;
 
-                        answersContainer.addChild(answerBButton);
+                        answersContainer.addChild($scope.answerBButton);
                         stage.update();
 
 
@@ -511,15 +526,14 @@ angular.module("bookbuilder2")
                         answersContainer.addChild(answerBButtonLetter);
                         stage.update();
 
-                        //
 
                         /**------------- C1 -------------**/
 
                         if ($scope.activityData.questions[$scope.activeQuestionIndex].cChoice !== "" && $scope.activityData.questions[$scope.activeQuestionIndex].dChoice !== "") {
-                            var answerC1Button = new createjs.Sprite(answerButtonSpriteSheet, "white");
+                            $scope.answerC1Button = new createjs.Sprite(answerButtonSpriteSheet, "white");
 
                             /*Button event when it's clicked*/
-                            answerC1Button.addEventListener("pressup", function (event) {
+                            $scope.answerC1Button.addEventListener("pressup", function (event) {
                                 console.log("Answer button fires pressup event!");
 
                                 console.log("Event information: ", event);
@@ -529,26 +543,35 @@ angular.module("bookbuilder2")
                                 $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer
                                     = $scope.activityData.questions[$scope.activeQuestionIndex].cChoice;
 
-                                console.log("Has user answered the selected question? : ",$scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer);
-                                if($scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer){
-                                    console.log("The user's choice is :",$scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
+
+                                /*Animation for bottom bar button when user selects an answer
+                                 * the +1 in children[$scope.activeQuestionIndex+1] is for letting out the bg Image of the container
+                                 * children[0] is for getting the Sprite of the container, children[1] is the Text
+                                 * */
+                                bottomBarContainer.children[$scope.activeQuestionIndex + 1].children[0].gotoAndPlay("grey");
+
+
+                                console.log("Has user answered the selected question? : ", $scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer);
+                                if ($scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer) {
+                                    console.log("The user's choice is :", $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
                                 }
 
                                 /*Before the button goes and plays "grey" animation all buttons have to play "white" animation*/
-                                _.each(answersContainer.children, function(child, key, list){
-                                    if(child.currentAnimation){
+                                _.each(answersContainer.children, function (child, key, list) {
+                                    if (child.currentAnimation) {
                                         child.gotoAndPlay("white");
                                     }
                                 });
 
                                 /*Button plays the grey animation indicating that is the user's choice*/
-                                answerC1Button.gotoAndPlay("grey");
-                                $ionicHistory.goBack();
-                            });
-                            answerC1Button.x = answersContainer.x + 10 * scale;
-                            answerC1Button.y = answersContainer.y + 100 * scale;
+                                $scope.answerC1Button.gotoAndPlay("grey");
 
-                            answersContainer.addChild(answerC1Button);
+
+                            });
+                            $scope.answerC1Button.x = answersContainer.x + 10 * scale;
+                            $scope.answerC1Button.y = answersContainer.y + 100 * scale;
+
+                            answersContainer.addChild($scope.answerC1Button);
                             stage.update();
 
 
@@ -572,10 +595,10 @@ angular.module("bookbuilder2")
                         /**------------- C2 -------------**/
 
                         if ($scope.activityData.questions[$scope.activeQuestionIndex].cChoice !== "" && $scope.activityData.questions[$scope.activeQuestionIndex].dChoice === "") {
-                            var answerC2Button = new createjs.Sprite(answerButtonSpriteSheet, "white");
+                            $scope.answerC2Button = new createjs.Sprite(answerButtonSpriteSheet, "white");
 
                             /*Button event when it's clicked*/
-                            answerC2Button.addEventListener("pressup", function (event) {
+                            $scope.answerC2Button.addEventListener("pressup", function (event) {
                                 console.log("Answer button fires pressup event!");
 
                                 console.log("Event information: ", event);
@@ -585,27 +608,34 @@ angular.module("bookbuilder2")
                                 $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer
                                     = $scope.activityData.questions[$scope.activeQuestionIndex].cChoice;
 
-                                console.log("Has user answered the selected question? : ",$scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer);
-                                if($scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer){
-                                    console.log("The user's choice is :",$scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
+
+                                /*Animation for bottom bar button when user selects an answer
+                                 * the +1 in children[$scope.activeQuestionIndex+1] is for letting out the bg Image of the container
+                                 * children[0] is for getting the Sprite of the container, children[1] is the Text
+                                 * */
+                                bottomBarContainer.children[$scope.activeQuestionIndex + 1].children[0].gotoAndPlay("grey");
+
+
+                                console.log("Has user answered the selected question? : ", $scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer);
+                                if ($scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer) {
+                                    console.log("The user's choice is :", $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
                                 }
 
                                 /*Before the button goes and plays "grey" animation all buttons have to play "white" animation*/
-                                _.each(answersContainer.children, function(child, key, list){
-                                    if(child.currentAnimation){
+                                _.each(answersContainer.children, function (child, key, list) {
+                                    if (child.currentAnimation) {
                                         child.gotoAndPlay("white");
                                     }
                                 });
 
                                 /*Button plays the grey animation indicating that is the user's choice*/
-                                answerC2Button.gotoAndPlay("grey");
-                                $ionicHistory.goBack();
+                                $scope.answerC2Button.gotoAndPlay("grey");
                             });
 
-                            answerC2Button.x = answersContainer.x + 235 * scale;
-                            answerC2Button.y = answersContainer.y + 100 * scale;
+                            $scope.answerC2Button.x = answersContainer.x + 235 * scale;
+                            $scope.answerC2Button.y = answersContainer.y + 100 * scale;
 
-                            answersContainer.addChild(answerC2Button);
+                            answersContainer.addChild($scope.answerC2Button);
                             stage.update();
 
                             //Answer button Letter + Text
@@ -627,10 +657,10 @@ angular.module("bookbuilder2")
 
                         /**------------- D -------------**/
                         if ($scope.activityData.questions[$scope.activeQuestionIndex].dChoice !== "") {
-                            var answerDButton = new createjs.Sprite(answerButtonSpriteSheet, "white");
+                            $scope.answerDButton = new createjs.Sprite(answerButtonSpriteSheet, "white");
 
                             /*Button event when it's clicked*/
-                            answerDButton.addEventListener("pressup", function (event) {
+                            $scope.answerDButton.addEventListener("pressup", function (event) {
                                 console.log("Answer button fires pressup event!");
 
                                 console.log("Event information: ", event);
@@ -640,26 +670,33 @@ angular.module("bookbuilder2")
                                 $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer
                                     = $scope.activityData.questions[$scope.activeQuestionIndex].dChoice;
 
-                                console.log("Has user answered the selected question? : ",$scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer);
-                                if($scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer){
-                                    console.log("The user's choice is :",$scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
+
+                                /*Animation for bottom bar button when user selects an answer
+                                 * the +1 in children[$scope.activeQuestionIndex+1] is for letting out the bg Image of the container
+                                 * children[0] is for getting the Sprite of the container, children[1] is the Text
+                                 * */
+                                bottomBarContainer.children[$scope.activeQuestionIndex + 1].children[0].gotoAndPlay("grey");
+
+
+                                console.log("Has user answered the selected question? : ", $scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer);
+                                if ($scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer) {
+                                    console.log("The user's choice is :", $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
                                 }
 
                                 /*Before the button goes and plays "grey" animation all buttons have to play "white" animation*/
-                                _.each(answersContainer.children, function(child, key, list){
-                                    if(child.currentAnimation){
+                                _.each(answersContainer.children, function (child, key, list) {
+                                    if (child.currentAnimation) {
                                         child.gotoAndPlay("white");
                                     }
                                 });
 
                                 /*Button plays the grey animation indicating that is the user's choice*/
-                                answerDButton.gotoAndPlay("grey");
-                                $ionicHistory.goBack();
+                                $scope.answerDButton.gotoAndPlay("grey");
                             });
-                            answerDButton.x = answersContainer.x + 470 * scale;
-                            answerDButton.y = answersContainer.y + 100 * scale;
+                            $scope.answerDButton.x = answersContainer.x + 470 * scale;
+                            $scope.answerDButton.y = answersContainer.y + 100 * scale;
 
-                            answersContainer.addChild(answerDButton);
+                            answersContainer.addChild($scope.answerDButton);
                             stage.update();
 
 
@@ -700,6 +737,45 @@ angular.module("bookbuilder2")
 
                 /******* Function that dynamically updates the text of buttons *********/
                 function updateQuestionAnswersTexts() {
+
+                    /*Re-initializing answers. Removing the selected one etc.*/
+                    _.each(answersContainer.children, function (child, key, list) {
+                        if (child.currentAnimation) {
+                            child.gotoAndPlay("white");
+                        }
+                    });
+
+                    /** NOTE !!! This function updates the displayed animation too. When a choice has answer!!! **/
+                    if ($scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer) {
+                        if ($scope.activityData.questions[$scope.activeQuestionIndex].userAnswer
+                            === $scope.activityData.questions[$scope.activeQuestionIndex].aChoice) {
+
+                            console.log("Children: ", answersContainer.children);
+                            $scope.answerAButton.gotoAndPlay("grey");
+
+                        } else if ($scope.activityData.questions[$scope.activeQuestionIndex].userAnswer
+                            === $scope.activityData.questions[$scope.activeQuestionIndex].bChoice) {
+
+                            console.log("Children: ", answersContainer.children);
+                            $scope.answerBButton.gotoAndPlay("grey");
+
+                        } else if ($scope.activityData.questions[$scope.activeQuestionIndex].userAnswer
+                            === $scope.activityData.questions[$scope.activeQuestionIndex].cChoice) {
+
+                            if ($scope.answerC1Button) {
+                                console.log("Children: ", answersContainer.children);
+                                $scope.answerC1Button.gotoAndPlay("grey");
+                            } else {
+                                console.log("Children: ", answersContainer.children);
+                                $scope.answerC2Button.gotoAndPlay("grey");
+                            }
+
+                        } else {
+                            console.log("Children: ", answersContainer.children);
+                            $scope.answerDButton.gotoAndPlay("grey");
+                        }
+                    }
+
 
                     //For A button
                     $scope.answerAButtonText = new createjs.Text($scope.activityData.questions[$scope.activeQuestionIndex].aChoice, "25px Arial", "#69B8C7");
@@ -773,6 +849,9 @@ angular.module("bookbuilder2")
 
 
                 /***----------------------------------- BOTTOM BAR -----------------------------------***/
+
+                $scope.yellowBarContainers = {};
+
                 //Container
                 var bottomBarContainer = new createjs.Container();
                 /*It's important too define containers height before start calculating buttons*/
@@ -807,25 +886,67 @@ angular.module("bookbuilder2")
 
                         var yellowBarButtonSpriteSheet = new createjs.SpriteSheet(response);
 
+                        console.log("Success on getting spriteSheet for the yellow line / bottom bar button! : ", yellowBarButtonSpriteSheet);
+
                         var yellowBarButtonX = bottomBarContainer.x + 180 * scale;
 
                         /*Populating yellow bar*/
                         _.each($scope.activityData.questions, function (question, key, list) {
 
+                            console.log("Question in each() while populating yellow bar: ", question);
+
+                            /*BUTTON CONTAINER*/
+                            $scope.yellowBarContainers[key] = new createjs.Container();
+
+                            /*It's important too define containers height before start calculating buttons*/
+                            $scope.yellowBarContainers[key].width = 50;
+                            $scope.yellowBarContainers[key].height = 50;
+
+                            $scope.yellowBarContainers[key].scaleX = $scope.yellowBarContainers[key].scaleY = scale;
+
+                            $scope.yellowBarContainers[key].regY = $scope.yellowBarContainers[key].height / 3;
+                            $scope.yellowBarContainers[key].regX = $scope.yellowBarContainers[key].width / 2;
+
+                            $scope.yellowBarContainers[key].x = yellowBarButtonX;
+                            $scope.yellowBarContainers[key].y = bottomBarContainer.y;
+                            yellowBarButtonX += 58;
+
+                            bottomBarContainer.addChild($scope.yellowBarContainers[key]);
+                            stage.update();
+
+
+                            /* //Reinitializing scale for all yellowBar buttons
+                             _.each(bottomBarContainer.children, function (container, key, list) {
+                             container.scaleX = container.scaleY = scale;
+                             });*/
+
+
+                            /*BUTTON*/
                             var yellowBarButton = new createjs.Sprite(yellowBarButtonSpriteSheet, "white");
 
-                            //Button event for pressing the button and selecting new question
+                            //Button EVENT for pressing the button and selecting new question
                             yellowBarButton.addEventListener("pressup", function (event) {
-                                console.log("Button fires a pressup event!");
+                                console.log("Event info: ", event);
 
-                                //Reinitializing scale for all yellowBar buttons
-                                _.each(bottomBarContainer.children, function(button, key, list){
-                                    button.scaleX = button.scaleY = scale;
-                                });
+                                /*event.currentTarget.scaleX = event.currentTarget.scaleY = scale * 1.2;*/
+                                $scope.yellowBarContainers[key].scaleX = $scope.yellowBarContainers[key].scaleY = scale * 1.2;
 
                                 console.log("Getting question for index: ", key);
                                 loadNewQuestion(key);
-                                yellowBarButton.scaleX = yellowBarButton.scaleY = scale * 1.2;
+
+                                console.log("bottomBarContainer children:", bottomBarContainer.children);
+
+                                //
+                                _.each($scope.activityData.questions, function (question, k, list) {
+
+                                    if (k !== key) {
+                                        $scope.yellowBarContainers[k].scaleX = $scope.yellowBarContainers[k].scaleY = scale;
+                                    }
+
+                                });
+
+                                stage.update();
+
                             });
 
                             //Checking if user has answered
@@ -834,30 +955,30 @@ angular.module("bookbuilder2")
                             }
 
                             /*Initializing first yellowBarButton as selected*/
-                            key === 0 ? yellowBarButton.scaleX = yellowBarButton.scaleY = scale * 1.2
-                                : yellowBarButton.scaleX = yellowBarButton.scaleY = scale;
+                            key === 0 ? $scope.yellowBarContainers[key].scaleX = $scope.yellowBarContainers[key].scaleY = scale * 1.2
+                                : $scope.yellowBarContainers[key].scaleX = $scope.yellowBarContainers[key].scaleY = scale;
 
-                            yellowBarButton.x = yellowBarButtonX;
-                            yellowBarButton.y = bottomBarContainer.y - 15 * scale;
-                            yellowBarButtonX += 58;
+                            yellowBarButton.x = 0;
+                            yellowBarButton.y = 0;
 
-                            bottomBarContainer.addChild(yellowBarButton);
+                            $scope.yellowBarContainers[key].addChild(yellowBarButton);
                             stage.update();
 
-                            /*Adding the text index*/
-                            var yellowBarButtonIndex = new createjs.Text(key + 1, "20px Arial", "black");
 
-                            yellowBarButtonIndex.x = yellowBarButton.x + 21 * scale;
-                            yellowBarButtonIndex.y = backgroundPosition.y + (backgroundPosition.height / 2.7);
+                            /*TEXT INDEX*/
+                            var yellowBarButtonIndex = new createjs.Text(key + 1, "15px Arial", "black");
+
+                            yellowBarButtonIndex.x = 20;
+                            yellowBarButtonIndex.y = 20;
                             yellowBarButtonIndex.textBaseline = "alphabetic";
                             yellowBarButtonIndex.textAlign = "center";
                             yellowBarButtonIndex.maxWidth = questionsContainer.width;
 
-                            bottomBarContainer.addChild(yellowBarButtonIndex);
+                            $scope.yellowBarContainers[key].addChild(yellowBarButtonIndex);
                             stage.update();
 
-                        });
 
+                        });
 
                     })
                     .error(function (error) {
