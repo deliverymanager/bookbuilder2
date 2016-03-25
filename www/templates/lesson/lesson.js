@@ -102,23 +102,12 @@ angular.module("bookbuilder2")
 
             //Reassigning images with the rest of resource
             response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-
-            //Reassigning animations
-            response.animations = {
-              normal: 0,
-              pressed: 1,
-              tap: {
-                frames: [1],
-                next: "normal"
-              }
-            };
-
             var menuButtonSpriteSheet = new createjs.SpriteSheet(response);
             var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
 
             menuButton.addEventListener("mousedown", function (event) {
               console.log("mousedown event on a button !");
-              menuButton.gotoAndPlay("pressed");
+              menuButton.gotoAndPlay("onSelection");
               stage.update();
             });
 
@@ -203,52 +192,25 @@ angular.module("bookbuilder2")
             /*-----------------------------------------READING BUTTON----------------------------------------*/
             $http.get($rootScope.rootDir + "data/assets/menu_reading_bubble_button_sprite.json")
               .success(function (response) {
-
-                //Reassigning images with the rest of resource
                 response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-
-                //Reassigning animations
-                response.animations = {
-                  normal: 0,
-                  onSelection: 1,
-                  selected: 2,
-                  tap: {
-                    frames: [1],
-                    next: "selected"
-                  }
-                };
-
                 var readingButtonSpriteSheet = new createjs.SpriteSheet(response);
                 var readingButton = new createjs.Sprite(readingButtonSpriteSheet, "normal");
-
-                /* ------------------------ EVENT --------------------------- */
-                readingButton.addEventListener("click", function (event) {
-
-                });
-
-                //We need to scale every container!
                 readingButton.scaleX = readingButton.scaleY = scale;
-                readingButton.x = backgroundPosition.x + (backgroundPosition.width / 1.5);
-                readingButton.y = backgroundPosition.y + (backgroundPosition.height / 1.5);
-
-
-                /* ------------------------ EVENT ------------------------ */
+                readingButton.x = backgroundPosition.x + (backgroundPosition.width / 2.8);
+                readingButton.y = backgroundPosition.y + (backgroundPosition.height / 2.3);
                 readingButton.addEventListener("mousedown", function (event) {
                   console.log("mousedown event on a lesson button!");
                   readingButton.gotoAndPlay("onSelection");
                   stage.update();
                 });
-
                 readingButton.addEventListener("pressup", function (event) {
-                  readingButton.gotoAndPlay("selected");
+                  readingButton.gotoAndPlay("normal");
                   stage.update();
                   console.log($rootScope.selectedLessonId);
                   $state.go("reading");
                 });
-
                 stage.addChild(readingButton);
                 stage.update();
-
               })
               .error(function (error) {
                 console.error("Error on getting json for reading button...", error);
@@ -261,42 +223,24 @@ angular.module("bookbuilder2")
 
                 //Reassigning images with the rest of resource
                 response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-
-                //Reassigning animations
-                response.animations = {
-                  normal: 0,
-                  onSelection: 1,
-                  selected: 2,
-                  tap: {
-                    frames: [1],
-                    next: "selected"
-                  }
-                };
-
                 var vocabularyButtonSpriteSheet = new createjs.SpriteSheet(response);
                 var vocabularyButton = new createjs.Sprite(vocabularyButtonSpriteSheet, "normal");
                 vocabularyButton.scaleX = vocabularyButton.scaleY = scale;
-                vocabularyButton.x = backgroundPosition.x + (backgroundPosition.width / 2);
-                vocabularyButton.y = backgroundPosition.y + (backgroundPosition.height / 2.5);
-
-
-                /* ------------------------ EVENT ------------------------ */
+                vocabularyButton.x = backgroundPosition.x + (backgroundPosition.width / 2.8);
+                vocabularyButton.y = backgroundPosition.y + (backgroundPosition.height / 4);
                 vocabularyButton.addEventListener("mousedown", function (event) {
                   console.log("mousedown event on a lesson button!");
                   vocabularyButton.gotoAndPlay("onSelection");
                   stage.update();
                 });
-
                 vocabularyButton.addEventListener("pressup", function (event) {
-                  vocabularyButton.gotoAndPlay("selected");
+                  vocabularyButton.gotoAndPlay("normal");
                   stage.update();
                   console.log($rootScope.selectedLessonId);
                   $state.go("vocabulary");
                 });
-
                 stage.addChild(vocabularyButton);
                 stage.update();
-
               })
               .error(function (error) {
                 console.error("Error on getting json for vocabulary button...", error);
@@ -307,20 +251,7 @@ angular.module("bookbuilder2")
 
             $http.get($rootScope.rootDir + "data/assets/lesson_results_button_sprite.json")
               .success(function (response) {
-
-                //Reassigning images with the rest of resource
                 response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-
-                //Reassigning animations
-                response.animations = {
-                  normal: 0,
-                  pressed: 1,
-                  tap: {
-                    frames: [1],
-                    next: "normal"
-                  }
-                };
-
                 var resultsButtonSpriteSheet = new createjs.SpriteSheet(response);
                 var resultsButton = new createjs.Sprite(resultsButtonSpriteSheet, "normal");
                 resultsButton.scaleX = resultsButton.scaleY = scale;
@@ -332,7 +263,7 @@ angular.module("bookbuilder2")
                 /* ------------------------ EVENT ------------------------ */
                 resultsButton.addEventListener("mousedown", function (event) {
                   console.log("mousedown event on a button !");
-                  resultsButton.gotoAndPlay("pressed");
+                  resultsButton.gotoAndPlay("onSelection");
                   stage.update();
                 });
                 resultsButton.addEventListener("pressup", function (event) {
@@ -364,7 +295,7 @@ angular.module("bookbuilder2")
                     activityButton.y = yPosition;
                     activityButton.x = -1500 * scale;
                     createjs.Tween.get(activityButton, {loop: false}).wait(yPosition)
-                      .to({x: 120}, 500, createjs.Ease.getPowIn(2));
+                      .to({x: 0}, 500, createjs.Ease.getPowIn(2));
                     yPosition += 75;
 
                     /* -------------------------------- CLICK ON LESSON BUTTON -------------------------------- */
@@ -376,7 +307,6 @@ angular.module("bookbuilder2")
 
                     activityButton.addEventListener("pressup", function (event) {
                       console.log("pressup event on a lesson button !");
-                      activityButton.gotoAndPlay("selected");
                       stage.update();
                       $rootScope.activityFolder = activityButton.activityFolder;
                       console.log($rootScope.selectedLessonId);

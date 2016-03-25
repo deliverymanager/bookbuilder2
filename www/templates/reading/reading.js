@@ -98,22 +98,12 @@ angular.module("bookbuilder2")
             //Reassigning images with the rest of resource
             response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
 
-            //Reassigning animations
-            response.animations = {
-              normal: 0,
-              pressed: 1,
-              tap: {
-                frames: [1],
-                next: "normal"
-              }
-            };
-
             var menuButtonSpriteSheet = new createjs.SpriteSheet(response);
             var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
 
             menuButton.addEventListener("mousedown", function (event) {
               console.log("mousedown event on a button !");
-              menuButton.gotoAndPlay("pressed");
+              menuButton.gotoAndPlay("onSelection");
               stage.update();
             });
 
@@ -170,7 +160,7 @@ angular.module("bookbuilder2")
                     }
                   );
 
-                }, 0, 1, true);
+                }, 100, 0, true);
 
               })
               .error(function (error) {
