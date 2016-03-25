@@ -335,17 +335,17 @@ angular.module("bookbuilder2")
                 stage.update();
 
 
-                updateQuestionIndexAndText();
-                function updateQuestionIndexAndText() {
+                updateQuestionIndexAndText(null);
+                function updateQuestionIndexAndText(userChoice) {
 
                     console.log("$scope.activityData: ", $scope.activityData);
                     console.log("$scope.activityData.questions: ", $scope.activityData.questions);
                     console.log("$scope.activeQuestionIndex: ", $scope.activeQuestionIndex);
 
-                    var emptyString = "__________";
+                    var underlinedSpace = userChoice ? userChoice : "__________";
                     var formattedQuestion = $scope.activityData.questions[$scope.activeQuestionIndex].pretext
-                        + emptyString
-                        + ($scope.activityData.questions[$scope.activeQuestionIndex].midtext === '' ? '' : emptyString)
+                        + underlinedSpace
+                        + ($scope.activityData.questions[$scope.activeQuestionIndex].midtext === '' ? '' : underlinedSpace)
                         + $scope.activityData.questions[$scope.activeQuestionIndex].postext;
                     $scope.questionText = new createjs.Text(formattedQuestion, "23px Arial", "#69B8C7");
 
@@ -410,10 +410,19 @@ angular.module("bookbuilder2")
 
                             console.log("Event information: ", event);
 
+
                             /*Updating the properties regarding question after user selected an answer*/
                             $scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer = true;
                             $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer
                                 = $scope.activityData.questions[$scope.activeQuestionIndex].aChoice;
+
+
+                            /*Adds the selected answer to question gap*/
+                            console.log(questionsContainer.children);
+                            var questionChild = _.findWhere(questionsContainer.children, {color: "#69B8C7"});
+                            questionsContainer.removeChild(questionChild);
+
+                            updateQuestionIndexAndText($scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
 
 
                             /*Animation for bottom bar button when user selects an answer
@@ -476,6 +485,14 @@ angular.module("bookbuilder2")
                                 = $scope.activityData.questions[$scope.activeQuestionIndex].bChoice;
 
 
+                            /*Adds the selected answer to question gap*/
+                            console.log(questionsContainer.children);
+                            var questionChild = _.findWhere(questionsContainer.children, {color: "#69B8C7"});
+                            questionsContainer.removeChild(questionChild);
+
+                            updateQuestionIndexAndText($scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
+
+
                             /*Animation for bottom bar button when user selects an answer
                              * the +1 in children[$scope.activeQuestionIndex+1] is for letting out the bg Image of the container
                              * children[0] is for getting the Sprite of the container, children[1] is the Text
@@ -532,6 +549,14 @@ angular.module("bookbuilder2")
                                 $scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer = true;
                                 $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer
                                     = $scope.activityData.questions[$scope.activeQuestionIndex].cChoice;
+
+
+                                /*Adds the selected answer to question gap*/
+                                console.log(questionsContainer.children);
+                                var questionChild = _.findWhere(questionsContainer.children, {color: "#69B8C7"});
+                                questionsContainer.removeChild(questionChild);
+
+                                updateQuestionIndexAndText($scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
 
 
                                 /*Animation for bottom bar button when user selects an answer
@@ -599,6 +624,14 @@ angular.module("bookbuilder2")
                                     = $scope.activityData.questions[$scope.activeQuestionIndex].cChoice;
 
 
+                                /*Adds the selected answer to question gap*/
+                                console.log(questionsContainer.children);
+                                var questionChild = _.findWhere(questionsContainer.children, {color: "#69B8C7"});
+                                questionsContainer.removeChild(questionChild);
+
+                                updateQuestionIndexAndText($scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
+
+
                                 /*Animation for bottom bar button when user selects an answer
                                  * the +1 in children[$scope.activeQuestionIndex+1] is for letting out the bg Image of the container
                                  * children[0] is for getting the Sprite of the container, children[1] is the Text
@@ -659,6 +692,14 @@ angular.module("bookbuilder2")
                                 $scope.activityData.questions[$scope.activeQuestionIndex].hasAnswer = true;
                                 $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer
                                     = $scope.activityData.questions[$scope.activeQuestionIndex].dChoice;
+
+
+                                /*Adds the selected answer to question gap*/
+                                console.log(questionsContainer.children);
+                                var questionChild = _.findWhere(questionsContainer.children, {color: "#69B8C7"});
+                                questionsContainer.removeChild(questionChild);
+
+                                updateQuestionIndexAndText($scope.activityData.questions[$scope.activeQuestionIndex].userAnswer);
 
 
                                 /*Animation for bottom bar button when user selects an answer
@@ -987,22 +1028,14 @@ angular.module("bookbuilder2")
                         //Reassigning images with the rest of resource
                         response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
 
-                        //Reassigning animations
-                        response.animations = {
-                            normal: 0,
-                            pressed: 1,
-                            tap: {
-                                frames: [1],
-                                next: "normal"
-                            }
-                        };
+
 
                         var returnButtonSpriteSheet = new createjs.SpriteSheet(response);
                         var returnButton = new createjs.Sprite(returnButtonSpriteSheet, "normal");
 
                         returnButton.addEventListener("mousedown", function (event) {
                             console.log("mousedown event on a button !");
-                            returnButton.gotoAndPlay("pressed");
+                            returnButton.gotoAndPlay("onSelection");
                             stage.update();
                         });
 
@@ -1034,22 +1067,13 @@ angular.module("bookbuilder2")
                         //Reassigning images with the rest of resource
                         response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
 
-                        //Reassigning animations
-                        response.animations = {
-                            normal: 0,
-                            pressed: 1,
-                            tap: {
-                                frames: [1],
-                                next: "normal"
-                            }
-                        };
 
                         var checkButtonSpriteSheet = new createjs.SpriteSheet(response);
                         var checkButton = new createjs.Sprite(checkButtonSpriteSheet, "normal");
 
                         checkButton.addEventListener("mousedown", function (event) {
                             console.log("mousedown event on a button !");
-                            checkButton.gotoAndPlay("pressed");
+                            checkButton.gotoAndPlay("onSelection");
                             stage.update();
                         });
 
@@ -1082,22 +1106,14 @@ angular.module("bookbuilder2")
                         //Reassigning images with the rest of resource
                         response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
 
-                        //Reassigning animations
-                        response.animations = {
-                            normal: 0,
-                            pressed: 1,
-                            tap: {
-                                frames: [1],
-                                next: "normal"
-                            }
-                        };
+
 
                         var nextButtonSpriteSheet = new createjs.SpriteSheet(response);
                         var nextButton = new createjs.Sprite(nextButtonSpriteSheet, "normal");
 
                         nextButton.addEventListener("mousedown", function (event) {
                             console.log("mousedown event on a button !");
-                            nextButton.gotoAndPlay("pressed");
+                            nextButton.gotoAndPlay("onSelection");
                             stage.update();
                         });
 
