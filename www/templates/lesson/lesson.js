@@ -149,15 +149,8 @@ angular.module("bookbuilder2")
         activitiesMenuContainer.scaleX = activitiesMenuContainer.scaleY = scale;
 
         var yPosition = 60;
-
         activitiesMenuContainer.x = backgroundPosition.x + (backgroundPosition.width / 24);
         activitiesMenuContainer.y = backgroundPosition.y + (backgroundPosition.height / 7);
-        /*
-         var graphics = new createjs.Graphics().beginFill("#ff0000").drawRect(0, 0, activitiesMenuContainer.width, activitiesMenuContainer.height);
-         var shape = new createjs.Shape(graphics);
-         shape.alpha = 0.5;
-         activitiesMenuContainer.addChild(shape);
-         */
         stage.addChild(activitiesMenuContainer);
         stage.update();
 
@@ -208,7 +201,7 @@ angular.module("bookbuilder2")
 
 
             /*-----------------------------------------READING BUTTON----------------------------------------*/
-            $http.get("data/assets/" + response.lessonButtons.readingButtonFileName)
+            $http.get($rootScope.rootDir + "data/assets/menu_reading_bubble_button_sprite.json")
               .success(function (response) {
 
                 //Reassigning images with the rest of resource
@@ -250,7 +243,7 @@ angular.module("bookbuilder2")
                   readingButton.gotoAndPlay("selected");
                   stage.update();
                   console.log($rootScope.selectedLessonId);
-                  $state.go("vocabulary");
+                  $state.go("reading");
                 });
 
                 stage.addChild(readingButton);
@@ -263,7 +256,7 @@ angular.module("bookbuilder2")
 
             /*-----------------------------------------VOCABULARY BUTTON----------------------------------------*/
 
-            $http.get($rootScope.rootDir + "data/assets/" + response.lessonButtons.vocabularyButtonFileName)
+            $http.get($rootScope.rootDir + "data/assets/menu_vocabulary_bubble_button_sprite.json")
               .success(function (response) {
 
                 //Reassigning images with the rest of resource
@@ -312,7 +305,7 @@ angular.module("bookbuilder2")
 
             /*-----------------------------------------RESULTS BUTTON----------------------------------------*/
 
-            $http.get($rootScope.rootDir + "data/assets/" + response.lessonButtons.resultsButtonFileName)
+            $http.get($rootScope.rootDir + "data/assets/lesson_results_button_sprite.json")
               .success(function (response) {
 
                 //Reassigning images with the rest of resource
@@ -362,20 +355,7 @@ angular.module("bookbuilder2")
                 $http.get(spriteResourceUrl)
                   .success(function (response) {
 
-
-                    //Reassigning images with the rest of resource
                     response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-
-                    //Reassigning animations
-                    response.animations = {
-                      normal: 0,
-                      onSelection: 1,
-                      selected: 2,
-                      tap: {
-                        frames: [1],
-                        next: "selected"
-                      }
-                    };
 
                     var activityButtonSpriteSheet = new createjs.SpriteSheet(response);
                     var activityButton = new createjs.Sprite(activityButtonSpriteSheet, "normal");

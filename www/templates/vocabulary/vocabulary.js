@@ -33,7 +33,12 @@ angular.module("bookbuilder2")
       $scope.$on('$destroy', function () {
         console.log('destroy');
         createjs.Ticker.framerate = 0;
-        createjs.Sound.removeAllSounds();
+
+        _.each($scope.sounds, function (sound, key, list) {
+          $scope.sounds[key].stop();
+          $scope.sounds[key].release();
+        });
+
       });
 
       $ionicPlatform.on('pause', function () {
@@ -131,27 +136,61 @@ angular.module("bookbuilder2")
             $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/vocabulary.json")
               .success(function (vocabularyJson) {
 
+                $scope.sounds = {};
+                var assetPath = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/";
                 console.log("vocabularyJson", vocabularyJson);
 
-                var assetPath = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/";
-
-                var sounds = [];
+                var waterFallFunctions = [];
                 _.each(vocabularyJson, function (tabWords, tab, list) {
                   _.each(tabWords, function (word, key, list) {
-                    sounds.push({src: word + ".mp3", id: word});
+
+                    waterFallFunctions.push(function (waterfallCallback) {
+                      console.log("Sound", word);
+                      if (ionic.Platform.isIOS() && window.cordova) {
+                        console.log("Else iOS");
+                        resolveLocalFileSystemURL(assetPath + word + ".mp3", function (entry) {
+                          console.log(entry);
+                          $scope.sounds[word] = new Media(entry.toInternalURL(), function () {
+                            console.log("Sound success");
+                          }, function (err) {
+                            console.log("Sound error", err);
+                          }, function (status) {
+                            console.log("Sound status", status);
+                          });
+                          $timeout(function () {
+                            waterfallCallback();
+                          }, 100);
+                        });
+                      } else {
+                        console.log("Else Android");
+                        $scope.sounds[word] = new Media(assetPath + word + ".mp3", function () {
+                          console.log("Sound success");
+                        }, function (err) {
+                          console.log("Sound error", err);
+                        }, function (status) {
+                          console.log("Sound status", status);
+                        });
+
+                        $timeout(function () {
+                          waterfallCallback();
+                        }, 100);
+
+                      }
+
+                    });
                   });
                 });
-                createjs.Sound.registerSounds(sounds, assetPath);
+
+                console.log(waterFallFunctions.length);
+                async.waterfall(waterFallFunctions, function (err, response) {
+                  console.log($scope.sounds);
+                });
+
+
               })
               .error(function (error) {
                 console.error("Error on getting json for results button...", error);
               });//end of get menu button
-
-
-            $timeout(function () {
-              createjs.Sound.play("w11");
-            }, 3000);
-
 
           })
           .error(function (error) {

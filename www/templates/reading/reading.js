@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-  .controller("ReadingController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory) {
+  .controller("ReadingController", function ($scope, $interval, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory) {
 
     console.log("ReadingController loaded!");
 
@@ -33,6 +33,9 @@ angular.module("bookbuilder2")
       $scope.$on('$destroy', function () {
         console.log('destroy');
         createjs.Ticker.framerate = 0;
+        $scope.sound.stop();
+        $scope.sound.release();
+        $interval.cancel($scope.playSoundIntervalPromise);
       });
 
       $ionicPlatform.on('pause', function () {
@@ -127,23 +130,53 @@ angular.module("bookbuilder2")
             stage.addChild(menuButton);
             stage.update();
 
+            $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/reading/reading.json")
+              .success(function (readingJson) {
 
-            var assetsPath = "./assets/";
-            var sounds = [{
-              src: "MyAudioSprite.ogg", data: {
-                audioSprite: [
-                  {id: "sound1", startTime: 0, duration: 500},
-                  {id: "sound2", startTime: 1000, duration: 400},
-                  {id: "sound3", startTime: 1700, duration: 1000}
-                ]
-              }
-            }
-            ];
-            createjs.Sound.alternateExtensions = ["mp3"];
-            createjs.Sound.on("fileload", loadSound);
-            createjs.Sound.registerSounds(sounds, assetsPath);
-            // after load is complete
-            createjs.Sound.play("sound2");
+                var assetPath = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/reading/";
+                console.log("readingJson", readingJson);
+
+                if (ionic.Platform.isIOS() && window.cordova) {
+                  resolveLocalFileSystemURL(assetPath + "reading.mp3", function (entry) {
+                    console.log(entry);
+                    $scope.sound = new Media(entry.toInternalURL(), function () {
+                      console.log("Sound success");
+                    }, function (err) {
+                      console.log("Sound error", err);
+                    }, function (status) {
+                      console.log("Sound status", status);
+                    });
+                  });
+                } else {
+                  $scope.sound = new Media(assetPath + "reading.mp3", function () {
+                    console.log("Sound success");
+                  }, function (err) {
+                    console.log("Sound error", err);
+                  }, function (status) {
+                    console.log("Sound status", status);
+                  });
+                }
+
+                $scope.playSoundIntervalPromise = $interval(function () {
+
+                  $scope.sound.getCurrentPosition(
+                    // success callback
+                    function (position) {
+                      console.log(position);
+                    },
+                    // error callback
+                    function (e) {
+                      console.log("Error getting pos=" + e);
+                    }
+                  );
+
+                }, 0, 1, true);
+
+              })
+              .error(function (error) {
+                console.error("Error on getting json for results button...", error);
+              });//end of get menu button
+
 
           })
           .error(function (error) {
