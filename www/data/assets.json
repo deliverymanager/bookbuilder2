@@ -128,7 +128,7 @@
     "multiple_choice_text_bubble.png",
     "multiple_choice_choice_button_sprite.json",
     "multiple_choice_choice_button_sprite.png",
-    "vocabulary_background_image_blue.png.png",
+    "vocabulary_background_image_blue.png",
     "vocabulary_derivatives_button_sprite.json",
     "vocabulary_derivatives_button_sprite.png",
     "vocabulary_english_big_button_sprite.json",
@@ -158,5 +158,6 @@
     "results_email_button_sprite.json",
     "results_email_button_sprite.png",
     "results_exit_button_sprite.json",
-    "results_exit_button_sprite.png"
+    "results_exit_button_sprite.png",
+    "reading_background_image_blue.png"
 ]

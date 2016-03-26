@@ -52,7 +52,7 @@ angular.module("bookbuilder2")
 
       /*Image Loader*/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-        src: $rootScope.rootDir + "data/assets/lesson_menu_background_image_2_blue.png"
+        src: $rootScope.rootDir + "data/assets/reading_background_image_blue.png"
       }));
       imageLoader.load();
 
@@ -63,7 +63,7 @@ angular.module("bookbuilder2")
         console.log("Image Loaded...");
 
         /*Creating Bitmap Background for Canvas*/
-        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/lesson_menu_background_image_2_blue.png");
+        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/reading_background_image_blue.png");
 
         /**** CALCULATING SCALING ****/
         var scaleY = stage.canvas.height / background.image.height;
@@ -89,8 +89,56 @@ angular.module("bookbuilder2")
         stage.addChild(background);
         stage.update();
         var backgroundPosition = background.getTransformedBounds();
+        console.log("backgroundPosition", backgroundPosition);
 
         /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
+
+        $http.get($rootScope.rootDir + "data/assets/reading_play_button_sprite.json")
+          .success(function (response) {
+
+            $scope.playing = false;
+
+            //Reassigning images with the rest of resource
+            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+            var buttonPlaySpriteSheet = new createjs.SpriteSheet(response);
+            var playButton = new createjs.Sprite(buttonPlaySpriteSheet, "playNormal");
+
+            playButton.addEventListener("mousedown", function (event) {
+              console.log("mousedown event on a button !");
+
+              if ($scope.playing) {
+                playButton.gotoAndPlay("playOnSelection");
+              } else {
+                playButton.gotoAndPlay("pauseOnSelection");
+              }
+              stage.update();
+            });
+
+            playButton.addEventListener("pressup", function (event) {
+              console.log("pressup event!");
+
+              if ($scope.playing) {
+                playButton.gotoAndPlay("pauseNormal");
+                $scope.playing = false;
+                $scope.sound.stop();
+              } else {
+                playButton.gotoAndPlay("playNormal");
+                $scope.playing = true;
+                $scope.sound.play();
+              }
+            });
+
+            playButton.scaleX = playButton.scaleY = scale;
+            playButton.x = backgroundPosition.x + (backgroundPosition.width / 1.13);
+            playButton.y = backgroundPosition.y + (backgroundPosition.height / 1.063);
+
+            stage.addChild(playButton);
+            stage.update();
+          })
+          .error(function (error) {
+            console.error("Error on getting json for results button...", error);
+          });//end of get menu button
+
 
         $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
           .success(function (response) {
@@ -119,54 +167,53 @@ angular.module("bookbuilder2")
 
             stage.addChild(menuButton);
             stage.update();
+          })
+          .error(function (error) {
+            console.error("Error on getting json for results button...", error);
+          });//end of get menu button
 
-            $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/reading/reading.json")
-              .success(function (readingJson) {
 
-                var assetPath = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/reading/";
-                console.log("readingJson", readingJson);
+        $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/reading/reading.json")
+          .success(function (readingJson) {
 
-                if (ionic.Platform.isIOS() && window.cordova) {
-                  resolveLocalFileSystemURL(assetPath + "reading.mp3", function (entry) {
-                    console.log(entry);
-                    $scope.sound = new Media(entry.toInternalURL(), function () {
-                      console.log("Sound success");
-                    }, function (err) {
-                      console.log("Sound error", err);
-                    }, function (status) {
-                      console.log("Sound status", status);
-                    });
-                  });
-                } else {
-                  $scope.sound = new Media(assetPath + "reading.mp3", function () {
-                    console.log("Sound success");
-                  }, function (err) {
-                    console.log("Sound error", err);
-                  }, function (status) {
-                    console.log("Sound status", status);
-                  });
+            var assetPath = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/reading/";
+            console.log("readingJson", readingJson);
+
+            if (ionic.Platform.isIOS() && window.cordova) {
+              resolveLocalFileSystemURL(assetPath + "reading.mp3", function (entry) {
+                console.log(entry);
+                $scope.sound = new Media(entry.toInternalURL(), function () {
+                  console.log("Sound success");
+                }, function (err) {
+                  console.log("Sound error", err);
+                }, function (status) {
+                  console.log("Sound status", status);
+                });
+              });
+            } else {
+              $scope.sound = new Media(assetPath + "reading.mp3", function () {
+                console.log("Sound success");
+              }, function (err) {
+                console.log("Sound error", err);
+              }, function (status) {
+                console.log("Sound status", status);
+              });
+            }
+
+            $scope.playSoundIntervalPromise = $interval(function () {
+
+              $scope.sound.getCurrentPosition(
+                // success callback
+                function (position) {
+                  //console.log(position);
+                },
+                // error callback
+                function (e) {
+                  console.log("Error getting pos=" + e);
                 }
+              );
 
-                $scope.playSoundIntervalPromise = $interval(function () {
-
-                  $scope.sound.getCurrentPosition(
-                    // success callback
-                    function (position) {
-                      console.log(position);
-                    },
-                    // error callback
-                    function (e) {
-                      console.log("Error getting pos=" + e);
-                    }
-                  );
-
-                }, 100, 0, true);
-
-              })
-              .error(function (error) {
-                console.error("Error on getting json for results button...", error);
-              });//end of get menu button
-
+            }, 100, 0, true);
 
           })
           .error(function (error) {

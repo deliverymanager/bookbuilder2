@@ -197,7 +197,7 @@ angular.module("bookbuilder2")
                 var readingButton = new createjs.Sprite(readingButtonSpriteSheet, "normal");
                 readingButton.scaleX = readingButton.scaleY = scale;
                 readingButton.x = backgroundPosition.x + (backgroundPosition.width / 2.8);
-                readingButton.y = backgroundPosition.y + (backgroundPosition.height / 2.3);
+                readingButton.y = backgroundPosition.y + (backgroundPosition.height / 2);
                 readingButton.addEventListener("mousedown", function (event) {
                   console.log("mousedown event on a lesson button!");
                   readingButton.gotoAndPlay("onSelection");
@@ -227,7 +227,7 @@ angular.module("bookbuilder2")
                 var vocabularyButton = new createjs.Sprite(vocabularyButtonSpriteSheet, "normal");
                 vocabularyButton.scaleX = vocabularyButton.scaleY = scale;
                 vocabularyButton.x = backgroundPosition.x + (backgroundPosition.width / 2.8);
-                vocabularyButton.y = backgroundPosition.y + (backgroundPosition.height / 4);
+                vocabularyButton.y = backgroundPosition.y + (backgroundPosition.height / 5);
                 vocabularyButton.addEventListener("mousedown", function (event) {
                   console.log("mousedown event on a lesson button!");
                   vocabularyButton.gotoAndPlay("onSelection");
@@ -295,7 +295,7 @@ angular.module("bookbuilder2")
                     activityButton.y = yPosition;
                     activityButton.x = -1500 * scale;
                     createjs.Tween.get(activityButton, {loop: false}).wait(yPosition)
-                      .to({x: 0}, 500, createjs.Ease.getPowIn(2));
+                      .to({x: 20}, 500, createjs.Ease.getPowIn(2));
                     yPosition += 75;
 
                     /* -------------------------------- CLICK ON LESSON BUTTON -------------------------------- */
