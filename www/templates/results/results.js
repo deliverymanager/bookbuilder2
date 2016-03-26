@@ -5,27 +5,40 @@ angular.module("bookbuilder2")
 
     $timeout(function () {
 
-      var stage = new createjs.Stage(document.getElementById("resultsCanvas"));
-      var ctx = document.getElementById("resultsCanvas").getContext("2d");
-      stage.canvas.height = window.innerHeight;
-      stage.canvas.width = window.innerWidth;
-      stage.enableDOMEvents(false);
-      ctx.mozImageSmoothingEnabled = true;
-      ctx.webkitImageSmoothingEnabled = true;
-      ctx.msImageSmoothingEnabled = true;
-      ctx.imageSmoothingEnabled = true;
-      stage.regX = stage.width / 2;
-      stage.regY = stage.height / 2;
+      var PIXEL_RATIO = (function () {
+        var ctx = document.getElementById("canvas").getContext("2d"),
+          dpr = window.devicePixelRatio || 1,
+          bsr = ctx.webkitBackingStorePixelRatio ||
+            ctx.mozBackingStorePixelRatio ||
+            ctx.msBackingStorePixelRatio ||
+            ctx.oBackingStorePixelRatio ||
+            ctx.backingStorePixelRatio || 1;
+        return dpr / bsr;
+      })();
+      var createHiDPICanvas = function (w, h, ratio) {
+        if (!ratio) {
+          ratio = PIXEL_RATIO;
+        }
+        console.log("ratio", PIXEL_RATIO);
+        var can = document.getElementById("canvas");
+        can.width = w * ratio;
+        can.height = h * ratio;
+        can.style.width = w + "px";
+        can.style.height = h + "px";
+        can.getContext("2d").setTransform(ratio, 0, 0, ratio, 0, 0);
+        return can;
+      };
+      $scope.stage = new createjs.Stage(createHiDPICanvas(window.innerWidth, window.innerHeight));
+      $scope.stage.enableDOMEvents(false);
       createjs.MotionGuidePlugin.install();
-      createjs.Touch.enable(stage);
-      stage.enableMouseOver(0);
-      stage.mouseMoveOutside = false;
+      createjs.Touch.enable($scope.stage);
+      $scope.stage.enableMouseOver(0);
+      $scope.stage.mouseMoveOutside = false;
 
       createjs.Ticker.framerate = 20;
       var handleTick = function () {
-        $scope.fps = createjs.Ticker.getMeasuredFPS().toFixed(2);
         $scope.$apply();
-        stage.update();
+        $scope.stage.update();
       };
       createjs.Ticker.addEventListener("tick", handleTick);
 
@@ -63,9 +76,9 @@ angular.module("bookbuilder2")
         var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/lesson_menu_background_image_2_blue.png");
 
         /**** CALCULATING SCALING ****/
-        var scaleY = stage.canvas.height / background.image.height;
+        var scaleY = $scope.stage.canvas.height / background.image.height;
         scaleY = scaleY.toFixed(2);
-        var scaleX = stage.canvas.width / background.image.width;
+        var scaleX = $scope.stage.canvas.width / background.image.width;
         scaleX = scaleX.toFixed(2);
         var scale = 1;
         if (scaleX >= scaleY) {
@@ -81,10 +94,10 @@ angular.module("bookbuilder2")
         background.scaleY = scale;
         background.regX = background.image.width / 2;
         background.regY = background.image.height / 2;
-        background.x = stage.canvas.width / 2;
-        background.y = stage.canvas.height / 2;
-        stage.addChild(background);
-        stage.update();
+        background.x = $scope.stage.canvas.width / 2;
+        background.y = $scope.stage.canvas.height / 2;
+        $scope.stage.addChild(background);
+        $scope.stage.update();
         var backgroundPosition = background.getTransformedBounds();
 
         /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
@@ -101,7 +114,7 @@ angular.module("bookbuilder2")
             menuButton.addEventListener("mousedown", function (event) {
               console.log("mousedown event on a button !");
               menuButton.gotoAndPlay("onSelection");
-              stage.update();
+              $scope.stage.update();
             });
 
             menuButton.addEventListener("pressup", function (event) {
@@ -114,8 +127,8 @@ angular.module("bookbuilder2")
             menuButton.x = 0;
             menuButton.y = -menuButton.getTransformedBounds().height / 5;
 
-            stage.addChild(menuButton);
-            stage.update();
+            $scope.stage.addChild(menuButton);
+            $scope.stage.update();
           })
           .error(function (error) {
             console.error("Error on getting json for results button...", error);
@@ -145,8 +158,8 @@ angular.module("bookbuilder2")
             lessonTitle.rotation = -4;
             lessonTitle.textBaseline = "alphabetic";
 
-            stage.addChild(lessonTitle);
-            stage.update();
+            $scope.stage.addChild(lessonTitle);
+            $scope.stage.update();
 
 
             /*-------------------------------------TITLE CREATION--------------------------------------------*/
@@ -160,8 +173,8 @@ angular.module("bookbuilder2")
             title.y = backgroundPosition.y + (backgroundPosition.height / 13);
             title.textBaseline = "alphabetic";
 
-            stage.addChild(title);
-            stage.update();
+            $scope.stage.addChild(title);
+            $scope.stage.update();
 
           });//end of $http.get(lessonResourceUrl)
 
@@ -178,8 +191,8 @@ angular.module("bookbuilder2")
 
         var vocabularyReadingShape = new createjs.Shape(vocabularyReadingGraphics);
         vocabularyReadingShape.setTransform(backgroundPosition.x + (backgroundPosition.width / 20), backgroundPosition.y + (backgroundPosition.height / 7), scale, scale, 0, 0, 0, 0, 0);
-        stage.addChild(vocabularyReadingShape);
-        stage.update();
+        $scope.stage.addChild(vocabularyReadingShape);
+        $scope.stage.update();
 
 
         /* ------------------------------------------ totalScore Shape ---------------------------------------------- */
@@ -189,8 +202,8 @@ angular.module("bookbuilder2")
         totalScoreShape.setTransform(backgroundPosition.x + (backgroundPosition.width / 2), backgroundPosition.y + (backgroundPosition.height / 6.5), scale, scale, 0, 0, 0, 0, 0);
         //Setting Shadow
         totalScoreShape.shadow = new createjs.Shadow("#000000", 5, 5, 10);
-        stage.addChild(totalScoreShape);
-        stage.update();
+        $scope.stage.addChild(totalScoreShape);
+        $scope.stage.update();
 
         //Text for the totalScore
         var totalScoreTitle = new createjs.Text("Total Score:", "25px Arial", "white");
@@ -201,8 +214,8 @@ angular.module("bookbuilder2")
         totalScoreTitle.y = backgroundPosition.y + (backgroundPosition.height / 13);
         totalScoreTitle.textBaseline = "alphabetic";
 
-        stage.addChild(totalScoreTitle);
-        stage.update();
+        $scope.stage.addChild(totalScoreTitle);
+        $scope.stage.update();
 
 
         /* ------------------------------------------ activitiesScore Shape ---------------------------------------------- */
@@ -222,8 +235,8 @@ angular.module("bookbuilder2")
 
         console.log("Shape transformed bounds: ", activitiesScoreShape.getTransformedBounds());
 
-        stage.addChild(activitiesScoreShape);
-        stage.update();
+        $scope.stage.addChild(activitiesScoreShape);
+        $scope.stage.update();
 
 
       });//end of image on complete

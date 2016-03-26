@@ -12,17 +12,31 @@ angular.module("bookbuilder2")
 
     $timeout(function () {
 
-      $scope.stage = new createjs.Stage(document.getElementById("groupCanvas"));
-      var ctx = document.getElementById("groupCanvas").getContext("2d");
-      $scope.stage.canvas.height = window.innerHeight;
-      $scope.stage.canvas.width = window.innerWidth;
+      var PIXEL_RATIO = (function () {
+        var ctx = document.getElementById("canvas").getContext("2d"),
+          dpr = window.devicePixelRatio || 1,
+          bsr = ctx.webkitBackingStorePixelRatio ||
+            ctx.mozBackingStorePixelRatio ||
+            ctx.msBackingStorePixelRatio ||
+            ctx.oBackingStorePixelRatio ||
+            ctx.backingStorePixelRatio || 1;
+        return dpr / bsr;
+      })();
+      var createHiDPICanvas = function (w, h, ratio) {
+        if (!ratio) {
+          ratio = PIXEL_RATIO;
+        }
+        console.log("ratio", PIXEL_RATIO);
+        var can = document.getElementById("canvas");
+        can.width = w * ratio;
+        can.height = h * ratio;
+        can.style.width = w + "px";
+        can.style.height = h + "px";
+        can.getContext("2d").setTransform(ratio, 0, 0, ratio, 0, 0);
+        return can;
+      };
+      $scope.stage = new createjs.Stage(createHiDPICanvas(window.innerWidth, window.innerHeight));
       $scope.stage.enableDOMEvents(false);
-      ctx.mozImageSmoothingEnabled = true;
-      ctx.webkitImageSmoothingEnabled = true;
-      ctx.msImageSmoothingEnabled = true;
-      ctx.imageSmoothingEnabled = true;
-      $scope.stage.regX = $scope.stage.width / 2;
-      $scope.stage.regY = $scope.stage.height / 2;
       createjs.MotionGuidePlugin.install();
       createjs.Touch.enable($scope.stage);
       $scope.stage.enableMouseOver(0);
@@ -30,7 +44,6 @@ angular.module("bookbuilder2")
 
       createjs.Ticker.framerate = 20;
       var handleTick = function () {
-        $scope.fps = createjs.Ticker.getMeasuredFPS().toFixed(2);
         $scope.$apply();
         $scope.stage.update();
       };

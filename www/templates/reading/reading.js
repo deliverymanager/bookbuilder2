@@ -5,27 +5,40 @@ angular.module("bookbuilder2")
 
     $timeout(function () {
 
-      var stage = new createjs.Stage(document.getElementById("readingCanvas"));
-      var ctx = document.getElementById("readingCanvas").getContext("2d");
-      stage.canvas.height = window.innerHeight;
-      stage.canvas.width = window.innerWidth;
-      stage.enableDOMEvents(false);
-      ctx.mozImageSmoothingEnabled = true;
-      ctx.webkitImageSmoothingEnabled = true;
-      ctx.msImageSmoothingEnabled = true;
-      ctx.imageSmoothingEnabled = true;
-      stage.regX = stage.width / 2;
-      stage.regY = stage.height / 2;
+      var PIXEL_RATIO = (function () {
+        var ctx = document.getElementById("canvas").getContext("2d"),
+          dpr = window.devicePixelRatio || 1,
+          bsr = ctx.webkitBackingStorePixelRatio ||
+            ctx.mozBackingStorePixelRatio ||
+            ctx.msBackingStorePixelRatio ||
+            ctx.oBackingStorePixelRatio ||
+            ctx.backingStorePixelRatio || 1;
+        return dpr / bsr;
+      })();
+      var createHiDPICanvas = function (w, h, ratio) {
+        if (!ratio) {
+          ratio = PIXEL_RATIO;
+        }
+        console.log("ratio", PIXEL_RATIO);
+        var can = document.getElementById("canvas");
+        can.width = w * ratio;
+        can.height = h * ratio;
+        can.style.width = w + "px";
+        can.style.height = h + "px";
+        can.getContext("2d").setTransform(ratio, 0, 0, ratio, 0, 0);
+        return can;
+      };
+      $scope.stage = new createjs.Stage(createHiDPICanvas(window.innerWidth, window.innerHeight));
+      $scope.stage.enableDOMEvents(false);
       createjs.MotionGuidePlugin.install();
-      createjs.Touch.enable(stage);
-      stage.enableMouseOver(0);
-      stage.mouseMoveOutside = false;
+      createjs.Touch.enable($scope.stage);
+      $scope.stage.enableMouseOver(0);
+      $scope.stage.mouseMoveOutside = false;
 
       createjs.Ticker.framerate = 20;
       var handleTick = function () {
-        $scope.fps = createjs.Ticker.getMeasuredFPS().toFixed(2);
         $scope.$apply();
-        stage.update();
+        $scope.stage.update();
       };
       createjs.Ticker.addEventListener("tick", handleTick);
 
@@ -56,6 +69,8 @@ angular.module("bookbuilder2")
       }));
       imageLoader.load();
 
+      $scope.currentPage = 1;
+      var activityNameInLocalStorage = $rootScope.selectedLesson.id + "_reading";
 
       /*IMAGE LOADER COMPLETED*/
       imageLoader.on("complete", function (r) {
@@ -66,9 +81,9 @@ angular.module("bookbuilder2")
         var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/reading_background_image_blue.png");
 
         /**** CALCULATING SCALING ****/
-        var scaleY = stage.canvas.height / background.image.height;
+        var scaleY = $scope.stage.canvas.height / background.image.height;
         scaleY = scaleY.toFixed(2);
-        var scaleX = stage.canvas.width / background.image.width;
+        var scaleX = $scope.stage.canvas.width / background.image.width;
         scaleX = scaleX.toFixed(2);
         var scale = 1;
         if (scaleX >= scaleY) {
@@ -84,12 +99,13 @@ angular.module("bookbuilder2")
         background.scaleY = scale;
         background.regX = background.image.width / 2;
         background.regY = background.image.height / 2;
-        background.x = stage.canvas.width / 2;
-        background.y = stage.canvas.height / 2;
-        stage.addChild(background);
-        stage.update();
+        background.x = $scope.stage.canvas.width / 2;
+        background.y = $scope.stage.canvas.height / 2;
+        $scope.stage.addChild(background);
+        $scope.stage.update();
         var backgroundPosition = background.getTransformedBounds();
         console.log("backgroundPosition", backgroundPosition);
+
 
         /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
 
@@ -111,16 +127,16 @@ angular.module("bookbuilder2")
               } else {
                 playButton.gotoAndPlay("pauseOnSelection");
               }
-              stage.update();
+              $scope.stage.update();
             });
 
             playButton.addEventListener("pressup", function (event) {
-              console.log("pressup event!");
+              console.log("pressup event Play", $scope.playing);
 
               if ($scope.playing) {
                 playButton.gotoAndPlay("pauseNormal");
                 $scope.playing = false;
-                $scope.sound.stop();
+                $scope.sound.pause();
               } else {
                 playButton.gotoAndPlay("playNormal");
                 $scope.playing = true;
@@ -130,10 +146,10 @@ angular.module("bookbuilder2")
 
             playButton.scaleX = playButton.scaleY = scale;
             playButton.x = backgroundPosition.x + (backgroundPosition.width / 1.13);
-            playButton.y = backgroundPosition.y + (backgroundPosition.height / 1.063);
+            playButton.y = backgroundPosition.y + (backgroundPosition.height / 1.053);
 
-            stage.addChild(playButton);
-            stage.update();
+            $scope.stage.addChild(playButton);
+            $scope.stage.update();
           })
           .error(function (error) {
             console.error("Error on getting json for results button...", error);
@@ -152,7 +168,7 @@ angular.module("bookbuilder2")
             menuButton.addEventListener("mousedown", function (event) {
               console.log("mousedown event on a button !");
               menuButton.gotoAndPlay("onSelection");
-              stage.update();
+              $scope.stage.update();
             });
 
             menuButton.addEventListener("pressup", function (event) {
@@ -165,62 +181,151 @@ angular.module("bookbuilder2")
             menuButton.x = 0;
             menuButton.y = -menuButton.getTransformedBounds().height / 5;
 
-            stage.addChild(menuButton);
-            stage.update();
+            $scope.stage.addChild(menuButton);
+            $scope.stage.update();
           })
           .error(function (error) {
             console.error("Error on getting json for results button...", error);
           });//end of get menu button
 
 
-        $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/reading/reading.json")
-          .success(function (readingJson) {
+        var init = function () {
+          console.log("Title: ", $rootScope.selectedLesson.title);
+          var title = new createjs.Text($rootScope.selectedLesson.title, "27px Arial", "white");
 
-            var assetPath = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/reading/";
-            console.log("readingJson", readingJson);
+          /*background.scaleX = background.scaleY = scale;*/
+          title.scaleX = title.scaleY = scale;
+          title.x = backgroundPosition.x + (backgroundPosition.width / 10);
+          title.y = backgroundPosition.y + (backgroundPosition.height / 17);
+          title.textBaseline = "alphabetic";
 
-            if (ionic.Platform.isIOS() && window.cordova) {
-              resolveLocalFileSystemURL(assetPath + "reading.mp3", function (entry) {
-                console.log(entry);
-                $scope.sound = new Media(entry.toInternalURL(), function () {
-                  console.log("Sound success");
-                }, function (err) {
-                  console.log("Sound error", err);
-                }, function (status) {
-                  console.log("Sound status", status);
-                });
-              });
-            } else {
-              $scope.sound = new Media(assetPath + "reading.mp3", function () {
+          $scope.stage.addChild(title);
+          $scope.stage.update();
+
+          $scope.pageImageLoader = {};
+          $scope.pages = {};
+
+          _.each($scope.activityData.CuePoint, function (page, key, list) {
+
+            $scope.pageImageLoader["reading_book_" + (key + 1)] = new createjs.ImageLoader(new createjs.LoadItem().set({
+              src: $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/reading/reading_book_" + (key + 1) + ".png"
+            }));
+
+            $scope.pageImageLoader["reading_book_" + (key + 1)].load();
+
+            $scope.pageImageLoader["reading_book_" + (key + 1)].on("complete", function (r) {
+              $scope.pages["reading_book_" + (key + 1)] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/reading/reading_book_" + (key + 1) + ".png");
+
+              $scope.pages["reading_book_" + (key + 1)].scaleX = $scope.pages["reading_book_" + (key + 1)].scaleY = scale;
+              $scope.pages["reading_book_" + (key + 1)].x = backgroundPosition.x + (backgroundPosition.width / 7);
+              $scope.pages["reading_book_" + (key + 1)].y = backgroundPosition.y + (backgroundPosition.height / 6.5);
+
+              if (key) {
+                $scope.pages["reading_book_" + (key + 1)].visible = false;
+              }
+
+              $scope.stage.addChild($scope.pages["reading_book_" + (key + 1)]);
+
+            });
+          });
+
+
+          var assetPath = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/reading/";
+          if (ionic.Platform.isIOS() && window.cordova) {
+            resolveLocalFileSystemURL(assetPath + "reading.mp3", function (entry) {
+              console.log(entry);
+              $scope.sound = new Media(entry.toInternalURL(), function () {
                 console.log("Sound success");
               }, function (err) {
                 console.log("Sound error", err);
               }, function (status) {
                 console.log("Sound status", status);
               });
-            }
+            });
+          } else {
+            $scope.sound = new Media(assetPath + "reading.mp3", function () {
+              console.log("Sound success");
+            }, function (err) {
+              console.log("Sound error", err);
+            }, function (status) {
+              console.log("Sound status", status);
+            });
+          }
 
-            $scope.playSoundIntervalPromise = $interval(function () {
+          $scope.playSoundIntervalPromise = $interval(function () {
 
-              $scope.sound.getCurrentPosition(
-                // success callback
-                function (position) {
-                  //console.log(position);
-                },
-                // error callback
-                function (e) {
-                  console.log("Error getting pos=" + e);
+            $scope.sound.getCurrentPosition(
+              // success callback
+              function (position) {
+                //console.log(position);
+                if (position > 0) {
+                  checkCurrentTimePage(position);
                 }
-              );
 
-            }, 100, 0, true);
+              },
+              // error callback
+              function (e) {
+                console.log("Error getting pos=" + e);
+              }
+            );
+          }, 100, 0, true);
+        };
 
-          })
-          .error(function (error) {
-            console.error("Error on getting json for results button...", error);
-          });//end of get menu button
+        if (window.localStorage.getItem(activityNameInLocalStorage)) {
+          $scope.activityData = JSON.parse(window.localStorage.getItem(activityNameInLocalStorage));
+
+          $scope.activityData.attempts = $scope.activityData.attempts + 1;
+          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+          init();
+
+        } else {
+
+          $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/reading/reading.json")
+            .success(function (readingJson) {
+
+              $scope.activityData = readingJson;
+              $scope.activityData.attempts = 1;
+              window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+              init();
+            })
+            .error(function (error) {
+              console.error("Error on getting json for results button...", error);
+            });//end of get menu button
+
+        }
+
+        var completedActivity = function () {
+          $scope.activityData.completed = true;
+          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+        };
 
 
+        var checkCurrentTimePage = function (currentTime) {
+          var cue = _.find($scope.activityData.CuePoint, function (cue) {
+            return parseInt(cue.Time) < currentTime * 1000 && $scope.currentPage + 1 === parseInt(cue.Name);
+          });
+
+          if (!cue || $scope.currentPage === parseInt(cue.Name)) {
+            return;
+          }
+
+          console.log("cue", cue.Name);
+          _.each($scope.activityData.CuePoint, function (page, key, list) {
+            $scope.pages["reading_book_" + (key + 1)].visible = false;
+          });
+
+          if (!cue) {
+            $scope.pages["reading_book_1"].visible = true;
+            $scope.currentPage = 1;
+          } else {
+            $scope.currentPage = parseInt(cue.Name);
+            $scope.pages["reading_book_" + cue.Name].visible = true;
+
+            if (parseInt(cue.Name) === $scope.activityData.CuePoint.length) {
+              completedActivity();
+            }
+          }
+        };
       });//end of image on complete
     }, 500);//end of timeout
   });
