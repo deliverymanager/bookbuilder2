@@ -111,11 +111,15 @@ angular.module("bookbuilder2")
         }, 2000);
       });
 
-      /*Image Loader*/
-      var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-        src: $rootScope.rootDir + "data/assets/vocabulary_background_image_blue.png"
-      }));
 
+
+
+
+
+      /****************************** Image Loader ******************************/
+      var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
+        src: $rootScope.rootDir + "data/assets/background_image_for_draganddrop_blue.png"
+      }));
       imageLoader.load();
 
       /*IMAGE LOADER COMPLETED*/
@@ -124,7 +128,7 @@ angular.module("bookbuilder2")
         console.log("Image Loaded...");
 
         /*Creating Bitmap Background for Canvas*/
-        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/vocabulary_background_image_blue.png");
+        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/background_image_for_draganddrop_blue.png");
 
         /**** CALCULATING SCALING ****/
         var scaleY = stage.canvas.height / background.image.height;
@@ -186,7 +190,7 @@ angular.module("bookbuilder2")
           });//end of get menu button
 
 
-        /************************************** Initializing Page & Functions **************************************/
+        /************************************** Initializing Page **************************************/
 
         init();
         function init() {
@@ -197,6 +201,8 @@ angular.module("bookbuilder2")
             addScoreText();
             console.log("Activity data exist in localStorage and its: ", activityData);
           } else {
+
+            /*Getting the json object for the activity*/
             var activityUrl = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.lessonId + "/" + $rootScope.activityFolder + "/draganddrop.json";
             console.log("trying to get json for the url: ", activityUrl);
             $http.get(activityUrl)
@@ -223,76 +229,6 @@ angular.module("bookbuilder2")
                 console.log("Error on getting json for the url...:", error);
               });
           }
-        }
-
-        /*Function that restarts the exercise*/
-        function restart() {
-
-          _.each(activityData.questions, function (question, key, value) {
-            question.userAnswer = "";
-          });
-
-          //Saving to localStorage
-          LocalStorage.set(activityNameInLocalStorage, JSON.stringify(activityData));
-        }
-
-        /*Function that checks user answers and calls score function and showAnswers function*/
-        function check() {
-          score();
-          showAnswers()
-        }
-
-
-        /*Function that calculates score*/
-        function score() {
-
-          var rightAnswers = 0;
-          _.each(activityData.questions, function (question, key, value) {
-            if (question.userAnswer === question.answer) {
-              rightAnswers++;
-            }
-          });
-
-          return "Score: " + rightAnswers + " / " + activityData.questions.length;
-        }
-
-        /* ------------------------------------------ SCORE ---------------------------------------------- */
-        function addScoreText() {
-          console.log("Title: ", score());
-          var scoreText = new createjs.Text(score(), "27px Arial", "white");
-
-          /*background.scaleX = background.scaleY = scale;*/
-          scoreText.scaleX = scoreText.scaleY = scale;
-          scoreText.x = backgroundPosition.x + (backgroundPosition.width / 1.3);
-          scoreText.y = backgroundPosition.y + (backgroundPosition.height / 15);
-          scoreText.textBaseline = "alphabetic";
-
-          stage.addChild(scoreText);
-          stage.update();
-
-        }
-
-
-        /*Function that fills activity questions with the right answers*/
-        function showAnswers() {
-          _.each(activityData.questions, function (question, key, value) {
-            question.userAnswer = question.answer;
-          });
-        }
-
-
-        /*Function that goes to the next activity*/
-        function next() {
-
-        }
-
-
-        function collision() {
-        }
-
-
-        function playSound() {
-
         }
 
 
@@ -326,28 +262,15 @@ angular.module("bookbuilder2")
         stage.update();
 
 
-        /* ---------------------------------- DESCRIPTION SHAPE AND TITLE -----------------------------------------*/
-        //Starting and making it transparent
-        var descriptionGraphics = new createjs.Graphics().beginFill("#69B8C7");
-
-
-        //Drawing the shape !!!NOTE Every optimization before drawRoundRect
-        descriptionGraphics.drawRoundRect(0, 0, 280, 30, 1);
-
-        var descriptionShape = new createjs.Shape(descriptionGraphics);
-        descriptionShape.setTransform(backgroundPosition.x + (backgroundPosition.width / 1.43), backgroundPosition.y
-          + (backgroundPosition.height / 12), scale, scale, 0, 0, 0, 0, 0);
-        stage.addChild(descriptionShape);
-        stage.update();
-
+        /* ---------------------------------- Description -----------------------------------------*/
 
         console.log(activityData.description);
-        var descriptionText = new createjs.Text(activityData.description, "20px Arial", "white");
+        var descriptionText = new createjs.Text(activityData.description, "17px Arial", "white");
 
         /*background.scaleX = background.scaleY = scale;*/
         descriptionText.scaleX = descriptionText.scaleY = scale;
         descriptionText.x = backgroundPosition.x + (backgroundPosition.width / 1.3);
-        descriptionText.y = backgroundPosition.y + (backgroundPosition.height / 9);
+        descriptionText.y = backgroundPosition.y + (backgroundPosition.height / 8.7);
         descriptionText.textBaseline = "alphabetic";
 
         stage.addChild(descriptionText);
@@ -355,8 +278,6 @@ angular.module("bookbuilder2")
 
 
         /* ------------------------------------------ QUESTIONS & ANSWERS ---------------------------------------------- */
-
-        /*Populating template with questions*/
 
         /********** QUESTIONS *********/
         var questionsContainer = new createjs.Container();
@@ -386,7 +307,7 @@ angular.module("bookbuilder2")
          stage.update();*/
 
 
-        var someGap = "__________";
+        var userChoice = "__________";
 
         var waterfallFunctions = [];
 
@@ -399,10 +320,10 @@ angular.module("bookbuilder2")
           //Filling the waterfall
           waterfallFunctions.push(function (waterfallCallback) {
 
-            var formattedQuestion = question.pretext + someGap + question.postext;
+            var formattedQuestion = question.pretext + userChoice + question.postext;
             console.log("Question that it will be added: ", formattedQuestion);
 
-            var questionText = new createjs.Text(formattedQuestion, "23px Arial", "black");
+            var questionText = new createjs.Text(formattedQuestion, "23px Arial", "blue");
 
             /*background.scaleX = background.scaleY = scale;*/
             questionText.scaleX = questionText.scaleY = scale;
@@ -431,11 +352,9 @@ angular.module("bookbuilder2")
         /******** ANSWERS ********/
         var answersContainer = new createjs.Container();
         /*It's important too define containers height before start calculating buttons*/
-        answersContainer.width = 270;
+        answersContainer.width = 250;
         answersContainer.height = 530;
-
         answersContainer.scaleX = answersContainer.scaleY = scale;
-
         answersContainer.x = backgroundPosition.x + (backgroundPosition.width / 2.75);
         answersContainer.y = backgroundPosition.y + (backgroundPosition.height / 30);
 
@@ -455,11 +374,10 @@ angular.module("bookbuilder2")
           answerWaterfallFunctions.push(function (waterfallCallback) {
 
 
-            var answerText = new createjs.Text(answer.text, "20px Arial", "blue");
+            var answerText = new createjs.Text(answer.text, "18px Arial", "blue");
 
             /*background.scaleX = background.scaleY = scale;*/
-            answerText.scaleX = answerText.scaleY = scale;
-            answerText.x = backgroundPosition.x + (backgroundPosition.width / 2.1);
+            answerText.x = answersContainer.x + 160;
             answerText.y = answerY;
             answerText.textBaseline = "alphabetic";
             answerText.maxWidth = answersContainer.width;
@@ -497,21 +415,7 @@ angular.module("bookbuilder2")
           console.log("answers Inserted!");
         });
 
-
-        /* //Starting and making it transparent
-         var test2Graphics = new createjs.Graphics().beginFill("orange");
-
-
-         //Drawing the shape !!!NOTE Every optimization before drawRoundRect
-         test2Graphics.drawRoundRect(0, 0, answersContainer.width, answersContainer.height, 1);
-
-         var test2Shape = new createjs.Shape(test2Graphics);
-         test2Shape.setTransform(answersContainer.x, answersContainer.y, scale, scale, 0, 0, 0, 0, 0);
-         answersContainer.addChild(test2Shape);
-         stage.update();*/
-
-
-        /* ------------------------------------------ BUTTONS ---------------------------------------------- */
+        /********************************** BUTTONS ***********************************/
 
         /*RESTART BUTTON*/
         $http.get($rootScope.rootDir + "data/assets/lesson_restart_button_sprite.json")
@@ -605,6 +509,82 @@ angular.module("bookbuilder2")
             console.log("Error on getting json data for check button...", error);
 
           });
+
+
+
+        /********************************** FUNCTIONS ***********************************/
+        /*Function that restarts the exercise*/
+        function restart() {
+
+          _.each(activityData.questions, function (question, key, value) {
+            question.userAnswer = "";
+          });
+
+          //Saving to localStorage
+          LocalStorage.set(activityNameInLocalStorage, JSON.stringify(activityData));
+        }
+
+        /*Function that checks user answers and calls score function and showAnswers function*/
+        function check() {
+          score();
+          showAnswers()
+        }
+
+
+        /*Function that calculates score*/
+        function score() {
+
+          var rightAnswers = 0;
+          _.each(activityData.questions, function (question, key, value) {
+            if (question.userAnswer === question.answer) {
+              rightAnswers++;
+            }
+          });
+
+          return "Score: " + rightAnswers + " / " + activityData.questions.length;
+        }
+
+
+        function addScoreText() {
+          console.log("Title: ", score());
+          var scoreText = new createjs.Text(score(), "27px Arial", "white");
+
+          /*background.scaleX = background.scaleY = scale;*/
+          scoreText.scaleX = scoreText.scaleY = scale;
+          scoreText.x = backgroundPosition.x + (backgroundPosition.width / 1.3);
+          scoreText.y = backgroundPosition.y + (backgroundPosition.height / 15);
+          scoreText.textBaseline = "alphabetic";
+
+          stage.addChild(scoreText);
+          stage.update();
+
+        }
+
+
+        /*Function that fills activity questions with the right answers*/
+        function showAnswers() {
+          _.each(activityData.questions, function (question, key, value) {
+            question.userAnswer = question.answer;
+          });
+        }
+
+
+        /*Function that goes to the next activity*/
+        function next() {
+
+        }
+
+
+        function collision() {
+        }
+
+
+        function playSound() {
+
+        }
+
+
+
 
 
       });//end of image on complete

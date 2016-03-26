@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-    .controller("MultipleController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, LocalStorage) {
+    .controller("MultipleController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, LocalStorage, $stateParams) {
 
         console.log("MultipleController loaded!");
 
@@ -159,7 +159,7 @@ angular.module("bookbuilder2")
 
                 /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
 
-                $http.get("data/assets/head_menu_button_sprite.json")
+                $http.get($rootScope.rootDir+"data/assets/head_menu_button_sprite.json")
                     .success(function (response) {
 
                         //Reassigning images with the rest of resource
@@ -403,7 +403,6 @@ angular.module("bookbuilder2")
                         /**------------- A -------------**/
                         $scope.answerAButton = new createjs.Sprite(answerButtonSpriteSheet, "white");
 
-
                         /*Button event when it's clicked*/
                         $scope.answerAButton.addEventListener("pressup", function (event) {
                             console.log("Answer button fires pressup event!");
@@ -471,7 +470,6 @@ angular.module("bookbuilder2")
 
                         /**------------- B -------------**/
                         $scope.answerBButton = new createjs.Sprite(answerButtonSpriteSheet, "white");
-
 
                         /*Button event when it's clicked*/
                         $scope.answerBButton.addEventListener("pressup", function (event) {
@@ -1034,16 +1032,16 @@ angular.module("bookbuilder2")
                         var returnButton = new createjs.Sprite(returnButtonSpriteSheet, "normal");
 
                         returnButton.addEventListener("mousedown", function (event) {
-                            console.log("mousedown event on a button !");
+                            console.log("Mousedown event on Restart button!");
                             returnButton.gotoAndPlay("onSelection");
                             stage.update();
                         });
 
                         returnButton.addEventListener("pressup", function (event) {
-                            console.log("pressup event!");
+                            console.log("Pressup event on Restart button!");
                             returnButton.gotoAndPlay("normal");
 
-                            //action
+                            restart();
 
                         });
                         returnButton.x = backgroundPosition.x + (backgroundPosition.width / 3.1);
@@ -1141,11 +1139,6 @@ angular.module("bookbuilder2")
                  **                                  | APPLICATION FUNCTIONS |                                 **
                  ************************************************************************************************/
 
-                /*Function for changing question by clicking to a yellow bar button*/
-                function changeQuestion() {
-
-                }
-
                 /*Function for loading new question*/
                 function loadNewQuestion(index) {
                     $scope.activeQuestionIndex = index;
@@ -1181,13 +1174,16 @@ angular.module("bookbuilder2")
                 /*Function that restarts the exercise*/
                 function restart() {
 
-                    _.each($scope.activityData.questions, function (question, key, value) {
-                        question.userAnswer = "";
-                    });
+                    console.log("Starting restart process...");
 
-                    //Saving to localStorage
-                    LocalStorage.set(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+                    /*_.each($scope.activityData.questions, function (question, key, value) {
+                        question.userAnswer = "";
+                    });*/
+
+                    localStorage.removeItem(activityNameInLocalStorage);
+
                 }
+
 
                 /*Function that checks user answers and calls score function and showAnswers function*/
                 function check() {
@@ -1201,7 +1197,7 @@ angular.module("bookbuilder2")
 
                     var rightAnswers = 0;
                     _.each($scope.activityData.questions, function (question, key, value) {
-                        if (question.userAnswer === question.answer) {
+                        if (question.userAnswer === question.answerChoice) {
                             rightAnswers++;
                         }
                     });
@@ -1213,7 +1209,7 @@ angular.module("bookbuilder2")
                 /*Function that fills activity questions with the right answers*/
                 function showAnswers() {
                     _.each($scope.activityData.questions, function (question, key, value) {
-                        question.userAnswer = question.answer;
+                        question.userAnswer = question.answerChoice;
                     });
                 }
 
