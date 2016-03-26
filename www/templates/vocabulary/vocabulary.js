@@ -23,7 +23,6 @@ angular.module("bookbuilder2")
 
       createjs.Ticker.framerate = 20;
       var handleTick = function () {
-        $scope.fps = createjs.Ticker.getMeasuredFPS().toFixed(2);
         $scope.$apply();
         stage.update();
       };

@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-  .controller("DraganddropController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, LocalStorage) {
+  .controller("DraganddropController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory) {
 
     console.log("Draganddrop loaded!");
 
@@ -69,27 +69,40 @@ angular.module("bookbuilder2")
 
     $timeout(function () {
 
-      var stage = new createjs.Stage(document.getElementById("draganddropCanvas"));
-      var ctx = document.getElementById("draganddropCanvas").getContext("2d");
-      stage.canvas.height = window.innerHeight;
-      stage.canvas.width = window.innerWidth;
-      stage.enableDOMEvents(false);
-      ctx.mozImageSmoothingEnabled = true;
-      ctx.webkitImageSmoothingEnabled = true;
-      ctx.msImageSmoothingEnabled = true;
-      ctx.imageSmoothingEnabled = true;
-      stage.regX = stage.width / 2;
-      stage.regY = stage.height / 2;
+      var PIXEL_RATIO = (function () {
+        var ctx = document.getElementById("canvas").getContext("2d"),
+          dpr = window.devicePixelRatio || 1,
+          bsr = ctx.webkitBackingStorePixelRatio ||
+            ctx.mozBackingStorePixelRatio ||
+            ctx.msBackingStorePixelRatio ||
+            ctx.oBackingStorePixelRatio ||
+            ctx.backingStorePixelRatio || 1;
+        return dpr / bsr;
+      })();
+      var createHiDPICanvas = function (w, h, ratio) {
+        if (!ratio) {
+          ratio = PIXEL_RATIO;
+        }
+        console.log("ratio", PIXEL_RATIO);
+        var can = document.getElementById("canvas");
+        can.width = w * ratio;
+        can.height = h * ratio;
+        can.style.width = w + "px";
+        can.style.height = h + "px";
+        can.getContext("2d").setTransform(ratio, 0, 0, ratio, 0, 0);
+        return can;
+      };
+      $scope.stage = new createjs.Stage(createHiDPICanvas(window.innerWidth, window.innerHeight));
+      $scope.stage.enableDOMEvents(false);
       createjs.MotionGuidePlugin.install();
-      createjs.Touch.enable(stage);
-      stage.enableMouseOver(0);
-      stage.mouseMoveOutside = false;
+      createjs.Touch.enable($scope.stage);
+      $scope.stage.enableMouseOver(0);
+      $scope.stage.mouseMoveOutside = false;
 
       createjs.Ticker.framerate = 20;
       var handleTick = function () {
-        $scope.fps = createjs.Ticker.getMeasuredFPS().toFixed(2);
         $scope.$apply();
-        stage.update();
+        $scope.stage.update();
       };
       createjs.Ticker.addEventListener("tick", handleTick);
 
@@ -112,10 +125,6 @@ angular.module("bookbuilder2")
       });
 
 
-
-
-
-
       /****************************** Image Loader ******************************/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
         src: $rootScope.rootDir + "data/assets/background_image_for_draganddrop_blue.png"
@@ -131,9 +140,9 @@ angular.module("bookbuilder2")
         var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/background_image_for_draganddrop_blue.png");
 
         /**** CALCULATING SCALING ****/
-        var scaleY = stage.canvas.height / background.image.height;
+        var scaleY = $scope.stage.canvas.height / background.image.height;
         scaleY = scaleY.toFixed(2);
-        var scaleX = stage.canvas.width / background.image.width;
+        var scaleX = $scope.stage.canvas.width / background.image.width;
         scaleX = scaleX.toFixed(2);
         var scale = 1;
         if (scaleX >= scaleY) {
@@ -149,10 +158,10 @@ angular.module("bookbuilder2")
         background.scaleY = scale;
         background.regX = background.image.width / 2;
         background.regY = background.image.height / 2;
-        background.x = stage.canvas.width / 2;
-        background.y = stage.canvas.height / 2;
-        stage.addChild(background);
-        stage.update();
+        background.x = $scope.stage.canvas.width / 2;
+        background.y = $scope.stage.canvas.height / 2;
+        $scope.stage.addChild(background);
+        $scope.stage.update();
         var backgroundPosition = background.getTransformedBounds();
 
         /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
@@ -169,7 +178,7 @@ angular.module("bookbuilder2")
             menuButton.addEventListener("mousedown", function (event) {
               console.log("mousedown event on a button !");
               menuButton.gotoAndPlay("onSelection");
-              stage.update();
+              $scope.stage.update();
             });
 
             menuButton.addEventListener("pressup", function (event) {
@@ -182,8 +191,8 @@ angular.module("bookbuilder2")
             menuButton.x = 0;
             menuButton.y = -menuButton.getTransformedBounds().height / 5;
 
-            stage.addChild(menuButton);
-            stage.update();
+            $scope.stage.addChild(menuButton);
+            $scope.stage.update();
           })
           .error(function (error) {
             console.error("Error on getting json for results button...", error);
@@ -220,7 +229,7 @@ angular.module("bookbuilder2")
                 addScoreText();
 
                 //Saving it to localStorage
-                LocalStorage.set(activityNameInLocalStorage, JSON.stringify(activityData));
+                window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify(activityData));
 
                 console.log("Newly created activityData with userAnswer attribute: ", activityData);
 
@@ -243,8 +252,8 @@ angular.module("bookbuilder2")
         title.y = backgroundPosition.y + (backgroundPosition.height / 15);
         title.textBaseline = "alphabetic";
 
-        stage.addChild(title);
-        stage.update();
+        $scope.stage.addChild(title);
+        $scope.stage.update();
 
 
         /* ------------------------------------------ Lesson Title ---------------------------------------------- */
@@ -258,8 +267,8 @@ angular.module("bookbuilder2")
         lessonTitle.y = backgroundPosition.y + (backgroundPosition.height / 1.05);
         lessonTitle.textBaseline = "alphabetic";
 
-        stage.addChild(lessonTitle);
-        stage.update();
+        $scope.stage.addChild(lessonTitle);
+        $scope.stage.update();
 
 
         /* ---------------------------------- Description -----------------------------------------*/
@@ -273,8 +282,8 @@ angular.module("bookbuilder2")
         descriptionText.y = backgroundPosition.y + (backgroundPosition.height / 8.7);
         descriptionText.textBaseline = "alphabetic";
 
-        stage.addChild(descriptionText);
-        stage.update();
+        $scope.stage.addChild(descriptionText);
+        $scope.stage.update();
 
 
         /* ------------------------------------------ QUESTIONS & ANSWERS ---------------------------------------------- */
@@ -290,8 +299,8 @@ angular.module("bookbuilder2")
         questionsContainer.x = backgroundPosition.x + (backgroundPosition.width / 30);
         questionsContainer.y = backgroundPosition.y + (backgroundPosition.height / 30);
 
-        stage.addChild(questionsContainer);
-        stage.update();
+        $scope.stage.addChild(questionsContainer);
+        $scope.stage.update();
 
 
         /*//Starting and making it transparent
@@ -304,7 +313,7 @@ angular.module("bookbuilder2")
          var testShape = new createjs.Shape(testGraphics);
          testShape.setTransform(questionsContainer.x, questionsContainer.y, scale, scale, 0, 0, 0, 0, 0);
          questionsContainer.addChild(testShape);
-         stage.update();*/
+         $scope.stage.update();*/
 
 
         var userChoice = "__________";
@@ -336,7 +345,7 @@ angular.module("bookbuilder2")
             questionY += questionHeight;
 
             questionsContainer.addChild(questionText);
-            stage.update();
+            $scope.stage.update();
 
             waterfallCallback();
 
@@ -359,8 +368,8 @@ angular.module("bookbuilder2")
         answersContainer.y = backgroundPosition.y + (backgroundPosition.height / 30);
 
 
-        stage.addChild(answersContainer);
-        stage.update();
+        $scope.stage.addChild(answersContainer);
+        $scope.stage.update();
 
 
         var answerWaterfallFunctions = [];
@@ -391,11 +400,11 @@ angular.module("bookbuilder2")
 
               console.log("this: ", this);
 
-              var local = stage.globalToLocal(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
+              var local = $scope.stage.globalToLocal(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
               this.x = local.x;
               this.y = local.y;
 
-              $scope.stage.update();
+              $scope.$scope.stage.update();
             });
 
 
@@ -404,7 +413,7 @@ angular.module("bookbuilder2")
             });
 
             answersContainer.addChild(answerText);
-            stage.update();
+            $scope.stage.update();
 
             waterfallCallback();
 
@@ -428,7 +437,7 @@ angular.module("bookbuilder2")
             returnButton.addEventListener("mousedown", function (event) {
               console.log("mousedown event on a button !");
               returnButton.gotoAndPlay("onSelection");
-              stage.update();
+              $scope.stage.update();
             });
 
             returnButton.addEventListener("pressup", function (event) {
@@ -441,8 +450,8 @@ angular.module("bookbuilder2")
             returnButton.scaleX = returnButton.scaleY = scale;
             returnButton.x = backgroundPosition.x + (backgroundPosition.width / 3.1);
             returnButton.y = backgroundPosition.y + (backgroundPosition.height / 1.063);
-            stage.addChild(returnButton);
-            stage.update();
+            $scope.stage.addChild(returnButton);
+            $scope.stage.update();
           })
           .error(function (error) {
 
@@ -460,7 +469,7 @@ angular.module("bookbuilder2")
             checkButton.addEventListener("mousedown", function (event) {
               console.log("mousedown event on a button !");
               checkButton.gotoAndPlay("onSelection");
-              stage.update();
+              $scope.stage.update();
             });
             checkButton.addEventListener("pressup", function (event) {
               console.log("pressup event!");
@@ -472,8 +481,8 @@ angular.module("bookbuilder2")
             checkButton.scaleX = checkButton.scaleY = scale;
             checkButton.x = backgroundPosition.x + (backgroundPosition.width / 1.5);
             checkButton.y = backgroundPosition.y + (backgroundPosition.height / 1.063);
-            stage.addChild(checkButton);
-            stage.update();
+            $scope.stage.addChild(checkButton);
+            $scope.stage.update();
           })
           .error(function (error) {
             console.log("Error on getting json data for check button...", error);
@@ -489,7 +498,7 @@ angular.module("bookbuilder2")
             nextButton.addEventListener("mousedown", function (event) {
               console.log("mousedown event on a button !");
               nextButton.gotoAndPlay("onSelection");
-              stage.update();
+              $scope.stage.update();
             });
             nextButton.addEventListener("pressup", function (event) {
               console.log("pressup event!");
@@ -501,15 +510,14 @@ angular.module("bookbuilder2")
             nextButton.scaleX = nextButton.scaleY = scale;
             nextButton.x = backgroundPosition.x + (backgroundPosition.width / 1.13);
             nextButton.y = backgroundPosition.y + (backgroundPosition.height / 1.063);
-            stage.addChild(nextButton);
-            stage.update();
+            $scope.stage.addChild(nextButton);
+            $scope.stage.update();
           })
           .error(function (error) {
 
             console.log("Error on getting json data for check button...", error);
 
           });
-
 
 
         /********************************** FUNCTIONS ***********************************/
@@ -521,7 +529,7 @@ angular.module("bookbuilder2")
           });
 
           //Saving to localStorage
-          LocalStorage.set(activityNameInLocalStorage, JSON.stringify(activityData));
+          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify(activityData));
         }
 
         /*Function that checks user answers and calls score function and showAnswers function*/
@@ -555,8 +563,8 @@ angular.module("bookbuilder2")
           scoreText.y = backgroundPosition.y + (backgroundPosition.height / 15);
           scoreText.textBaseline = "alphabetic";
 
-          stage.addChild(scoreText);
-          stage.update();
+          $scope.stage.addChild(scoreText);
+          $scope.stage.update();
 
         }
 
@@ -582,9 +590,6 @@ angular.module("bookbuilder2")
         function playSound() {
 
         }
-
-
-
 
 
       });//end of image on complete
