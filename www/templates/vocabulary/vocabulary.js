@@ -3,6 +3,68 @@ angular.module("bookbuilder2")
 
     console.log("VocabularyController loaded!");
 
+
+
+
+
+    /*- TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST -*/
+
+    $rootScope.selectedLesson = {
+      "lessonTitle": "Lesson 1",
+      "title": "Family shopping",
+      "id": "lesson1",
+      "lessonMenu": [
+        {
+          "name": "Vocabulary 1",
+          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
+          "activityFolder": "vocabulary1",
+          "activityTemplate": "multiple",
+          "numberOfQuestions": 10
+        },
+        {
+          "name": "Vocabulary 2",
+          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
+          "activityFolder": "vocabulary2",
+          "activityTemplate": "draganddrop",
+          "numberOfQuestions": 5
+        },
+        {
+          "name": "Vocabulary 3",
+          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
+          "activityFolder": "vocabulary3",
+          "activityTemplate": "multiple",
+          "numberOfQuestions": 5
+        },
+        {
+          "name": "Grammar 1",
+          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
+          "activityFolder": "grammar1",
+          "activityTemplate": "multiple",
+          "numberOfQuestions": 15
+        },
+        {
+          "name": "Grammar 2",
+          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
+          "activityFolder": "grammar2",
+          "activityTemplate": "multiple",
+          "numberOfQuestions": 15
+        }
+      ],
+      "lessonButtons": {
+        "resultsButtonFileName": "lesson_results_button_sprite.json",
+        "vocabularyButtonFileName": "lesson_results_button_sprite.json",
+        "readingButtonFileName": "lesson_results_button_sprite.json"
+      }
+    };
+    $rootScope.rootDir = "";
+
+
+    /*- TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST -*/
+
+
+
+
+
     $timeout(function () {
 
       var stage = new createjs.Stage(document.getElementById("vocabularyCanvas"));
@@ -55,7 +117,7 @@ angular.module("bookbuilder2")
 
       /*Image Loader*/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-        src: $rootScope.rootDir + "data/assets/lesson_menu_background_image_2_blue.png"
+        src: $rootScope.rootDir + "data/assets/vocabulary_background_image_blue.png"
       }));
       imageLoader.load();
 
@@ -65,7 +127,7 @@ angular.module("bookbuilder2")
         console.log("Image Loaded...");
 
         /*Creating Bitmap Background for Canvas*/
-        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/lesson_menu_background_image_2_blue.png");
+        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/vocabulary_background_image_blue.png");
 
         /**** CALCULATING SCALING ****/
         var scaleY = stage.canvas.height / background.image.height;
@@ -81,7 +143,6 @@ angular.module("bookbuilder2")
         console.log("GENERAL SCALING FACTOR", scale);
         //IN ORDER TO FIND THE CORRECT COORDINATES FIRST WE NEED TO ENTER THE EXACT SAME DIMENSIONS IN THE EMULATOR OF THE BACKGROUND IMAGE
 
-
         background.scaleX = scale;
         background.scaleY = scale;
         background.regX = background.image.width / 2;
@@ -90,10 +151,10 @@ angular.module("bookbuilder2")
         background.y = stage.canvas.height / 2;
         stage.addChild(background);
         stage.update();
+
         var backgroundPosition = background.getTransformedBounds();
 
-        /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
-
+        /**** MENU BUTTON ****/
         $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
           .success(function (response) {
 
@@ -123,23 +184,25 @@ angular.module("bookbuilder2")
 
 
             $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/vocabulary.json")
-              .success(function (vocabularyJson) {
+              .success(function (response) {
+
+                $scope.activityData = response;
 
                 $scope.sounds = {};
                 var assetPath = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/";
-                console.log("vocabularyJson", vocabularyJson);
+                console.log("$scope.activityData: ", $scope.activityData);
 
                 var waterFallFunctions = [];
-                _.each(vocabularyJson, function (tabWords, tab, list) {
+                _.each($scope.activityData, function (tabWords, tab, list) {
                   _.each(tabWords, function (word, key, list) {
 
                     waterFallFunctions.push(function (waterfallCallback) {
-                      console.log("Sound", word);
+                      console.log("Sound", word.name);
                       if (ionic.Platform.isIOS() && window.cordova) {
                         console.log("Else iOS");
-                        resolveLocalFileSystemURL(assetPath + word + ".mp3", function (entry) {
+                        resolveLocalFileSystemURL(assetPath + word.name + ".mp3", function (entry) {
                           console.log(entry);
-                          $scope.sounds[word] = new Media(entry.toInternalURL(), function () {
+                          $scope.sounds[word.name] = new Media(entry.toInternalURL(), function () {
                             console.log("Sound success");
                           }, function (err) {
                             console.log("Sound error", err);
@@ -152,13 +215,13 @@ angular.module("bookbuilder2")
                         });
                       } else {
                         console.log("Else Android");
-                        $scope.sounds[word] = new Media(assetPath + word + ".mp3", function () {
+                        /*$scope.sounds[word.name] = new Media(assetPath + word.name + ".mp3", function () {
                           console.log("Sound success");
                         }, function (err) {
                           console.log("Sound error", err);
                         }, function (status) {
                           console.log("Sound status", status);
-                        });
+                        });*/
 
                         $timeout(function () {
                           waterfallCallback();
@@ -174,17 +237,314 @@ angular.module("bookbuilder2")
                 async.waterfall(waterFallFunctions, function (err, response) {
                   console.log($scope.sounds);
                 });
-
-
               })
               .error(function (error) {
-                console.error("Error on getting json for results button...", error);
+                console.error("Error on getting json for menu button...", error);
               });//end of get menu button
-
           })
           .error(function (error) {
-            console.error("Error on getting json for results button...", error);
+            console.error("Error on getting json for menu button...", error);
           });//end of get menu button
+
+
+
+        /********************************** CREATION OF CONTAINERS **********************************/
+
+
+        /*BUTTONS CONTAINER*/
+        var buttonsContainer = new createjs.Container();
+
+        console.log("Creating buttons container...");
+
+        buttonsContainer.width = 120;
+        buttonsContainer.height = backgroundPosition.height/1.15;
+        buttonsContainer.scaleX = buttonsContainer.scaleY = scale;
+        buttonsContainer.x = backgroundPosition.x+30;
+        buttonsContainer.y = backgroundPosition.y+2;
+
+        /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
+        /*var testGraphics = new createjs.Graphics().beginFill("red");
+        //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+        testGraphics.drawRoundRect(0, 0, buttonsContainer.width, buttonsContainer.height, 1);
+
+        var testShape = new createjs.Shape(testGraphics);
+        testShape.setTransform(buttonsContainer.x, buttonsContainer.y, scale, scale, 0, 0, 0, 0, 0);
+        buttonsContainer.addChild(testShape);
+        stage.update();*/
+        /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
+
+        stage.addChild(buttonsContainer);
+        stage.update();
+
+
+
+        /*INDEX CONTAINER*/
+        var indexContainer = new createjs.Container();
+
+        console.log("Creating buttons container...");
+
+        indexContainer.width = 40;
+        indexContainer.height = backgroundPosition.height/1.15;
+        indexContainer.scaleX = indexContainer.scaleY = scale;
+        indexContainer.x = backgroundPosition.x+85;
+        indexContainer.y = backgroundPosition.y+2;
+
+        /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
+        /*var testGraphics2 = new createjs.Graphics().beginFill("orangered");
+        //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+        testGraphics2.drawRoundRect(0, 0, indexContainer.width, indexContainer.height, 1);
+
+        var testShape2 = new createjs.Shape(testGraphics2);
+        testShape2.setTransform(indexContainer.x, indexContainer.y, scale, scale, 0, 0, 0, 0, 0);
+        indexContainer.addChild(testShape2);
+        stage.update();*/
+        /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
+
+        stage.addChild(indexContainer);
+        stage.update();
+
+
+        /*ENGLISH WORDS CONTAINER*/
+        var englishWordsContainer = new createjs.Container();
+
+        console.log("Creating buttons container...");
+
+        englishWordsContainer.width = 300;
+        englishWordsContainer.height = backgroundPosition.height/1.15;
+        englishWordsContainer.scaleX = englishWordsContainer.scaleY = scale;
+        englishWordsContainer.x = backgroundPosition.x+105;
+        englishWordsContainer.y = backgroundPosition.y+2;
+
+        /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
+        /*var testGraphics3 = new createjs.Graphics().beginFill("darkred");
+        //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+        testGraphics3.drawRoundRect(0, 0, englishWordsContainer.width, englishWordsContainer.height, 1);
+
+        var testShape3 = new createjs.Shape(testGraphics3);
+        testShape3.setTransform(englishWordsContainer.x, englishWordsContainer.y, scale, scale, 0, 0, 0, 0, 0);
+        englishWordsContainer.addChild(testShape3);
+        stage.update();*/
+        /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
+
+        stage.addChild(englishWordsContainer);
+        stage.update();
+
+
+
+        /*EQUALS SIGN CONTAINER*/
+        var equalsSignContainer = new createjs.Container();
+
+        console.log("Creating buttons container...");
+
+        equalsSignContainer.width = 30;
+        equalsSignContainer.height = backgroundPosition.height/1.15;
+        equalsSignContainer.scaleX = equalsSignContainer.scaleY = scale;
+        equalsSignContainer.x = backgroundPosition.x+245;
+        equalsSignContainer.y = backgroundPosition.y+2;
+
+        /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
+        /*var testGraphics4 = new createjs.Graphics().beginFill("yellow");
+        //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+        testGraphics4.drawRoundRect(0, 0, equalsSignContainer.width, equalsSignContainer.height, 1);
+
+        var testShape4 = new createjs.Shape(testGraphics4);
+        testShape4.setTransform(equalsSignContainer.x, equalsSignContainer.y, scale, scale, 0, 0, 0, 0, 0);
+        equalsSignContainer.addChild(testShape4);
+        stage.update();*/
+        /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
+
+        stage.addChild(equalsSignContainer);
+        stage.update();
+
+
+
+        /*GREEK WORDS CONTAINER*/
+        var greekWordsContainer = new createjs.Container();
+
+        console.log("Creating buttons container...");
+
+        greekWordsContainer.width = 300;
+        greekWordsContainer.height = backgroundPosition.height/1.15;
+        greekWordsContainer.scaleX = greekWordsContainer.scaleY = scale;
+        greekWordsContainer.x = backgroundPosition.x+260;
+        greekWordsContainer.y = backgroundPosition.y+2;
+
+        /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
+       /* var testGraphics5 = new createjs.Graphics().beginFill("blue");
+        //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+        testGraphics5.drawRoundRect(0, 0, greekWordsContainer.width, greekWordsContainer.height, 1);
+
+        var testShape5 = new createjs.Shape(testGraphics5);
+        testShape5.setTransform(greekWordsContainer.x, greekWordsContainer.y, scale, scale, 0, 0, 0, 0, 0);
+        greekWordsContainer.addChild(testShape5);
+        stage.update();*/
+        /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
+
+        stage.addChild(greekWordsContainer);
+        stage.update();
+
+
+        /********************************** POPULATING CONTAINERS **********************************/
+
+        /*LOAD BUTTONS*/
+        loadButtons();
+        function loadButtons(){
+
+          /*Initializing SpriteSheet instances using waterfall*/
+          async.waterfall([
+              function(buttonsSpriteSheetCallback){
+
+                /*English Button*/
+                $http.get($rootScope.rootDir + "data/assets/english_small_button_sprite.json")
+                    .success(function (response) {
+                      console.log("Success on getting json data for english button!");
+                      response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+
+                      var enSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
+
+                      return buttonsSpriteSheetCallback(null, enSmallButtonSpriteSheet);
+
+                    })
+                    .error(function (error) {
+                      console.log("Error on getting json data for english button...", error);
+                      return buttonsSpriteSheetCallback(true, error);
+                    });
+
+              },
+              function(enSmallButtonSpriteSheet, buttonsSpriteSheetCallback){
+
+                /*Greek Button*/
+                $http.get($rootScope.rootDir + "data/assets/greek_small_button_sprite.json")
+                    .success(function (response) {
+                      console.log("Success on getting json data for greek button!");
+                      response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+
+                      var grSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
+
+                      return buttonsSpriteSheetCallback(null, enSmallButtonSpriteSheet, grSmallButtonSpriteSheet);
+
+                    })
+                    .error(function (error) {
+                      console.log("Error on getting json data for greek button...", error);
+                      return buttonsSpriteSheetCallback(true, error);
+                    });
+
+              },
+              function(enSmallButtonSpriteSheet, grSmallButtonSpriteSheet, buttonsSpriteSheetCallback){
+
+                /*Play Button*/
+                $http.get($rootScope.rootDir + "data/assets/play_small_button_sprite.json")
+                    .success(function (response) {
+
+                      console.log("Success on getting json data for play button!");
+                      response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+
+                      var playSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
+
+                      //Creation of result object
+                      var resultObject = {
+                        "enSmallButtonSpriteSheet":enSmallButtonSpriteSheet,
+                        "grSmallButtonSpriteSheet":grSmallButtonSpriteSheet,
+                        "playSmallButtonSpriteSheet":playSmallButtonSpriteSheet
+                      };
+
+                      return buttonsSpriteSheetCallback(null, resultObject);
+
+                    })
+                    .error(function (error) {
+                      console.log("Error on getting json data for play button...", error);
+                      return buttonsSpriteSheetCallback(true, error);
+                    });
+              }
+          ],function(err, result){
+
+            if(err){
+              console.error("Error on waterfall process for getting buttons spriteSheets...");
+            }else{
+              console.log("Success on waterfall process for getting buttons spriteSheets! Result: ", result);
+
+              var enSmallButtonSpriteSheet = result.enSmallButtonSpriteSheet;
+              var grSmallButtonSpriteSheet = result.grSmallButtonSpriteSheet;
+              var playSmallButtonSpriteSheet = result.playSmallButtonSpriteSheet;
+
+              /*Initializing y that will change dynamically for every button*/
+              var buttonsY = 100;
+
+              /*Iterating and populating the ccontainer*/
+              _.each($scope.activityData.words, function(word, key, list){
+
+
+                /********************* Creating English button *********************/
+                var enSmallButton = new createjs.Sprite(enSmallButtonSpriteSheet, "normal");
+
+                enSmallButton.addEventListener("mousedown", function (event) {
+                  console.log("mousedown event on a button !");
+                  enSmallButton.gotoAndPlay("onSelection");
+                  stage.update();
+                });
+
+                enSmallButton.addEventListener("pressup", function (event) {
+                  console.log("pressup event!");
+                  enSmallButton.gotoAndPlay("normal");
+
+                });
+                enSmallButton.x = buttonsContainer.x+ 15;
+                enSmallButton.y = buttonsY;
+                buttonsContainer.addChild(enSmallButton);
+                /*stage.update();*/
+
+
+                /******************** Creating Greek button ********************/
+                var grSmallButton = new createjs.Sprite(grSmallButtonSpriteSheet, "normal");
+
+                grSmallButton.addEventListener("mousedown", function (event) {
+                  console.log("mousedown event on a button !");
+                  grSmallButton.gotoAndPlay("onSelection");
+                  stage.update();
+                });
+
+                grSmallButton.addEventListener("pressup", function (event) {
+                  console.log("pressup event!");
+                  grSmallButton.gotoAndPlay("normal");
+
+                });
+                grSmallButton.x = buttonsContainer.x+ 30;
+                grSmallButton.y = buttonsY;
+                buttonsContainer.addChild(grSmallButton);
+                /*stage.update();*/
+
+
+                /*********************Creating Play button*********************/
+                var playSmallButton = new createjs.Sprite(playSmallButtonSpriteSheet, "normal");
+                playSmallButton.addEventListener("mousedown", function (event) {
+                  console.log("mousedown event on a button !");
+                  playSmallButton.gotoAndPlay("onSelection");
+                  stage.update();
+                });
+
+                playSmallButton.addEventListener("pressup", function (event) {
+                  console.log("pressup event!");
+                  playSmallButton.gotoAndPlay("normal");
+
+                });
+                playSmallButton.x = buttonsContainer.x+ 45;
+                playSmallButton.y = buttonsY;
+                /*playSmallButton.x = backgroundPosition.x + (backgroundPosition.width / 3.1);
+                playSmallButton.y = backgroundPosition.y + (backgroundPosition.height / 1.063);*/
+                buttonsContainer.addChild(playSmallButton);
+
+                stage.update();
+                buttonsY+=20;
+
+
+              });
+            }
+
+          });//End of waterfall
+        }//End of loadButtons function
+
+
+
       });//end of image on complete
     }, 500);//end of timeout
   });
