@@ -172,6 +172,10 @@ angular.module("bookbuilder2")
             $rootScope.selectedLesson = response;
             console.log("Selected Lesson: ", $rootScope.selectedLesson);
 
+
+            //FOR DEVELOPMENT
+            window.localStorage.setItem("selectedLesson", JSON.stringify($rootScope.selectedLesson));
+
             /*---------------------------------------LESSON TITLE CREATION------------------------------------------*/
 
             console.log("Lesson Title: ", response.lessonTitle);
@@ -323,6 +327,9 @@ angular.module("bookbuilder2")
                       console.log("pressup event on a lesson button !");
                       $scope.stage.update();
                       $rootScope.activityFolder = activityButton.activityFolder;
+
+                      window.localStorage.setItem("activityFolder", $rootScope.activityFolder);
+
                       console.log($rootScope.selectedLessonId);
                       console.log($rootScope.activityFolder);
                       $state.go(activityButton.activityTemplate);

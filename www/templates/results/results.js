@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-  .controller("ResultsController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory) {
+  .controller("ResultsController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast) {
 
     console.log("ResultsController loaded!");
 
@@ -100,143 +100,269 @@ angular.module("bookbuilder2")
         $scope.stage.update();
         var backgroundPosition = background.getTransformedBounds();
 
-        /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
 
-        $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
-          .success(function (response) {
+        async.parallel([function (callback) {
 
-            //Reassigning images with the rest of resource
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+          $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
+            .success(function (response) {
 
-            var menuButtonSpriteSheet = new createjs.SpriteSheet(response);
-            var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
+              //Reassigning images with the rest of resource
+              response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
 
-            menuButton.addEventListener("mousedown", function (event) {
-              console.log("mousedown event on a button !");
-              menuButton.gotoAndPlay("onSelection");
+              var menuButtonSpriteSheet = new createjs.SpriteSheet(response);
+              var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
+
+              menuButton.addEventListener("mousedown", function (event) {
+                console.log("mousedown event on a button !");
+                menuButton.gotoAndPlay("onSelection");
+                $scope.stage.update();
+              });
+
+              menuButton.addEventListener("pressup", function (event) {
+                console.log("pressup event!");
+                menuButton.gotoAndPlay("normal");
+                $ionicHistory.goBack();
+              });
+
+              menuButton.scaleX = menuButton.scaleY = scale;
+              menuButton.x = 0;
+              menuButton.y = -menuButton.getTransformedBounds().height / 5;
+
+              $scope.stage.addChild(menuButton);
               $scope.stage.update();
+              callback();
+            })
+            .error(function (error) {
+              console.error("Error on getting json for results button...", error);
+              callback();
+            });//end of get menu button
+
+        }, function (callback) {
+
+          $http.get($rootScope.rootDir + "data/assets/lesson_restart_button_sprite.json")
+            .success(function (response) {
+              //Reassigning images with the rest of resource
+              response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+              var returnButtonSpriteSheet = new createjs.SpriteSheet(response);
+              var returnButton = new createjs.Sprite(returnButtonSpriteSheet, "normal");
+
+              returnButton.addEventListener("mousedown", function (event) {
+                console.log("mousedown event on a button !");
+                returnButton.gotoAndPlay("onSelection");
+                $scope.stage.update();
+              });
+
+              returnButton.addEventListener("pressup", function (event) {
+                console.log("pressup event!");
+                returnButton.gotoAndPlay("normal");
+
+
+                var confirmPopup = $ionicPopup.confirm({
+                  title: 'Restart all activities in ' + $rootScope.selectedLesson.title,
+                  template: 'This will reset all your activity in ' + $rootScope.selectedLesson.title + "!"
+                });
+                confirmPopup.then(function (res) {
+                  if (res) {
+                    clearAllActivitiesLocalStorage();
+                  }
+                });
+
+              });
+              returnButton.scaleX = returnButton.scaleY = scale;
+              returnButton.x = backgroundPosition.x + (backgroundPosition.width / 1.1);
+              returnButton.y = backgroundPosition.y + (backgroundPosition.height / 10);
+              $scope.stage.addChild(returnButton);
+              $scope.stage.update();
+              callback();
+            })
+            .error(function (error) {
+              callback();
+              console.log("Error on getting json data for return button...", error);
+
             });
+        }, function (callback) {
 
-            menuButton.addEventListener("pressup", function (event) {
-              console.log("pressup event!");
-              menuButton.gotoAndPlay("normal");
-              $ionicHistory.goBack();
-            });
+          /* ------------------------------------------ vocabularyReading Shape ---------------------------------------------- */
 
-            menuButton.scaleX = menuButton.scaleY = scale;
-            menuButton.x = 0;
-            menuButton.y = -menuButton.getTransformedBounds().height / 5;
+          //Starting and making it transparent
+          var vocabularyReadingGraphics = new createjs.Graphics().beginFill(null);
+          //Setting Stroke
+          vocabularyReadingGraphics.setStrokeStyle(3).beginStroke("white");
 
-            $scope.stage.addChild(menuButton);
-            $scope.stage.update();
-          })
-          .error(function (error) {
-            console.error("Error on getting json for results button...", error);
-          });//end of get menu button
+          //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+          vocabularyReadingGraphics.drawRoundRect(0, 0, 430, 110, 15);
 
-
-        /*********************************************** GETTING JSON FOR THE SELECTED LESSON ***********************************************/
-          //Getting the right lesson json
-        console.log($rootScope.selectedLessonId);
-        var lessonResourceUrl = $rootScope.rootDir + 'data/lessons/' + $rootScope.selectedLessonId + "/lesson.json";
-        console.log("URL for selected lesson's json: ", lessonResourceUrl);
-
-        $http.get(lessonResourceUrl)
-          .success(function (response) {
-            console.log("Success on getting json for the selected lesson! ", response);
+          var vocabularyReadingShape = new createjs.Shape(vocabularyReadingGraphics);
+          vocabularyReadingShape.setTransform(backgroundPosition.x + (backgroundPosition.width / 20), backgroundPosition.y + (backgroundPosition.height / 7), scale, scale, 0, 0, 0, 0, 0);
+          $scope.stage.addChild(vocabularyReadingShape);
+          $scope.stage.update();
 
 
-            /*---------------------------------------LESSON TITLE CREATION------------------------------------------*/
+          /* ------------------------------------------ totalScore Shape ---------------------------------------------- */
 
-            console.log("Lesson Title: ", response.lessonTitle);
-            var lessonTitle = new createjs.Text(response.lessonTitle, "33px Arial", "white");
+          var totalScoreGraphics = new createjs.Graphics().beginFill("blue").drawRect(0, 0, 430, 100);
+          var totalScoreShape = new createjs.Shape(totalScoreGraphics);
+          totalScoreShape.setTransform(backgroundPosition.x + (backgroundPosition.width / 2), backgroundPosition.y + (backgroundPosition.height / 6.5), scale, scale, 0, 0, 0, 0, 0);
+          //Setting Shadow
+          totalScoreShape.shadow = new createjs.Shadow("#000000", 5, 5, 10);
+          $scope.stage.addChild(totalScoreShape);
+          $scope.stage.update();
 
-            /*background.scaleX = background.scaleY = scale;*/
-            lessonTitle.scaleX = lessonTitle.scaleY = scale;
-            lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 10);
-            lessonTitle.y = backgroundPosition.y + (backgroundPosition.height / 9.8);
-            lessonTitle.rotation = -4;
-            lessonTitle.textBaseline = "alphabetic";
+          //Text for the totalScore
+          var totalScoreTitle = new createjs.Text("Total Score:", "25px Arial", "white");
 
-            $scope.stage.addChild(lessonTitle);
-            $scope.stage.update();
+          /*background.scaleX = background.scaleY = scale;*/
+          totalScoreTitle.scaleX = totalScoreTitle.scaleY = scale;
+          totalScoreTitle.x = backgroundPosition.x + (backgroundPosition.width / 3);
+          totalScoreTitle.y = backgroundPosition.y + (backgroundPosition.height / 13);
+          totalScoreTitle.textBaseline = "alphabetic";
 
-
-            /*-------------------------------------TITLE CREATION--------------------------------------------*/
-
-            console.log("Lesson Title: ", response.title);
-            var title = new createjs.Text(response.title, "25px Arial", "white");
-
-            /*background.scaleX = background.scaleY = scale;*/
-            title.scaleX = title.scaleY = scale;
-            title.x = backgroundPosition.x + (backgroundPosition.width / 3);
-            title.y = backgroundPosition.y + (backgroundPosition.height / 13);
-            title.textBaseline = "alphabetic";
-
-            $scope.stage.addChild(title);
-            $scope.stage.update();
-
-          });//end of $http.get(lessonResourceUrl)
+          $scope.stage.addChild(totalScoreTitle);
+          $scope.stage.update();
 
 
-        /* ------------------------------------------ vocabularyReading Shape ---------------------------------------------- */
+          /* ------------------------------------------ activitiesScore Shape ---------------------------------------------- */
 
-        //Starting and making it transparent
-        var vocabularyReadingGraphics = new createjs.Graphics().beginFill(null);
-        //Setting Stroke
-        vocabularyReadingGraphics.setStrokeStyle(3).beginStroke("white");
+          //Starting and making it transparent
+          var activitiesScoreGraphics = new createjs.Graphics().beginFill(null);
+          //Setting Stroke
+          activitiesScoreGraphics.setStrokeStyle(3).beginStroke("white");
 
-        //Drawing the shape !!!NOTE Every optimization before drawRoundRect
-        vocabularyReadingGraphics.drawRoundRect(0, 0, 430, 110, 15);
+          //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+          activitiesScoreGraphics.drawRoundRect(0, 0, 900, 400, 15);
 
-        var vocabularyReadingShape = new createjs.Shape(vocabularyReadingGraphics);
-        vocabularyReadingShape.setTransform(backgroundPosition.x + (backgroundPosition.width / 20), backgroundPosition.y + (backgroundPosition.height / 7), scale, scale, 0, 0, 0, 0, 0);
-        $scope.stage.addChild(vocabularyReadingShape);
-        $scope.stage.update();
+          var activitiesScoreShape = new createjs.Shape(activitiesScoreGraphics);
 
+          activitiesScoreShape.setTransform(backgroundPosition.x + (backgroundPosition.width / 20), backgroundPosition.y
+            + (backgroundPosition.height / 3), scale, scale, 0, 0, 0, 0, 0);
 
-        /* ------------------------------------------ totalScore Shape ---------------------------------------------- */
+          console.log("Shape transformed bounds: ", activitiesScoreShape.getTransformedBounds());
 
-        var totalScoreGraphics = new createjs.Graphics().beginFill("blue").drawRect(0, 0, 430, 100);
-        var totalScoreShape = new createjs.Shape(totalScoreGraphics);
-        totalScoreShape.setTransform(backgroundPosition.x + (backgroundPosition.width / 2), backgroundPosition.y + (backgroundPosition.height / 6.5), scale, scale, 0, 0, 0, 0, 0);
-        //Setting Shadow
-        totalScoreShape.shadow = new createjs.Shadow("#000000", 5, 5, 10);
-        $scope.stage.addChild(totalScoreShape);
-        $scope.stage.update();
+          $scope.stage.addChild(activitiesScoreShape);
+          $scope.stage.update();
 
-        //Text for the totalScore
-        var totalScoreTitle = new createjs.Text("Total Score:", "25px Arial", "white");
+          callback();
+        }], function (err, results) {
 
-        /*background.scaleX = background.scaleY = scale;*/
-        totalScoreTitle.scaleX = totalScoreTitle.scaleY = scale;
-        totalScoreTitle.x = backgroundPosition.x + (backgroundPosition.width / 3);
-        totalScoreTitle.y = backgroundPosition.y + (backgroundPosition.height / 13);
-        totalScoreTitle.textBaseline = "alphabetic";
+          /*********************************************** GETTING JSON FOR THE SELECTED LESSON ***********************************************/
+            //Getting the right lesson json
+          console.log($rootScope.selectedLessonId);
+          var lessonResourceUrl = $rootScope.rootDir + 'data/lessons/' + $rootScope.selectedLessonId + "/lesson.json";
+          console.log("URL for selected lesson's json: ", lessonResourceUrl);
 
-        $scope.stage.addChild(totalScoreTitle);
-        $scope.stage.update();
+          $http.get(lessonResourceUrl)
+            .success(function (response) {
+              console.log("Success on getting json for the selected lesson! ", response);
 
 
-        /* ------------------------------------------ activitiesScore Shape ---------------------------------------------- */
+              /*---------------------------------------LESSON TITLE CREATION------------------------------------------*/
 
-        //Starting and making it transparent
-        var activitiesScoreGraphics = new createjs.Graphics().beginFill(null);
-        //Setting Stroke
-        activitiesScoreGraphics.setStrokeStyle(3).beginStroke("white");
+              console.log("Lesson Title: ", response.lessonTitle);
+              var lessonTitle = new createjs.Text(response.lessonTitle, "33px Arial", "white");
 
-        //Drawing the shape !!!NOTE Every optimization before drawRoundRect
-        activitiesScoreGraphics.drawRoundRect(0, 0, 900, 400, 15);
+              /*background.scaleX = background.scaleY = scale;*/
+              lessonTitle.scaleX = lessonTitle.scaleY = scale;
+              lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 10);
+              lessonTitle.y = backgroundPosition.y + (backgroundPosition.height / 9.8);
+              lessonTitle.rotation = -4;
+              lessonTitle.textBaseline = "alphabetic";
 
-        var activitiesScoreShape = new createjs.Shape(activitiesScoreGraphics);
+              $scope.stage.addChild(lessonTitle);
+              $scope.stage.update();
 
-        activitiesScoreShape.setTransform(backgroundPosition.x + (backgroundPosition.width / 20), backgroundPosition.y
-          + (backgroundPosition.height / 3), scale, scale, 0, 0, 0, 0, 0);
 
-        console.log("Shape transformed bounds: ", activitiesScoreShape.getTransformedBounds());
+              /*-------------------------------------TITLE CREATION--------------------------------------------*/
 
-        $scope.stage.addChild(activitiesScoreShape);
-        $scope.stage.update();
+              console.log("Lesson Title: ", response.title);
+              var title = new createjs.Text(response.title, "25px Arial", "white");
+
+              /*background.scaleX = background.scaleY = scale;*/
+              title.scaleX = title.scaleY = scale;
+              title.x = backgroundPosition.x + (backgroundPosition.width / 3);
+              title.y = backgroundPosition.y + (backgroundPosition.height / 13);
+              title.textBaseline = "alphabetic";
+
+              $scope.stage.addChild(title);
+              $scope.stage.update();
+
+              showResults();
+
+            });//end of $http.get(lessonResourceUrl)
+
+        });
+
+
+        function showResults() {
+
+          var calculatedActivityScores = {};
+
+          _.each($rootScope.selectedLesson.lessonMenu, function (activity, key, list) {
+            var activityData = window.localStorage.getItem($rootScope.selectedLesson.id + "_" + activity.activityFolder);
+
+            if (activityData) {
+              calculatedActivityScores[activity.activityFolder] = {
+                "title": activity.name,
+                "completed": activityData.completed,
+                "attempts": activityData.attempts,
+                "correct": calculateCorrectAnswers(activityData),
+                "numberOfQuestions": activity.numberOfQuestions,
+                "percentCorrectQuestions": calculatePercentCorrectQuestions(activityData)
+              }
+            } else {
+              calculatedActivityScores[activity.activityFolder] = {
+                "title": activity.name,
+                "completed": activityData.completed,
+                "attempts": activityData.attempts,
+                "correct": calculateCorrectAnswers(activityData),
+                "numberOfQuestions": activity.numberOfQuestions,
+                "percentCorrectQuestions": calculatePercentCorrectQuestions(activityData)
+              }
+            }
+          });
+
+          var vocabularyActivityData = window.localStorage.getItem($rootScope.selectedLesson.id + "_vocabulary");
+
+          calculatedActivityScores["vocabulary"] = {
+            "title": "Vocabulary",
+            "completed": vocabularyActivityData.completed,
+            "attempts": vocabularyActivityData.attempts
+          };
+
+          var readingActivityData = window.localStorage.getItem($rootScope.selectedLesson.id + "_reading");
+
+          calculatedActivityScores["reading"] = {
+            "title": "Reading",
+            "completed": readingActivityData.completed,
+            "attempts": readingActivityData.attempts
+          };
+
+          _.each(calculatedActivityScores, function (activity, key, list) {
+
+            //START SHOWING THE TEXT IN THE CANVAS
+
+          });
+        };
+
+        function calculateCorrectAnswers(activityData) {
+          return 3;
+        };
+
+        function calculatePercentCorrectQuestions(activityData) {
+          return 30;
+        };
+
+
+        function clearAllActivitiesLocalStorage() {
+
+          _.each($rootScope.selectedLesson.lessonMenu, function (activity, key, list) {
+            window.localStorage.removeItem($rootScope.selectedLesson.id + "_" + activity.activityFolder);
+          });
+
+          Toast.show($rootScope.selectedLesson.title + " is cleared succesfully!");
+
+          showResults();
+
+        };
 
 
       });//end of image on complete

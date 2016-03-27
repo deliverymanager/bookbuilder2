@@ -1,74 +1,23 @@
 angular.module("bookbuilder2")
-  .controller("DraganddropController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory) {
+  .controller("DraganddropController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast) {
 
     console.log("Draganddrop loaded!");
 
-
-    /*- TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST -*/
-
-    $rootScope.selectedLesson = {
-      "lessonTitle": "Lesson 1",
-      "title": "Family shopping",
-      "lessonId": "lesson1",
-      "lessonMenu": [
-        {
-          "name": "Vocabulary 1",
-          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
-          "activityFolder": "vocabulary1",
-          "activityTemplate": "multiple",
-          "numberOfQuestions": 10
-        },
-        {
-          "name": "Vocabulary 2",
-          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
-          "activityFolder": "vocabulary2",
-          "activityTemplate": "draganddrop",
-          "numberOfQuestions": 5
-        },
-        {
-          "name": "Vocabulary 3",
-          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
-          "activityFolder": "vocabulary3",
-          "activityTemplate": "multiple",
-          "numberOfQuestions": 5
-        },
-        {
-          "name": "Grammar 1",
-          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
-          "activityFolder": "grammar1",
-          "activityTemplate": "multiple",
-          "numberOfQuestions": 15
-        },
-        {
-          "name": "Grammar 2",
-          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
-          "activityFolder": "grammar2",
-          "activityTemplate": "multiple",
-          "numberOfQuestions": 15
-        }
-      ],
-      "lessonButtons": {
-        "resultsButtonFileName": "lesson_results_button_sprite.json",
-        "vocabularyButtonFileName": "lesson_results_button_sprite.json",
-        "readingButtonFileName": "lesson_results_button_sprite.json"
-      }
-    };
-    $rootScope.activityFolder = "vocabulary2";
-    $rootScope.rootDir = "";
-
-    /*- TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST -*/
-
-
-    /*Each activity projected to activityData and application retrieves it from localStorage
-     if it's not located in localStorage controller initializes an object */
-    var activityData = {};
+    //START OF DEVELOPMENT SNIPPET
+    if (window.cordova && window.cordova.platformId !== "browser") {
+      $rootScope.rootDir = window.cordova.file.dataDirectory;
+    } else {
+      $rootScope.rootDir = "";
+    }
+    $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+    $rootScope.activityFolder = window.localStorage.getItem("activityFolder");
+    //END OF DEVELOPMENT SNIPPET
 
     /*Name of activity in localStorage*/
-    var activityNameInLocalStorage = $rootScope.selectedLesson.lessonId + "_" + $rootScope.activityFolder;
+    var activityNameInLocalStorage = $rootScope.selectedLesson.id + "_" + $rootScope.activityFolder;
     console.log("Name of activity in localStorage: ", activityNameInLocalStorage);
 
     $timeout(function () {
-
       var PIXEL_RATIO = (function () {
         var ctx = document.getElementById("canvas").getContext("2d"),
           dpr = window.devicePixelRatio || 1,
@@ -110,6 +59,12 @@ angular.module("bookbuilder2")
       $scope.$on('$destroy', function () {
         console.log('destroy');
         createjs.Ticker.framerate = 0;
+
+        _.each($scope.sounds, function (sound, key, list) {
+          $scope.sounds[key].stop();
+          $scope.sounds[key].release();
+        });
+
       });
 
       $ionicPlatform.on('pause', function () {
@@ -124,6 +79,35 @@ angular.module("bookbuilder2")
         }, 2000);
       });
 
+      $scope.sounds = {};
+      if (window.cordova && window.cordova.platformId !== "browser") {
+        _.each(["drag", "drop"], function (sound, key, list) {
+          if (ionic.Platform.isIOS() && window.cordova) {
+            console.log("Else iOS");
+            resolveLocalFileSystemURL($rootScope.rootDir + "data/assets/" + sound + ".mp3", function (entry) {
+              $scope.sounds[sound] = new Media(entry.toInternalURL(), function () {
+                console.log("Sound success");
+              }, function (err) {
+                console.log("Sound error", err);
+              }, function (status) {
+                console.log("Sound status", status);
+              });
+            });
+          } else {
+            console.log("Else Android");
+            $scope.sounds[sound] = new Media($rootScope.rootDir + "data/assets/" + sound + ".mp3", function () {
+              console.log("Sound success");
+            }, function (err) {
+              console.log("Sound error", err);
+            }, function (status) {
+              console.log("Sound status", status);
+            });
+          }
+        });
+
+      }
+
+      var userChoice = " _________________________________ ";
 
       /****************************** Image Loader ******************************/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
@@ -163,6 +147,7 @@ angular.module("bookbuilder2")
         $scope.stage.addChild(background);
         $scope.stage.update();
         var backgroundPosition = background.getTransformedBounds();
+        console.log(backgroundPosition);
 
         /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
 
@@ -199,52 +184,496 @@ angular.module("bookbuilder2")
           });//end of get menu button
 
 
-        /************************************** Initializing Page **************************************/
+        var init = function () {
 
-        init();
-        function init() {
+          /* ---------------------------------- Description -----------------------------------------*/
 
-          console.log("Searching in localStorage fo activity: ", activityNameInLocalStorage);
-          if (LocalStorage.get(activityNameInLocalStorage)) {
-            activityData = JSON.parse(LocalStorage.get(activityNameInLocalStorage));
-            addScoreText();
-            console.log("Activity data exist in localStorage and its: ", activityData);
-          } else {
+          console.log($scope.activityData.description);
+          var descriptionText = new createjs.Text($scope.activityData.description, "17px Arial", "white");
 
-            /*Getting the json object for the activity*/
-            var activityUrl = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.lessonId + "/" + $rootScope.activityFolder + "/draganddrop.json";
-            console.log("trying to get json for the url: ", activityUrl);
-            $http.get(activityUrl)
-              .success(function (response) {
-                console.log("Success on getting json for the url. The response object is: ", response);
+          /*background.scaleX = background.scaleY = scale;*/
+          descriptionText.scaleX = descriptionText.scaleY = scale;
+          descriptionText.x = backgroundPosition.x + (backgroundPosition.width / 1.3);
+          descriptionText.y = backgroundPosition.y + (backgroundPosition.height / 9.6);
+          descriptionText.textBaseline = "alphabetic";
 
-                /*Adding the userAnswer attribute to response object before assigning it to activityData*/
-                _.each(response.questions, function (question, key, value) {
-                  question.userAnswer = "";
+          $scope.stage.addChild(descriptionText);
+          $scope.stage.update();
+
+
+          $scope.scoreText = new createjs.Text("Score: " + "0" + " / " + $scope.activityData.questions.length, "27px Arial", "white");
+          $scope.scoreText.scaleX = $scope.scoreText.scaleY = scale;
+          $scope.scoreText.x = backgroundPosition.x + (backgroundPosition.width / 1.3);
+          $scope.scoreText.y = backgroundPosition.y + (backgroundPosition.height / 17);
+          $scope.scoreText.textBaseline = "alphabetic";
+          $scope.stage.addChild($scope.scoreText);
+          $scope.stage.update();
+
+
+          /* ------------------------------------------ QUESTIONS & ANSWERS ---------------------------------------------- */
+          $scope.questionText = {};
+          $scope.underlinedText = {};
+          $scope.answerText = {};
+          var waterfallFunctions = [];
+          var questionHeight = 530 * scale / $scope.activityData.questions.length;
+          var questionY = backgroundPosition.y + (backgroundPosition.height / 5);
+
+          _.each($scope.activityData.questions, function (question, key, list) {
+
+            //Filling the waterfall
+            waterfallFunctions.push(function (waterfallCallback) {
+
+              var pretexts = question.pretext.split("\n");
+              var currentPretexts = {};
+              var yPreText = questionHeight / 3;
+              _.each(pretexts, function (text, l, li) {
+                currentPretexts[l] = new createjs.Text(text, "23px Arial", "blue");
+                currentPretexts[l].scaleX = currentPretexts[l].scaleY = scale;
+                currentPretexts[l].x = backgroundPosition.x + (backgroundPosition.width / 40);
+                currentPretexts[l].y = questionY + yPreText * l;
+                currentPretexts[l].textBaseline = "alphabetic";
+                currentPretexts[l].lineHeight = 30;
+                $scope.stage.addChild(currentPretexts[l]);
+              });
+
+              $scope.questionText[key] = new createjs.Text(userChoice, "23px Arial", "blue");
+              $scope.questionText[key].scaleX = $scope.questionText[key].scaleY = scale;
+              $scope.questionText[key].x = currentPretexts[pretexts.length - 1].getTransformedBounds().x + currentPretexts[pretexts.length - 1].getTransformedBounds().width;
+              $scope.questionText[key].y = currentPretexts[pretexts.length - 1].getTransformedBounds().y + currentPretexts[pretexts.length - 1].getTransformedBounds().height / 1.3;
+
+              $scope.questionText[key].startingPointX = $scope.questionText[key].x;
+              $scope.questionText[key].startingPointY = $scope.questionText[key].y;
+
+
+              $scope.questionText[key].textBaseline = "alphabetic";
+              $scope.questionText[key].lineHeight = 30;
+              $scope.questionText[key].maxWidth = $scope.questionText[key].getTransformedBounds().width;
+
+
+              $scope.underlinedText[key] = $scope.questionText[key].clone();
+
+              $scope.stage.addChild($scope.underlinedText[key]);
+              $scope.stage.addChild($scope.questionText[key]);
+
+              var currentPostexts = new createjs.Text(question.postext, "23px Arial", "blue");
+              currentPostexts.scaleX = currentPostexts.scaleY = scale;
+              if (pretexts.length === 1) {
+                currentPostexts.x = backgroundPosition.x + (backgroundPosition.width / 40);
+                currentPostexts.y = $scope.questionText[key].getTransformedBounds().y + $scope.questionText[key].getTransformedBounds().height * 2;
+              } else {
+                currentPostexts.x = $scope.questionText[key].getTransformedBounds().x + $scope.questionText[key].getTransformedBounds().width;
+                currentPostexts.y = $scope.questionText[key].getTransformedBounds().y + $scope.questionText[key].getTransformedBounds().height / 1.3;
+              }
+
+              currentPostexts.textBaseline = "alphabetic";
+              currentPostexts.lineHeight = 30;
+
+              $scope.stage.addChild(currentPostexts);
+
+
+              questionY += questionHeight;
+              $scope.stage.update();
+
+
+              var hit = new createjs.Shape();
+              var bounds = $scope.questionText[key].getBounds();
+              hit.graphics.beginFill("yellow").drawRect(bounds.x, bounds.y, bounds.width * 1.5, bounds.height * 1.5);
+              $scope.questionText[key].hitArea = hit;
+
+
+              $scope.questionText[key].on("mousedown", function (evt) {
+
+                if ($scope.activityData.completed) {
+                  return;
+                }
+
+                if (window.cordova && window.cordova.platformId !== "browser") {
+                  $scope.sounds["drag"].play();
+                }
+
+                var global = $scope.stage.localToGlobal(this.x, this.y);
+                this.offset = {
+                  'x': global.x - evt.stageX,
+                  'y': global.y - evt.stageY
+                };
+                this.global = {
+                  'x': global.x,
+                  'y': global.y
+                };
+              });
+
+              /*DRAG AND DROP EVENT*/
+              $scope.questionText[key].on("pressmove", function (evt) {
+
+                if ($scope.activityData.completed) {
+                  return;
+                }
+
+                if ($scope.questionText[key].text === userChoice) {
+                  return;
+                }
+
+                var local = $scope.stage.globalToLocal(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
+                this.x = local.x;
+                this.y = local.y;
+                $scope.stage.update();
+              });
+
+
+              $scope.questionText[key].on("pressup", function (evt) {
+                console.log("up");
+
+                if ($scope.activityData.completed) {
+                  return;
+                }
+
+                if (window.cordova && window.cordova.platformId !== "browser") {
+                  $scope.sounds["drop"].play();
+                }
+
+                var collisionDetectedQuestion = collision(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
+
+                if (collisionDetectedQuestion !== -1) {
+
+                  $scope.questionText[key].x = $scope.questionText[key].startingPointX;
+                  $scope.questionText[key].y = $scope.questionText[key].startingPointY;
+
+                  placeAnswer(_.findIndex($scope.activityData.answers, {
+                    "text": $scope.questionText[key].text
+                  }), collisionDetectedQuestion);
+
+                  $scope.activityData.questions[key].userAnswerLabel = "";
+                  $scope.activityData.questions[key].userAnswer = "";
+                  $scope.questionText[key].text = userChoice;
+                } else {
+                  $scope.answerText[_.findIndex($scope.activityData.answers, {
+                    "text": $scope.questionText[key].text
+                  })].visible = true;
+
+                  $scope.answerText[_.findIndex($scope.activityData.answers, {
+                    "text": $scope.questionText[key].text
+                  })].x = $scope.answerText[_.findIndex($scope.activityData.answers, {
+                    "text": $scope.questionText[key].text
+                  })].startingPointX;
+
+                  $scope.answerText[_.findIndex($scope.activityData.answers, {
+                    "text": $scope.questionText[key].text
+                  })].y = $scope.answerText[_.findIndex($scope.activityData.answers, {
+                    "text": $scope.questionText[key].text
+                  })].startingPointY;
+
+                  $scope.activityData.questions[key].userAnswerLabel = "";
+                  $scope.activityData.questions[key].userAnswer = "";
+                  $scope.questionText[key].text = userChoice;
+                  $scope.questionText[key].x = $scope.questionText[key].startingPointX;
+                  $scope.questionText[key].y = $scope.questionText[key].startingPointY;
+                }
+
+
+                $scope.stage.update();
+              });
+
+
+              waterfallCallback();
+
+            });
+
+          });
+
+          /******** ANSWERS ********/
+          var answerWaterfallFunctions = [];
+          var answerY = backgroundPosition.y + (backgroundPosition.height / 5);
+          var answerHeight = 530 * scale / $scope.activityData.answers.length;
+
+          console.log("answerHeight", answerHeight);
+
+          //Populating container with answers
+          _.each($scope.activityData.answers, function (answer, key, list) {
+            //Filling the waterfall
+            answerWaterfallFunctions.push(function (waterfallCallback) {
+
+              $scope.answerText[key] = new createjs.Text(answer.text, "18px Arial", "blue");
+              $scope.answerText[key].textBaseline = "alphabetic";
+              $scope.answerText[key].x = backgroundPosition.x + (backgroundPosition.width / 1.13);
+              $scope.answerText[key].y = answerY;
+
+              $scope.answerText[key].startingPointX = $scope.answerText[key].x;
+              $scope.answerText[key].startingPointY = $scope.answerText[key].y;
+
+              $scope.answerText[key].scaleX = $scope.answerText[key].scaleY = scale;
+              $scope.answerText[key].height = answerHeight;
+              $scope.answerText[key].textAlign = "center";
+
+              var hit = new createjs.Shape();
+              var bounds = $scope.answerText[key].getBounds();
+              hit.graphics.beginFill("yellow").drawRect(bounds.x, bounds.y, bounds.width * 1.5, bounds.height * 1.5);
+              $scope.answerText[key].hitArea = hit;
+
+              $scope.stage.addChild($scope.answerText[key]);
+              $scope.stage.update();
+
+              answerY += answerHeight;
+
+              $scope.answerText[key].on("mousedown", function (evt) {
+
+                if ($scope.activityData.completed) {
+                  return;
+                }
+
+                if (window.cordova && window.cordova.platformId !== "browser") {
+                  $scope.sounds["drag"].play();
+                }
+
+                var global = $scope.stage.localToGlobal(this.x, this.y);
+                this.offset = {
+                  'x': global.x - evt.stageX,
+                  'y': global.y - evt.stageY
+                };
+                this.global = {
+                  'x': global.x,
+                  'y': global.y
+                };
+              });
+
+              /*DRAG AND DROP EVENT*/
+              $scope.answerText[key].on("pressmove", function (evt) {
+                if ($scope.activityData.completed) {
+                  return;
+                }
+
+                var local = $scope.stage.globalToLocal(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
+                this.x = local.x;
+                this.y = local.y;
+                $scope.stage.update();
+              });
+
+
+              $scope.answerText[key].on("pressup", function (evt) {
+                console.log("up");
+
+                if ($scope.activityData.completed) {
+                  return;
+                }
+                if (window.cordova && window.cordova.platformId !== "browser") {
+                  $scope.sounds["drop"].play();
+                }
+                var collisionDetectedQuestion = collision(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
+
+                if (collisionDetectedQuestion !== -1) {
+
+                  placeAnswer(key, collisionDetectedQuestion);
+
+                } else {
+                  createjs.Tween.get(this, {loop: false})
+                    .to({x: this.startingPointX, y: this.startingPointY}, 200, createjs.Ease.getPowIn(2));
+                  $scope.stage.update()
+                }
+              });
+
+              $scope.stage.update();
+              waterfallCallback();
+
+            });
+          });
+
+
+          async.waterfall(waterfallFunctions, function (callback) {
+            console.log("Questions Inserted!");
+
+            /* ------------------------------------------ Lesson Title ---------------------------------------------- */
+
+
+            var lessonTitle = new createjs.Text($rootScope.selectedLesson.lessonTitle, "27px Arial", "yellow");
+
+            /*background.scaleX = background.scaleY = scale;*/
+            lessonTitle.scaleX = lessonTitle.scaleY = scale;
+            lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 27);
+            lessonTitle.y = backgroundPosition.y + (backgroundPosition.height / 1.04);
+            lessonTitle.textBaseline = "alphabetic";
+
+            $scope.stage.addChild(lessonTitle);
+            $scope.stage.update();
+
+            /********************************** BUTTONS ***********************************/
+
+            async.parallel([function (callback) {
+              /*RESTART BUTTON*/
+              $http.get($rootScope.rootDir + "data/assets/lesson_restart_button_sprite.json")
+                .success(function (response) {
+                  //Reassigning images with the rest of resource
+                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  var returnButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  var returnButton = new createjs.Sprite(returnButtonSpriteSheet, "normal");
+
+                  returnButton.addEventListener("mousedown", function (event) {
+                    console.log("mousedown event on a button !");
+                    returnButton.gotoAndPlay("onSelection");
+                    $scope.stage.update();
+                  });
+
+                  returnButton.addEventListener("pressup", function (event) {
+                    console.log("pressup event!");
+                    returnButton.gotoAndPlay("normal");
+
+                    //action
+                    restart();
+
+                  });
+                  returnButton.scaleX = returnButton.scaleY = scale;
+                  returnButton.x = backgroundPosition.x + (backgroundPosition.width / 3.1);
+                  returnButton.y = backgroundPosition.y + (backgroundPosition.height / 1.055);
+                  $scope.stage.addChild(returnButton);
+                  $scope.stage.update();
+                  callback();
+                })
+                .error(function (error) {
+                  callback();
+                  console.log("Error on getting json data for return button...", error);
+
+                });
+            }, function (callback) {
+              /*CHECK BUTTON*/
+              $http.get($rootScope.rootDir + "data/assets/lesson_check_button_sprite.json")
+                .success(function (response) {
+                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  var checkButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  $scope.checkButton = new createjs.Sprite(checkButtonSpriteSheet, "normal");
+                  $scope.checkButton.alpha = 1;
+                  $scope.checkButton.addEventListener("mousedown", function (event) {
+                    console.log("mousedown event on a button !");
+                    if (!$scope.activityData.completed) {
+                      $scope.checkButton.gotoAndPlay("onSelection");
+                    }
+                    $scope.stage.update();
+                  });
+                  $scope.checkButton.addEventListener("pressup", function (event) {
+                    console.log("pressup event!");
+
+                    if (!$scope.activityData.completed) {
+                      $scope.checkButton.gotoAndPlay("normal");
+                      check();
+                    }
+                  });
+                  $scope.checkButton.scaleX = $scope.checkButton.scaleY = scale;
+                  $scope.checkButton.x = backgroundPosition.x + (backgroundPosition.width / 1.5);
+                  $scope.checkButton.y = backgroundPosition.y + (backgroundPosition.height / 1.055);
+                  $scope.stage.addChild($scope.checkButton);
+                  $scope.stage.update();
+                  callback();
+                })
+                .error(function (error) {
+
+                  console.log("Error on getting json data for check button...", error);
+                  callback();
+                });
+            }, function (callback) {
+              /*NEXT BUTTON*/
+              $http.get($rootScope.rootDir + "data/assets/lesson_next_button_sprite.json")
+                .success(function (response) {
+                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  var nextButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  $scope.nextButton = new createjs.Sprite(nextButtonSpriteSheet, "normal");
+                  $scope.nextButton.alpha = 0.5;
+
+                  $scope.nextButton.addEventListener("mousedown", function (event) {
+                    console.log("mousedown event on a button !", $scope.activityData.completed);
+                    if ($scope.activityData.completed) {
+                      $scope.nextButton.gotoAndPlay("onSelection");
+                    }
+                    $scope.stage.update();
+                  });
+                  $scope.nextButton.addEventListener("pressup", function (event) {
+                    console.log("pressup event!");
+
+
+                    if ($scope.activityData.completed) {
+                      $scope.nextButton.gotoAndPlay("normal");
+                      next();
+                    }
+
+                  });
+                  $scope.nextButton.scaleX = $scope.nextButton.scaleY = scale;
+                  $scope.nextButton.x = backgroundPosition.x + (backgroundPosition.width / 1.13);
+                  $scope.nextButton.y = backgroundPosition.y + (backgroundPosition.height / 1.055);
+                  $scope.stage.addChild($scope.nextButton);
+                  $scope.stage.update();
+                  callback();
+                })
+                .error(function (error) {
+
+                  console.log("Error on getting json data for check button...", error);
+                  callback();
+                });
+            }], function (err, response) {
+
+              async.waterfall(answerWaterfallFunctions, function (callback) {
+                console.log("answers Inserted!");
+
+                _.each($scope.activityData.questions, function (question, key, value) {
+                  console.log(key + " User Answer", question.userAnswerLabel);
+                  if (question.userAnswerLabel) {
+
+                    placeAnswer(_.findIndex($scope.activityData.answers, {
+                      "answer": question.userAnswerLabel
+                    }), key);
+                  }
                 });
 
-                //Assigning configured response to activityData
-                activityData = response;
-
-                addScoreText();
-
-                //Saving it to localStorage
-                window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify(activityData));
-
-                console.log("Newly created activityData with userAnswer attribute: ", activityData);
-
-              })
-              .error(function (error) {
-                console.log("Error on getting json for the url...:", error);
+                check();
               });
-          }
+            });
+
+
+          });
+
+
+        };
+        /************************************** Initializing Page **************************************/
+
+        console.log("Searching in localStorage fo activity: ", activityNameInLocalStorage);
+        if (window.localStorage.getItem(activityNameInLocalStorage)) {
+          $scope.activityData = JSON.parse(window.localStorage.getItem(activityNameInLocalStorage));
+          init();
+
+        } else {
+          /*Getting the json object for the activity*/
+          var activityUrl = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/" + $rootScope.activityFolder + "/draganddrop.json";
+          console.log("trying to get json for the url: ", activityUrl);
+          $http.get(activityUrl)
+            .success(function (response) {
+              console.log("Success on getting json for the url. The response object is: ", response);
+
+              //Assigning configured response to activityData
+              $scope.activityData = response;
+              $scope.activityData.attempts = 0;
+
+              /*Adding the userAnswer attribute to response object before assigning it to activityData*/
+              _.each($scope.activityData.questions, function (question, key, value) {
+                $scope.activityData.questions[key].userAnswerLabel = "";
+                $scope.activityData.questions[key].userAnswer = "";
+              });
+              init();
+              //Saving it to localStorage
+              window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+            })
+            .error(function (error) {
+              console.log("Error on getting json for the url...:", error);
+            });
         }
 
 
+        function completedActivity() {
+          console.log("Completed Activity!");
+          $scope.nextButton.alpha = 1;
+          $scope.checkButton.alpha = 0.5;
+          $scope.activityData.completed = true;
+          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+        };
+
         /* ------------------------------------------ TITLE ---------------------------------------------- */
 
-        console.log("Title: ", activityData.title);
-        var title = new createjs.Text(activityData.title, "27px Arial", "white");
+        console.log("Title: ", $rootScope.selectedLesson.title);
+        var title = new createjs.Text($rootScope.selectedLesson.title, "27px Arial", "white");
 
         /*background.scaleX = background.scaleY = scale;*/
         title.scaleX = title.scaleY = scale;
@@ -256,341 +685,123 @@ angular.module("bookbuilder2")
         $scope.stage.update();
 
 
-        /* ------------------------------------------ Lesson Title ---------------------------------------------- */
-
-
-        var lessonTitle = new createjs.Text($rootScope.selectedLesson.lessonTitle, "27px Arial", "yellow");
-
-        /*background.scaleX = background.scaleY = scale;*/
-        lessonTitle.scaleX = lessonTitle.scaleY = scale;
-        lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 10);
-        lessonTitle.y = backgroundPosition.y + (backgroundPosition.height / 1.05);
-        lessonTitle.textBaseline = "alphabetic";
-
-        $scope.stage.addChild(lessonTitle);
-        $scope.stage.update();
-
-
-        /* ---------------------------------- Description -----------------------------------------*/
-
-        console.log(activityData.description);
-        var descriptionText = new createjs.Text(activityData.description, "17px Arial", "white");
-
-        /*background.scaleX = background.scaleY = scale;*/
-        descriptionText.scaleX = descriptionText.scaleY = scale;
-        descriptionText.x = backgroundPosition.x + (backgroundPosition.width / 1.3);
-        descriptionText.y = backgroundPosition.y + (backgroundPosition.height / 8.7);
-        descriptionText.textBaseline = "alphabetic";
-
-        $scope.stage.addChild(descriptionText);
-        $scope.stage.update();
-
-
-        /* ------------------------------------------ QUESTIONS & ANSWERS ---------------------------------------------- */
-
-        /********** QUESTIONS *********/
-        var questionsContainer = new createjs.Container();
-        /*It's important too define containers height before start calculating buttons*/
-        questionsContainer.width = 700;
-        questionsContainer.height = 530;
-
-        questionsContainer.scaleX = questionsContainer.scaleY = scale;
-
-        questionsContainer.x = backgroundPosition.x + (backgroundPosition.width / 30);
-        questionsContainer.y = backgroundPosition.y + (backgroundPosition.height / 30);
-
-        $scope.stage.addChild(questionsContainer);
-        $scope.stage.update();
-
-
-        /*//Starting and making it transparent
-         var testGraphics = new createjs.Graphics().beginFill("red");
-
-
-         //Drawing the shape !!!NOTE Every optimization before drawRoundRect
-         testGraphics.drawRoundRect(0, 0, questionsContainer.width, questionsContainer.height, 1);
-
-         var testShape = new createjs.Shape(testGraphics);
-         testShape.setTransform(questionsContainer.x, questionsContainer.y, scale, scale, 0, 0, 0, 0, 0);
-         questionsContainer.addChild(testShape);
-         $scope.stage.update();*/
-
-
-        var userChoice = "__________";
-
-        var waterfallFunctions = [];
-
-        /*Starting to filling questions*/
-        var questionHeight = 100;
-        var questionY = backgroundPosition.y + (backgroundPosition.height / 19);
-
-        _.each(activityData.questions, function (question, key, list) {
-
-          //Filling the waterfall
-          waterfallFunctions.push(function (waterfallCallback) {
-
-            var formattedQuestion = question.pretext + userChoice + question.postext;
-            console.log("Question that it will be added: ", formattedQuestion);
-
-            var questionText = new createjs.Text(formattedQuestion, "23px Arial", "blue");
-
-            /*background.scaleX = background.scaleY = scale;*/
-            questionText.scaleX = questionText.scaleY = scale;
-            questionText.x = backgroundPosition.x + (backgroundPosition.width / 25);
-            questionText.y = questionY;
-            questionText.textBaseline = "alphabetic";
-            questionText.maxWidth = questionsContainer.width;
-            questionText.lineHeight = 30;
-
-            questionY += questionHeight;
-
-            questionsContainer.addChild(questionText);
-            $scope.stage.update();
-
-            waterfallCallback();
-
-          });
-
-        });
-
-        async.waterfall(waterfallFunctions, function (callback) {
-          console.log("Questions Inserted!");
-        });
-
-
-        /******** ANSWERS ********/
-        var answersContainer = new createjs.Container();
-        /*It's important too define containers height before start calculating buttons*/
-        answersContainer.width = 250;
-        answersContainer.height = 530;
-        answersContainer.scaleX = answersContainer.scaleY = scale;
-        answersContainer.x = backgroundPosition.x + (backgroundPosition.width / 2.75);
-        answersContainer.y = backgroundPosition.y + (backgroundPosition.height / 30);
-
-
-        $scope.stage.addChild(answersContainer);
-        $scope.stage.update();
-
-
-        var answerWaterfallFunctions = [];
-
-        var answerY = 100;
-        var answerHeight = backgroundPosition.y + (backgroundPosition.height / 40);
-
-        //Populating container with answers
-        _.each(activityData.answers, function (answer, key, list) {
-          //Filling the waterfall
-          answerWaterfallFunctions.push(function (waterfallCallback) {
-
-
-            var answerText = new createjs.Text(answer.text, "18px Arial", "blue");
-
-            /*background.scaleX = background.scaleY = scale;*/
-            answerText.x = answersContainer.x + 160;
-            answerText.y = answerY;
-            answerText.textBaseline = "alphabetic";
-            answerText.maxWidth = answersContainer.width;
-            answerText.regX = answerText.width / 2;
-            answerText.textAlign = "center";
-
-            answerY += answerHeight;
-
-            /*DRAG AND DROP EVENT*/
-            answerText.on("pressmove", function (evt) {
-
-              console.log("this: ", this);
-
-              var local = $scope.stage.globalToLocal(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
-              this.x = local.x;
-              this.y = local.y;
-
-              $scope.$scope.stage.update();
-            });
-
-
-            answerText.on("pressup", function (evt) {
-              console.log("up");
-            });
-
-            answersContainer.addChild(answerText);
-            $scope.stage.update();
-
-            waterfallCallback();
-
-          });
-        });
-
-        async.waterfall(answerWaterfallFunctions, function (callback) {
-          console.log("answers Inserted!");
-        });
-
-        /********************************** BUTTONS ***********************************/
-
-        /*RESTART BUTTON*/
-        $http.get($rootScope.rootDir + "data/assets/lesson_restart_button_sprite.json")
-          .success(function (response) {
-            //Reassigning images with the rest of resource
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-            var returnButtonSpriteSheet = new createjs.SpriteSheet(response);
-            var returnButton = new createjs.Sprite(returnButtonSpriteSheet, "normal");
-
-            returnButton.addEventListener("mousedown", function (event) {
-              console.log("mousedown event on a button !");
-              returnButton.gotoAndPlay("onSelection");
-              $scope.stage.update();
-            });
-
-            returnButton.addEventListener("pressup", function (event) {
-              console.log("pressup event!");
-              returnButton.gotoAndPlay("normal");
-
-              //action
-
-            });
-            returnButton.scaleX = returnButton.scaleY = scale;
-            returnButton.x = backgroundPosition.x + (backgroundPosition.width / 3.1);
-            returnButton.y = backgroundPosition.y + (backgroundPosition.height / 1.063);
-            $scope.stage.addChild(returnButton);
-            $scope.stage.update();
-          })
-          .error(function (error) {
-
-            console.log("Error on getting json data for return button...", error);
-
-          });
-
-
-        /*CHECK BUTTON*/
-        $http.get($rootScope.rootDir + "data/assets/lesson_check_button_sprite.json")
-          .success(function (response) {
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-            var checkButtonSpriteSheet = new createjs.SpriteSheet(response);
-            var checkButton = new createjs.Sprite(checkButtonSpriteSheet, "normal");
-            checkButton.addEventListener("mousedown", function (event) {
-              console.log("mousedown event on a button !");
-              checkButton.gotoAndPlay("onSelection");
-              $scope.stage.update();
-            });
-            checkButton.addEventListener("pressup", function (event) {
-              console.log("pressup event!");
-              checkButton.gotoAndPlay("normal");
-
-              //action
-
-            });
-            checkButton.scaleX = checkButton.scaleY = scale;
-            checkButton.x = backgroundPosition.x + (backgroundPosition.width / 1.5);
-            checkButton.y = backgroundPosition.y + (backgroundPosition.height / 1.063);
-            $scope.stage.addChild(checkButton);
-            $scope.stage.update();
-          })
-          .error(function (error) {
-            console.log("Error on getting json data for check button...", error);
-          });
-
-
-        /*NEXT BUTTON*/
-        $http.get($rootScope.rootDir + "data/assets/lesson_next_button_sprite.json")
-          .success(function (response) {
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-            var nextButtonSpriteSheet = new createjs.SpriteSheet(response);
-            var nextButton = new createjs.Sprite(nextButtonSpriteSheet, "normal");
-            nextButton.addEventListener("mousedown", function (event) {
-              console.log("mousedown event on a button !");
-              nextButton.gotoAndPlay("onSelection");
-              $scope.stage.update();
-            });
-            nextButton.addEventListener("pressup", function (event) {
-              console.log("pressup event!");
-              nextButton.gotoAndPlay("normal");
-
-              //action
-
-            });
-            nextButton.scaleX = nextButton.scaleY = scale;
-            nextButton.x = backgroundPosition.x + (backgroundPosition.width / 1.13);
-            nextButton.y = backgroundPosition.y + (backgroundPosition.height / 1.063);
-            $scope.stage.addChild(nextButton);
-            $scope.stage.update();
-          })
-          .error(function (error) {
-
-            console.log("Error on getting json data for check button...", error);
-
-          });
-
-
         /********************************** FUNCTIONS ***********************************/
         /*Function that restarts the exercise*/
         function restart() {
+          $scope.nextButton.alpha = 0.5;
+          $scope.nextButton.gotoAndPlay("normal");
 
-          _.each(activityData.questions, function (question, key, value) {
-            question.userAnswer = "";
+          $scope.checkButton.alpha = 1;
+          $scope.checkButton.gotoAndPlay("normal");
+
+          $scope.activityData.completed = false;
+          $scope.activityData.attempts += +1;
+
+          _.each($scope.activityData.questions, function (question, key, value) {
+            $scope.activityData.questions[key].userAnswerLabel = "";
+            $scope.activityData.questions[key].userAnswer = "";
+            $scope.questionText[key].text = userChoice;
+            $scope.answerText[key].visible = true;
+            createjs.Tween.get($scope.answerText[key], {loop: false})
+              .to({
+                x: $scope.answerText[key].startingPointX,
+                y: $scope.answerText[key].startingPointY
+              }, 200, createjs.Ease.getPowIn(2));
+
+            $scope.questionText[key].color = "blue";
+            $scope.questionText[key].x = $scope.underlinedText[key].getTransformedBounds().x + $scope.underlinedText[key].getTransformedBounds().width / 2 - $scope.questionText[key].getTransformedBounds().width / 2;
           });
-
-          //Saving to localStorage
-          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify(activityData));
-        }
-
-        /*Function that checks user answers and calls score function and showAnswers function*/
-        function check() {
           score();
-          showAnswers()
         }
 
+        function check() {
+
+          if (_.findWhere($scope.activityData.questions, {
+              "userAnswerLabel": ""
+            })) {
+            console.log("Please fill all the gaps!");
+            Toast.show("Please fill all the gaps!");
+            return;
+          } else {
+            score();
+            completedActivity();
+          }
+        };
 
         /*Function that calculates score*/
         function score() {
 
+          console.log("$scope.activityData", $scope.activityData);
+
           var rightAnswers = 0;
-          _.each(activityData.questions, function (question, key, value) {
-            if (question.userAnswer === question.answer) {
-              rightAnswers++;
+          _.each($scope.activityData.questions, function (question, key, value) {
+            if (question.userAnswerLabel === question.answer) {
+
+              if (!$scope.activityData.questions[key].userAnswer) {
+                $scope.activityData.questions[key].userAnswer = question.answer;
+                $scope.questionText[key].color = "green";
+                rightAnswers++;
+              } else if ($scope.activityData.questions[key].userAnswer !== $scope.activityData.questions[key].answer) {
+                $scope.questionText[key].color = "red";
+              } else {
+                $scope.questionText[key].color = "green";
+                rightAnswers++;
+              }
+
+            } else if (question.userAnswerLabel) {
+              if (!$scope.activityData.questions[key].userAnswer) {
+                $scope.activityData.questions[key].userAnswer = question.userAnswerLabel;
+              }
+              placeAnswer(_.findIndex($scope.activityData.answers, {
+                "answer": question.answer
+              }), key);
+              $scope.questionText[key].color = "red";
             }
           });
 
-          return "Score: " + rightAnswers + " / " + activityData.questions.length;
-        }
+          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
 
-
-        function addScoreText() {
-          console.log("Title: ", score());
-          var scoreText = new createjs.Text(score(), "27px Arial", "white");
-
-          /*background.scaleX = background.scaleY = scale;*/
-          scoreText.scaleX = scoreText.scaleY = scale;
-          scoreText.x = backgroundPosition.x + (backgroundPosition.width / 1.3);
-          scoreText.y = backgroundPosition.y + (backgroundPosition.height / 15);
-          scoreText.textBaseline = "alphabetic";
-
-          $scope.stage.addChild(scoreText);
+          $scope.scoreText.text = "Score: " + rightAnswers + " / " + $scope.activityData.questions.length;
           $scope.stage.update();
-
         }
 
+        function placeAnswer(answerKey, questionKey) {
 
-        /*Function that fills activity questions with the right answers*/
-        function showAnswers() {
-          _.each(activityData.questions, function (question, key, value) {
-            question.userAnswer = question.answer;
-          });
-        }
+          console.log("answerKey", answerKey);
+          console.log("questionKey", questionKey);
+
+          $scope.answerText[answerKey].visible = false;
+          $scope.questionText[questionKey].text = $scope.activityData.answers[answerKey].text;
+          $scope.activityData.questions[questionKey].userAnswerLabel = $scope.activityData.answers[answerKey].answer;
+          $scope.questionText[questionKey].color = "black";
+          $scope.questionText[questionKey].x = $scope.underlinedText[questionKey].getTransformedBounds().x + $scope.underlinedText[questionKey].getTransformedBounds().width / 2 - $scope.questionText[questionKey].getTransformedBounds().width / 2;
+          $scope.stage.update();
+          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+        };
 
 
         /*Function that goes to the next activity*/
         function next() {
-
+          var index = _.findIndex($rootScope.selectedLesson.lessonMenu, {
+            "activityFolder": $rootScope.activityFolder
+          });
+          if (index < $rootScope.selectedLesson.lessonMenu.length - 1) {
+            $state.go($rootScope.selectedLesson.lessonMenu[index + 1].activityTemplate);
+          } else {
+            $state.go("results");
+          }
         }
 
 
-        function collision() {
+        function collision(x, y) {
+          for (var i = 0; i < $scope.activityData.questions.length; i++) {
+            var bounds = $scope.questionText[i].getTransformedBounds();
+            if (ionic.DomUtil.rectContains(x, y, bounds.x, bounds.y, bounds.x + bounds.width, bounds.y + bounds.height) && $scope.questionText[i].text === userChoice) {
+              return i;
+            }
+          }
+          return -1;
         }
-
-
-        function playSound() {
-
-        }
-
 
       });//end of image on complete
     }, 500);//end of timeout

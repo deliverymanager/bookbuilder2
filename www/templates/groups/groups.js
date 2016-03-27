@@ -10,6 +10,12 @@ angular.module("bookbuilder2")
       "background-size": "cover"
     };
 
+    if (window.cordova && window.cordova.platformId !== "browser") {
+      $rootScope.rootDir = window.cordova.file.dataDirectory;
+    } else {
+      $rootScope.rootDir = "";
+    }
+
     $timeout(function () {
 
       var PIXEL_RATIO = (function () {
@@ -120,7 +126,7 @@ angular.module("bookbuilder2")
               response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
               var exitButtonSpriteSheet = new createjs.SpriteSheet(response);
               var exitButton = new createjs.Sprite(exitButtonSpriteSheet, "normal");
-              //exitButton.visible = ionic.Platform.isAndroid();
+              exitButton.visible = ionic.Platform.isAndroid();
 
               exitButton.addEventListener("mousedown", function (event) {
                 console.log("mousedown event on a button !");
@@ -669,5 +675,10 @@ angular.module("bookbuilder2")
       });
 
     };
+
+    $ionicPlatform.onHardwareBackButton(function () {
+      ionic.Platform.exitApp();
+    });
+
 
   });
