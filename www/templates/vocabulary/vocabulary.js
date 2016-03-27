@@ -537,30 +537,30 @@ angular.module("bookbuilder2")
                 /*CREATION OF MULTI COLUMN CONTAINERS*/
                 function createMultiColumnContainers() {
 
-                    /*VERBS CONTAINER*/
                     $scope.verbsContainer = new createjs.Container();
 
-                    console.log("Creating verbsContainer...");
+                    console.log("Creating  $scope.verbsContainer...");
 
-                    $scope.verbsContainer.width = 300;
-                    $scope.verbsContainer.height = backgroundPosition.height / 1.15;
+                    $scope.verbsContainer.width = backgroundPosition.width / 2.6;
+                    $scope.verbsContainer.height = backgroundPosition.height / 2.5;
                     $scope.verbsContainer.scaleX = $scope.verbsContainer.scaleY = scale;
-                    $scope.verbsContainer.x = backgroundPosition.x + 260;
-                    $scope.verbsContainer.y = backgroundPosition.y + 5;
+                    $scope.verbsContainer.x = backgroundPosition.x + (backgroundPosition.width / 33);
+                    $scope.verbsContainer.y = backgroundPosition.y + (backgroundPosition.height / 50);
 
                     /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-                    /*var testGraphics5 = new createjs.Graphics().beginFill("blue");
-                     //Drawing the shape !!!NOTE Every optimization before drawRoundRect
-                     testGraphics5.drawRoundRect(0, 0, $scope.greekWordsContainer.width, $scope.greekWordsContainer.height, 1);
+                    var testGraphics4 = new createjs.Graphics().beginFill("darkred");
+                    //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+                    testGraphics4.drawRoundRect(0, 0, $scope.verbsContainer.width, $scope.verbsContainer.height, 1);
 
-                     var testShape5 = new createjs.Shape(testGraphics5);
-                     testShape5.setTransform($scope.greekWordsContainer.x, $scope.greekWordsContainer.y, scale, scale, 0, 0, 0, 0, 0);
-                     $scope.greekWordsContainer.addChild(testShape5);
-                     stage.update();*/
+                    var testShape4 = new createjs.Shape(testGraphics4);
+                    testShape4.setTransform($scope.verbsContainer.x, $scope.verbsContainer.y, scale, scale, 0, 0, 0, 0, 0);
+                    $scope.verbsContainer.addChild(testShape4);
+                    stage.update();
                     /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
                     stage.addChild($scope.verbsContainer);
                     stage.update();
+
 
 
                     /*NOUNS CONTAINER*/
@@ -568,25 +568,26 @@ angular.module("bookbuilder2")
 
                     console.log("Creating  $scope.nounsContainer...");
 
-                    $scope.nounsContainer.width = 30;
-                    $scope.nounsContainer.height = backgroundPosition.height / 1.15;
+                    $scope.nounsContainer.width = backgroundPosition.width / 2.6;
+                    $scope.nounsContainer.height = backgroundPosition.height / 2.5;
                     $scope.nounsContainer.scaleX = $scope.nounsContainer.scaleY = scale;
-                    $scope.nounsContainer.x = backgroundPosition.x + 330;
-                    $scope.nounsContainer.y = backgroundPosition.y + 5;
+                    $scope.nounsContainer.x = backgroundPosition.x + (backgroundPosition.width / 4.5);
+                    $scope.nounsContainer.y = backgroundPosition.y + (backgroundPosition.height / 50);
 
                     /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-                    /*var testGraphics4 = new createjs.Graphics().beginFill("yellow");
-                     //Drawing the shape !!!NOTE Every optimization before drawRoundRect
-                     testGraphics4.drawRoundRect(0, 0, $scope.equalsSignContainer.width, $scope.equalsSignContainer.height, 1);
+                    var testGraphics3 = new createjs.Graphics().beginFill("orange");
+                    //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+                    testGraphics3.drawRoundRect(0, 0, $scope.nounsContainer.width, $scope.nounsContainer.height, 1);
 
-                     var testShape4 = new createjs.Shape(testGraphics4);
-                     testShape4.setTransform($scope.equalsSignContainer.x, $scope.equalsSignContainer.y, scale, scale, 0, 0, 0, 0, 0);
-                     $scope.equalsSignContainer.addChild(testShape4);
-                     stage.update();*/
+                    var testShape3 = new createjs.Shape(testGraphics3);
+                    testShape3.setTransform($scope.nounsContainer.x, $scope.nounsContainer.y, scale, scale, 0, 0, 0, 0, 0);
+                    $scope.nounsContainer.addChild(testShape3);
+                    stage.update();
                     /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
                     stage.addChild($scope.nounsContainer);
                     stage.update();
+
 
 
                     /*NOUN CONTAINER*/
@@ -594,25 +595,26 @@ angular.module("bookbuilder2")
 
                     console.log("Creating  $scope.nounContainer...");
 
-                    $scope.nounContainer.width = 300;
-                    $scope.nounContainer.height = backgroundPosition.height / 1.15;
+                    $scope.nounContainer.width = backgroundPosition.width / 2.6;
+                    $scope.nounContainer.height = backgroundPosition.height / 2.5;
                     $scope.nounContainer.scaleX = $scope.nounContainer.scaleY = scale;
-                    $scope.nounContainer.x = backgroundPosition.x + 105;
-                    $scope.nounContainer.y = backgroundPosition.y + 5;
+                    $scope.nounContainer.x = backgroundPosition.x + (backgroundPosition.width / 33);
+                    $scope.nounContainer.y = backgroundPosition.y + (backgroundPosition.height / 4.5);
 
                     /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-                    /*var testGraphics3 = new createjs.Graphics().beginFill("darkred");
-                     //Drawing the shape !!!NOTE Every optimization before drawRoundRect
-                     testGraphics3.drawRoundRect(0, 0, $scope.englishWordsContainer.width, $scope.englishWordsContainer.height, 1);
+                    var testGraphics1 = new createjs.Graphics().beginFill("yellow");
+                    //Drawing the shape !!!NOTE Every optimization before drawRoundRect
+                    testGraphics1.drawRoundRect(0, 0, $scope.nounContainer.width, $scope.nounContainer.height, 1);
 
-                     var testShape3 = new createjs.Shape(testGraphics3);
-                     testShape3.setTransform($scope.englishWordsContainer.x, $scope.englishWordsContainer.y, scale, scale, 0, 0, 0, 0, 0);
-                     $scope.englishWordsContainer.addChild(testShape3);
-                     stage.update();*/
+                    var testShape1 = new createjs.Shape(testGraphics1);
+                    testShape1.setTransform($scope.nounContainer.x, $scope.nounContainer.y, scale, scale, 0, 0, 0, 0, 0);
+                    $scope.nounContainer.addChild(testShape1);
+                    stage.update();
                     /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
                     stage.addChild($scope.nounContainer);
                     stage.update();
+
 
 
                     /*ADJECTIVE CONTAINER*/
@@ -620,21 +622,21 @@ angular.module("bookbuilder2")
 
                     console.log("Creating  $scope.adjectiveContainer...");
 
-                    $scope.adjectiveContainer.width = 40;
-                    $scope.adjectiveContainer.height = backgroundPosition.height / 1.15;
-                    $scope.adjectiveContainer.scaleX = $scope.indexContainer.scaleY = scale;
-                    $scope.adjectiveContainer.x = backgroundPosition.x + 85;
-                    $scope.adjectiveContainer.y = backgroundPosition.y + 5;
+                    $scope.adjectiveContainer.width = backgroundPosition.width / 2.6;
+                    $scope.adjectiveContainer.height = backgroundPosition.height / 2.5;
+                    $scope.adjectiveContainer.scaleX = $scope.adjectiveContainer.scaleY = scale;
+                    $scope.adjectiveContainer.x = backgroundPosition.x + (backgroundPosition.width / 4.5);
+                    $scope.adjectiveContainer.y = backgroundPosition.y + (backgroundPosition.height / 4.5);
 
                     /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-                    /*var testGraphics2 = new createjs.Graphics().beginFill("orangered");
+                    var testGraphics2 = new createjs.Graphics().beginFill("orangered");
                      //Drawing the shape !!!NOTE Every optimization before drawRoundRect
-                     testGraphics2.drawRoundRect(0, 0, $scope.indexContainer.width, $scope.indexContainer.height, 1);
+                     testGraphics2.drawRoundRect(0, 0, $scope.adjectiveContainer.width, $scope.adjectiveContainer.height, 1);
 
                      var testShape2 = new createjs.Shape(testGraphics2);
-                     testShape2.setTransform($scope.indexContainer.x, $scope.indexContainer.y, scale, scale, 0, 0, 0, 0, 0);
-                     $scope.indexContainer.addChild(testShape2);
-                     stage.update();*/
+                     testShape2.setTransform($scope.adjectiveContainer.x, $scope.adjectiveContainer.y, scale, scale, 0, 0, 0, 0, 0);
+                     $scope.adjectiveContainer.addChild(testShape2);
+                     stage.update();
                     /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
                     stage.addChild($scope.adjectiveContainer);
@@ -667,6 +669,11 @@ angular.module("bookbuilder2")
                         $scope.equalsSignPhrasesContainer.visible = false;
                         $scope.englishPhrasesContainer.visible = false;
 
+                        $scope.verbsContainer.visible = false;
+                        $scope.nounsContainer.visible = false;
+                        $scope.nounContainer.visible = false;
+                        $scope.adjectiveContainer.visible = false;
+
                         $scope.buttonsContainer.visible = true;
                         $scope.indexContainer.visible = true;
                         $scope.greekWordsContainer.visible = true;
@@ -677,11 +684,26 @@ angular.module("bookbuilder2")
 
                         console.log("Loading Vocabulary's Phrases!");
 
+                        $scope.buttonsContainer.visible = false;
+                        $scope.indexContainer.visible = false;
+                        $scope.greekWordsContainer.visible = false;
+                        $scope.equalsSignContainer.visible = false;
+                        $scope.englishWordsContainer.visible = false;
+
+                        $scope.verbsContainer.visible = false;
+                        $scope.nounsContainer.visible = false;
+                        $scope.nounContainer.visible = false;
+                        $scope.adjectiveContainer.visible = false;
+
                         $scope.buttonsPhrasesContainer.visible = true;
                         $scope.indexPhrasesContainer.visible = true;
                         $scope.greekPhrasesContainer.visible = true;
                         $scope.equalsSignPhrasesContainer.visible = true;
                         $scope.englishPhrasesContainer.visible = true;
+
+                    } else {
+
+                        console.log("Loading Derivatives' Phrases!");
 
                         $scope.buttonsContainer.visible = false;
                         $scope.indexContainer.visible = false;
@@ -689,7 +711,16 @@ angular.module("bookbuilder2")
                         $scope.equalsSignContainer.visible = false;
                         $scope.englishWordsContainer.visible = false;
 
-                    } else {
+                        $scope.buttonsPhrasesContainer.visible = false;
+                        $scope.indexPhrasesContainer.visible = false;
+                        $scope.greekPhrasesContainer.visible = false;
+                        $scope.equalsSignPhrasesContainer.visible = false;
+                        $scope.englishPhrasesContainer.visible = false;
+
+                        $scope.verbsContainer.visible = true;
+                        $scope.nounsContainer.visible = true;
+                        $scope.nounContainer.visible = true;
+                        $scope.adjectiveContainer.visible = true;
 
                     }
 
@@ -1237,6 +1268,176 @@ angular.module("bookbuilder2")
                 }//End of loadGreekPhrases function
 
 
+
+
+                /********************************** POPULATING DERIVATIVES CONTAINERS **********************************/
+
+                /*LOAD PHRASES BUTTONS*/
+                function loadPhrasesButtons() {
+
+                    /*Initializing y that will change dynamically for every button*/
+                    var buttonsY = 80;
+
+                    /*Initializing SpriteSheet instances using waterfall*/
+                    async.waterfall([
+                        function (buttonsSpriteSheetCallback) {
+
+                            /*English Button*/
+                            $http.get($rootScope.rootDir + "data/assets/english_small_button_sprite.json")
+                                .success(function (response) {
+                                    console.log("Success on getting json data for english button!");
+                                    response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+
+                                    var enSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
+
+                                    /*Iterating and populating the container*/
+                                    _.each($scope.activityData.phrases, function (phrase, key, list) {
+
+
+                                        /********************* Creating English button *********************/
+                                        var enSmallButton = new createjs.Sprite(enSmallButtonSpriteSheet, "normal");
+
+                                        enSmallButton.addEventListener("mousedown", function (event) {
+                                            console.log("Mouse down event on a button !");
+                                            enSmallButton.gotoAndPlay("onSelection");
+                                            stage.update();
+                                        });
+
+                                        enSmallButton.addEventListener("pressup", function (event) {
+                                            console.log("Press up event!");
+                                            enSmallButton.gotoAndPlay("normal");
+                                            $scope.englishPhrasesBitmaps[phrase.name].visible = !$scope.englishPhrasesBitmaps[phrase.name].visible;
+                                        });
+                                        enSmallButton.x = $scope.buttonsPhrasesContainer.x + 20;
+                                        enSmallButton.y = buttonsY;
+
+                                        $scope.buttonsPhrasesContainer.addChild(enSmallButton);
+                                        /*stage.update();*/
+
+                                        /*** Updating stage and adding more Y before iterating again ***/
+                                        stage.update();
+                                        buttonsY += 20;
+
+                                    });
+
+                                    return buttonsSpriteSheetCallback(null);
+
+                                })
+                                .error(function (error) {
+                                    console.log("Error on getting json data for english button...", error);
+                                    return buttonsSpriteSheetCallback(true, error);
+                                });
+
+                        },
+                        function (buttonsSpriteSheetCallback) {
+
+                            var buttonsY = 80;
+                            /*Greek Button*/
+                            $http.get($rootScope.rootDir + "data/assets/greek_small_button_sprite.json")
+                                .success(function (response) {
+                                    console.log("Success on getting json data for greek button!");
+                                    response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+
+                                    var grSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
+
+                                    /*Iterating and populating the container*/
+                                    _.each($scope.activityData.phrases, function (phrase, key, list) {
+
+                                        /******************** Creating Greek button ********************/
+                                        var grSmallButton = new createjs.Sprite(grSmallButtonSpriteSheet, "normal");
+
+                                        grSmallButton.addEventListener("mousedown", function (event) {
+                                            console.log("mousedown event on a button !");
+                                            grSmallButton.gotoAndPlay("onSelection");
+                                            stage.update();
+                                        });
+
+                                        grSmallButton.addEventListener("pressup", function (event) {
+                                            console.log("pressup event!");
+                                            grSmallButton.gotoAndPlay("normal");
+                                            $scope.greekPhrasesBitmaps[phrase.name].visible = !$scope.greekPhrasesBitmaps[phrase.name].visible;
+
+                                        });
+                                        grSmallButton.x = $scope.buttonsPhrasesContainer.x + 50;
+                                        grSmallButton.y = buttonsY;
+                                        $scope.buttonsPhrasesContainer.addChild(grSmallButton);
+                                        /*stage.update();*/
+
+                                        /*** Updating stage and adding more Y before iterating again ***/
+
+                                        buttonsY += 20;
+
+                                    });
+                                    stage.update();
+                                    return buttonsSpriteSheetCallback(null);
+
+                                })
+                                .error(function (error) {
+                                    console.log("Error on getting json data for greek button...", error);
+                                    return buttonsSpriteSheetCallback(true, error);
+                                });
+
+                        },
+                        function (buttonsSpriteSheetCallback) {
+
+                            var buttonsY = 80;
+                            /*Play Button*/
+                            $http.get($rootScope.rootDir + "data/assets/play_small_button_sprite.json")
+                                .success(function (response) {
+
+                                    console.log("Success on getting json data for play button!");
+                                    response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+
+                                    var playSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
+
+                                    /*Iterating and populating the ccontainer*/
+                                    _.each($scope.activityData.phrases, function (phrase, key, list) {
+
+                                        /*********************Creating Play button*********************/
+                                        var playSmallButton = new createjs.Sprite(playSmallButtonSpriteSheet, "normal");
+                                        playSmallButton.addEventListener("mousedown", function (event) {
+                                            console.log("Mouse down event on a button !");
+                                            playSmallButton.gotoAndPlay("onSelection");
+                                            stage.update();
+                                        });
+
+                                        playSmallButton.addEventListener("pressup", function (event) {
+                                            console.log("Press up event!");
+                                            playSmallButton.gotoAndPlay("normal");
+
+                                        });
+                                        playSmallButton.x = $scope.buttonsPhrasesContainer.x + 80;
+                                        playSmallButton.y = buttonsY;
+                                        /*playSmallButton.x = backgroundPosition.x + (backgroundPosition.width / 3.1);
+                                         playSmallButton.y = backgroundPosition.y + (backgroundPosition.height / 1.063);*/
+                                        $scope.buttonsPhrasesContainer.addChild(playSmallButton);
+
+                                        /*** Updting stage and adding more Y before iterating again ***/
+
+                                        buttonsY += 20;
+
+                                    });
+                                    stage.update();
+                                    return buttonsSpriteSheetCallback(null);
+
+                                })
+                                .error(function (error) {
+                                    console.log("Error on getting json data for play button...", error);
+                                    return buttonsSpriteSheetCallback(true, error);
+                                });
+                        }
+                    ], function (err, result) {
+                        if (err) {
+                            console.error("Error on waterfall process for getting buttons spriteSheets...");
+                        } else {
+                            console.log("Success on waterfall process for getting buttons spriteSheets! Result: ", result);
+                        }
+                    });//End of waterfall
+                }//End of loadPhrasesButtons function
+
+
+
+
                 /********************************** Adding Page Buttons **********************************/
 
                 /* WORDS BUTTON */
@@ -1395,7 +1596,7 @@ angular.module("bookbuilder2")
                                     console.log("Hiding all english phrases...");
                                     _.each($scope.activityData.phrases, function (phrase, key, list) {
 
-                                        $scope.englishWordsBitmaps[phrase.name].visible = false;
+                                        $scope.englishPhrasesBitmaps[phrase.name].visible = false;
                                     });
 
                                     englishBigButton.gotoAndPlay("selected");
@@ -1405,7 +1606,7 @@ angular.module("bookbuilder2")
 
                                     console.log("Making all english phrases visible again...");
                                     _.each($scope.activityData.phrases, function (phrase, key, list) {
-                                        $scope.englishWordsBitmaps[phrase.name].visible = true;
+                                        $scope.englishPhrasesBitmaps[phrase.name].visible = true;
                                     });
                                     englishBigButton.gotoAndPlay("normal");
                                     stage.update();
@@ -1471,12 +1672,12 @@ angular.module("bookbuilder2")
                                     stage.update();
                                 }
                             } else if ($scope.selectedVocabularySection === 'phrases') {
-                                if ($scope.englishPhrasesBitmaps[$scope.activityData.phrases[0].name].visible === true) {
+                                if ($scope.greekPhrasesBitmaps[$scope.activityData.phrases[0].name].visible === true) {
 
                                     console.log("Hiding all english phrases...");
                                     _.each($scope.activityData.phrases, function (phrase, key, list) {
 
-                                        $scope.greekWordsBitmaps[phrase.name].visible = false;
+                                        $scope.greekPhrasesBitmaps[phrase.name].visible = false;
                                     });
 
                                     greekBigButton.gotoAndPlay("selected");
@@ -1486,7 +1687,7 @@ angular.module("bookbuilder2")
 
                                     console.log("Making all english phrases visible again...");
                                     _.each($scope.activityData.phrases, function (phrase, key, list) {
-                                        $scope.greekWordsBitmaps[phrase.name].visible = true;
+                                        $scope.greekPhrasesBitmaps[phrase.name].visible = true;
                                     });
                                     greekBigButton.gotoAndPlay("normal");
                                     stage.update();
