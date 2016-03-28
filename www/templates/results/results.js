@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-  .controller("ResultsController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast) {
+  .controller("ResultsController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast, $ionicPopup) {
 
     console.log("ResultsController loaded!");
 
@@ -62,7 +62,7 @@ angular.module("bookbuilder2")
 
       /*Image Loader*/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-        src: $rootScope.rootDir + "data/assets/lesson_menu_background_image_2_blue.png"
+        src: $rootScope.rootDir + "data/assets/results_backgroung_image_blue.png"
       }));
       imageLoader.load();
 
@@ -73,7 +73,7 @@ angular.module("bookbuilder2")
         console.log("Image Loaded...");
 
         /*Creating Bitmap Background for Canvas*/
-        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/lesson_menu_background_image_2_blue.png");
+        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/results_backgroung_image_blue.png");
 
         /**** CALCULATING SCALING ****/
         var scaleY = $scope.stage.canvas.height / background.image.height;
