@@ -11,7 +11,7 @@ angular.module("bookbuilder2")
         okType: 'button-dark'
       });
       errorPopUp.then(function () {
-        $state.go("groups");
+        $state.go($rootScope.book.bookTemplate);
       });
     };
 
@@ -71,19 +71,19 @@ angular.module("bookbuilder2")
                           }
 
                           $scope.popupRegisterVar = $ionicPopup.show({
-                            "template": $rootScope.selectedLanguage === 'el' ? 'Να κατεβεί και να ενημερωθεί η συσκευή σας με τη νέα έκδοση της εφαρμογής μας;' : 'Download and install the new version ' + metadata.version + '?',
-                            'title': $rootScope.selectedLanguage === 'el' ? 'Διαθέσιμη Ενημέρωση' : 'Update Available',
+                            "template": 'Download and install the new version ' + metadata.version + '?',
+                            'title': 'Update Available',
                             "scope": $scope,
                             "buttons": [
                               {
-                                "text": $rootScope.selectedLanguage === 'el' ? 'ΟΧΙ' : 'NO',
+                                "text": 'NO',
                                 "type": "button-dark button-outline",
                                 "onTap": function (e) {
-                                  $state.go("groups");
+                                  $state.go($rootScope.book.bookTemplate);
                                 }
                               },
                               {
-                                "text": $rootScope.selectedLanguage === 'el' ? 'ΝΑΙ' : 'YES',
+                                "text": 'YES',
                                 "type": "button-dark",
                                 "onTap": function (e) {
 
@@ -106,7 +106,7 @@ angular.module("bookbuilder2")
                                       }, function (err) {
                                         console.log('Ionic Deploy: Update error! ', err);
                                         $ionicLoading.hide();
-                                        $state.go("groups");
+                                        $state.go($rootScope.book.bookTemplate);
                                       }, function (prog) {
                                         console.log('Ionic Deploy: Progress... ', prog);
                                         $ionicLoading.show({
@@ -115,7 +115,7 @@ angular.module("bookbuilder2")
                                       });
                                     }, function (error) {
                                       console.log(error);
-                                      $state.go("groups");
+                                      $state.go($rootScope.book.bookTemplate);
                                     });
                                 }
                               }
@@ -123,17 +123,17 @@ angular.module("bookbuilder2")
                           });
                         }, function (response) {
                           console.log("callback meta 1 ", response);
-                          $state.go("groups");
+                          $state.go($rootScope.book.bookTemplate);
                         }, function (response) {
                           console.log("callback meta 2", response);
-                          $state.go("groups");
+                          $state.go($rootScope.book.bookTemplate);
                         });
                       } else {
-                        $state.go("groups");
+                        $state.go($rootScope.book.bookTemplate);
                       }
                     }, function (error) {
                       console.log(error);
-                      $state.go("groups");
+                      $state.go($rootScope.book.bookTemplate);
                     });
                   } else {
                     $rootScope.showPopup();
@@ -147,7 +147,7 @@ angular.module("bookbuilder2")
         });
       } else {
         $rootScope.rootDir = "";
-        $state.go("groups");
+        $state.go($rootScope.book.bookTemplate);
       }
     });
 

@@ -158,8 +158,8 @@ angular.module("bookbuilder2")
 
 
                 var confirmPopup = $ionicPopup.confirm({
-                  title: 'Restart all activities in ' + $rootScope.selectedLesson.title,
-                  template: 'This will reset all your activity in ' + $rootScope.selectedLesson.title + "!"
+                  title: 'Restart all activities in ' + $rootScope.selectedLesson.lessonTitle,
+                  template: 'This will reset all your activity in ' + $rootScope.selectedLesson.lessonTitle + "!"
                 });
                 confirmPopup.then(function (res) {
                   if (res) {

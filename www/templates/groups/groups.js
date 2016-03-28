@@ -597,7 +597,7 @@ angular.module("bookbuilder2")
                 Download.assets(arrayOfStrings, $rootScope.book.cdnUrl, "data/lessons/" + lesson.id, key, function (response) {
                   $rootScope.downloadingLessonAsset++;
                   $ionicLoading.show({
-                    template: lesson.title + " " + ($rootScope.downloadingLessonAsset && $rootScope.totalFilesLessonAssets ? (($rootScope.downloadingLessonAsset / $rootScope.totalFilesLessonAssets) * 100).toFixed() : 0) + "%"
+                    template: lesson.title + " - " + ($rootScope.downloadingLessonAsset && $rootScope.totalFilesLessonAssets ? (($rootScope.downloadingLessonAsset / $rootScope.totalFilesLessonAssets) * 100).toFixed() : 0) + "%"
                   });
                   if (response) {
                     waterfallCallback(null);
