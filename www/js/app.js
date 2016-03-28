@@ -51,23 +51,44 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
         templateUrl: "templates/groups/groups.html",
         controller: "GroupsController"
       })
+      .state('groupsNew', {
+        cache: false,
+        url: "/groupsNew",
+        templateUrl: "templates/groupsNew/groupsNew.html",
+        controller: "GroupsNewController"
+      })
       .state('lesson', {
         cache: false,
         url: "/lesson",
         templateUrl: "templates/lesson/lesson.html",
         controller: "LessonController"
+      }).state('lessonNew', {
+        cache: false,
+        url: "/lessonNew",
+        templateUrl: "templates/lessonNew/lessonNew.html",
+        controller: "LessonNewController"
       })
       .state('vocabulary', {
         cache: false,
         url: "/vocabulary",
         templateUrl: "templates/vocabulary/vocabulary.html",
         controller: "VocabularyController"
+      }).state('vocabularyNew', {
+        cache: false,
+        url: "/vocabularyNew",
+        templateUrl: "templates/vocabularyNew/vocabularyNew.html",
+        controller: "VocabularyNewController"
       })
       .state('reading', {
         cache: false,
         url: "/reading",
         templateUrl: "templates/reading/reading.html",
         controller: "ReadingController"
+      }).state('readingNew', {
+        cache: false,
+        url: "/readingNew",
+        templateUrl: "templates/readingNew/readingNew.html",
+        controller: "ReadingNewController"
       })
       .state('multiple', {
         cache: false,
