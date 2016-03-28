@@ -699,7 +699,7 @@ angular.module("bookbuilder2")
 
             /*Index*/
             $scope.derivativeContainers[key].subContainers["index"] = new createjs.Container();
-            $scope.derivativeContainers[key].subContainers["index"].width = $scope.derivativeContainers[key].width / 8;
+            $scope.derivativeContainers[key].subContainers["index"].width = $scope.derivativeContainers[key].width / 9;
             $scope.derivativeContainers[key].subContainers["index"].height = $scope.derivativeContainers[key].height;
             $scope.derivativeContainers[key].subContainers["index"].x = $scope.derivativeContainers[key].subContainers["buttons"].width;
 
@@ -718,9 +718,9 @@ angular.module("bookbuilder2")
 
             /*English*/
             $scope.derivativeContainers[key].subContainers["english"] = new createjs.Container();
-            $scope.derivativeContainers[key].subContainers["english"].width = $scope.derivativeContainers[key].width / 4;
+            $scope.derivativeContainers[key].subContainers["english"].width = $scope.derivativeContainers[key].width / 3;
             $scope.derivativeContainers[key].subContainers["english"].height = $scope.derivativeContainers[key].height;
-            $scope.derivativeContainers[key].subContainers["english"].x = $scope.derivativeContainers[key].subContainers["buttons"].width;
+            $scope.derivativeContainers[key].subContainers["english"].x = $scope.derivativeContainers[key].subContainers["buttons"].width+$scope.derivativeContainers[key].subContainers["index"].width;
 
             $scope.derivativeContainers[key].subContainers["english"].y = 0;
             $scope.derivativeContainers[key].addChild($scope.derivativeContainers[key].subContainers["english"]);
@@ -737,9 +737,10 @@ angular.module("bookbuilder2")
 
             /*Greek*/
             $scope.derivativeContainers[key].subContainers["greek"] = new createjs.Container();
-            $scope.derivativeContainers[key].subContainers["greek"].width = $scope.derivativeContainers[key].width / 4;
+            $scope.derivativeContainers[key].subContainers["greek"].width = $scope.derivativeContainers[key].width / 3;
             $scope.derivativeContainers[key].subContainers["greek"].height = $scope.derivativeContainers[key].height;
-            $scope.derivativeContainers[key].subContainers["greek"].x = $scope.derivativeContainers[key].subContainers["buttons"].width;
+            $scope.derivativeContainers[key].subContainers["greek"].x = $scope.derivativeContainers[key].subContainers["buttons"].width
+              +$scope.derivativeContainers[key].subContainers["index"].width+$scope.derivativeContainers[key].subContainers["english"].width;
 
             $scope.derivativeContainers[key].subContainers["greek"].y = 0;
             $scope.derivativeContainers[key].addChild($scope.derivativeContainers[key].subContainers["greek"]);
