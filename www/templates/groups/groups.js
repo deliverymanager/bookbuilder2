@@ -159,6 +159,8 @@ angular.module("bookbuilder2")
               /*It's important too define containers height before start calculating buttons*/
               groupsMenuContainer.width = 236;
               groupsMenuContainer.height = 480;
+              
+              $rootScope.book = response;
 
               groupsMenuContainer.scaleX = groupsMenuContainer.scaleY = scale;
 
@@ -580,7 +582,7 @@ angular.module("bookbuilder2")
       $rootScope.totalFilesLessonAssets = 2;
       $rootScope.downloadingLessonAsset = 0;
 
-      Download.assets(["lesson.json", "lessonassets.json"], $rootScope.book.cdnUrl, "data/lessons", lesson.id, function (response) {
+      Download.assets(["lesson.json", "lessonassets.json"], $rootScope.cdnUrl, "data/lessons", lesson.id, function (response) {
         console.log(lesson.id + " downloaded basic lesson file lesson.json and lessonassets.json ", response);
 
         $http.get($rootScope.rootDir + "data/lessons/" + lesson.id + "/lessonassets.json")
@@ -593,7 +595,7 @@ angular.module("bookbuilder2")
 
               waterFallFunctions.push(function (waterfallCallback) {
 
-                Download.assets(arrayOfStrings, $rootScope.book.cdnUrl, "data/lessons/" + lesson.id, key, function (response) {
+                Download.assets(arrayOfStrings, $rootScope.cdnUrl, "data/lessons/" + lesson.id, key, function (response) {
                   $rootScope.downloadingLessonAsset++;
                   $ionicLoading.show({
                     template: lesson.title + " - " + ($rootScope.downloadingLessonAsset && $rootScope.totalFilesLessonAssets ? (($rootScope.downloadingLessonAsset / $rootScope.totalFilesLessonAssets) * 100).toFixed() : 0) + "%"

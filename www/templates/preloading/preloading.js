@@ -39,26 +39,25 @@ angular.module("bookbuilder2")
               $rootScope.versionNumber = versionNumber;
             }
 
-            var cdnUrl = "http://" + TempGroup[2] + ".s3-website-eu-west-1.amazonaws.com/";
+            $rootScope.cdnUrl = "http://" + TempGroup[2] + ".s3-website-eu-west-1.amazonaws.com/";
             console.log(cdnUrl);
             $rootScope.totalFiles = 100;
             $rootScope.downloading = 0;
 
-            Download.assets(["assets.json", "groups.json"], cdnUrl, "data", "book", function (response) {
+            Download.assets(["assets.json", "groups.json"], $rootScope.cdnUrl, "data", "book", function (response) {
               console.log("response assets.json groups.json", response);
               if (response) {
 
                 $http.get($rootScope.rootDir + "data/book/groups.json").success(function (book) {
 
                   $rootScope.book = book;
-                  $rootScope.book.cdnUrl = cdnUrl;
 
                   $http.get($rootScope.rootDir + "data/book/assets.json").success(function (assets) {
 
                     $rootScope.totalFiles = 2 + assets.length;
                     $rootScope.downloading = 2;
 
-                    Download.assets(assets, cdnUrl, "data", "assets", function (response) {
+                    Download.assets(assets, $rootScope.cdnUrl, "data", "assets", function (response) {
                       console.log("response", response);
                       if (response) {
 
@@ -160,7 +159,8 @@ angular.module("bookbuilder2")
         });
       } else {
         $rootScope.rootDir = "";
-        $state.go($rootScope.book.bookTemplate);
+        /*$state.go($rootScope.book.bookTemplate);*/
+        $state.go("groups");
       }
     });
 

@@ -699,7 +699,7 @@ angular.module("bookbuilder2")
 
             /*Index*/
             $scope.derivativeContainers[key].subContainers["index"] = new createjs.Container();
-            $scope.derivativeContainers[key].subContainers["index"].width = $scope.derivativeContainers[key].width / 4;
+            $scope.derivativeContainers[key].subContainers["index"].width = $scope.derivativeContainers[key].width / 8;
             $scope.derivativeContainers[key].subContainers["index"].height = $scope.derivativeContainers[key].height;
             $scope.derivativeContainers[key].subContainers["index"].x = $scope.derivativeContainers[key].subContainers["buttons"].width;
 
