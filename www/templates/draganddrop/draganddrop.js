@@ -17,6 +17,8 @@ angular.module("bookbuilder2")
     var activityNameInLocalStorage = $rootScope.selectedLesson.id + "_" + $rootScope.activityFolder;
     console.log("Name of activity in localStorage: ", activityNameInLocalStorage);
 
+
+
     $timeout(function () {
       var PIXEL_RATIO = (function () {
         var ctx = document.getElementById("canvas").getContext("2d"),

@@ -39,107 +39,120 @@ angular.module("bookbuilder2")
               $rootScope.versionNumber = versionNumber;
             }
 
+            var cdnUrl = "http://" + TempGroup[2] + ".s3-website-eu-west-1.amazonaws.com/";
+            console.log(cdnUrl);
+            $rootScope.totalFiles = 100;
+            $rootScope.downloading = 0;
 
-            $http.get(window.cordova.file.applicationDirectory + "www/data/groups.json").success(function (book) {
+            Download.assets(["assets.json", "groups.json"], cdnUrl, "data", "book", function (response) {
+              console.log("response assets.json groups.json", response);
+              if (response) {
 
-              $rootScope.book = book;
+                $http.get($rootScope.rootDir + "data/book/groups.json").success(function (book) {
 
-              $http.get(window.cordova.file.applicationDirectory + "www/data/assets.json").success(function (assets) {
+                  $rootScope.book = book;
+                  $rootScope.book.cdnUrl = cdnUrl;
 
-                $rootScope.totalFiles = assets.length;
-                $rootScope.downloading = 0;
+                  $http.get($rootScope.rootDir + "data/book/assets.json").success(function (assets) {
 
-                Download.assets(assets, $rootScope.book.cdnUrl, "data", "assets", function (response) {
-                  console.log("response", response);
-                  if (response) {
+                    $rootScope.totalFiles = 2 + assets.length;
+                    $rootScope.downloading = 2;
 
-
-                    $scope.deploy = new Ionic.Deploy();
-                    //deploy.setChannel("dev");
-
-                    $scope.deploy.check().then(function (hasUpdate) {
-
-                      if (hasUpdate) {
-
-                        $scope.deploy.getMetadata().then(function (metadata) {
-                          // metadata will be a JSON object
-                          console.log(metadata);
-                          if (!metadata || !metadata.version) {
-                            metadata = {
-                              version: ""
-                            }
-                          }
-
-                          $scope.popupRegisterVar = $ionicPopup.show({
-                            "template": 'Download and install the new version ' + metadata.version + '?',
-                            'title': 'Update Available',
-                            "scope": $scope,
-                            "buttons": [
-                              {
-                                "text": 'NO',
-                                "type": "button-dark button-outline",
-                                "onTap": function (e) {
-                                  $state.go($rootScope.book.bookTemplate);
-                                }
-                              },
-                              {
-                                "text": 'YES',
-                                "type": "button-dark",
-                                "onTap": function (e) {
+                    Download.assets(assets, cdnUrl, "data", "assets", function (response) {
+                      console.log("response", response);
+                      if (response) {
 
 
-                                  window.localStorage.setItem("versionNumber", metadata.version);
-                                  if (window.localStorage.getItem("versionNumber")) {
-                                    $rootScope.versionNumber = window.localStorage.getItem("versionNumber");
-                                  }
+                        $scope.deploy = new Ionic.Deploy();
+                        //deploy.setChannel("dev");
 
-                                  $ionicLoading.show({
-                                    template: "Downloading ..."
-                                  });
+                        $scope.deploy.check().then(function (hasUpdate) {
 
-                                  $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data")
-                                    .then(function (success) {
-                                      console.log("assets directory deleted!");
-                                      $scope.deploy.update().then(function (res) {
-                                        console.log('Ionic Deploy: Update Success! ', res);
+                          if (hasUpdate) {
 
-                                      }, function (err) {
-                                        console.log('Ionic Deploy: Update error! ', err);
-                                        $ionicLoading.hide();
-                                        $state.go($rootScope.book.bookTemplate);
-                                      }, function (prog) {
-                                        console.log('Ionic Deploy: Progress... ', prog);
-                                        $ionicLoading.show({
-                                          template: "Downloading " + parseInt(prog) + "%"
-                                        });
-                                      });
-                                    }, function (error) {
-                                      console.log(error);
-                                      $state.go($rootScope.book.bookTemplate);
-                                    });
+                            $scope.deploy.getMetadata().then(function (metadata) {
+                              // metadata will be a JSON object
+                              console.log(metadata);
+                              if (!metadata || !metadata.version) {
+                                metadata = {
+                                  version: ""
                                 }
                               }
-                            ]
-                          });
-                        }, function (response) {
-                          console.log("callback meta 1 ", response);
-                          $state.go($rootScope.book.bookTemplate);
-                        }, function (response) {
-                          console.log("callback meta 2", response);
+
+                              $scope.popupRegisterVar = $ionicPopup.show({
+                                "template": 'Download and install the new version ' + metadata.version + '?',
+                                'title': 'Update Available',
+                                "scope": $scope,
+                                "buttons": [
+                                  {
+                                    "text": 'NO',
+                                    "type": "button-dark button-outline",
+                                    "onTap": function (e) {
+                                      $state.go($rootScope.book.bookTemplate);
+                                    }
+                                  },
+                                  {
+                                    "text": 'YES',
+                                    "type": "button-dark",
+                                    "onTap": function (e) {
+
+
+                                      window.localStorage.setItem("versionNumber", metadata.version);
+                                      if (window.localStorage.getItem("versionNumber")) {
+                                        $rootScope.versionNumber = window.localStorage.getItem("versionNumber");
+                                      }
+
+                                      $ionicLoading.show({
+                                        template: "Downloading ..."
+                                      });
+
+                                      $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data")
+                                        .then(function (success) {
+                                          console.log("assets directory deleted!");
+                                          $scope.deploy.update().then(function (res) {
+                                            console.log('Ionic Deploy: Update Success! ', res);
+
+                                          }, function (err) {
+                                            console.log('Ionic Deploy: Update error! ', err);
+                                            $ionicLoading.hide();
+                                            $state.go($rootScope.book.bookTemplate);
+                                          }, function (prog) {
+                                            console.log('Ionic Deploy: Progress... ', prog);
+                                            $ionicLoading.show({
+                                              template: "Downloading " + parseInt(prog) + "%"
+                                            });
+                                          });
+                                        }, function (error) {
+                                          console.log(error);
+                                          $state.go($rootScope.book.bookTemplate);
+                                        });
+                                    }
+                                  }
+                                ]
+                              });
+                            }, function (response) {
+                              console.log("callback meta 1 ", response);
+                              $state.go($rootScope.book.bookTemplate);
+                            }, function (response) {
+                              console.log("callback meta 2", response);
+                              $state.go($rootScope.book.bookTemplate);
+                            });
+                          } else {
+                            $state.go($rootScope.book.bookTemplate);
+                          }
+                        }, function (error) {
+                          console.log(error);
                           $state.go($rootScope.book.bookTemplate);
                         });
                       } else {
-                        $state.go($rootScope.book.bookTemplate);
+                        $rootScope.showPopup();
                       }
-                    }, function (error) {
-                      console.log(error);
-                      $state.go($rootScope.book.bookTemplate);
                     });
-                  } else {
-                    $rootScope.showPopup();
-                  }
+                  });
                 });
-              });
+              } else {
+                $rootScope.showPopup();
+              }
             });
           });
         }, function (error) {
