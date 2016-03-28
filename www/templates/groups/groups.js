@@ -152,10 +152,9 @@ angular.module("bookbuilder2")
 
           /* -------------------------------- LEFT SIDE GROUP MENU -------------------------------- */
           //This groups.json is loaded within the application and not from the server!
-          $http.get("data/groups.json")
+          $http.get($rootScope.rootDir + "data/book/groups.json")
             .success(function (response) {
               //groupsMenuContainer CREATION
-              $rootScope.book = response;
               var groupsMenuContainer = new createjs.Container();
               /*It's important too define containers height before start calculating buttons*/
               groupsMenuContainer.width = 236;
