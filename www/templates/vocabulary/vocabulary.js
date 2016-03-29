@@ -205,6 +205,10 @@ angular.module("bookbuilder2")
 
                 // 3)Populating Derivatives containers
 
+                loadDerivativesButtons();
+                loadDerivativesIndexes();
+                loadEnglishDerivatives();
+                loadGreekDerivatives();
 
                 //Finally loading page initialized for "words" section...
                 loadPage("words");
@@ -248,9 +252,7 @@ angular.module("bookbuilder2")
                         $timeout(function () {
                           waterfallCallback();
                         }, 100);
-
                       }
-
                     });
                   });
                 });
@@ -540,10 +542,9 @@ angular.module("bookbuilder2")
         function createMultiColumnContainers() {
 
           $scope.derivativeContainers = {};
+
           $scope.derivativeContainers["verbs"] = new createjs.Container();
-
           console.log("Creating $scope.derivativeContainers['verbs']...");
-
           $scope.derivativeContainers["verbs"].width = background.image.width / 2.6;
           $scope.derivativeContainers["verbs"].height = background.image.height / 2.5;
           $scope.derivativeContainers["verbs"].scaleX = $scope.derivativeContainers["verbs"].scaleY = scale;
@@ -556,11 +557,10 @@ angular.module("bookbuilder2")
 
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
-
-          var graphics = new createjs.Graphics().beginFill("blue").drawRect(0, 0, $scope.derivativeContainers["verbs"].width, $scope.derivativeContainers["verbs"].height);
-          var shape = new createjs.Shape(graphics);
-          $scope.derivativeContainers["verbs"].addChild(shape);
-          stage.update();
+          /*var graphics = new createjs.Graphics().beginFill("blue").drawRect(0, 0, $scope.derivativeContainers["verbs"].width, $scope.derivativeContainers["verbs"].height);
+           var shape = new createjs.Shape(graphics);
+           $scope.derivativeContainers["verbs"].addChild(shape);
+           stage.update();*/
 
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
@@ -591,10 +591,10 @@ angular.module("bookbuilder2")
           $scope.derivativeContainers["nouns"].subContainers = {};
 
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-          var graphics1 = new createjs.Graphics().beginFill("orange").drawRect(0, 0, $scope.derivativeContainers["nouns"].width, $scope.derivativeContainers["nouns"].height);
-          var shape1 = new createjs.Shape(graphics1);
-          $scope.derivativeContainers["nouns"].addChild(shape1);
-          stage.update();
+          /*var graphics1 = new createjs.Graphics().beginFill("orange").drawRect(0, 0, $scope.derivativeContainers["nouns"].width, $scope.derivativeContainers["nouns"].height);
+           var shape1 = new createjs.Shape(graphics1);
+           $scope.derivativeContainers["nouns"].addChild(shape1);
+           stage.update();*/
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
           //Adding Title for Verbs
@@ -624,10 +624,10 @@ angular.module("bookbuilder2")
           $scope.derivativeContainers["noun"].subContainers = {};
 
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-          var graphics3 = new createjs.Graphics().beginFill("yellow").drawRect(0, 0, $scope.derivativeContainers["noun"].width, $scope.derivativeContainers["noun"].height);
-          var shape3 = new createjs.Shape(graphics3);
-          $scope.derivativeContainers["noun"].addChild(shape3);
-          stage.update();
+          /*var graphics3 = new createjs.Graphics().beginFill("yellow").drawRect(0, 0, $scope.derivativeContainers["noun"].width, $scope.derivativeContainers["noun"].height);
+           var shape3 = new createjs.Shape(graphics3);
+           $scope.derivativeContainers["noun"].addChild(shape3);
+           stage.update();*/
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
           //Adding Title for Verbs
@@ -657,10 +657,10 @@ angular.module("bookbuilder2")
           $scope.derivativeContainers["adjective"].subContainers = {};
 
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-          var graphics4 = new createjs.Graphics().beginFill("red").drawRect(0, 0, $scope.derivativeContainers["adjective"].width, $scope.derivativeContainers["adjective"].height);
-          var shape4 = new createjs.Shape(graphics4);
-          $scope.derivativeContainers["adjective"].addChild(shape4);
-          stage.update();
+          /*var graphics4 = new createjs.Graphics().beginFill("red").drawRect(0, 0, $scope.derivativeContainers["adjective"].width, $scope.derivativeContainers["adjective"].height);
+           var shape4 = new createjs.Shape(graphics4);
+           $scope.derivativeContainers["adjective"].addChild(shape4);
+           stage.update();*/
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
           //Adding Title for Verbs
@@ -672,34 +672,32 @@ angular.module("bookbuilder2")
           $scope.derivativeContainers["adjective"].addChild(adjectiveTitle);
           stage.update();
 
+
           /*Populating each derivatives container with sub categories*/
           _.each($scope.derivativeContainers, function (container, key, list) {
             console.log("Adding sub containers to container: ", key);
 
-            /**************************************************************************************************************************/
-
             /*Buttons*/
             $scope.derivativeContainers[key].subContainers["buttons"] = new createjs.Container();
-            $scope.derivativeContainers[key].subContainers["buttons"].width = $scope.derivativeContainers[key].width / 4;
+            $scope.derivativeContainers[key].subContainers["buttons"].width = $scope.derivativeContainers[key].width / 5;
             $scope.derivativeContainers[key].subContainers["buttons"].height = $scope.derivativeContainers[key].height;
             $scope.derivativeContainers[key].subContainers["buttons"].x = 0;
-
             $scope.derivativeContainers[key].subContainers["buttons"].y = 0;
             $scope.derivativeContainers[key].addChild($scope.derivativeContainers[key].subContainers["buttons"]);
             stage.update();
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-            var graphics = new createjs.Graphics().beginFill("darkgrey").drawRect(0, 0, $scope.derivativeContainers[key].subContainers["buttons"].width, $scope.derivativeContainers[key].subContainers["buttons"].height);
+           /* var graphics = new createjs.Graphics().beginFill("darkgrey").drawRect(0, 0, $scope.derivativeContainers[key].subContainers["buttons"].width, $scope.derivativeContainers[key].subContainers["buttons"].height);
             var shape = new createjs.Shape(graphics);
             $scope.derivativeContainers[key].subContainers["buttons"].addChild(shape);
-            stage.update();
+            stage.update();*/
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
 
             /*Index*/
             $scope.derivativeContainers[key].subContainers["index"] = new createjs.Container();
-            $scope.derivativeContainers[key].subContainers["index"].width = $scope.derivativeContainers[key].width / 8;
+            $scope.derivativeContainers[key].subContainers["index"].width = $scope.derivativeContainers[key].width / 11;
             $scope.derivativeContainers[key].subContainers["index"].height = $scope.derivativeContainers[key].height;
             $scope.derivativeContainers[key].subContainers["index"].x = $scope.derivativeContainers[key].subContainers["buttons"].width;
 
@@ -708,54 +706,146 @@ angular.module("bookbuilder2")
             stage.update();
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-            var graphics1 = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.derivativeContainers[key].subContainers["index"].width, $scope.derivativeContainers[key].subContainers["index"].height);
-            var shape1 = new createjs.Shape(graphics1);
-            $scope.derivativeContainers[key].subContainers["index"].addChild(shape1);
-            stage.update();
+            /*var graphics1 = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.derivativeContainers[key].subContainers["index"].width, $scope.derivativeContainers[key].subContainers["index"].height);
+             var shape1 = new createjs.Shape(graphics1);
+             $scope.derivativeContainers[key].subContainers["index"].addChild(shape1);
+             stage.update();*/
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
 
             /*English*/
             $scope.derivativeContainers[key].subContainers["english"] = new createjs.Container();
-            $scope.derivativeContainers[key].subContainers["english"].width = $scope.derivativeContainers[key].width / 4;
+            $scope.derivativeContainers[key].subContainers["english"].width = $scope.derivativeContainers[key].width / 3;
             $scope.derivativeContainers[key].subContainers["english"].height = $scope.derivativeContainers[key].height;
-            $scope.derivativeContainers[key].subContainers["english"].x = $scope.derivativeContainers[key].subContainers["buttons"].width;
+            $scope.derivativeContainers[key].subContainers["english"].x = $scope.derivativeContainers[key].subContainers["buttons"].width + $scope.derivativeContainers[key].subContainers["index"].width;
 
             $scope.derivativeContainers[key].subContainers["english"].y = 0;
             $scope.derivativeContainers[key].addChild($scope.derivativeContainers[key].subContainers["english"]);
             stage.update();
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-            var graphics2 = new createjs.Graphics().beginFill("lightgrey").drawRect(0, 0, $scope.derivativeContainers[key].subContainers["english"].width, $scope.derivativeContainers[key].subContainers["english"].height);
-            var shape2 = new createjs.Shape(graphics2);
-            $scope.derivativeContainers[key].subContainers["english"].addChild(shape2);
-            stage.update();
+            /* var graphics2 = new createjs.Graphics().beginFill("lightgrey").drawRect(0, 0, $scope.derivativeContainers[key].subContainers["english"].width, $scope.derivativeContainers[key].subContainers["english"].height);
+             var shape2 = new createjs.Shape(graphics2);
+             $scope.derivativeContainers[key].subContainers["english"].addChild(shape2);
+             stage.update();*/
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
 
             /*Greek*/
             $scope.derivativeContainers[key].subContainers["greek"] = new createjs.Container();
-            $scope.derivativeContainers[key].subContainers["greek"].width = $scope.derivativeContainers[key].width / 4;
+            $scope.derivativeContainers[key].subContainers["greek"].width = $scope.derivativeContainers[key].width / 3;
             $scope.derivativeContainers[key].subContainers["greek"].height = $scope.derivativeContainers[key].height;
-            $scope.derivativeContainers[key].subContainers["greek"].x = $scope.derivativeContainers[key].subContainers["buttons"].width;
+            $scope.derivativeContainers[key].subContainers["greek"].x = $scope.derivativeContainers[key].subContainers["buttons"].width
+              + $scope.derivativeContainers[key].subContainers["index"].width + $scope.derivativeContainers[key].subContainers["english"].width;
 
             $scope.derivativeContainers[key].subContainers["greek"].y = 0;
             $scope.derivativeContainers[key].addChild($scope.derivativeContainers[key].subContainers["greek"]);
             stage.update();
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-            var graphics3 = new createjs.Graphics().beginFill("azure").drawRect(0, 0, $scope.derivativeContainers[key].subContainers["greek"].width, $scope.derivativeContainers[key].subContainers["greek"].height);
-            var shape3 = new createjs.Shape(graphics3);
-            $scope.derivativeContainers[key].subContainers["greek"].addChild(shape3);
-            stage.update();
+            /* var graphics3 = new createjs.Graphics().beginFill("azure").drawRect(0, 0, $scope.derivativeContainers[key].subContainers["greek"].width, $scope.derivativeContainers[key].subContainers["greek"].height);
+             var shape3 = new createjs.Shape(graphics3);
+             $scope.derivativeContainers[key].subContainers["greek"].addChild(shape3);
+             stage.update();*/
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
-            /**************************************************************************************************************************/
 
-          });
+            /*Initialization of row containers*/
+            $scope.derivativeContainers[key].subContainers["buttons"].rowContainers = {};
+            $scope.derivativeContainers[key].subContainers["index"].rowContainers = {};
+            $scope.derivativeContainers[key].subContainers["english"].rowContainers = {};
+            $scope.derivativeContainers[key].subContainers["greek"].rowContainers = {};
+
+            /*FILLING ROW CONTAINERS*/
+            _.each(_.filter($scope.activityData.derivatives, {type: key}), function (derivative, k, list) {
+
+              console.log("Populating row containers --------> k: ", k);
+              console.log("Populating row containers --------> key: ", key);
+              console.log("Populating row containers --------> derivative.type: ", derivative.type);
+
+              /*Row container for Buttons*/
+              $scope.derivativeContainers[key].subContainers["buttons"].rowContainers[k] = new createjs.Container();
+              $scope.derivativeContainers[key].subContainers["buttons"].rowContainers[k].width = $scope.derivativeContainers[key].subContainers["buttons"].width;
+              $scope.derivativeContainers[key].subContainers["buttons"].rowContainers[k].height = 30;
+              $scope.derivativeContainers[key].subContainers["buttons"].rowContainers[k].x = 0;
+
+              console.log("Y for the element " + k + ": ", $scope.derivativeContainers[key].subContainers["buttons"].children.length * 30);
+              $scope.derivativeContainers[key].subContainers["buttons"].rowContainers[k].y = (k + 1) * 30;
+
+              //Adding new container
+              $scope.derivativeContainers[key].subContainers["buttons"].addChild($scope.derivativeContainers[key].subContainers["buttons"].rowContainers[k]);
+
+              /* var graphics1 = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.derivativeContainers[key].subContainers["buttons"].rowContainers[k].width, 30);
+               var shape1 = new createjs.Shape(graphics1);
+               $scope.derivativeContainers[key].subContainers["buttons"].rowContainers[k].addChild(shape1);
+               stage.update();*/
+
+
+              /*Row container for Index*/
+              $scope.derivativeContainers[key].subContainers["index"].rowContainers[k] = new createjs.Container();
+              $scope.derivativeContainers[key].subContainers["index"].rowContainers[k].width = $scope.derivativeContainers[key].subContainers["index"].width;
+              $scope.derivativeContainers[key].subContainers["index"].rowContainers[k].height = 30;
+              $scope.derivativeContainers[key].subContainers["index"].rowContainers[k].x = 0;
+
+              console.log("Y for the element " + k + ": ", $scope.derivativeContainers[key].subContainers["index"].children.length * 30);
+              $scope.derivativeContainers[key].subContainers["index"].rowContainers[k].y = (k + 1) * 30;
+
+              //Adding new container
+              $scope.derivativeContainers[key].subContainers["index"].addChild($scope.derivativeContainers[key].subContainers["index"].rowContainers[k]);
+
+              /*var graphics2 = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.derivativeContainers[key].subContainers["index"].rowContainers[k].width, 30);
+               var shape2 = new createjs.Shape(graphics2);
+               $scope.derivativeContainers[key].subContainers["index"].rowContainers[k].addChild(shape2);
+               stage.update();*/
+
+
+              /*Row container for English*/
+              $scope.derivativeContainers[key].subContainers["english"].rowContainers[k] = new createjs.Container();
+              $scope.derivativeContainers[key].subContainers["english"].rowContainers[k].width = $scope.derivativeContainers[key].subContainers["english"].width;
+              $scope.derivativeContainers[key].subContainers["english"].rowContainers[k].height = 30;
+              $scope.derivativeContainers[key].subContainers["english"].rowContainers[k].x = 0;
+
+              console.log("Y for the element " + k + ": ", $scope.derivativeContainers[key].subContainers["english"].children.length * 30);
+              $scope.derivativeContainers[key].subContainers["english"].rowContainers[k].y = (k + 1) * 30;
+
+              //Adding new container
+              $scope.derivativeContainers[key].subContainers["english"].addChild($scope.derivativeContainers[key].subContainers["english"].rowContainers[k]);
+
+              /* var graphics3 = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.derivativeContainers[key].subContainers["english"].rowContainers[k].width, 30);
+               var shape3 = new createjs.Shape(graphics3);
+               $scope.derivativeContainers[key].subContainers["english"].rowContainers[k].addChild(shape3);
+               stage.update();*/
+
+
+              /*Row container for Greek*/
+              $scope.derivativeContainers[key].subContainers["greek"].rowContainers[k] = new createjs.Container();
+              $scope.derivativeContainers[key].subContainers["greek"].rowContainers[k].width = $scope.derivativeContainers[key].subContainers["greek"].width;
+              $scope.derivativeContainers[key].subContainers["greek"].rowContainers[k].height = 30;
+              $scope.derivativeContainers[key].subContainers["greek"].rowContainers[k].x = 0;
+
+              console.log("Y for the element " + k + ": ", $scope.derivativeContainers[key].subContainers["greek"].children.length * 30);
+              $scope.derivativeContainers[key].subContainers["greek"].rowContainers[k].y = (k + 1) * 30;
+
+              //Adding new container
+              $scope.derivativeContainers[key].subContainers["greek"].addChild($scope.derivativeContainers[key].subContainers["greek"].rowContainers[k]);
+
+              /*var graphics4 = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.derivativeContainers[key].subContainers["greek"].rowContainers[k].width, 30);
+               var shape4 = new createjs.Shape(graphics4);
+               $scope.derivativeContainers[key].subContainers["greek"].rowContainers[k].addChild(shape4);
+               stage.update();*/
+
+
+            });
+
+            console.log("************************** Row Containers Results **************************");
+            console.log("ROW CONTAINERS FOR: " + key + ": ", $scope.derivativeContainers[key].subContainers["buttons"].rowContainers);
+            console.log("****************************************************************************");
+
+
+          });//end of each for creating derivatives container
 
         }//End of creating multiple column containers function
 
@@ -1385,8 +1475,301 @@ angular.module("bookbuilder2")
 
         /********************************** POPULATING DERIVATIVES CONTAINERS **********************************/
 
+        /*LOAD DERIVATIVES BUTTONS*/
+        function loadDerivativesButtons() {
 
-        /********************************** Adding Page Buttons **********************************/
+          /*Initializing SpriteSheet instances using waterfall*/
+          async.waterfall([
+            function (buttonsSpriteSheetCallback) {
+
+              /*English Button*/
+              $http.get($rootScope.rootDir + "data/assets/english_small_button_sprite.json")
+                .success(function (response) {
+                  console.log("Success on getting json data for english button!");
+                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+
+                  $scope.enSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  return buttonsSpriteSheetCallback(null);
+
+                })
+                .error(function (error) {
+                  console.log("Error on getting json data for english button...", error);
+                  return buttonsSpriteSheetCallback(true, error);
+                });
+
+            },
+            function (buttonsSpriteSheetCallback) {
+
+              /*Greek Button*/
+              $http.get($rootScope.rootDir + "data/assets/greek_small_button_sprite.json")
+                .success(function (response) {
+                  console.log("Success on getting json data for greek button!");
+                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+
+                  $scope.grSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
+
+                  return buttonsSpriteSheetCallback(null);
+
+                })
+                .error(function (error) {
+                  console.log("Error on getting json data for greek button...", error);
+                  return buttonsSpriteSheetCallback(true, error);
+                });
+
+            },
+            function (buttonsSpriteSheetCallback) {
+
+              /*Play Button*/
+              $http.get($rootScope.rootDir + "data/assets/play_small_button_sprite.json")
+                .success(function (response) {
+
+                  console.log("Success on getting json data for play button!");
+                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+
+                  $scope.playSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
+
+                  return buttonsSpriteSheetCallback(null);
+
+                })
+                .error(function (error) {
+                  console.log("Error on getting json data for play button...", error);
+                  return buttonsSpriteSheetCallback(true, error);
+                });
+            }
+          ], function (err, result) {
+            if (err) {
+              console.error("Error on waterfall process for getting buttons spriteSheets...");
+            } else {
+              console.log("Success on waterfall process for getting buttons spriteSheets! Result: ", result);
+
+
+              var verbsIndex = 0;
+              var nounsIndex = 0;
+              var nounIndex = 0;
+              var adjectiveIndex = 0;
+              /*Iterating and populating the container*/
+              _.each($scope.activityData.derivatives, function (derivative, key, list) {
+
+                /********************* Creating English button *********************/
+                var enSmallButton = new createjs.Sprite($scope.enSmallButtonSpriteSheet, "normal");
+
+                enSmallButton.addEventListener("mousedown", function (event) {
+                  console.log("Mouse down event on a button !");
+                  enSmallButton.gotoAndPlay("onSelection");
+                  stage.update();
+                });
+
+                enSmallButton.addEventListener("pressup", function (event) {
+                  console.log("Press up event!");
+                  enSmallButton.gotoAndPlay("normal");
+                  $scope.englishDerivativesBitmaps[derivative.name].visible = !$scope.englishDerivativesBitmaps[derivative.name].visible;
+                });
+
+                enSmallButton.x = enSmallButton.getBounds().width / 2;
+                enSmallButton.y = $scope.derivativeContainers[derivative.type].subContainers["buttons"].rowContainers[0].height / 2;
+
+                console.log("getBounds: ", enSmallButton.getBounds());
+
+                /*********************Creating Greek button*********************/
+                var grSmallButton = new createjs.Sprite($scope.grSmallButtonSpriteSheet, "normal");
+
+                grSmallButton.addEventListener("mousedown", function (event) {
+                  console.log("Mouse down event on a button !");
+                  grSmallButton.gotoAndPlay("onSelection");
+                  stage.update();
+                });
+
+                grSmallButton.addEventListener("pressup", function (event) {
+                  console.log("Press up event!");
+                  grSmallButton.gotoAndPlay("normal");
+                  $scope.greekDerivativesBitmaps[derivative.name].visible = !$scope.greekDerivativesBitmaps[derivative.name].visible;
+
+                });
+
+                grSmallButton.x = $scope.derivativeContainers[derivative.type].subContainers["buttons"].rowContainers[0].width / 2;
+                grSmallButton.y = $scope.derivativeContainers[derivative.type].subContainers["buttons"].rowContainers[0].height / 2;
+
+                /********************* Creating Play button *********************/
+                var playSmallButton = new createjs.Sprite($scope.playSmallButtonSpriteSheet, "normal");
+                playSmallButton.addEventListener("mousedown", function (event) {
+                  console.log("Mouse down event on a button !");
+                  playSmallButton.gotoAndPlay("onSelection");
+                  stage.update();
+                });
+
+                playSmallButton.addEventListener("pressup", function (event) {
+                  console.log("Press up event!");
+                  playSmallButton.gotoAndPlay("normal");
+
+                });
+
+                playSmallButton.x = $scope.derivativeContainers[derivative.type].subContainers["buttons"].rowContainers[0].width - playSmallButton.getBounds().width / 2;
+                playSmallButton.y = $scope.derivativeContainers[derivative.type].subContainers["buttons"].rowContainers[0].height / 2;
+
+
+                if (derivative.type === 'verbs') {
+                  $scope.derivativeContainers['verbs'].subContainers["buttons"].rowContainers[verbsIndex].addChild(enSmallButton);
+                  $scope.derivativeContainers['verbs'].subContainers["buttons"].rowContainers[verbsIndex].addChild(grSmallButton);
+                  $scope.derivativeContainers['verbs'].subContainers["buttons"].rowContainers[verbsIndex].addChild(playSmallButton);
+                  stage.update();
+                  verbsIndex++;
+                } else if (derivative.type === 'nouns') {
+                  console.log("$scope.derivativeContainers['nouns'].subContainers.rowContainers: ", $scope.derivativeContainers['nouns'].subContainers["buttons"].rowContainers);
+                  $scope.derivativeContainers['nouns'].subContainers["buttons"].rowContainers[nounsIndex].addChild(enSmallButton);
+                  $scope.derivativeContainers['nouns'].subContainers["buttons"].rowContainers[nounsIndex].addChild(grSmallButton);
+                  $scope.derivativeContainers['nouns'].subContainers["buttons"].rowContainers[nounsIndex].addChild(playSmallButton);
+                  stage.update();
+                  nounsIndex++;
+                } else if (derivative.type === 'noun') {
+                  $scope.derivativeContainers['noun'].subContainers["buttons"].rowContainers[nounIndex].addChild(enSmallButton);
+                  $scope.derivativeContainers['noun'].subContainers["buttons"].rowContainers[nounIndex].addChild(grSmallButton);
+                  $scope.derivativeContainers['noun'].subContainers["buttons"].rowContainers[nounIndex].addChild(playSmallButton);
+                  stage.update();
+                  nounIndex++;
+                } else {
+                  $scope.derivativeContainers['adjective'].subContainers["buttons"].rowContainers[adjectiveIndex].addChild(enSmallButton);
+                  $scope.derivativeContainers['adjective'].subContainers["buttons"].rowContainers[adjectiveIndex].addChild(grSmallButton);
+                  $scope.derivativeContainers['adjective'].subContainers["buttons"].rowContainers[adjectiveIndex].addChild(playSmallButton);
+                  stage.update();
+                  adjectiveIndex++;
+                }
+
+              });
+
+            }
+          });//End of waterfall
+        }//End of loadDerivativesButtons function
+
+
+        /*LOAD DERIVATIVES INDEXES*/
+        function loadDerivativesIndexes() {
+
+          var verbsIndex = 0;
+          var nounsIndex = 0;
+          var nounIndex = 0;
+          var adjectiveIndex = 0;
+
+          _.each($scope.activityData.derivatives, function (derivative, key, list) {
+
+            var derivativeIndex = new createjs.Text(key + 1 + ".", "20px Arial", "black");
+
+            derivativeIndex.x = $scope.derivativeContainers['verbs'].subContainers["index"].rowContainers[0].width / 2;
+            derivativeIndex.y = $scope.derivativeContainers['verbs'].subContainers["index"].rowContainers[0].height / 2;
+            derivativeIndex.textAlign = "center";
+            derivativeIndex.textBaseline = "middle";
+
+            /*Resolving on which container should be added*/
+            if (derivative.type === 'verbs') {
+              $scope.derivativeContainers['verbs'].subContainers["index"].rowContainers[verbsIndex].addChild(derivativeIndex);
+              stage.update();
+              verbsIndex++;
+            } else if (derivative.type === 'nouns') {
+              $scope.derivativeContainers['nouns'].subContainers["index"].rowContainers[nounsIndex].addChild(derivativeIndex);
+              stage.update();
+              nounsIndex++;
+            } else if (derivative.type === 'noun') {
+              $scope.derivativeContainers['noun'].subContainers["index"].rowContainers[nounIndex].addChild(derivativeIndex);
+              stage.update();
+              nounIndex++;
+            } else {
+              $scope.derivativeContainers['adjective'].subContainers["index"].rowContainers[adjectiveIndex].addChild(derivativeIndex);
+              stage.update();
+              adjectiveIndex++;
+            }
+
+          });
+        }//End of loadDerivativesIndexes function
+
+
+        /*LOAD ENGLISH DERIVATIVES*/
+        function loadEnglishDerivatives() {
+
+          /*Initializing y that will change dynamically for every button*/
+          $scope.englishDerivativesBitmaps = {};
+          var verbsIndex = 0;
+          var nounsIndex = 0;
+          var nounIndex = 0;
+          var adjectiveIndex = 0;
+
+
+          /*Iterating and populating the container*/
+          _.each($scope.activityData.derivatives, function (derivative, key, list) {
+
+            $scope.englishDerivativesBitmaps[derivative.name] = new createjs.Bitmap("data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + derivative.name + ".png");
+
+            $scope.englishDerivativesBitmaps[derivative.name].regY = $scope.derivativeContainers['verbs'].subContainers["english"].rowContainers[0].height / 2;
+            $scope.englishDerivativesBitmaps[derivative.name].x = 0;
+            $scope.englishDerivativesBitmaps[derivative.name].y = $scope.derivativeContainers['verbs'].subContainers["english"].rowContainers[0].height / 1.5;
+
+            /*Resolving on which container should be added*/
+            if (derivative.type === 'verbs') {
+              $scope.derivativeContainers['verbs'].subContainers["english"].rowContainers[verbsIndex].addChild($scope.englishDerivativesBitmaps[derivative.name]);
+              stage.update();
+              verbsIndex++;
+            } else if (derivative.type === 'nouns') {
+              $scope.derivativeContainers['nouns'].subContainers["english"].rowContainers[nounsIndex].addChild($scope.englishDerivativesBitmaps[derivative.name]);
+              stage.update();
+              nounsIndex++;
+            } else if (derivative.type === 'noun') {
+              $scope.derivativeContainers['noun'].subContainers["english"].rowContainers[nounIndex].addChild($scope.englishDerivativesBitmaps[derivative.name]);
+              stage.update();
+              nounIndex++;
+            } else {
+              $scope.derivativeContainers['adjective'].subContainers["english"].rowContainers[adjectiveIndex].addChild($scope.englishDerivativesBitmaps[derivative.name]);
+              stage.update();
+              adjectiveIndex++;
+            }
+
+
+          });
+        }//End of loadEnglishDerivatives function
+
+
+        /*LOAD GREEK DERIVATIVES*/
+        function loadGreekDerivatives() {
+
+          /*Initializing y that will change dynamically for every button*/
+          var verbsIndex = 0;
+          var nounsIndex = 0;
+          var nounIndex = 0;
+          var adjectiveIndex = 0;
+
+          $scope.greekDerivativesBitmaps = {};
+
+          /*Iterating and populating the container*/
+          _.each($scope.activityData.derivatives, function (derivative, key, list) {
+
+            $scope.greekDerivativesBitmaps[derivative.name] = new createjs.Bitmap("data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + derivative.name + "_gr.png");
+
+            $scope.greekDerivativesBitmaps[derivative.name].regY = $scope.derivativeContainers['verbs'].subContainers["greek"].rowContainers[0].height / 2;
+            $scope.greekDerivativesBitmaps[derivative.name].x = 0;
+            $scope.greekDerivativesBitmaps[derivative.name].y = $scope.derivativeContainers['verbs'].subContainers["greek"].rowContainers[0].height / 1.5;
+
+            /*Resolving on which container should be added*/
+            if (derivative.type === 'verbs') {
+              $scope.derivativeContainers['verbs'].subContainers["greek"].rowContainers[verbsIndex].addChild($scope.greekDerivativesBitmaps[derivative.name]);
+              stage.update();
+              verbsIndex++;
+            } else if (derivative.type === 'nouns') {
+              $scope.derivativeContainers['nouns'].subContainers["greek"].rowContainers[nounsIndex].addChild($scope.greekDerivativesBitmaps[derivative.name]);
+              stage.update();
+              nounsIndex++;
+            } else if (derivative.type === 'noun') {
+              $scope.derivativeContainers['noun'].subContainers["greek"].rowContainers[nounIndex].addChild($scope.greekDerivativesBitmaps[derivative.name]);
+              stage.update();
+              nounIndex++;
+            } else {
+              $scope.derivativeContainers['adjective'].subContainers["greek"].rowContainers[adjectiveIndex].addChild($scope.greekDerivativesBitmaps[derivative.name]);
+              stage.update();
+              adjectiveIndex++;
+            }
+
+          });
+
+        }//End of loadGreekDerivatives function
+
+
+        /******************************************* Adding Page Buttons *******************************************/
 
         /* WORDS BUTTON */
         $http.get($rootScope.rootDir + "data/assets/words_button_sprite.json")
