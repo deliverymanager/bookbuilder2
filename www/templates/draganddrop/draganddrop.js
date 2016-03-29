@@ -17,8 +17,6 @@ angular.module("bookbuilder2")
     var activityNameInLocalStorage = $rootScope.selectedLesson.id + "_" + $rootScope.activityFolder;
     console.log("Name of activity in localStorage: ", activityNameInLocalStorage);
 
-
-
     $timeout(function () {
       var PIXEL_RATIO = (function () {
         var ctx = document.getElementById("canvas").getContext("2d"),
@@ -540,7 +538,13 @@ angular.module("bookbuilder2")
                   response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
                   var checkButtonSpriteSheet = new createjs.SpriteSheet(response);
                   $scope.checkButton = new createjs.Sprite(checkButtonSpriteSheet, "normal");
-                  $scope.checkButton.alpha = 1;
+
+                  if (!$scope.activityData.completed) {
+                    $scope.checkButton.alpha = 1;
+                  } else {
+                    $scope.checkButton.alpha = 0.5;
+                  }
+
                   $scope.checkButton.addEventListener("mousedown", function (event) {
                     console.log("mousedown event on a button !");
                     if (!$scope.activityData.completed) {
@@ -674,8 +678,7 @@ angular.module("bookbuilder2")
 
         /* ------------------------------------------ TITLE ---------------------------------------------- */
 
-        console.log("Title: ", $rootScope.selectedLesson.title);
-        var title = new createjs.Text($rootScope.selectedLesson.title, "27px Arial", "white");
+        var title = new createjs.Text($rootScope.activityName, "27px Arial", "white");
 
         /*background.scaleX = background.scaleY = scale;*/
         title.scaleX = title.scaleY = scale;

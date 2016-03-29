@@ -309,6 +309,7 @@ angular.module("bookbuilder2")
                     var activityButtonSpriteSheet = new createjs.SpriteSheet(response);
                     var activityButton = new createjs.Sprite(activityButtonSpriteSheet, "normal");
                     activityButton.activityFolder = activity.activityFolder;
+                    activityButton.activityName = activity.name;
                     activityButton.activityTemplate = activity.activityTemplate;
                     activityButton.y = yPosition;
                     activityButton.x = -1500 * scale;
@@ -327,8 +328,10 @@ angular.module("bookbuilder2")
                       console.log("pressup event on a lesson button !");
                       $scope.stage.update();
                       $rootScope.activityFolder = activityButton.activityFolder;
+                      $rootScope.activityName = activityButton.activityName;
 
                       window.localStorage.setItem("activityFolder", $rootScope.activityFolder);
+                      window.localStorage.setItem("activityName", $rootScope.activityName);
 
                       console.log($rootScope.selectedLessonId);
                       console.log($rootScope.activityFolder);
