@@ -153,6 +153,7 @@ angular.module("bookbuilder2")
 
         async.waterfall([function (callback) {
 
+            console.log("Waterfall loading images");
             var loadingBitmaps = [];
 
             _.each(["multiple_choice_text_bubble.png", "lesson_yellow_line.png", "multiple_choice_choice_button_sprite.png", "yellow_line_big_bubble.png"], function (file, key, list) {
@@ -174,9 +175,11 @@ angular.module("bookbuilder2")
               callback();
             });
           }, function (callback) {
+            console.log("Waterfall loading activityData");
 
             if (window.localStorage.getItem(activityNameInLocalStorage)) {
               $scope.activityData = JSON.parse(window.localStorage.getItem(activityNameInLocalStorage));
+              console.log("$scope.activityData from local Strage: ", $scope.activityData);
               callback();
             } else {
               $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/" + $rootScope.activityFolder + "/multiple.json")
@@ -187,13 +190,17 @@ angular.module("bookbuilder2")
                   });
                   $scope.activityData = response;
                   window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+                  console.log("$scope.activityData from local file: ", $scope.activityData);
                   callback();
                 })
                 .error(function (error) {
                   console.log("Error on getting json for the url...:", error);
+                  callback();
                 });
             }
           }, function (callback) {
+
+            console.log("Waterfall loading scores");
 
             $scope.scoreText = new createjs.Text("Score: " + "0" + " / " + $scope.activityData.questions.length, "27px Arial", "white");
             $scope.scoreText.scaleX = $scope.scoreText.scaleY = scale;
@@ -233,6 +240,9 @@ angular.module("bookbuilder2")
                 callback();
               });
           }, function (callback) {
+
+            console.log("Waterfall loading next button");
+
             $http.get($rootScope.rootDir + "data/assets/lesson_next_button_sprite.json")
               .success(function (response) {
                 response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
@@ -259,7 +269,7 @@ angular.module("bookbuilder2")
                 });
                 $scope.nextButton.scaleX = $scope.nextButton.scaleY = scale;
                 $scope.nextButton.x = backgroundPosition.x + (backgroundPosition.width / 1.18);
-                $scope.nextButton.y = backgroundPosition.y + (backgroundPosition.height / 1.07);
+                $scope.nextButton.y = backgroundPosition.y + (backgroundPosition.height / 1.10);
                 $scope.stage.addChild($scope.nextButton);
                 $scope.stage.update();
                 callback();
@@ -271,6 +281,8 @@ angular.module("bookbuilder2")
               });
           }, function (callback) {
             /*CHECK BUTTON*/
+            console.log("Waterfall loading check button");
+
             $http.get($rootScope.rootDir + "data/assets/lesson_check_button_sprite.json")
               .success(function (response) {
                 response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
@@ -309,6 +321,9 @@ angular.module("bookbuilder2")
                 callback();
               });
           }, function (callback) {
+
+            console.log("Waterfall loading head menu button");
+
             $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
               .success(function (response) {
 
@@ -325,7 +340,11 @@ angular.module("bookbuilder2")
                 menuButton.addEventListener("pressup", function (event) {
                   console.log("pressup event!");
                   menuButton.gotoAndPlay("normal");
-                  $ionicHistory.goBack();
+                  $ionicHistory.nextViewOptions({
+                    historyRoot: true,
+                    disableBack: true
+                  });
+                  $state.go("lesson");
                 });
 
                 menuButton.scaleX = menuButton.scaleY = scale;
@@ -342,6 +361,9 @@ angular.module("bookbuilder2")
               });
 
           }, function (callback) {
+
+            console.log("Waterfall loading title");
+
             var title = new createjs.Text($scope.activityData.title, "27px Arial", "white");
             title.scaleX = title.scaleY = scale;
             title.x = backgroundPosition.x + (backgroundPosition.width / 10);
@@ -352,6 +374,9 @@ angular.module("bookbuilder2")
             callback();
 
           }, function (callback) {
+
+            console.log("Waterfall loading activity name");
+
             var lessonTitle = new createjs.Text($rootScope.activityName, "27px Arial", "yellow");
             lessonTitle.scaleX = lessonTitle.scaleY = scale;
             lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 11);
@@ -363,6 +388,9 @@ angular.module("bookbuilder2")
             callback();
 
           }, function (callback) {
+
+            console.log("Waterfall loading descriotion");
+
             var descriptionText = new createjs.Text($scope.activityData.description, "18px Arial", "white");
             descriptionText.scaleX = descriptionText.scaleY = scale;
             descriptionText.x = backgroundPosition.x + (backgroundPosition.width / 1.4);
@@ -375,6 +403,8 @@ angular.module("bookbuilder2")
 
 
           }, function (callback) {
+
+            console.log("Waterfall loading question containers");
 
             $scope.questionsContainer = new createjs.Container();
             $scope.questionsContainer.width = background.image.width / 1.1;
@@ -426,6 +456,9 @@ angular.module("bookbuilder2")
             callback();
 
           }, function (callback) {
+
+            console.log("Waterfall loading answer containers");
+
             $scope.answersContainer = new createjs.Container();
             $scope.answersContainer.width = background.image.width / 1.1;
             $scope.answersContainer.height = background.image.height / 3.2;
@@ -683,6 +716,9 @@ angular.module("bookbuilder2")
 
           }, function (callback) {
 
+            console.log("Waterfall navugator buttons");
+
+
             $scope.navigatorContainer = new createjs.Container();
             $scope.navigatorContainer.width = background.image.width / 1.1;
             $scope.navigatorContainer.height = background.image.height / 8;
@@ -801,6 +837,8 @@ angular.module("bookbuilder2")
           }
           ],
           function (err, response) {
+            console.log("General Callback and init");
+
             init();
           });
 
@@ -1186,12 +1224,21 @@ angular.module("bookbuilder2")
           console.log(index);
 
           if (index < $rootScope.selectedLesson.lessonMenu.length - 1) {
-            $rootScope.activityFolder = $rootScope.selectedLesson.lessonMenu[index].activityFolder;
-            $rootScope.activityName = $rootScope.selectedLesson.lessonMenu[index].activityName;
+            $rootScope.activityFolder = $rootScope.selectedLesson.lessonMenu[index + 1].activityFolder;
+            $rootScope.activityName = $rootScope.selectedLesson.lessonMenu[index + 1].name;
             window.localStorage.setItem("activityFolder", $rootScope.activityFolder);
             window.localStorage.setItem("activityName", $rootScope.activityName);
+            console.log("Next $rootScope.activityFolder: " + $rootScope.activityFolder + " $rootScope.activityName" + $rootScope.activityName);
+            $ionicHistory.nextViewOptions({
+              historyRoot: true,
+              disableBack: true
+            });
             $state.go($rootScope.selectedLesson.lessonMenu[index + 1].activityTemplate);
           } else {
+            $ionicHistory.nextViewOptions({
+              historyRoot: true,
+              disableBack: true
+            });
             $state.go("results");
           }
         }

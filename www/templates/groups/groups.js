@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-  .controller("GroupsController", function (Download, $ionicLoading, $scope, $ionicPlatform, $timeout, $http, _, $ionicPopup, $state, $rootScope, Toast, $cordovaFile) {
+  .controller("GroupsController", function (Download, $ionicLoading, $scope, $ionicPlatform, $timeout, $http, _, $ionicHistory, $ionicPopup, $state, $rootScope, Toast, $cordovaFile) {
 
     console.log("GroupsController loaded!");
 
@@ -159,7 +159,7 @@ angular.module("bookbuilder2")
               /*It's important too define containers height before start calculating buttons*/
               groupsMenuContainer.width = 236;
               groupsMenuContainer.height = 480;
-              
+
               $rootScope.book = response;
 
               groupsMenuContainer.scaleX = groupsMenuContainer.scaleY = scale;
@@ -336,6 +336,10 @@ angular.module("bookbuilder2")
 
                           downloadLessonAssets(lesson, function (response) {
                             if (response) {
+                              $ionicHistory.nextViewOptions({
+                                historyRoot: true,
+                                disableBack: true
+                              });
                               $state.go("lesson");
                             } else {
                               showDownloadingError(lesson);
@@ -352,6 +356,14 @@ angular.module("bookbuilder2")
                             if (res) {
                               downloadLessonAssets(lesson, function (response) {
                                 if (response) {
+                                  //Clearing Lesson after downloading for the first time!
+                                  _.each(lesson.lessonMenu, function (activity, key, list) {
+                                    window.localStorage.removeItem(lesson.id + "_" + activity.activityFolder);
+                                  });
+                                  $ionicHistory.nextViewOptions({
+                                    historyRoot: true,
+                                    disableBack: true
+                                  });
                                   $state.go("lesson");
                                 } else {
                                   showDownloadingError(lesson);
@@ -567,12 +579,20 @@ angular.module("bookbuilder2")
         if (res) {
           downloadLessonAssets(lesson, function (response) {
             if (response) {
+              $ionicHistory.nextViewOptions({
+                historyRoot: true,
+                disableBack: true
+              });
               $state.go("lesson");
             } else {
               showDownloadingError(lesson);
             }
           });
         } else {
+          $ionicHistory.nextViewOptions({
+            historyRoot: true,
+            disableBack: true
+          });
           $state.go("lesson");
         }
       });

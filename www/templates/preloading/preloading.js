@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-  .controller("PreloadingController", function (_, $scope, Download, $ionicPlatform, $ionicPopup, $rootScope, $http, $state, $ionicLoading, $cordovaFile) {
+  .controller("PreloadingController", function (_, $scope, Download, $ionicHistory, $ionicPlatform, $ionicPopup, $rootScope, $http, $state, $ionicLoading, $cordovaFile) {
 
     console.log("PreloadingController loaded!");
 
@@ -11,6 +11,10 @@ angular.module("bookbuilder2")
         okType: 'button-dark'
       });
       errorPopUp.then(function () {
+        $ionicHistory.nextViewOptions({
+          historyRoot: true,
+          disableBack: true
+        });
         $state.go($rootScope.book.bookTemplate);
       });
     };
@@ -86,6 +90,10 @@ angular.module("bookbuilder2")
                                     "text": 'NO',
                                     "type": "button-dark button-outline",
                                     "onTap": function (e) {
+                                      $ionicHistory.nextViewOptions({
+                                        historyRoot: true,
+                                        disableBack: true
+                                      });
                                       $state.go($rootScope.book.bookTemplate);
                                     }
                                   },
@@ -113,6 +121,10 @@ angular.module("bookbuilder2")
                                           }, function (err) {
                                             console.log('Ionic Deploy: Update error! ', err);
                                             $ionicLoading.hide();
+                                            $ionicHistory.nextViewOptions({
+                                              historyRoot: true,
+                                              disableBack: true
+                                            });
                                             $state.go($rootScope.book.bookTemplate);
                                           }, function (prog) {
                                             console.log('Ionic Deploy: Progress... ', prog);
@@ -122,6 +134,10 @@ angular.module("bookbuilder2")
                                           });
                                         }, function (error) {
                                           console.log(error);
+                                          $ionicHistory.nextViewOptions({
+                                            historyRoot: true,
+                                            disableBack: true
+                                          });
                                           $state.go($rootScope.book.bookTemplate);
                                         });
                                     }
@@ -130,16 +146,33 @@ angular.module("bookbuilder2")
                               });
                             }, function (response) {
                               console.log("callback meta 1 ", response);
+                              $ionicHistory.nextViewOptions({
+                                historyRoot: true,
+                                disableBack: true
+                              });
                               $state.go($rootScope.book.bookTemplate);
                             }, function (response) {
                               console.log("callback meta 2", response);
+                              $ionicHistory.nextViewOptions({
+                                historyRoot: true,
+                                disableBack: true
+                              });
                               $state.go($rootScope.book.bookTemplate);
                             });
                           } else {
+                            $ionicHistory.nextViewOptions({
+                              historyRoot: true,
+                              disableBack: true
+                            });
                             $state.go($rootScope.book.bookTemplate);
+
                           }
                         }, function (error) {
                           console.log(error);
+                          $ionicHistory.nextViewOptions({
+                            historyRoot: true,
+                            disableBack: true
+                          });
                           $state.go($rootScope.book.bookTemplate);
                         });
                       } else {
@@ -159,6 +192,10 @@ angular.module("bookbuilder2")
       } else {
         $rootScope.rootDir = "";
         /*$state.go($rootScope.book.bookTemplate);*/
+        $ionicHistory.nextViewOptions({
+          historyRoot: true,
+          disableBack: true
+        });
         $state.go("groups");
       }
     });

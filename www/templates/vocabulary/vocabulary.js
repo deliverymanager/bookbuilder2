@@ -165,7 +165,11 @@ angular.module("bookbuilder2")
             menuButton.addEventListener("pressup", function (event) {
               console.log("pressup event!");
               menuButton.gotoAndPlay("normal");
-              $ionicHistory.goBack();
+              $ionicHistory.nextViewOptions({
+                historyRoot: true,
+                disableBack: true
+              });
+              $state.go("lesson");
             });
 
             menuButton.scaleX = menuButton.scaleY = scale;
@@ -687,10 +691,10 @@ angular.module("bookbuilder2")
             stage.update();
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-           /* var graphics = new createjs.Graphics().beginFill("darkgrey").drawRect(0, 0, $scope.derivativeContainers[key].subContainers["buttons"].width, $scope.derivativeContainers[key].subContainers["buttons"].height);
-            var shape = new createjs.Shape(graphics);
-            $scope.derivativeContainers[key].subContainers["buttons"].addChild(shape);
-            stage.update();*/
+            /* var graphics = new createjs.Graphics().beginFill("darkgrey").drawRect(0, 0, $scope.derivativeContainers[key].subContainers["buttons"].width, $scope.derivativeContainers[key].subContainers["buttons"].height);
+             var shape = new createjs.Shape(graphics);
+             $scope.derivativeContainers[key].subContainers["buttons"].addChild(shape);
+             stage.update();*/
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 

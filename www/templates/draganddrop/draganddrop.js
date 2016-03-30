@@ -169,7 +169,11 @@ angular.module("bookbuilder2")
             menuButton.addEventListener("pressup", function (event) {
               console.log("pressup event!");
               menuButton.gotoAndPlay("normal");
-              $ionicHistory.goBack();
+              $ionicHistory.nextViewOptions({
+                historyRoot: true,
+                disableBack: true
+              });
+              $state.go("lesson");
             });
 
             menuButton.scaleX = menuButton.scaleY = scale;
@@ -600,7 +604,7 @@ angular.module("bookbuilder2")
                   });
                   $scope.nextButton.scaleX = $scope.nextButton.scaleY = scale;
                   $scope.nextButton.x = backgroundPosition.x + (backgroundPosition.width / 1.18);
-                  $scope.nextButton.y = backgroundPosition.y + (backgroundPosition.height / 1.07);
+                  $scope.nextButton.y = backgroundPosition.y + (backgroundPosition.height / 1.085);
                   $scope.stage.addChild($scope.nextButton);
                   $scope.stage.update();
                   callback();
@@ -793,12 +797,21 @@ angular.module("bookbuilder2")
           console.log(index);
 
           if (index < $rootScope.selectedLesson.lessonMenu.length - 1) {
-            $rootScope.activityFolder = $rootScope.selectedLesson.lessonMenu[index].activityFolder;
-            $rootScope.activityName = $rootScope.selectedLesson.lessonMenu[index].activityName;
+            $rootScope.activityFolder = $rootScope.selectedLesson.lessonMenu[index + 1].activityFolder;
+            $rootScope.activityName = $rootScope.selectedLesson.lessonMenu[index + 1].name;
             window.localStorage.setItem("activityFolder", $rootScope.activityFolder);
             window.localStorage.setItem("activityName", $rootScope.activityName);
+            console.log("Next $rootScope.activityFolder: " + $rootScope.activityFolder + " $rootScope.activityName" + $rootScope.activityName);
+            $ionicHistory.nextViewOptions({
+              historyRoot: true,
+              disableBack: true
+            });
             $state.go($rootScope.selectedLesson.lessonMenu[index + 1].activityTemplate);
           } else {
+            $ionicHistory.nextViewOptions({
+              historyRoot: true,
+              disableBack: true
+            });
             $state.go("results");
           }
         }

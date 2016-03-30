@@ -178,7 +178,11 @@ angular.module("bookbuilder2")
             menuButton.addEventListener("pressup", function (event) {
               console.log("pressup event!");
               menuButton.gotoAndPlay("normal");
-              $ionicHistory.goBack();
+              $ionicHistory.nextViewOptions({
+                historyRoot: true,
+                disableBack: true
+              });
+              $state.go("lesson");
             });
 
             menuButton.scaleX = menuButton.scaleY = scale;
