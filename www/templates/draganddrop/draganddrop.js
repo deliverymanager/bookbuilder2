@@ -81,7 +81,7 @@ angular.module("bookbuilder2")
 
       $scope.sounds = {};
       if (window.cordova && window.cordova.platformId !== "browser") {
-        _.each(["drag", "drop"], function (sound, key, list) {
+        _.each(["drag", "drop", "check"], function (sound, key, list) {
           if (ionic.Platform.isIOS() && window.cordova) {
             console.log("Else iOS");
             resolveLocalFileSystemURL($rootScope.rootDir + "data/assets/" + sound + ".mp3", function (entry) {
@@ -173,7 +173,7 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
-              $state.go("lesson");
+              $state.go("lesson", {}, { reload: true });
             });
 
             menuButton.scaleX = menuButton.scaleY = scale;
@@ -346,8 +346,8 @@ angular.module("bookbuilder2")
                     "text": $scope.questionText[key].text
                   }), collisionDetectedQuestion);
 
-                  $scope.activityData.questions[key].userAnswerLabel = "";
                   $scope.activityData.questions[key].userAnswer = "";
+                  $scope.activityData.questions[key].userAnswerLabel = "";
                   $scope.questionText[key].text = userChoice;
                 } else {
                   $scope.answerText[_.findIndex($scope.activityData.answers, {
@@ -366,8 +366,8 @@ angular.module("bookbuilder2")
                     "text": $scope.questionText[key].text
                   })].startingPointY;
 
-                  $scope.activityData.questions[key].userAnswerLabel = "";
                   $scope.activityData.questions[key].userAnswer = "";
+                  $scope.activityData.questions[key].userAnswerLabel = "";
                   $scope.questionText[key].text = userChoice;
                   $scope.questionText[key].x = $scope.questionText[key].startingPointX;
                   $scope.questionText[key].y = $scope.questionText[key].startingPointY;
@@ -561,6 +561,9 @@ angular.module("bookbuilder2")
 
                     if (!$scope.activityData.completed) {
                       $scope.checkButton.gotoAndPlay("normal");
+                      if (window.cordova && window.cordova.platformId !== "browser") {
+                        $scope.sounds["check"].play();
+                      }
                       check();
                     }
                   });
@@ -620,11 +623,11 @@ angular.module("bookbuilder2")
                 console.log("answers Inserted!");
 
                 _.each($scope.activityData.questions, function (question, key, value) {
-                  console.log(key + " User Answer", question.userAnswerLabel);
-                  if (question.userAnswerLabel) {
+                  console.log(key + " User Answer", question.userAnswer);
+                  if (question.userAnswer) {
 
                     placeAnswer(_.findIndex($scope.activityData.answers, {
-                      "answer": question.userAnswerLabel
+                      "answer": question.userAnswer
                     }), key);
                   }
                 });
@@ -652,12 +655,12 @@ angular.module("bookbuilder2")
 
               //Assigning configured response to activityData
               $scope.activityData = response;
-              $scope.activityData.attempts = 0;
+              $scope.activityData.attempts = 1;
 
-              /*Adding the userAnswer attribute to response object before assigning it to activityData*/
+              /*Adding the userAnswerLabel attribute to response object before assigning it to activityData*/
               _.each($scope.activityData.questions, function (question, key, value) {
-                $scope.activityData.questions[key].userAnswerLabel = "";
                 $scope.activityData.questions[key].userAnswer = "";
+                $scope.activityData.questions[key].userAnswerLabel = "";
               });
               init();
               //Saving it to localStorage
@@ -704,8 +707,8 @@ angular.module("bookbuilder2")
           $scope.activityData.attempts += +1;
 
           _.each($scope.activityData.questions, function (question, key, value) {
-            $scope.activityData.questions[key].userAnswerLabel = "";
             $scope.activityData.questions[key].userAnswer = "";
+            $scope.activityData.questions[key].userAnswerLabel = "";
             $scope.questionText[key].text = userChoice;
             $scope.answerText[key].visible = true;
             createjs.Tween.get($scope.answerText[key], {loop: false})
@@ -724,7 +727,7 @@ angular.module("bookbuilder2")
         function check() {
 
           if (_.findWhere($scope.activityData.questions, {
-              "userAnswerLabel": ""
+              "userAnswer": ""
             })) {
             console.log("Please fill all the gaps!");
             Toast.show("Please fill all the gaps!");
@@ -742,22 +745,22 @@ angular.module("bookbuilder2")
 
           var rightAnswers = 0;
           _.each($scope.activityData.questions, function (question, key, value) {
-            if (question.userAnswerLabel === question.answer) {
+            if (question.userAnswer === question.answer) {
 
-              if (!$scope.activityData.questions[key].userAnswer) {
-                $scope.activityData.questions[key].userAnswer = question.answer;
+              if (!$scope.activityData.questions[key].userAnswerLabel) {
+                $scope.activityData.questions[key].userAnswerLabel = question.answer;
                 $scope.questionText[key].color = "green";
                 rightAnswers++;
-              } else if ($scope.activityData.questions[key].userAnswer !== $scope.activityData.questions[key].answer) {
+              } else if ($scope.activityData.questions[key].userAnswerLabel !== $scope.activityData.questions[key].answer) {
                 $scope.questionText[key].color = "red";
               } else {
                 $scope.questionText[key].color = "green";
                 rightAnswers++;
               }
 
-            } else if (question.userAnswerLabel) {
-              if (!$scope.activityData.questions[key].userAnswer) {
-                $scope.activityData.questions[key].userAnswer = question.userAnswerLabel;
+            } else if (question.userAnswer) {
+              if (!$scope.activityData.questions[key].userAnswerLabel) {
+                $scope.activityData.questions[key].userAnswerLabel = question.userAnswer;
               }
               placeAnswer(_.findIndex($scope.activityData.answers, {
                 "answer": question.answer
@@ -779,7 +782,7 @@ angular.module("bookbuilder2")
 
           $scope.answerText[answerKey].visible = false;
           $scope.questionText[questionKey].text = $scope.activityData.answers[answerKey].text;
-          $scope.activityData.questions[questionKey].userAnswerLabel = $scope.activityData.answers[answerKey].answer;
+          $scope.activityData.questions[questionKey].userAnswer = $scope.activityData.answers[answerKey].answer;
           $scope.questionText[questionKey].color = "black";
           $scope.questionText[questionKey].x = $scope.underlinedText[questionKey].getTransformedBounds().x + $scope.underlinedText[questionKey].getTransformedBounds().width / 2 - $scope.questionText[questionKey].getTransformedBounds().width / 2;
           $scope.stage.update();
@@ -806,13 +809,13 @@ angular.module("bookbuilder2")
               historyRoot: true,
               disableBack: true
             });
-            $state.go($rootScope.selectedLesson.lessonMenu[index + 1].activityTemplate);
+            $state.go($rootScope.selectedLesson.lessonMenu[index + 1].activityTemplate, {}, { reload: true });
           } else {
             $ionicHistory.nextViewOptions({
               historyRoot: true,
               disableBack: true
             });
-            $state.go("results");
+            $state.go("results", {}, { reload: true });
           }
         }
 

@@ -267,7 +267,7 @@ angular.module("bookbuilder2")
                     historyRoot: true,
                     disableBack: true
                   });
-                  $state.go("vocabulary");
+                  $state.go("vocabulary", {}, { reload: true });
                 });
                 $scope.stage.addChild(vocabularyButton);
                 $scope.stage.update();
@@ -303,7 +303,7 @@ angular.module("bookbuilder2")
                     historyRoot: true,
                     disableBack: true
                   });
-                  $state.go("results");
+                  $state.go("results", {}, { reload: true });
                 });
               })
               .error(function (error) {
@@ -355,7 +355,7 @@ angular.module("bookbuilder2")
                         historyRoot: true,
                         disableBack: true
                       });
-                      $state.go(activityButton.activityTemplate);
+                      $state.go(activityButton.activityTemplate, {}, { reload: true });
                     });
 
                     activitiesMenuContainer.addChild(activityButton);
