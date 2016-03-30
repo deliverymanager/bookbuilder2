@@ -123,9 +123,9 @@ angular.module("bookbuilder2")
               console.log("mousedown event on a button !");
 
               if ($scope.playing) {
-                playButton.gotoAndPlay("playOnSelection");
-              } else {
                 playButton.gotoAndPlay("pauseOnSelection");
+              } else {
+                playButton.gotoAndPlay("playOnSelection");
               }
               $scope.stage.update();
             });
@@ -134,19 +134,23 @@ angular.module("bookbuilder2")
               console.log("pressup event Play", $scope.playing);
 
               if ($scope.playing) {
-                playButton.gotoAndPlay("pauseNormal");
-                $scope.playing = false;
-                $scope.sound.pause();
-              } else {
                 playButton.gotoAndPlay("playNormal");
+                $scope.playing = false;
+                if (window.cordova && window.cordova.platformId !== "browser") {
+                  $scope.sound.pause();
+                }
+              } else {
+                playButton.gotoAndPlay("pauseNormal");
                 $scope.playing = true;
-                $scope.sound.play();
+                if (window.cordova && window.cordova.platformId !== "browser") {
+                  $scope.sound.play();
+                }
               }
             });
 
             playButton.scaleX = playButton.scaleY = scale;
             playButton.x = backgroundPosition.x + (backgroundPosition.width / 1.13);
-            playButton.y = backgroundPosition.y + (backgroundPosition.height / 1.053);
+            playButton.y = backgroundPosition.y + (backgroundPosition.height / 1.09);
 
             $scope.stage.addChild(playButton);
             $scope.stage.update();

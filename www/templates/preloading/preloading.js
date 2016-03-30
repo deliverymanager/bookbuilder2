@@ -40,7 +40,6 @@ angular.module("bookbuilder2")
             }
 
             $rootScope.cdnUrl = "http://" + TempGroup[2] + ".s3-website-eu-west-1.amazonaws.com/";
-            console.log(cdnUrl);
             $rootScope.totalFiles = 100;
             $rootScope.downloading = 0;
 

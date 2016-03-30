@@ -3,14 +3,14 @@ angular.module("bookbuilder2")
 
     console.log("MultipleController loaded!");
     //START OF DEVELOPMENT SNIPPET
-    if (window.cordova && window.cordova.platformId !== "browser") {
-      $rootScope.rootDir = window.cordova.file.dataDirectory;
-    } else {
-      $rootScope.rootDir = "";
-    }
-    $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
-    $rootScope.activityFolder = window.localStorage.getItem("activityFolder");
-    $rootScope.activityName = window.localStorage.getItem("activityName");
+    /*if (window.cordova && window.cordova.platformId !== "browser") {
+     $rootScope.rootDir = window.cordova.file.dataDirectory;
+     } else {
+     $rootScope.rootDir = "";
+     }
+     $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+     $rootScope.activityFolder = window.localStorage.getItem("activityFolder");
+     $rootScope.activityName = window.localStorage.getItem("activityName");*/
     //END OF DEVELOPMENT SNIPPET
 
     /*Name of activity in localStorage*/
@@ -179,8 +179,7 @@ angular.module("bookbuilder2")
               $scope.activityData = JSON.parse(window.localStorage.getItem(activityNameInLocalStorage));
               callback();
             } else {
-              var activityUrl = "data/lessons/" + $rootScope.selectedLesson.id + "/" + $rootScope.activityFolder + "/multiple.json";
-              $http.get(activityUrl)
+              $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/" + $rootScope.activityFolder + "/multiple.json")
                 .success(function (response) {
                   /*Adding the userAnswer attribute to response object before assigning it to $scope.activityData*/
                   _.each(response.questions, function (question, key, value) {
@@ -259,8 +258,8 @@ angular.module("bookbuilder2")
 
                 });
                 $scope.nextButton.scaleX = $scope.nextButton.scaleY = scale;
-                $scope.nextButton.x = backgroundPosition.x + (backgroundPosition.width / 1.13);
-                $scope.nextButton.y = backgroundPosition.y + (backgroundPosition.height / 1.063);
+                $scope.nextButton.x = backgroundPosition.x + (backgroundPosition.width / 1.18);
+                $scope.nextButton.y = backgroundPosition.y + (backgroundPosition.height / 1.07);
                 $scope.stage.addChild($scope.nextButton);
                 $scope.stage.update();
                 callback();
@@ -381,8 +380,7 @@ angular.module("bookbuilder2")
             $scope.questionsContainer.width = background.image.width / 1.1;
             $scope.questionsContainer.height = background.image.height / 3;
             $scope.questionsContainer.scaleX = $scope.questionsContainer.scaleY = scale;
-            $scope.questionsContainer.x = backgroundPosition.x + (backgroundPosition.width / 22);
-            $scope.questionsContainer.y = backgroundPosition.y + (backgroundPosition.height / 7);
+            $scope.questionsContainer.x = backgroundPosition.x + (backgroundPosition.height / 22);
             $scope.stage.addChild($scope.questionsContainer);
 
 
@@ -433,7 +431,6 @@ angular.module("bookbuilder2")
             $scope.answersContainer.height = background.image.height / 3.2;
             $scope.answersContainer.scaleX = $scope.answersContainer.scaleY = scale;
             $scope.answersContainer.x = backgroundPosition.x + (backgroundPosition.width / 22);
-            $scope.answersContainer.y = backgroundPosition.y + (backgroundPosition.height / 2.1);
             $scope.stage.addChild($scope.answersContainer);
 
             /*var graphicsCon = new createjs.Graphics().beginFill("blue").drawRect(0, 0, $scope.answersContainer.width, $scope.answersContainer.height);
@@ -757,7 +754,28 @@ angular.module("bookbuilder2")
                       }
                     });
                     $scope.stage.update();
-                    loadQuestion(key);
+
+                    async.parallel([function (parallelCallback) {
+
+                      createjs.Tween.get($scope.answersContainer, {loop: false})
+                        .to({
+                          y: +1000 * scale
+                        }, 300, createjs.Ease.getPowIn(2)).call(function () {
+                        parallelCallback();
+                      });
+
+                    }, function (parallelCallback) {
+
+                      createjs.Tween.get($scope.questionsContainer, {loop: false})
+                        .to({
+                          y: -1000 * scale
+                        }, 300, createjs.Ease.getPowIn(2)).call(function () {
+                        parallelCallback();
+                      });
+                    }], function (err, response) {
+                      loadQuestion(key);
+                    });
+
                   });
 
                   $scope.yellowBarContainers[key].addChild($scope.yellowBarContainers[key].yellowBarButtons[key]);
@@ -900,6 +918,7 @@ angular.module("bookbuilder2")
           var firstGapUnderlinedText = $scope.firstGap.clone();
           $scope.questionsTextContainer.addChild(firstGapUnderlinedText);
           $scope.firstGap.textAlign = "center";
+          $scope.firstGap.maxWidth = firstGapUnderlinedText.getBounds().width * 0.9;
           $scope.firstGap.x = currentPretexts[pretexts.length - 1].x + currentPretexts[pretexts.length - 1].getBounds().width + firstGapUnderlinedText.getBounds().width / 2;
 
           if ($scope.activityData.questions[key].midtext) {
@@ -924,6 +943,7 @@ angular.module("bookbuilder2")
             $scope.questionsTextContainer.addChild(secondGapUnderlinedText);
 
             $scope.secondGap.textAlign = "center";
+            $scope.secondGap.maxWidth = secondGapUnderlinedText.getBounds().width * 0.9;
             $scope.secondGap.x = currentMidtexts[pretexts.length - 1].x + currentMidtexts[pretexts.length - 1].getBounds().width + secondGapUnderlinedText.getBounds().width / 2;
 
             if (question.postext) {
@@ -1043,6 +1063,17 @@ angular.module("bookbuilder2")
 
           $scope.stage.update();
 
+          createjs.Tween.get($scope.answersContainer, {loop: false})
+            .to({
+              y: backgroundPosition.y + (backgroundPosition.height / 2.1)
+            }, 300, createjs.Ease.getPowIn(2)).call(function () {
+          });
+
+          createjs.Tween.get($scope.questionsContainer, {loop: false})
+            .to({
+              y: backgroundPosition.y + (backgroundPosition.height / 7)
+            }, 300, createjs.Ease.getPowIn(2));
+
         };
 
         function completedActivity() {
@@ -1074,6 +1105,7 @@ angular.module("bookbuilder2")
             }
           });
           $scope.yellowBarContainers[0].scaleX = $scope.yellowBarContainers[0].scaleY = 1.4;
+          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
           loadQuestion(0);
         }
 
@@ -1152,7 +1184,12 @@ angular.module("bookbuilder2")
             "activityFolder": $rootScope.activityFolder
           });
           console.log(index);
+
           if (index < $rootScope.selectedLesson.lessonMenu.length - 1) {
+            $rootScope.activityFolder = $rootScope.selectedLesson.lessonMenu[index].activityFolder;
+            $rootScope.activityName = $rootScope.selectedLesson.lessonMenu[index].activityName;
+            window.localStorage.setItem("activityFolder", $rootScope.activityFolder);
+            window.localStorage.setItem("activityName", $rootScope.activityName);
             $state.go($rootScope.selectedLesson.lessonMenu[index + 1].activityTemplate);
           } else {
             $state.go("results");

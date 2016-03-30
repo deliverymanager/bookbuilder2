@@ -4,13 +4,13 @@ angular.module("bookbuilder2")
     console.log("Draganddrop loaded!");
 
     //START OF DEVELOPMENT SNIPPET
-    if (window.cordova && window.cordova.platformId !== "browser") {
-      $rootScope.rootDir = window.cordova.file.dataDirectory;
-    } else {
-      $rootScope.rootDir = "";
-    }
-    $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
-    $rootScope.activityFolder = window.localStorage.getItem("activityFolder");
+    /*if (window.cordova && window.cordova.platformId !== "browser") {
+     $rootScope.rootDir = window.cordova.file.dataDirectory;
+     } else {
+     $rootScope.rootDir = "";
+     }
+     $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+     $rootScope.activityFolder = window.localStorage.getItem("activityFolder");*/
     //END OF DEVELOPMENT SNIPPET
 
     /*Name of activity in localStorage*/
@@ -599,8 +599,8 @@ angular.module("bookbuilder2")
 
                   });
                   $scope.nextButton.scaleX = $scope.nextButton.scaleY = scale;
-                  $scope.nextButton.x = backgroundPosition.x + (backgroundPosition.width / 1.13);
-                  $scope.nextButton.y = backgroundPosition.y + (backgroundPosition.height / 1.055);
+                  $scope.nextButton.x = backgroundPosition.x + (backgroundPosition.width / 1.18);
+                  $scope.nextButton.y = backgroundPosition.y + (backgroundPosition.height / 1.07);
                   $scope.stage.addChild($scope.nextButton);
                   $scope.stage.update();
                   callback();
@@ -642,10 +642,7 @@ angular.module("bookbuilder2")
           init();
 
         } else {
-          /*Getting the json object for the activity*/
-          var activityUrl = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/" + $rootScope.activityFolder + "/draganddrop.json";
-          console.log("trying to get json for the url: ", activityUrl);
-          $http.get(activityUrl)
+          $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/" + $rootScope.activityFolder + "/draganddrop.json")
             .success(function (response) {
               console.log("Success on getting json for the url. The response object is: ", response);
 
@@ -716,6 +713,7 @@ angular.module("bookbuilder2")
             $scope.questionText[key].color = "blue";
             $scope.questionText[key].x = $scope.underlinedText[key].getTransformedBounds().x + $scope.underlinedText[key].getTransformedBounds().width / 2 - $scope.questionText[key].getTransformedBounds().width / 2;
           });
+          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
           score();
         }
 
@@ -786,11 +784,19 @@ angular.module("bookbuilder2")
 
 
         /*Function that goes to the next activity*/
+
         function next() {
+          console.log("next activity!");
           var index = _.findIndex($rootScope.selectedLesson.lessonMenu, {
             "activityFolder": $rootScope.activityFolder
           });
+          console.log(index);
+
           if (index < $rootScope.selectedLesson.lessonMenu.length - 1) {
+            $rootScope.activityFolder = $rootScope.selectedLesson.lessonMenu[index].activityFolder;
+            $rootScope.activityName = $rootScope.selectedLesson.lessonMenu[index].activityName;
+            window.localStorage.setItem("activityFolder", $rootScope.activityFolder);
+            window.localStorage.setItem("activityName", $rootScope.activityName);
             $state.go($rootScope.selectedLesson.lessonMenu[index + 1].activityTemplate);
           } else {
             $state.go("results");
