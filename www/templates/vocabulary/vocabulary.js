@@ -235,9 +235,14 @@ angular.module("bookbuilder2")
                           $scope.sounds[word.name] = new Media(entry.toInternalURL(), function () {
                             console.log("Sound success");
                           }, function (err) {
-                            console.log("Sound error", err);
+                            console.log("Sound error: ", err);
                           }, function (status) {
-                            console.log("Sound status", status);
+
+                            if (status === 1) {
+                              $scope.sounds[word.name].soundWasPlayed = true;
+                            }
+
+                            console.log("Sound status: ", status);
                           });
                           $timeout(function () {
                             waterfallCallback();
@@ -245,13 +250,22 @@ angular.module("bookbuilder2")
                         });
                       } else {
                         console.log("Else Android");
-                        /*$scope.sounds[word.name] = new Media(assetPath + word.name + ".mp3", function () {
-                         console.log("Sound success");
-                         }, function (err) {
-                         console.log("Sound error", err);
-                         }, function (status) {
-                         console.log("Sound status", status);
-                         });*/
+
+                        if (status === 1) {
+                          $scope.sounds[word.name].soundWasPlayed = true;
+                        }
+
+                        //Comment for browser
+                        $scope.sounds[word.name] = new Media(assetPath + word.name + ".mp3", function () {
+                          console.log("Sound success");
+
+                          //Sound finished and change background color again
+
+                        }, function (err) {
+                          console.log("Sound error", err);
+                        }, function (status) {
+                          console.log("Sound status", status);
+                        });
 
                         $timeout(function () {
                           waterfallCallback();
@@ -283,78 +297,125 @@ angular.module("bookbuilder2")
 
           console.log("Creating buttons container...");
 
-          $scope.buttonsContainer.width = 120;
-          $scope.buttonsContainer.height = backgroundPosition.height / 1.15;
+          $scope.buttonsContainer.width = background.image.width / 12;
+          $scope.buttonsContainer.height = background.image.height / 1.3;
           $scope.buttonsContainer.scaleX = $scope.buttonsContainer.scaleY = scale;
-          $scope.buttonsContainer.x = backgroundPosition.x + 30;
-          $scope.buttonsContainer.y = backgroundPosition.y + 5;
+          $scope.buttonsContainer.x = backgroundPosition.x + (backgroundPosition.width / 17);
+          $scope.buttonsContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
 
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-          /* var testGraphics = new createjs.Graphics().beginFill("red");
-           //Drawing the shape !!!NOTE Every optimization before drawRoundRect
-           testGraphics.drawRoundRect(0, 0, $scope.buttonsContainer.width, $scope.buttonsContainer.height, 1);
-
-           var testShape = new createjs.Shape(testGraphics);
-           testShape.setTransform($scope.buttonsContainer.x, $scope.buttonsContainer.y, scale, scale, 0, 0, 0, 0, 0);
-           $scope.buttonsContainer.addChild(testShape);
-           stage.update();*/
+          var buttonsContainerGraphics = new createjs.Graphics().beginFill("#BFBF3C").drawRect($scope.buttonsContainer.x, $scope.buttonsContainer.y, $scope.buttonsContainer.width, $scope.buttonsContainer.height);
+          var buttonsContainerShape = new createjs.Shape(buttonsContainerGraphics);
+          $scope.buttonsContainer.addChild(buttonsContainerShape);
+          stage.update();
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
           stage.addChild($scope.buttonsContainer);
           stage.update();
 
+          //Adding subContainers to buttonsPhrasesSubContainer
+          $scope.buttonsContainer.buttonsSubContainers = {};
+          _.each($scope.activityData.words, function (word, key, list) {
+            console.log("Adding a sub container to buttonsContainer with index: ", word.name);
+            $scope.buttonsContainer.buttonsSubContainers[word.name] = new createjs.Container();
+            $scope.buttonsContainer.buttonsSubContainers[word.name].width = $scope.buttonsContainer.width;
+            $scope.buttonsContainer.buttonsSubContainers[word.name].height = 30;
+            $scope.buttonsContainer.buttonsSubContainers[word.name].x = 0;
+            /*backgroundPosition.x + (backgroundPosition.width / 60);*/
+            $scope.buttonsContainer.buttonsSubContainers[word.name].y = key * 30;
+
+            /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
+            var buttonsSubContainerGraphics
+              = new createjs.Graphics().beginFill("grey").drawRect($scope.buttonsContainer.buttonsSubContainers[word.name].x,
+              $scope.buttonsContainer.buttonsSubContainers[word.name].y, $scope.buttonsContainer.buttonsSubContainers[word.name].width, $scope.buttonsContainer.buttonsSubContainers[word.name].height);
+            var buttonsSubContainerShape = new createjs.Shape(buttonsSubContainerGraphics);
+            $scope.buttonsContainer.buttonsSubContainers[word.name].addChild(buttonsSubContainerShape);
+            stage.update();
+            /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
+
+            $scope.buttonsContainer.addChild($scope.buttonsContainer.buttonsSubContainers[word.name]);
+            stage.update();
+          });
+          console.log("buttonsSubContainers: ", $scope.buttonsContainer.buttonsSubContainers);
+
 
           /*INDEX CONTAINER*/
           $scope.indexContainer = new createjs.Container();
 
-          console.log("Creating buttons container...");
+          console.log("Creating index container...");
 
-          $scope.indexContainer.width = 40;
-          $scope.indexContainer.height = backgroundPosition.height / 1.15;
+          $scope.indexContainer.width = background.image.width / 28;
+          $scope.indexContainer.height = background.image.height / 1.3;
           $scope.indexContainer.scaleX = $scope.indexContainer.scaleY = scale;
-          $scope.indexContainer.x = backgroundPosition.x + 85;
-          $scope.indexContainer.y = backgroundPosition.y + 5;
+          $scope.indexContainer.x = backgroundPosition.x + (backgroundPosition.width / 7);
+          $scope.indexContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
 
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-          /*var testGraphics2 = new createjs.Graphics().beginFill("orangered");
-           //Drawing the shape !!!NOTE Every optimization before drawRoundRect
-           testGraphics2.drawRoundRect(0, 0, $scope.indexContainer.width, $scope.indexContainer.height, 1);
-
-           var testShape2 = new createjs.Shape(testGraphics2);
-           testShape2.setTransform($scope.indexContainer.x, $scope.indexContainer.y, scale, scale, 0, 0, 0, 0, 0);
-           $scope.indexContainer.addChild(testShape2);
-           stage.update();*/
+          var graphicsIndex = new createjs.Graphics().beginFill("orange").drawRect($scope.indexContainer.x,
+            $scope.indexContainer.y, $scope.indexContainer.width, $scope.indexContainer.height);
+          var shapeIndex = new createjs.Shape(graphicsIndex);
+          $scope.indexContainer.addChild(shapeIndex);
+          stage.update();
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
           stage.addChild($scope.indexContainer);
           stage.update();
 
+          //Adding subContainers to indexPhrasesSubContainer
+          $scope.indexContainer.indexSubContainers = {};
+          _.each($scope.activityData.words, function (word, key, list) {
+            console.log("Adding a sub container to indexContainer with index: ", key);
+            $scope.indexContainer.indexSubContainers[word.name] = new createjs.Container();
+            console.log("Creating index container...");
+            $scope.indexContainer.indexSubContainers[word.name].width = $scope.indexContainer.width;
+            $scope.indexContainer.indexSubContainers[word.name].height = 30;
+            $scope.indexContainer.indexSubContainers[word.name].x = 0;
+            /*backgroundPosition.x + (backgroundPosition.width / 60);*/
+            $scope.indexContainer.indexSubContainers[word.name].y = key * 30;
+
+            /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
+            /* var indexPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("grey").drawRect(0, 0,
+             $scope.indexContainer.indexSubContainers[phrase.name].width,
+             $scope.indexContainer.indexSubContainers[phrase.name].height);
+             var indexSubContainers = new createjs.Shape(indexPhrasesSubContainerGraphics);
+             $scope.indexContainer.indexSubContainers[phrase.name].addChild(indexSubContainers);
+             stage.update();*/
+            /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
+
+            $scope.indexContainer.addChild($scope.indexContainer.indexSubContainers[word.name]);
+            stage.update();
+          });
+
 
           /*ENGLISH WORDS CONTAINER*/
           $scope.englishWordsContainer = new createjs.Container();
 
-          console.log("Creating buttons container...");
+          console.log("Creating words container...");
 
-          $scope.englishWordsContainer.width = 300;
-          $scope.englishWordsContainer.height = backgroundPosition.height / 1.15;
+          $scope.englishWordsContainer.width = background.image.width / 4;
+          $scope.englishWordsContainer.height = background.image.height / 1.3;
           $scope.englishWordsContainer.scaleX = $scope.englishWordsContainer.scaleY = scale;
-          $scope.englishWordsContainer.x = backgroundPosition.x + 105;
-          $scope.englishWordsContainer.y = backgroundPosition.y + 5;
+          $scope.englishWordsContainer.x = backgroundPosition.x + (backgroundPosition.width / 5.5);
+          $scope.englishWordsContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
 
 
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-          /*var testGraphics3 = new createjs.Graphics().beginFill("darkred");
-           //Drawing the shape !!!NOTE Every optimization before drawRoundRect
-           testGraphics3.drawRoundRect(0, 0, $scope.englishWordsContainer.width, $scope.englishWordsContainer.height, 1);
-
-           var testShape3 = new createjs.Shape(testGraphics3);
-           testShape3.setTransform($scope.englishWordsContainer.x, $scope.englishWordsContainer.y, scale, scale, 0, 0, 0, 0, 0);
-           $scope.englishWordsContainer.addChild(testShape3);
-           stage.update();*/
+          var graphicsPhraseEnglish = new createjs.Graphics().beginFill("yellow").drawRect($scope.englishWordsContainer.x,
+            $scope.englishWordsContainer.y, $scope.englishPhrasesContainer.width, $scope.englishWordsContainer.height);
+          var shapePhraseEnglish = new createjs.Shape(graphicsPhraseEnglish);
+          $scope.englishWordsContainer.addChild(shapePhraseEnglish);
+          stage.update();
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
           stage.addChild($scope.englishWordsContainer);
           stage.update();
+
+
+
+
+
+
+
 
 
           /*EQUALS SIGN CONTAINER*/
@@ -414,46 +475,44 @@ angular.module("bookbuilder2")
         function createSingleColumnPhrasesContainers() {
           $scope.buttonsPhrasesContainer = new createjs.Container();
           console.log("Creating buttons container...");
-          $scope.buttonsPhrasesContainer.width = background.image.width / 10;
+          $scope.buttonsPhrasesContainer.width = background.image.width / 12;
           $scope.buttonsPhrasesContainer.height = background.image.height / 1.3;
           $scope.buttonsPhrasesContainer.scaleX = $scope.buttonsPhrasesContainer.scaleY = scale;
-          $scope.buttonsPhrasesContainer.x = backgroundPosition.x;
-          /*backgroundPosition.x + (backgroundPosition.width / 60);*/
-          $scope.buttonsPhrasesContainer.y = backgroundPosition.y + (backgroundPosition.height / 17);
+          $scope.buttonsPhrasesContainer.x = backgroundPosition.x + (backgroundPosition.width / 17);
+          $scope.buttonsPhrasesContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
 
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-          var graphics = new createjs.Graphics().beginFill("#BFBF3C").drawRect($scope.buttonsPhrasesContainer.x, $scope.buttonsPhrasesContainer.y, $scope.buttonsPhrasesContainer.width, $scope.buttonsPhrasesContainer.height);
-          var shape = new createjs.Shape(graphics);
-          $scope.buttonsPhrasesContainer.addChild(shape);
-          stage.update();
+          /*  var graphics = new createjs.Graphics().beginFill("red").drawRect($scope.buttonsPhrasesContainer.x, $scope.buttonsPhrasesContainer.y, $scope.buttonsPhrasesContainer.width, $scope.buttonsPhrasesContainer.height);
+           var shape = new createjs.Shape(graphics);
+           $scope.buttonsPhrasesContainer.addChild(shape);
+           stage.update();*/
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
           stage.addChild($scope.buttonsPhrasesContainer);
           stage.update();
 
           //Adding subContainers to buttonsPhrasesSubContainer
-          $scope.buttonsPhrasesSubContainers = {};
+          $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers = {};
           _.each($scope.activityData.phrases, function (phrase, key, list) {
-            console.log("Adding a sub container to buttonsPhrasesContainer with index: ", key);
-            $scope.buttonsPhrasesSubContainers[phrase.name] = new createjs.Container();
-            console.log("Creating buttons container...");
-            $scope.buttonsPhrasesSubContainers[phrase.name].width = $scope.buttonsPhrasesContainer.width;
-            $scope.buttonsPhrasesSubContainers[phrase.name].height = 30;
-            $scope.buttonsPhrasesSubContainers[phrase.name].x = 0;
+            console.log("Adding a sub container to buttonsPhrasesContainer with index: ", phrase.name);
+            $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name] = new createjs.Container();
+            $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].width = $scope.buttonsPhrasesContainer.width;
+            $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].height = 30;
+            $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].x = 0;
             /*backgroundPosition.x + (backgroundPosition.width / 60);*/
-            $scope.buttonsPhrasesSubContainers[phrase.name].y = key * 30;
+            $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].y = key * 30;
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-            var buttonsPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("grey").drawRect($scope.buttonsPhrasesSubContainers[phrase.name].x, $scope.buttonsPhrasesSubContainers[phrase.name].y, $scope.buttonsPhrasesSubContainers[phrase.name].width, $scope.buttonsPhrasesSubContainers[phrase.name].height);
-            var buttonsPhrasesSubContainerShape = new createjs.Shape(buttonsPhrasesSubContainerGraphics);
-            $scope.buttonsPhrasesSubContainers[phrase.name].addChild(buttonsPhrasesSubContainerShape);
-            stage.update();
+            /*var buttonsPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].width, $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].height);
+             var buttonsPhrasesSubContainerShape = new createjs.Shape(buttonsPhrasesSubContainerGraphics);
+             $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].addChild(buttonsPhrasesSubContainerShape);
+             stage.update();*/
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
-            $scope.buttonsPhrasesContainer.addChild($scope.buttonsPhrasesSubContainers[phrase.name]);
+            $scope.buttonsPhrasesContainer.addChild($scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name]);
             stage.update();
           });
-          console.log("buttonsPhrasesSubContainers: ", $scope.buttonsPhrasesSubContainers);
+          console.log("buttonsPhrasesSubContainers: ", $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers);
 
 
           /*INDEX CONTAINER*/
@@ -462,42 +521,40 @@ angular.module("bookbuilder2")
           $scope.indexPhrasesContainer.width = background.image.width / 28;
           $scope.indexPhrasesContainer.height = background.image.height / 1.3;
           $scope.indexPhrasesContainer.scaleX = $scope.indexPhrasesContainer.scaleY = scale;
-          $scope.indexPhrasesContainer.x = backgroundPosition.x + (backgroundPosition.width / 15);
-          $scope.indexPhrasesContainer.y = backgroundPosition.y + (backgroundPosition.height / 17);
+          $scope.indexPhrasesContainer.x = backgroundPosition.x + (backgroundPosition.width / 7);
+          $scope.indexPhrasesContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
 
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-          var graphicsPhraseIndex = new createjs.Graphics().beginFill("#A0A037").drawRect($scope.indexPhrasesContainer.x, $scope.indexPhrasesContainer.y, $scope.indexPhrasesContainer.width, $scope.indexPhrasesContainer.height);
-          var shapePhraseIndex = new createjs.Shape(graphicsPhraseIndex);
-          $scope.indexPhrasesContainer.addChild(shapePhraseIndex);
-          stage.update();
+          /*   var graphicsPhraseIndex = new createjs.Graphics().beginFill("orange").drawRect($scope.indexPhrasesContainer.x, $scope.indexPhrasesContainer.y, $scope.indexPhrasesContainer.width, $scope.indexPhrasesContainer.height);
+           var shapePhraseIndex = new createjs.Shape(graphicsPhraseIndex);
+           $scope.indexPhrasesContainer.addChild(shapePhraseIndex);
+           stage.update();*/
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-
           stage.addChild($scope.indexPhrasesContainer);
           stage.update();
 
           //Adding subContainers to indexPhrasesSubContainer
-          $scope.indexPhrasesSubContainers = {};
+          $scope.indexPhrasesContainer.indexPhrasesSubContainers = {};
           _.each($scope.activityData.phrases, function (phrase, key, list) {
             console.log("Adding a sub container to indexPhrasesContainer with index: ", key);
-            $scope.indexPhrasesSubContainers[phrase.name] = new createjs.Container();
+            $scope.indexPhrasesContainer.indexPhrasesSubContainers[phrase.name] = new createjs.Container();
             console.log("Creating index container...");
-            $scope.indexPhrasesSubContainers[phrase.name].width = $scope.indexPhrasesContainer.width;
-            $scope.indexPhrasesSubContainers[phrase.name].height = 30;
-            $scope.indexPhrasesSubContainers[phrase.name].x = 0;
+            $scope.indexPhrasesContainer.indexPhrasesSubContainers[phrase.name].width = $scope.indexPhrasesContainer.width;
+            $scope.indexPhrasesContainer.indexPhrasesSubContainers[phrase.name].height = 30;
+            $scope.indexPhrasesContainer.indexPhrasesSubContainers[phrase.name].x = 0;
             /*backgroundPosition.x + (backgroundPosition.width / 60);*/
-            $scope.indexPhrasesSubContainers[phrase.name].y = key * 30;
+            $scope.indexPhrasesContainer.indexPhrasesSubContainers[phrase.name].y = key * 30;
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-            var indexPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("grey").drawRect($scope.indexPhrasesSubContainers[phrase.name].x, $scope.indexPhrasesSubContainers[phrase.name].y, $scope.indexPhrasesSubContainers[phrase.name].width, $scope.indexPhrasesSubContainers[phrase.name].height);
-            var indexPhrasesSubContainerShape = new createjs.Shape(indexPhrasesSubContainerGraphics);
-            $scope.indexPhrasesSubContainers[phrase.name].addChild(indexPhrasesSubContainerShape);
-            stage.update();
+            /* var indexPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.indexPhrasesContainer.indexPhrasesSubContainers[phrase.name].width, $scope.indexPhrasesContainer.indexPhrasesSubContainers[phrase.name].height);
+             var indexPhrasesSubContainerShape = new createjs.Shape(indexPhrasesSubContainerGraphics);
+             $scope.indexPhrasesContainer.indexPhrasesSubContainers[phrase.name].addChild(indexPhrasesSubContainerShape);
+             stage.update();*/
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
-            $scope.indexPhrasesContainer.addChild($scope.indexPhrasesSubContainers[phrase.name]);
+            $scope.indexPhrasesContainer.addChild($scope.indexPhrasesContainer.indexPhrasesSubContainers[phrase.name]);
             stage.update();
           });
-
 
 
           /*ENGLISH WORDS CONTAINER*/
@@ -506,44 +563,42 @@ angular.module("bookbuilder2")
           $scope.englishPhrasesContainer.width = background.image.width / 4;
           $scope.englishPhrasesContainer.height = background.image.height / 1.3;
           $scope.englishPhrasesContainer.scaleX = $scope.englishPhrasesContainer.scaleY = scale;
-          $scope.englishPhrasesContainer.x = backgroundPosition.x + (backgroundPosition.width / 11);
-          $scope.englishPhrasesContainer.y = backgroundPosition.y + (backgroundPosition.height / 17);
+          $scope.englishPhrasesContainer.x = backgroundPosition.x + (backgroundPosition.width / 5.5);
+          $scope.englishPhrasesContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
 
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-          var graphicsPhraseEnglish = new createjs.Graphics().beginFill("#AAAA39").drawRect($scope.englishPhrasesContainer.x, $scope.englishPhrasesContainer.y, $scope.englishPhrasesContainer.width, $scope.englishPhrasesContainer.height);
-          var shapePhraseEnglish = new createjs.Shape(graphicsPhraseEnglish);
-          $scope.englishPhrasesContainer.addChild(shapePhraseEnglish);
-          stage.update();
+          /*  var graphicsPhraseEnglish = new createjs.Graphics().beginFill("yellow").drawRect($scope.englishPhrasesContainer.x, $scope.englishPhrasesContainer.y, $scope.englishPhrasesContainer.width, $scope.englishPhrasesContainer.height);
+           var shapePhraseEnglish = new createjs.Shape(graphicsPhraseEnglish);
+           $scope.englishPhrasesContainer.addChild(shapePhraseEnglish);
+           stage.update();*/
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
           stage.addChild($scope.englishPhrasesContainer);
           stage.update();
 
           //Adding subContainers to englishPhrasesSubContainer
-          $scope.englishPhrasesSubContainers = {};
+          $scope.englishPhrasesContainer.englishPhrasesSubContainers = {};
           _.each($scope.activityData.phrases, function (phrase, key, list) {
             console.log("Adding a sub container to englishPhrasesContainer with index: ", key);
-            $scope.englishPhrasesSubContainers[phrase.name] = new createjs.Container();
+            $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name] = new createjs.Container();
             console.log("Creating english container...");
-            $scope.englishPhrasesSubContainers[phrase.name].width = $scope.englishPhrasesContainer.width;
-            $scope.englishPhrasesSubContainers[phrase.name].height = 30;
-            $scope.englishPhrasesSubContainers[phrase.name].x = 0;
+            $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].width = $scope.englishPhrasesContainer.width;
+            $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].height = 30;
+            $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].x = 0;
             /*backgroundPosition.x + (backgroundPosition.width / 60);*/
-            $scope.englishPhrasesSubContainers[phrase.name].y = key * 30;
+            $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].y = key * 30;
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-            var englishPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("grey").drawRect($scope.englishPhrasesSubContainers[phrase.name].x, $scope.englishPhrasesSubContainers[phrase.name].y, $scope.englishPhrasesSubContainers[phrase.name].width, $scope.englishPhrasesSubContainers[phrase.name].height);
-            var englishPhrasesSubContainerShape = new createjs.Shape(englishPhrasesSubContainerGraphics);
-            $scope.englishPhrasesSubContainers[phrase.name].addChild(englishPhrasesSubContainerShape);
-            stage.update();
+            /*var englishPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].width, $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].height);
+             var englishPhrasesSubContainerShape = new createjs.Shape(englishPhrasesSubContainerGraphics);
+             $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].addChild(englishPhrasesSubContainerShape);
+             stage.update();*/
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
-            $scope.englishPhrasesContainer.addChild($scope.englishPhrasesSubContainers[phrase.name]);
+            $scope.englishPhrasesContainer.addChild($scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name]);
             stage.update();
           });
-          console.log("englishPhrasesSubContainers: ", $scope.englishPhrasesSubContainers);
-
-
+          console.log("englishPhrasesSubContainers: ", $scope.englishPhrasesContainer.englishPhrasesSubContainers);
 
 
           /*EQUALS SIGN CONTAINER*/
@@ -554,44 +609,42 @@ angular.module("bookbuilder2")
           $scope.equalsSignPhrasesContainer.width = background.image.width / 28;
           $scope.equalsSignPhrasesContainer.height = backgroundPosition.height / 1.15;
           $scope.equalsSignPhrasesContainer.scaleX = $scope.equalsSignPhrasesContainer.scaleY = scale;
-          $scope.equalsSignPhrasesContainer.x = backgroundPosition.x + (backgroundPosition.width / 11);
-          $scope.equalsSignPhrasesContainer.y = backgroundPosition.y + 5;
+          $scope.equalsSignPhrasesContainer.x = backgroundPosition.x + (backgroundPosition.width / 2.2);
+          $scope.equalsSignPhrasesContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
 
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-          var graphicsPhraseEquals = new createjs.Graphics().beginFill("#BFBF3C").drawRect($scope.equalsSignPhrasesContainer.x, $scope.equalsSignPhrasesContainer.y, $scope.equalsSignPhrasesContainer.width, $scope.equalsSignPhrasesContainer.height);
-          var shapePhraseEquals = new createjs.Shape(graphicsPhraseEquals);
-          $scope.equalsSignPhrasesContainer.addChild(shapePhraseEquals);
-          stage.update();
+          /* var graphicsPhraseEquals = new createjs.Graphics().beginFill("#blue").drawRect($scope.equalsSignPhrasesContainer.x, $scope.equalsSignPhrasesContainer.y, $scope.equalsSignPhrasesContainer.width, $scope.equalsSignPhrasesContainer.height);
+           var shapePhraseEquals = new createjs.Shape(graphicsPhraseEquals);
+           $scope.equalsSignPhrasesContainer.addChild(shapePhraseEquals);
+           stage.update();*/
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
           stage.addChild($scope.equalsSignPhrasesContainer);
           stage.update();
 
           //Adding subContainers to equalsPhrasesSubContainer
-          $scope.equalsPhrasesSubContainers = {};
+          $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers = {};
           _.each($scope.activityData.phrases, function (phrase, key, list) {
             console.log("Adding a sub container to equalsPhrasesContainer with index: ", key);
-            $scope.equalsPhrasesSubContainers[phrase.name] = new createjs.Container();
+            $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name] = new createjs.Container();
             console.log("Creating equals container...");
-            $scope.equalsPhrasesSubContainers[phrase.name].width = $scope.equalsSignPhrasesContainer.width;
-            $scope.equalsPhrasesSubContainers[phrase.name].height = 30;
-            $scope.equalsPhrasesSubContainers[phrase.name].x = 0;
+            $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].width = $scope.equalsSignPhrasesContainer.width;
+            $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].height = 30;
+            $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].x = 0;
             /*backgroundPosition.x + (backgroundPosition.width / 60);*/
-            $scope.equalsPhrasesSubContainers[phrase.name].y = key * 30;
+            $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].y = key * 30;
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-            var equalsPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("grey").drawRect($scope.equalsPhrasesSubContainers[phrase.name].x, $scope.equalsPhrasesSubContainers[phrase.name].y, $scope.equalsPhrasesSubContainers[phrase.name].width, $scope.equalsPhrasesSubContainers[phrase.name].height);
-            var equalsPhrasesSubContainerShape = new createjs.Shape(equalsPhrasesSubContainerGraphics);
-            $scope.equalsPhrasesSubContainers[phrase.name].addChild(equalsPhrasesSubContainerShape);
-            stage.update();
+            /*var equalsPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].width, $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].height);
+             var equalsPhrasesSubContainerShape = new createjs.Shape(equalsPhrasesSubContainerGraphics);
+             $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].addChild(equalsPhrasesSubContainerShape);
+             stage.update();*/
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
-            $scope.equalsSignPhrasesContainer.addChild($scope.equalsPhrasesSubContainers[phrase.name]);
+            $scope.equalsSignPhrasesContainer.addChild($scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name]);
             stage.update();
           });
-          console.log("equalsPhrasesSubContainers: ", $scope.equalsPhrasesSubContainers);
-
-
+          console.log("equalsPhrasesSubContainers: ", $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers);
 
 
           /*GREEK WORDS CONTAINER*/
@@ -602,42 +655,42 @@ angular.module("bookbuilder2")
           $scope.greekPhrasesContainer.width = 300;
           $scope.greekPhrasesContainer.height = backgroundPosition.height / 1.15;
           $scope.greekPhrasesContainer.scaleX = $scope.greekPhrasesContainer.scaleY = scale;
-          $scope.greekPhrasesContainer.x = backgroundPosition.x + 260;
-          $scope.greekPhrasesContainer.y = backgroundPosition.y + 5;
+          $scope.greekPhrasesContainer.x = backgroundPosition.x + (backgroundPosition.width / 2);
+          $scope.greekPhrasesContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
 
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-          var graphicsPhraseGreek = new createjs.Graphics().beginFill("#BFBF3C").drawRect($scope.greekPhrasesContainer.x, $scope.greekPhrasesContainer.y, $scope.greekPhrasesContainer.width, $scope.greekPhrasesContainer.height);
-          var shapePhraseGreek = new createjs.Shape(graphicsPhraseGreek);
-          $scope.greekPhrasesContainer.addChild(shapePhraseGreek);
-          stage.update();
+          /* var graphicsPhraseGreek = new createjs.Graphics().beginFill("green").drawRect($scope.greekPhrasesContainer.x, $scope.greekPhrasesContainer.y, $scope.greekPhrasesContainer.width, $scope.greekPhrasesContainer.height);
+           var shapePhraseGreek = new createjs.Shape(graphicsPhraseGreek);
+           $scope.greekPhrasesContainer.addChild(shapePhraseGreek);
+           stage.update();*/
           /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
           stage.addChild($scope.greekPhrasesContainer);
           stage.update();
 
           //Adding subContainers to greekPhrasesSubContainer
-          $scope.greekPhrasesSubContainers = {};
+          $scope.greekPhrasesContainer.greekPhrasesSubContainers = {};
           _.each($scope.activityData.phrases, function (phrase, key, list) {
             console.log("Adding a sub container to greekPhrasesContainer with index: ", key);
-            $scope.greekPhrasesSubContainers[phrase.name] = new createjs.Container();
+            $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name] = new createjs.Container();
             console.log("Creating greek container...");
-            $scope.greekPhrasesSubContainers[phrase.name].width = $scope.greekPhrasesContainer.width;
-            $scope.greekPhrasesSubContainers[phrase.name].height = 30;
-            $scope.greekPhrasesSubContainers[phrase.name].x = 0;
+            $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].width = $scope.greekPhrasesContainer.width;
+            $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].height = 30;
+            $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].x = 0;
             /*backgroundPosition.x + (backgroundPosition.width / 60);*/
-            $scope.greekPhrasesSubContainers[phrase.name].y = key * 30;
+            $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].y = key * 30;
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-            var greekPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("grey").drawRect($scope.greekPhrasesSubContainers[phrase.name].x, $scope.greekPhrasesSubContainers[phrase.name].y, $scope.greekPhrasesSubContainers[phrase.name].width, $scope.greekPhrasesSubContainers[phrase.name].height);
-            var greekPhrasesSubContainerShape = new createjs.Shape(greekPhrasesSubContainerGraphics);
-            $scope.greekPhrasesSubContainers[phrase.name].addChild(greekPhrasesSubContainerShape);
-            stage.update();
+            /*var greekPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].width, $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].height);
+             var greekPhrasesSubContainerShape = new createjs.Shape(greekPhrasesSubContainerGraphics);
+             $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].addChild(greekPhrasesSubContainerShape);
+             stage.update();*/
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
-            $scope.greekPhrasesContainer.addChild($scope.greekPhrasesSubContainers[phrase.name]);
+            $scope.greekPhrasesContainer.addChild($scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name]);
             stage.update();
           });
-          console.log("greekPhrasesSubContainers: ", $scope.greekPhrasesSubContainers);
+          console.log("greekPhrasesSubContainers: ", $scope.greekPhrasesContainer.greekPhrasesSubContainers);
 
         }//End of creating single column phrases containers function
 
@@ -1133,7 +1186,7 @@ angular.module("bookbuilder2")
 
                   var grSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
 
-                  /*Iterating and populating the ccontainer*/
+                  /*Iterating and populating the container*/
                   _.each($scope.activityData.words, function (word, key, list) {
 
                     /******************** Creating Greek button ********************/
@@ -1404,13 +1457,8 @@ angular.module("bookbuilder2")
             } else {
               console.log("Success on waterfall process for getting buttons spriteSheets! Result: ", result);
 
-              var verbsIndex = 0;
-              var nounsIndex = 0;
-              var nounIndex = 0;
-              var adjectiveIndex = 0;
-
               /*Iterating and populating the container*/
-              _.each($scope.activityData.derivatives, function (derivative, key, list) {
+              _.each($scope.activityData.phrases, function (phrase, key, list) {
 
                 /********************* Creating English button *********************/
                 var enSmallButton = new createjs.Sprite($scope.enSmallButtonSpriteSheet, "normal");
@@ -1424,11 +1472,11 @@ angular.module("bookbuilder2")
                 enSmallButton.addEventListener("pressup", function (event) {
                   console.log("Press up event!");
                   enSmallButton.gotoAndPlay("normal");
-                  $scope.englishDerivativesBitmaps[derivative.name].visible = !$scope.englishDerivativesBitmaps[derivative.name].visible;
+                  $scope.englishPhrasesBitmaps[phrase.name].visible = !$scope.englishPhrasesBitmaps[phrase.name].visible;
                 });
 
                 enSmallButton.x = enSmallButton.getBounds().width / 2;
-                enSmallButton.y = $scope.derivativeContainers[derivative.type].subContainers["buttons"].rowContainers[0].height / 2;
+                enSmallButton.y = $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].height / 2;
 
                 console.log("getBounds: ", enSmallButton.getBounds());
 
@@ -1444,12 +1492,12 @@ angular.module("bookbuilder2")
                 grSmallButton.addEventListener("pressup", function (event) {
                   console.log("Press up event!");
                   grSmallButton.gotoAndPlay("normal");
-                  $scope.greekDerivativesBitmaps[derivative.name].visible = !$scope.greekDerivativesBitmaps[derivative.name].visible;
+                  $scope.greekPhrasesBitmaps[phrase.name].visible = !$scope.greekPhrasesBitmaps[phrase.name].visible;
 
                 });
 
-                grSmallButton.x = $scope.derivativeContainers[derivative.type].subContainers["buttons"].rowContainers[0].width / 2;
-                grSmallButton.y = $scope.derivativeContainers[derivative.type].subContainers["buttons"].rowContainers[0].height / 2;
+                grSmallButton.x = $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].width / 2;
+                grSmallButton.y = $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].height / 2;
 
                 /********************* Creating Play button *********************/
                 var playSmallButton = new createjs.Sprite($scope.playSmallButtonSpriteSheet, "normal");
@@ -1464,46 +1512,23 @@ angular.module("bookbuilder2")
                   playSmallButton.gotoAndPlay("normal");
                   console.log("Playing sound: ", event);
                   /*playingSound()*/
-                  console.log("Playing sound for element with derivative.type: " + derivative.type + " and key:", key);
+                  console.log("Playing sound for element with phrase.name: " + phrase.name + " and key:", key);
 
-                  var elementIndex = _.findIndex(_.filter($scope.activityData.derivatives, {type: derivative.type}), {name: $scope.activityData.derivatives[key].name});
-                  console.log("Formatted activityData.derivatives: ", _.filter($scope.activityData.derivatives, {type: derivative.type}));
+                  var elementIndex = _.findIndex($scope.activityData.phrases, {name: phrase.name});
                   console.log("The selected element index: ", elementIndex);
 
-                  $scope.derivativesBackgrounds[derivative.type].indexBackground[elementIndex].visible = true;
-                  $scope.derivativesBackgrounds[derivative.type].englishBackground[elementIndex].visible = true;
-                  $scope.derivativesBackgrounds[derivative.type].greekBackground[elementIndex].visible = true;
+                  /** MAKE SHAPES VISIBLE AGAIN **/
+
                 });
 
-                playSmallButton.x = $scope.derivativeContainers[derivative.type].subContainers["buttons"].rowContainers[0].width - playSmallButton.getBounds().width / 2;
-                playSmallButton.y = $scope.derivativeContainers[derivative.type].subContainers["buttons"].rowContainers[0].height / 2;
+                playSmallButton.x = $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].width - playSmallButton.getBounds().width / 2;
+                playSmallButton.y = $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].height / 2;
 
-                if (derivative.type === 'verbs') {
-                  $scope.derivativeContainers['verbs'].subContainers["buttons"].rowContainers[verbsIndex].addChild(enSmallButton);
-                  $scope.derivativeContainers['verbs'].subContainers["buttons"].rowContainers[verbsIndex].addChild(grSmallButton);
-                  $scope.derivativeContainers['verbs'].subContainers["buttons"].rowContainers[verbsIndex].addChild(playSmallButton);
-                  stage.update();
-                  verbsIndex++;
-                } else if (derivative.type === 'nouns') {
-                  console.log("$scope.derivativeContainers['nouns'].subContainers.rowContainers: ", $scope.derivativeContainers['nouns'].subContainers["buttons"].rowContainers);
-                  $scope.derivativeContainers['nouns'].subContainers["buttons"].rowContainers[nounsIndex].addChild(enSmallButton);
-                  $scope.derivativeContainers['nouns'].subContainers["buttons"].rowContainers[nounsIndex].addChild(grSmallButton);
-                  $scope.derivativeContainers['nouns'].subContainers["buttons"].rowContainers[nounsIndex].addChild(playSmallButton);
-                  stage.update();
-                  nounsIndex++;
-                } else if (derivative.type === 'noun') {
-                  $scope.derivativeContainers['noun'].subContainers["buttons"].rowContainers[nounIndex].addChild(enSmallButton);
-                  $scope.derivativeContainers['noun'].subContainers["buttons"].rowContainers[nounIndex].addChild(grSmallButton);
-                  $scope.derivativeContainers['noun'].subContainers["buttons"].rowContainers[nounIndex].addChild(playSmallButton);
-                  stage.update();
-                  nounIndex++;
-                } else {
-                  $scope.derivativeContainers['adjective'].subContainers["buttons"].rowContainers[adjectiveIndex].addChild(enSmallButton);
-                  $scope.derivativeContainers['adjective'].subContainers["buttons"].rowContainers[adjectiveIndex].addChild(grSmallButton);
-                  $scope.derivativeContainers['adjective'].subContainers["buttons"].rowContainers[adjectiveIndex].addChild(playSmallButton);
-                  stage.update();
-                  adjectiveIndex++;
-                }
+                $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].addChild(enSmallButton);
+                $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].addChild(grSmallButton);
+                $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].addChild(playSmallButton);
+                stage.update();
+
               });
             }
           });//End of waterfall
@@ -1514,24 +1539,18 @@ angular.module("bookbuilder2")
         function loadPhrasesIndexes() {
 
           /*Initializing y that will change dynamically for every button*/
-          var indexesY = 80;
 
           _.each($scope.activityData.phrases, function (phrase, key, list) {
 
-            var phraseIndex = new createjs.Text(key + 1 + ".", "15px Arial", "black");
+            var phraseIndex = new createjs.Text(key + 1 + ".", "18px Arial", "black");
 
-            phraseIndex.x = $scope.indexPhrasesContainer.x + 20;
-            phraseIndex.y = indexesY;
-            phraseIndex.textBaseline = "alphabetic";
+            phraseIndex.x = $scope.indexPhrasesContainer.indexPhrasesSubContainers[phrase.name].width / 2;
+            phraseIndex.y = $scope.indexPhrasesContainer.indexPhrasesSubContainers[phrase.name].height / 2;
+            phraseIndex.textBaseline = "middle";
             phraseIndex.textAlign = "center";
-            phraseIndex.maxWidth = $scope.indexPhrasesContainer.width;
 
-            $scope.indexPhrasesContainer.addChild(phraseIndex);
-            /*stage.update();*/
-
-            /*** Updating stage and adding more Y before iterating again ***/
+            $scope.indexPhrasesContainer.indexPhrasesSubContainers[phrase.name].addChild(phraseIndex);
             stage.update();
-            indexesY += 20;
 
           });
 
@@ -1542,23 +1561,17 @@ angular.module("bookbuilder2")
         function loadEnglishPhrases() {
 
           /*Initializing y that will change dynamically for every button*/
-          var englishPhraseY = 70;
           $scope.englishPhrasesBitmaps = {};
-
           /*Iterating and populating the container*/
           _.each($scope.activityData.phrases, function (phrase, key, list) {
 
             $scope.englishPhrasesBitmaps[phrase.name] = new createjs.Bitmap("data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + phrase.name + ".png");
 
-            $scope.englishPhrasesBitmaps[phrase.name].regX = $scope.englishPhrasesBitmaps[phrase.name].image.width / 2;
-            $scope.englishPhrasesBitmaps[phrase.name].regY = $scope.englishPhrasesBitmaps[phrase.name].image.height / 2;
-            $scope.englishPhrasesBitmaps[phrase.name].x = $scope.englishWordsContainer.x + 20;
-            $scope.englishPhrasesBitmaps[phrase.name].y = englishPhraseY;
-            /*$scope.englishPhrasesBitmaps[key].snapToPixel = false;*/
-            $scope.englishPhrasesContainer.addChild($scope.englishPhrasesBitmaps[phrase.name]);
+            $scope.englishPhrasesBitmaps[phrase.name].x = 0;
+            $scope.englishPhrasesBitmaps[phrase.name].y = $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].height / 1.5;
+            $scope.englishPhrasesBitmaps[phrase.name].regY = $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].height / 2;
+            $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].addChild($scope.englishPhrasesBitmaps[phrase.name]);
             stage.update();
-
-            englishPhraseY += 20;
           });
         }//End of loadEnglishPhrases function
 
@@ -1566,25 +1579,17 @@ angular.module("bookbuilder2")
         /*LOAD PHRASES EQUALS*/
         function loadPhrasesEquals() {
 
-          /*Initializing y that will change dynamically for every button*/
-          var equalsY = 80;
-
           _.each($scope.activityData.phrases, function (phrase, key, list) {
 
             var equals = new createjs.Text("=", "15px Arial", "black");
 
-            equals.x = backgroundPosition.x + (backgroundPosition.width / 8);
-            equals.y = equalsY;
-            equals.textBaseline = "alphabetic";
+            equals.x = $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].width / 2;
+            equals.y = $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].height / 2;
+            equals.textBaseline = "middle";
             equals.textAlign = "center";
-            equals.maxWidth = $scope.equalsSignPhrasesContainer.width;
 
-            $scope.equalsSignPhrasesContainer.addChild(equals);
-            /*stage.update();*/
-
-            /*** Updating stage and adding more Y before iterating again ***/
+            $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].addChild(equals);
             stage.update();
-            equalsY += 20;
 
           });
 
@@ -1594,8 +1599,6 @@ angular.module("bookbuilder2")
         /*LOAD GREEK PHRASES*/
         function loadGreekPhrases() {
 
-          /*Initializing y that will change dynamically for every button*/
-          var greekPhraseY = 70;
           $scope.greekPhrasesBitmaps = {};
 
           /*Iterating and populating the container*/
@@ -1603,17 +1606,14 @@ angular.module("bookbuilder2")
 
             $scope.greekPhrasesBitmaps[phrase.name] = new createjs.Bitmap("data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + phrase.name + "_gr.png");
 
-            $scope.greekPhrasesBitmaps[phrase.name].regX = $scope.greekPhrasesBitmaps[phrase.name].image.width / 2;
-            $scope.greekPhrasesBitmaps[phrase.name].regY = $scope.greekPhrasesBitmaps[phrase.name].image.height / 2;
-            $scope.greekPhrasesBitmaps[phrase.name].x = $scope.greekWordsContainer.x + 20;
-            $scope.greekPhrasesBitmaps[phrase.name].y = greekPhraseY;
-            $scope.greekPhrasesContainer.addChild($scope.greekPhrasesBitmaps[phrase.name]);
+            $scope.greekPhrasesBitmaps[phrase.name].x = 0;
+            $scope.greekPhrasesBitmaps[phrase.name].y = $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].height / 1.5;
+            $scope.greekPhrasesBitmaps[phrase.name].regY = $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].height / 2;
+            $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].addChild($scope.greekPhrasesBitmaps[phrase.name]);
             stage.update();
 
-            greekPhraseY += 20;
           });
         }//End of loadGreekPhrases function
-
 
 
         /********************************** POPULATING DERIVATIVES CONTAINERS **********************************/
