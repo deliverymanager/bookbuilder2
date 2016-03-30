@@ -161,6 +161,7 @@ angular.module("bookbuilder2")
               groupsMenuContainer.height = 480;
 
               $rootScope.book = response;
+              window.localStorage.setItem("book", JSON.stringify($rootScope.book));
 
               groupsMenuContainer.scaleX = groupsMenuContainer.scaleY = scale;
 
@@ -340,7 +341,7 @@ angular.module("bookbuilder2")
                                 historyRoot: true,
                                 disableBack: true
                               });
-                              $state.go("lesson");
+                              $state.go("lesson", {}, { reload: true });
                             } else {
                               showDownloadingError(lesson);
                             }
@@ -364,7 +365,7 @@ angular.module("bookbuilder2")
                                     historyRoot: true,
                                     disableBack: true
                                   });
-                                  $state.go("lesson");
+                                  $state.go("lesson", {}, { reload: true });
                                 } else {
                                   showDownloadingError(lesson);
                                 }
@@ -583,7 +584,7 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
-              $state.go("lesson");
+              $state.go("lesson", {}, { reload: true });
             } else {
               showDownloadingError(lesson);
             }
@@ -593,7 +594,7 @@ angular.module("bookbuilder2")
             historyRoot: true,
             disableBack: true
           });
-          $state.go("lesson");
+          $state.go("lesson", {}, { reload: true });
         }
       });
     };

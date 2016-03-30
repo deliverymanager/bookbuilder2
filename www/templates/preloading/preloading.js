@@ -15,7 +15,7 @@ angular.module("bookbuilder2")
           historyRoot: true,
           disableBack: true
         });
-        $state.go($rootScope.book.bookTemplate);
+        $state.go($rootScope.book.bookTemplate, {}, { reload: true });
       });
     };
 
@@ -54,6 +54,7 @@ angular.module("bookbuilder2")
                 $http.get($rootScope.rootDir + "data/book/groups.json").success(function (book) {
 
                   $rootScope.book = book;
+                  window.localStorage.setItem("book", JSON.stringify($rootScope.book));
 
                   $http.get($rootScope.rootDir + "data/book/assets.json").success(function (assets) {
 
@@ -94,7 +95,7 @@ angular.module("bookbuilder2")
                                         historyRoot: true,
                                         disableBack: true
                                       });
-                                      $state.go($rootScope.book.bookTemplate);
+                                      $state.go($rootScope.book.bookTemplate, {}, { reload: true });
                                     }
                                   },
                                   {
@@ -125,7 +126,7 @@ angular.module("bookbuilder2")
                                               historyRoot: true,
                                               disableBack: true
                                             });
-                                            $state.go($rootScope.book.bookTemplate);
+                                            $state.go($rootScope.book.bookTemplate, {}, { reload: true });
                                           }, function (prog) {
                                             console.log('Ionic Deploy: Progress... ', prog);
                                             $ionicLoading.show({
@@ -138,7 +139,7 @@ angular.module("bookbuilder2")
                                             historyRoot: true,
                                             disableBack: true
                                           });
-                                          $state.go($rootScope.book.bookTemplate);
+                                          $state.go($rootScope.book.bookTemplate, {}, { reload: true });
                                         });
                                     }
                                   }
@@ -150,21 +151,21 @@ angular.module("bookbuilder2")
                                 historyRoot: true,
                                 disableBack: true
                               });
-                              $state.go($rootScope.book.bookTemplate);
+                              $state.go($rootScope.book.bookTemplate, {}, { reload: true });
                             }, function (response) {
                               console.log("callback meta 2", response);
                               $ionicHistory.nextViewOptions({
                                 historyRoot: true,
                                 disableBack: true
                               });
-                              $state.go($rootScope.book.bookTemplate);
+                              $state.go($rootScope.book.bookTemplate, {}, { reload: true });
                             });
                           } else {
                             $ionicHistory.nextViewOptions({
                               historyRoot: true,
                               disableBack: true
                             });
-                            $state.go($rootScope.book.bookTemplate);
+                            $state.go($rootScope.book.bookTemplate, {}, { reload: true });
 
                           }
                         }, function (error) {
@@ -173,7 +174,7 @@ angular.module("bookbuilder2")
                             historyRoot: true,
                             disableBack: true
                           });
-                          $state.go($rootScope.book.bookTemplate);
+                          $state.go($rootScope.book.bookTemplate, {}, { reload: true });
                         });
                       } else {
                         $rootScope.showPopup();
@@ -196,7 +197,7 @@ angular.module("bookbuilder2")
           historyRoot: true,
           disableBack: true
         });
-        $state.go("groups");
+        $state.go("groups", {}, { reload: true });
       }
     });
 

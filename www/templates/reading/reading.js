@@ -182,7 +182,7 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
-              $state.go("lesson");
+              $state.go("lesson", {}, { reload: true });
             });
 
             menuButton.scaleX = menuButton.scaleY = scale;

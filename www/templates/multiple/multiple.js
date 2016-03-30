@@ -82,7 +82,7 @@ angular.module("bookbuilder2")
 
       $scope.sounds = {};
       if (window.cordova && window.cordova.platformId !== "browser") {
-        _.each(["drag", "drop"], function (sound, key, list) {
+        _.each(["select", "check"], function (sound, key, list) {
           if (ionic.Platform.isIOS() && window.cordova) {
             console.log("Else iOS");
             resolveLocalFileSystemURL($rootScope.rootDir + "data/assets/" + sound + ".mp3", function (entry) {
@@ -166,7 +166,10 @@ angular.module("bookbuilder2")
                 imageLoader.load();
 
                 imageLoader.on("complete", function (r) {
-                  seriesCallback();
+                  console.log("file", file);
+                  $timeout(function () {
+                    seriesCallback();
+                  });
                 });
               });
             });
@@ -189,6 +192,7 @@ angular.module("bookbuilder2")
                     question.userAnswer = "";
                   });
                   $scope.activityData = response;
+                  $scope.activityData.attempts = 1;
                   window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
                   console.log("$scope.activityData from local file: ", $scope.activityData);
                   callback();
@@ -305,6 +309,10 @@ angular.module("bookbuilder2")
 
                   if (!$scope.activityData.completed) {
                     $scope.checkButton.gotoAndPlay("normal");
+
+                    if (window.cordova && window.cordova.platformId !== "browser") {
+                      $scope.sounds["check"].play();
+                    }
                     check();
                   }
                 });
@@ -344,7 +352,7 @@ angular.module("bookbuilder2")
                     historyRoot: true,
                     disableBack: true
                   });
-                  $state.go("lesson");
+                  $state.go("lesson", {}, {reload: true});
                 });
 
                 menuButton.scaleX = menuButton.scaleY = scale;
@@ -586,6 +594,9 @@ angular.module("bookbuilder2")
                 $scope.buttonChoices["aChoice"].addEventListener("pressup", function (event) {
                   console.log("answerAButton fires pressup event!");
                   if (!$scope.activityData.completed) {
+                    if (window.cordova && window.cordova.platformId !== "browser") {
+                      $scope.sounds["select"].play();
+                    }
                     selectChoice("aChoice");
                   }
                 });
@@ -615,6 +626,10 @@ angular.module("bookbuilder2")
                 $scope.buttonChoices["bChoice"].addEventListener("pressup", function (event) {
                   console.log("answerBButton fires pressup event!");
                   if (!$scope.activityData.completed) {
+
+                    if (window.cordova && window.cordova.platformId !== "browser") {
+                      $scope.sounds["select"].play();
+                    }
                     selectChoice("bChoice");
                   }
                 });
@@ -645,6 +660,9 @@ angular.module("bookbuilder2")
                 $scope.buttonChoices["cChoice"].addEventListener("pressup", function (event) {
                   console.log("answerCButton fires pressup event!");
                   if (!$scope.activityData.completed) {
+                    if (window.cordova && window.cordova.platformId !== "browser") {
+                      $scope.sounds["select"].play();
+                    }
                     selectChoice("cChoice");
                   }
                 });
@@ -674,6 +692,9 @@ angular.module("bookbuilder2")
                 $scope.buttonChoices["dChoice"].addEventListener("pressup", function (event) {
                   console.log("answerDButton fires pressup event!");
                   if (!$scope.activityData.completed) {
+                    if (window.cordova && window.cordova.platformId !== "browser") {
+                      $scope.sounds["select"].play();
+                    }
                     selectChoice("dChoice");
                   }
                 });
@@ -705,6 +726,9 @@ angular.module("bookbuilder2")
                 $scope.buttonChoices["onlyCChoice"].addEventListener("pressup", function (event) {
                   console.log("answerOnlyCContainer fires pressup event!");
                   if (!$scope.activityData.completed) {
+                    if (window.cordova && window.cordova.platformId !== "browser") {
+                      $scope.sounds["select"].play();
+                    }
                     selectChoice("onlyCChoice");
                   }
                 });
@@ -902,6 +926,7 @@ angular.module("bookbuilder2")
 
         function loadQuestion(key) {
           $scope.activeQuestionIndex = key;
+          $scope.questionNumber.text = key + 1;
           console.log("numChildren", $scope.questionsTextContainer.numChildren);
           $scope.questionsTextContainer.removeAllChildren();
           console.log("question", $scope.activityData.questions[key]);
@@ -1233,13 +1258,13 @@ angular.module("bookbuilder2")
               historyRoot: true,
               disableBack: true
             });
-            $state.go($rootScope.selectedLesson.lessonMenu[index + 1].activityTemplate);
+            $state.go($rootScope.selectedLesson.lessonMenu[index + 1].activityTemplate, {}, {reload: true});
           } else {
             $ionicHistory.nextViewOptions({
               historyRoot: true,
               disableBack: true
             });
-            $state.go("results");
+            $state.go("results", {}, {reload: true});
           }
         }
 

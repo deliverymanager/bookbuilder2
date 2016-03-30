@@ -1,7 +1,20 @@
 angular.module("bookbuilder2")
-  .controller("ResultsController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast, $ionicPopup) {
+  .controller("ResultsController", function (Email, $ionicLoading, $scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast, $ionicPopup) {
 
     console.log("ResultsController loaded!");
+
+    //START OF DEVELOPMENT SNIPPET
+    if (window.cordova && window.cordova.platformId !== "browser") {
+      $rootScope.rootDir = window.cordova.file.dataDirectory;
+    } else {
+      $rootScope.rootDir = "";
+    }
+    $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+    $rootScope.activityFolder = window.localStorage.getItem("activityFolder");
+    $rootScope.book = JSON.parse(window.localStorage.getItem("book"));
+
+    //END OF DEVELOPMENT SNIPPET
+
 
     $timeout(function () {
 
@@ -87,8 +100,6 @@ angular.module("bookbuilder2")
           scale = scaleX;
         }
         console.log("GENERAL SCALING FACTOR", scale);
-        //IN ORDER TO FIND THE CORRECT COORDINATES FIRST WE NEED TO ENTER THE EXACT SAME DIMENSIONS IN THE EMULATOR OF THE BACKGROUND IMAGE
-
 
         background.scaleX = scale;
         background.scaleY = scale;
@@ -103,256 +114,422 @@ angular.module("bookbuilder2")
 
         async.parallel([function (callback) {
 
-          $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
-            .success(function (response) {
+            $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
+              .success(function (response) {
 
-              //Reassigning images with the rest of resource
-              response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                //Reassigning images with the rest of resource
+                response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
 
-              var menuButtonSpriteSheet = new createjs.SpriteSheet(response);
-              var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
+                var menuButtonSpriteSheet = new createjs.SpriteSheet(response);
+                var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
 
-              menuButton.addEventListener("mousedown", function (event) {
-                console.log("mousedown event on a button !");
-                menuButton.gotoAndPlay("onSelection");
-                $scope.stage.update();
-              });
-
-              menuButton.addEventListener("pressup", function (event) {
-                console.log("pressup event!");
-                menuButton.gotoAndPlay("normal");
-                $ionicHistory.nextViewOptions({
-                  historyRoot: true,
-                  disableBack: true
+                menuButton.addEventListener("mousedown", function (event) {
+                  console.log("mousedown event on a button !");
+                  menuButton.gotoAndPlay("onSelection");
+                  $scope.stage.update();
                 });
-                $state.go("lesson");
-              });
 
-              menuButton.scaleX = menuButton.scaleY = scale;
-              menuButton.x = 0;
-              menuButton.y = -menuButton.getTransformedBounds().height / 5;
-
-              $scope.stage.addChild(menuButton);
-              $scope.stage.update();
-              callback();
-            })
-            .error(function (error) {
-              console.error("Error on getting json for results button...", error);
-              callback();
-            });//end of get menu button
-
-        }, function (callback) {
-
-          $http.get($rootScope.rootDir + "data/assets/lesson_restart_button_sprite.json")
-            .success(function (response) {
-              //Reassigning images with the rest of resource
-              response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-              var returnButtonSpriteSheet = new createjs.SpriteSheet(response);
-              var returnButton = new createjs.Sprite(returnButtonSpriteSheet, "normal");
-
-              returnButton.addEventListener("mousedown", function (event) {
-                console.log("mousedown event on a button !");
-                returnButton.gotoAndPlay("onSelection");
-                $scope.stage.update();
-              });
-
-              returnButton.addEventListener("pressup", function (event) {
-                console.log("pressup event!");
-                returnButton.gotoAndPlay("normal");
-
-
-                var confirmPopup = $ionicPopup.confirm({
-                  title: 'Restart all activities in ' + $rootScope.selectedLesson.lessonTitle,
-                  template: 'This will reset all your activity in ' + $rootScope.selectedLesson.lessonTitle + "!"
+                menuButton.addEventListener("pressup", function (event) {
+                  console.log("pressup event!");
+                  menuButton.gotoAndPlay("normal");
+                  $ionicHistory.nextViewOptions({
+                    historyRoot: true,
+                    disableBack: true
+                  });
+                  $state.go("lesson", {}, {reload: true});
                 });
-                confirmPopup.then(function (res) {
-                  if (res) {
-                    clearAllActivitiesLocalStorage();
+
+                menuButton.scaleX = menuButton.scaleY = scale;
+                menuButton.x = 0;
+                menuButton.y = -menuButton.getTransformedBounds().height / 5;
+
+                $scope.stage.addChild(menuButton);
+                $scope.stage.update();
+                callback();
+              })
+              .error(function (error) {
+                console.error("Error on getting json for results button...", error);
+                callback();
+              });//end of get menu button
+
+          }, function (callback) {
+
+            $http.get($rootScope.rootDir + "data/assets/lesson_restart_button_sprite.json")
+              .success(function (response) {
+                //Reassigning images with the rest of resource
+                response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                var returnButtonSpriteSheet = new createjs.SpriteSheet(response);
+                var returnButton = new createjs.Sprite(returnButtonSpriteSheet, "normal");
+
+                returnButton.addEventListener("mousedown", function (event) {
+                  console.log("mousedown event on a button !");
+                  returnButton.gotoAndPlay("onSelection");
+                  $scope.stage.update();
+                });
+
+                returnButton.addEventListener("pressup", function (event) {
+                  console.log("pressup event!");
+                  returnButton.gotoAndPlay("normal");
+
+
+                  var confirmPopup = $ionicPopup.confirm({
+                    title: 'Restart all activities in ' + $rootScope.selectedLesson.lessonTitle,
+                    template: 'This will reset all your activity in ' + $rootScope.selectedLesson.lessonTitle + "!"
+                  });
+                  confirmPopup.then(function (res) {
+                    if (res) {
+                      clearAllActivitiesLocalStorage();
+                    }
+                  });
+
+                });
+                returnButton.scaleX = returnButton.scaleY = scale;
+                returnButton.x = backgroundPosition.x + (backgroundPosition.width / 1.15);
+                returnButton.y = backgroundPosition.y + (backgroundPosition.height / 8);
+                $scope.stage.addChild(returnButton);
+                $scope.stage.update();
+                callback();
+              })
+              .error(function (error) {
+                callback();
+                console.log("Error on getting json data for return button...", error);
+
+              });
+          }, function (callback) {
+
+            $http.get($rootScope.rootDir + "data/assets/results_activity_state.json")
+              .success(function (response) {
+                response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                $scope.activityState = new createjs.SpriteSheet(response);
+                callback();
+              })
+              .error(function (error) {
+                callback();
+                console.log("Error on getting json data for return button...", error);
+
+              });
+          }, function (callback) {
+
+            $http.get($rootScope.rootDir + "data/assets/results_exit_button_sprite.json")
+              .success(function (response) {
+                //Reassigning images with the rest of resource
+                response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                var resultsExitButtonSpriteSheet = new createjs.SpriteSheet(response);
+                var resultsExitButton = new createjs.Sprite(resultsExitButtonSpriteSheet, "normal");
+
+                resultsExitButton.addEventListener("mousedown", function (event) {
+                  console.log("mousedown event on a button !");
+                  resultsExitButton.gotoAndPlay("onSelection");
+                  $scope.stage.update();
+                });
+
+                resultsExitButton.addEventListener("pressup", function (event) {
+                  console.log("pressup event!");
+                  resultsExitButton.gotoAndPlay("normal");
+
+                  if (ionic.Platform.isAndroid()) {
+                    ionic.Platform.exitApp();
+                  } else {
+                    $ionicHistory.nextViewOptions({
+                      historyRoot: true,
+                      disableBack: true
+                    });
+                    $state.go("groups", {}, {reload: true});
                   }
+
                 });
+                resultsExitButton.scaleX = resultsExitButton.scaleY = scale;
+                resultsExitButton.x = backgroundPosition.x + (backgroundPosition.width / 1.5);
+                resultsExitButton.y = backgroundPosition.y + (backgroundPosition.height / 1.14);
+                $scope.stage.addChild(resultsExitButton);
+                $scope.stage.update();
+                callback();
+              })
+              .error(function (error) {
+                callback();
+                console.log("Error on getting json data for return button...", error);
 
               });
-              returnButton.scaleX = returnButton.scaleY = scale;
-              returnButton.x = backgroundPosition.x + (backgroundPosition.width / 1.1);
-              returnButton.y = backgroundPosition.y + (backgroundPosition.height / 10);
-              $scope.stage.addChild(returnButton);
-              $scope.stage.update();
-              callback();
-            })
-            .error(function (error) {
-              callback();
-              console.log("Error on getting json data for return button...", error);
-
-            });
-        }, function (callback) {
-
-          /* ------------------------------------------ vocabularyReading Shape ---------------------------------------------- */
-
-          //Starting and making it transparent
-          var vocabularyReadingGraphics = new createjs.Graphics().beginFill(null);
-          //Setting Stroke
-          vocabularyReadingGraphics.setStrokeStyle(3).beginStroke("white");
-
-          //Drawing the shape !!!NOTE Every optimization before drawRoundRect
-          vocabularyReadingGraphics.drawRoundRect(0, 0, 430, 110, 15);
-
-          var vocabularyReadingShape = new createjs.Shape(vocabularyReadingGraphics);
-          vocabularyReadingShape.setTransform(backgroundPosition.x + (backgroundPosition.width / 20), backgroundPosition.y + (backgroundPosition.height / 7), scale, scale, 0, 0, 0, 0, 0);
-          $scope.stage.addChild(vocabularyReadingShape);
-          $scope.stage.update();
 
 
-          /* ------------------------------------------ totalScore Shape ---------------------------------------------- */
+          }, function (callback) {
 
-          var totalScoreGraphics = new createjs.Graphics().beginFill("blue").drawRect(0, 0, 430, 100);
-          var totalScoreShape = new createjs.Shape(totalScoreGraphics);
-          totalScoreShape.setTransform(backgroundPosition.x + (backgroundPosition.width / 2), backgroundPosition.y + (backgroundPosition.height / 6.5), scale, scale, 0, 0, 0, 0, 0);
-          //Setting Shadow
-          totalScoreShape.shadow = new createjs.Shadow("#000000", 5, 5, 10);
-          $scope.stage.addChild(totalScoreShape);
-          $scope.stage.update();
+            $http.get($rootScope.rootDir + "data/assets/results_email_button_sprite.json")
+              .success(function (response) {
+                //Reassigning images with the rest of resource
+                response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                var resultsEmailButtonSpriteSheet = new createjs.SpriteSheet(response);
+                var resultsEmailButton = new createjs.Sprite(resultsEmailButtonSpriteSheet, "normal");
 
-          //Text for the totalScore
-          var totalScoreTitle = new createjs.Text("Total Score:", "25px Arial", "white");
+                resultsEmailButton.addEventListener("mousedown", function (event) {
+                  console.log("mousedown event on a button !");
+                  resultsEmailButton.gotoAndPlay("onSelection");
+                  $scope.stage.update();
+                });
 
-          /*background.scaleX = background.scaleY = scale;*/
-          totalScoreTitle.scaleX = totalScoreTitle.scaleY = scale;
-          totalScoreTitle.x = backgroundPosition.x + (backgroundPosition.width / 3);
-          totalScoreTitle.y = backgroundPosition.y + (backgroundPosition.height / 13);
-          totalScoreTitle.textBaseline = "alphabetic";
+                resultsEmailButton.addEventListener("pressup", function (event) {
+                  console.log("pressup event!");
+                  resultsEmailButton.gotoAndPlay("normal");
+                  $scope.popEmail();
 
-          $scope.stage.addChild(totalScoreTitle);
-          $scope.stage.update();
+                });
+                resultsEmailButton.scaleX = resultsEmailButton.scaleY = scale;
+                resultsEmailButton.x = backgroundPosition.x + (backgroundPosition.width / 12);
+                resultsEmailButton.y = backgroundPosition.y + (backgroundPosition.height / 1.14);
+                $scope.stage.addChild(resultsEmailButton);
+                $scope.stage.update();
+                callback();
+              })
+              .error(function (error) {
+                callback();
+                console.log("Error on getting json data for return button...", error);
 
+              });
 
-          /* ------------------------------------------ activitiesScore Shape ---------------------------------------------- */
-
-          //Starting and making it transparent
-          var activitiesScoreGraphics = new createjs.Graphics().beginFill(null);
-          //Setting Stroke
-          activitiesScoreGraphics.setStrokeStyle(3).beginStroke("white");
-
-          //Drawing the shape !!!NOTE Every optimization before drawRoundRect
-          activitiesScoreGraphics.drawRoundRect(0, 0, 900, 400, 15);
-
-          var activitiesScoreShape = new createjs.Shape(activitiesScoreGraphics);
-
-          activitiesScoreShape.setTransform(backgroundPosition.x + (backgroundPosition.width / 20), backgroundPosition.y
-            + (backgroundPosition.height / 3), scale, scale, 0, 0, 0, 0, 0);
-
-          console.log("Shape transformed bounds: ", activitiesScoreShape.getTransformedBounds());
-
-          $scope.stage.addChild(activitiesScoreShape);
-          $scope.stage.update();
-
-          callback();
-        }], function (err, results) {
-
-          /*********************************************** GETTING JSON FOR THE SELECTED LESSON ***********************************************/
-            //Getting the right lesson json
-          console.log($rootScope.selectedLessonId);
-          var lessonResourceUrl = $rootScope.rootDir + 'data/lessons/' + $rootScope.selectedLessonId + "/lesson.json";
-          console.log("URL for selected lesson's json: ", lessonResourceUrl);
-
-          $http.get(lessonResourceUrl)
-            .success(function (response) {
-              console.log("Success on getting json for the selected lesson! ", response);
+          }, function (callback) {
 
 
-              /*---------------------------------------LESSON TITLE CREATION------------------------------------------*/
-
-              console.log("Lesson Title: ", response.lessonTitle);
-              var lessonTitle = new createjs.Text(response.lessonTitle, "33px Arial", "white");
-
-              /*background.scaleX = background.scaleY = scale;*/
-              lessonTitle.scaleX = lessonTitle.scaleY = scale;
-              lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 10);
-              lessonTitle.y = backgroundPosition.y + (backgroundPosition.height / 9.8);
-              lessonTitle.rotation = -4;
-              lessonTitle.textBaseline = "alphabetic";
-
-              $scope.stage.addChild(lessonTitle);
-              $scope.stage.update();
+            $scope.vocReadContainer = new createjs.Container();
+            $scope.vocReadContainer.scaleX = $scope.vocReadContainer.scaleY = scale;
+            $scope.vocReadContainer.x = backgroundPosition.x + (backgroundPosition.width / 10);
+            $scope.vocReadContainer.y = backgroundPosition.y + (backgroundPosition.height / 5);
+            $scope.vocReadContainer.width = backgroundPosition.width / 5.7;
+            $scope.vocReadContainer.height = backgroundPosition.height / 10;
+            $scope.stage.addChild($scope.vocReadContainer);
 
 
-              /*-------------------------------------TITLE CREATION--------------------------------------------*/
+            $scope.scoreContainer = new createjs.Container();
+            $scope.scoreContainer.scaleX = $scope.scoreContainer.scaleY = scale;
+            $scope.scoreContainer.x = backgroundPosition.x + (backgroundPosition.width / 2);
+            $scope.scoreContainer.y = backgroundPosition.y + (backgroundPosition.height / 4.3);
+            $scope.scoreContainer.width = backgroundPosition.width / 6.6;
+            $scope.scoreContainer.height = backgroundPosition.height / 14;
+            $scope.stage.addChild($scope.scoreContainer);
 
-              console.log("Lesson Title: ", response.title);
-              var title = new createjs.Text(response.title, "25px Arial", "white");
 
-              /*background.scaleX = background.scaleY = scale;*/
-              title.scaleX = title.scaleY = scale;
-              title.x = backgroundPosition.x + (backgroundPosition.width / 3);
-              title.y = backgroundPosition.y + (backgroundPosition.height / 13);
-              title.textBaseline = "alphabetic";
+            $scope.activitiesContainer = new createjs.Container();
+            $scope.activitiesContainer.scaleX = $scope.activitiesContainer.scaleY = scale;
+            $scope.activitiesContainer.x = backgroundPosition.x + (backgroundPosition.width / 10);
+            $scope.activitiesContainer.y = backgroundPosition.y + (backgroundPosition.height / 2.35);
+            $scope.activitiesContainer.width = backgroundPosition.width / 2.85;
+            $scope.activitiesContainer.height = backgroundPosition.height / 4.7;
+            $scope.stage.addChild($scope.activitiesContainer);
 
-              $scope.stage.addChild(title);
-              $scope.stage.update();
+            $scope.stage.update();
 
-              showResults();
+            callback();
+          }
+          ],
+          function (err, results) {
 
-            });//end of $http.get(lessonResourceUrl)
+            var lessonTitle = new createjs.Text($rootScope.selectedLesson.lessonTitle, "33px Arial", "white");
+            lessonTitle.scaleX = lessonTitle.scaleY = scale;
+            lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 10);
+            lessonTitle.y = backgroundPosition.y + (backgroundPosition.height / 13);
+            lessonTitle.rotation = -4;
+            $scope.stage.addChild(lessonTitle);
+            var title = new createjs.Text($rootScope.selectedLesson.title, "25px Arial", "white");
+            title.scaleX = title.scaleY = scale;
+            title.x = backgroundPosition.x + (backgroundPosition.width / 2.8);
+            title.y = backgroundPosition.y + (backgroundPosition.height / 16);
+            $scope.stage.addChild(title);
+            $scope.stage.update();
 
-        });
+            showResults();
+
+          }
+        )
+        ;
 
 
         function showResults() {
 
-          var calculatedActivityScores = {};
+          $scope.scoreContainer.removeAllChildren();
+          $scope.vocReadContainer.removeAllChildren();
+          $scope.activitiesContainer.removeAllChildren();
+
+
+          var vocabularyReadingGraphics = new createjs.Graphics().beginFill(null);
+          vocabularyReadingGraphics.setStrokeStyle(3).beginStroke("white");
+          vocabularyReadingGraphics.drawRoundRect(0, 0, $scope.vocReadContainer.width, $scope.vocReadContainer.height, 15);
+          var vocabularyReadingShape = new createjs.Shape(vocabularyReadingGraphics);
+          $scope.vocReadContainer.addChild(vocabularyReadingShape);
+          $scope.stage.update();
+
+          var graphics = new createjs.Graphics().beginFill("blue").drawRect(0, 0, $scope.scoreContainer.width, $scope.scoreContainer.height);
+          var shape = new createjs.Shape(graphics);
+          shape.alpha = 0.8;
+          $scope.scoreContainer.addChild(shape);
+          $scope.stage.update();
+
+          var activitiesGraphics = new createjs.Graphics().beginFill(null);
+          activitiesGraphics.setStrokeStyle(3).beginStroke("white");
+          activitiesGraphics.drawRoundRect(0, 0, $scope.activitiesContainer.width, $scope.activitiesContainer.height, 15);
+          var activitiesShape = new createjs.Shape(activitiesGraphics);
+          $scope.activitiesContainer.addChild(activitiesShape);
+
+          $scope.calculatedActivityScores = {};
 
           _.each($rootScope.selectedLesson.lessonMenu, function (activity, key, list) {
-            var activityData = window.localStorage.getItem($rootScope.selectedLesson.id + "_" + activity.activityFolder);
-
+            var activityData = JSON.parse(window.localStorage.getItem($rootScope.selectedLesson.id + "_" + activity.activityFolder));
+            console.log("activity", activityData);
             if (activityData) {
-              calculatedActivityScores[activity.activityFolder] = {
+              $scope.calculatedActivityScores[activity.activityFolder] = {
                 "title": activity.name,
-                "completed": activityData.completed,
-                "attempts": activityData.attempts,
+                "completed": activityData.completed ? true : false,
+                "attempts": activityData.attempts ? activityData.attempts : 0,
                 "correct": calculateCorrectAnswers(activityData),
                 "numberOfQuestions": activity.numberOfQuestions,
-                "percentCorrectQuestions": calculatePercentCorrectQuestions(activityData)
+                "percentCorrectQuestions": parseInt(calculateCorrectAnswers(activityData) / activityData.questions.length * 100)
               }
             } else {
-              calculatedActivityScores[activity.activityFolder] = {
+              $scope.calculatedActivityScores[activity.activityFolder] = {
                 "title": activity.name,
-                "completed": activityData.completed,
-                "attempts": activityData.attempts,
-                "correct": calculateCorrectAnswers(activityData),
+                "completed": false,
+                "attempts": 0,
+                "correct": 0,
                 "numberOfQuestions": activity.numberOfQuestions,
-                "percentCorrectQuestions": calculatePercentCorrectQuestions(activityData)
+                "percentCorrectQuestions": 0
               }
             }
           });
 
           var vocabularyActivityData = window.localStorage.getItem($rootScope.selectedLesson.id + "_vocabulary");
 
-          calculatedActivityScores["vocabulary"] = {
-            "title": "Vocabulary",
-            "completed": vocabularyActivityData.completed,
-            "attempts": vocabularyActivityData.attempts
-          };
-
+          if (vocabularyActivityData) {
+            $scope.calculatedActivityScores["vocabulary"] = {
+              "title": "Vocabulary",
+              "completed": vocabularyActivityData.completed,
+              "attempts": vocabularyActivityData.attempts,
+              "percentCorrectQuestions": 100
+            };
+          } else {
+            $scope.calculatedActivityScores["vocabulary"] = {
+              "title": "Vocabulary",
+              "completed": false,
+              "attempts": 0,
+              "percentCorrectQuestions": 0
+            };
+          }
           var readingActivityData = window.localStorage.getItem($rootScope.selectedLesson.id + "_reading");
 
-          calculatedActivityScores["reading"] = {
-            "title": "Reading",
-            "completed": readingActivityData.completed,
-            "attempts": readingActivityData.attempts
-          };
+          if (readingActivityData) {
+            $scope.calculatedActivityScores["reading"] = {
+              "title": "Reading",
+              "completed": readingActivityData.completed,
+              "attempts": readingActivityData.attempts,
+              "percentCorrectQuestions": 100
+            };
+          } else {
+            readingActivityData["reading"] = {
+              "title": "Reading",
+              "completed": false,
+              "attempts": 0,
+              "percentCorrectQuestions": 0
+            };
+          }
 
-          _.each(calculatedActivityScores, function (activity, key, list) {
+          $scope.totalScore = 0;
+          var score = 0;
+          var counter = 0;
+          _.each($scope.calculatedActivityScores, function (activity, key, list) {
+            if (activity.completed) {
+              score += activity.percentCorrectQuestions;
+            }
+            counter++;
 
-            //START SHOWING THE TEXT IN THE CANVAS
+          });
+          $scope.totalScore = score / counter;
+
+
+          var scoreText = new createjs.Text("Total Score: " + $scope.totalScore.toFixed() + "%", "33px Arial", "white");
+          scoreText.textAlign = "center";
+          scoreText.x = $scope.scoreContainer.width / 2;
+          scoreText.y = $scope.scoreContainer.height / 2;
+          scoreText.regY = scoreText.getBounds().height / 2;
+          $scope.scoreContainer.addChild(scoreText);
+
+
+          var vocText = new createjs.Text($scope.calculatedActivityScores["vocabulary"].title, "25px Arial", "white");
+          vocText.x = $scope.vocReadContainer.width / 20;
+          vocText.y = $scope.vocReadContainer.height / 4;
+
+          $scope.activityStateVoc = new createjs.Sprite($scope.activityState, $scope.calculatedActivityScores["vocabulary"].completed ? "completed" : "notCompleted");
+          $scope.activityStateVoc.x = $scope.vocReadContainer.width / 2;
+          $scope.activityStateVoc.y = vocText.y;
+          $scope.vocReadContainer.addChild($scope.activityStateVoc);
+
+          $scope.vocReadContainer.addChild(vocText);
+
+          var vocAttempts = new createjs.Text(($scope.calculatedActivityScores["vocabulary"].attempts ? $scope.calculatedActivityScores["vocabulary"].attempts : 0) + " times", "25px Arial", "white");
+          vocAttempts.x = $scope.vocReadContainer.width / 1.5;
+          vocAttempts.y = vocText.y;
+          $scope.vocReadContainer.addChild(vocAttempts);
+
+
+          var readText = new createjs.Text($scope.calculatedActivityScores["reading"].title, "25px Arial", "white");
+          readText.x = $scope.vocReadContainer.width / 20;
+          readText.y = $scope.vocReadContainer.height / 1.65;
+          $scope.vocReadContainer.addChild(readText);
+
+          $scope.activityStateRead = new createjs.Sprite($scope.activityState, $scope.calculatedActivityScores["reading"].completed ? "completed" : "notCompleted");
+          $scope.activityStateRead.x = $scope.vocReadContainer.width / 2;
+          $scope.activityStateRead.y = readText.y;
+          $scope.vocReadContainer.addChild($scope.activityStateRead);
+
+          var readAttempts = new createjs.Text(($scope.calculatedActivityScores["reading"].attempts ? $scope.calculatedActivityScores["reading"].attempts : 0) + " times", "25px Arial", "white");
+          readAttempts.x = $scope.vocReadContainer.width / 1.5;
+          readAttempts.y = readText.y;
+          $scope.vocReadContainer.addChild(readAttempts);
+
+
+          var stepHeight = 15;
+          _.each($scope.calculatedActivityScores, function (activity, key, list) {
+
+            if (key === "reading" || key === "vocabulary") {
+              return;
+            }
+            var vocText = new createjs.Text(activity.title, "25px Arial", "white");
+            vocText.x = $scope.activitiesContainer.width / 40;
+            vocText.y = stepHeight;
+
+            $scope.activityStateVoc = new createjs.Sprite($scope.activityState, activity.completed ? "completed" : "notCompleted");
+            $scope.activityStateVoc.x = $scope.vocReadContainer.width / 2;
+            $scope.activityStateVoc.y = stepHeight;
+            $scope.activitiesContainer.addChild($scope.activityStateVoc);
+
+            $scope.activitiesContainer.addChild(vocText);
+
+            var vocAttempts = new createjs.Text((activity.attempts ? activity.attempts : 0) + " attempts", "25px Arial", "white");
+            vocAttempts.x = $scope.activitiesContainer.width / 3;
+            vocAttempts.y = stepHeight;
+            $scope.activitiesContainer.addChild(vocAttempts);
+
+            var vocCorrect = new createjs.Text("correct : " + activity.correct + " / " + activity.numberOfQuestions, "25px Arial", "white");
+            vocCorrect.x = $scope.activitiesContainer.width / 1.85;
+            vocCorrect.y = stepHeight;
+            $scope.activitiesContainer.addChild(vocCorrect);
+
+
+            var vocPerCent = new createjs.Text("score : " + activity.percentCorrectQuestions.toFixed() + "%", "25px Arial", "white");
+            vocPerCent.x = $scope.activitiesContainer.width / 1.25;
+            vocPerCent.y = stepHeight;
+            $scope.activitiesContainer.addChild(vocPerCent);
+
+            stepHeight += 50;
 
           });
         };
 
         function calculateCorrectAnswers(activityData) {
-          return 3;
-        };
 
-        function calculatePercentCorrectQuestions(activityData) {
-          return 30;
+          return _.filter(activityData.questions, function (question) {
+            if (question.userAnswer === question.answerChoice) {
+              return true;
+            } else {
+              return false;
+            }
+          }).length;
         };
 
 
@@ -369,6 +546,111 @@ angular.module("bookbuilder2")
         };
 
 
+        $scope.popEmail = function () {
+
+          $scope.data = {};
+          var myPopup = $ionicPopup.show({
+            template: '<input type="text" ng-model="data.firstName" placeholder="Όνομα μαθητή"><br><input type="email" ng-model="data.sendTo" placeholder="Email Καθηγητή">',
+            title: 'Εισάγετε τα στοιχεία σας',
+            scope: $scope,
+            buttons: [{
+              text: 'Cancel'
+            }, {
+              text: '<b>Send</b>',
+              type: 'button-positive',
+              onTap: function (e) {
+                if (!$scope.data.sendTo || !$scope.data.firstName) {
+                  //don't allow the user to close unless he enters wifi password
+                  e.preventDefault();
+                  $ionicLoading.show({
+                    "template": "Παρακαλώ συμπληρώστε τα στοιχεία σας σωστά!"
+                  });
+                  $timeout(function () {
+                    $ionicLoading.hide();
+                  }, 3000);
+                } else {
+                  console.log("$scope.calculatedActivityScores", $scope.calculatedActivityScores);
+                  console.log($scope.data.firstName + " " + $scope.data.sendTo);
+                  $scope.data.bookTitle = $rootScope.book.bookTitle;
+                  $scope.data.lessonTitle = $rootScope.selectedLesson.lessonTitle;
+                  $scope.data.totalScore = $scope.totalScore.toFixed();
+
+                  $scope.data.voc_check = $scope.calculatedActivityScores["vocabulary"].completed ? 1 : 2;
+                  $scope.data.text1 = $scope.calculatedActivityScores["vocabulary"].title;
+                  $scope.data.voc_attempt = $scope.calculatedActivityScores["vocabulary"].attempts;
+
+                  $scope.data.read_check = $scope.calculatedActivityScores["reading"].completed ? 1 : 2;
+                  $scope.data.text2 = $scope.calculatedActivityScores["reading"].title;
+                  $scope.data.read_attempt = $scope.calculatedActivityScores["reading"].attempts;
+
+
+                  $scope.data.voc1_check = $scope.calculatedActivityScores["vocabulary1"].completed ? 1 : 2;
+                  $scope.data.text6 = $scope.calculatedActivityScores["vocabulary1"].title;
+                  $scope.data.voc1_attempt = $scope.calculatedActivityScores["vocabulary1"].attempts;
+                  $scope.data.answers1 = $scope.calculatedActivityScores["vocabulary1"].correct;
+                  $scope.data.score1 = $scope.calculatedActivityScores["vocabulary1"].percentCorrectQuestions;
+                  $scope.data.total1 = $scope.calculatedActivityScores["vocabulary1"].numberOfQuestions;
+
+
+                  $scope.data.voc2_check = $scope.calculatedActivityScores["vocabulary2"].completed ? 1 : 2;
+                  $scope.data.text7 = $scope.calculatedActivityScores["vocabulary2"].title;
+                  $scope.data.voc2_attempt = $scope.calculatedActivityScores["vocabulary2"].attempts;
+                  $scope.data.answers2 = $scope.calculatedActivityScores["vocabulary2"].correct;
+                  $scope.data.score2 = $scope.calculatedActivityScores["vocabulary2"].percentCorrectQuestions;
+                  $scope.data.total2 = $scope.calculatedActivityScores["vocabulary2"].numberOfQuestions;
+
+                  /*$scope.data.voc3_check = $scope.calculatedActivityScores["vocabulary3"].completed ? 1 : 2;
+                   $scope.data.text11 = $scope.calculatedActivityScores["vocabulary3"].title;
+                   $scope.data.voc3_attempt = $scope.calculatedActivityScores["vocabulary3"].attempts;
+                   $scope.data.answers6 = $scope.calculatedActivityScores["vocabulary3"].correct;
+                   $scope.data.score6 = $scope.calculatedActivityScores["vocabulary3"].percentCorrectQuestions;
+                   $scope.data.total6 = $scope.calculatedActivityScores["vocabulary3"].numberOfQuestions;*/
+
+
+                  $scope.data.gram1_check = $scope.calculatedActivityScores["grammar1"].completed ? 1 : 2;
+                  $scope.data.text8 = $scope.calculatedActivityScores["grammar1"].title;
+                  $scope.data.gram1_attempt = $scope.calculatedActivityScores["grammar1"].attempts;
+                  $scope.data.answers3 = $scope.calculatedActivityScores["grammar1"].correct;
+                  $scope.data.score3 = $scope.calculatedActivityScores["grammar1"].percentCorrectQuestions;
+                  $scope.data.total3 = $scope.calculatedActivityScores["grammar1"].numberOfQuestions;
+
+                  $scope.data.gram2_check = $scope.calculatedActivityScores["grammar2"].completed ? 1 : 2;
+                  $scope.data.text9 = $scope.calculatedActivityScores["grammar2"].title;
+                  $scope.data.gram2_attempt = $scope.calculatedActivityScores["grammar2"].attempts;
+                  $scope.data.answers4 = $scope.calculatedActivityScores["grammar2"].correct;
+                  $scope.data.score4 = $scope.calculatedActivityScores["grammar2"].percentCorrectQuestions;
+                  $scope.data.total4 = $scope.calculatedActivityScores["grammar2"].numberOfQuestions;
+
+
+                  console.log($scope.data);
+                  Email.send($scope.data).success(function (response) {
+                    $ionicLoading.show({
+                      "template": "Το email εστάλη επιτυχώς!"
+                    });
+                    $timeout(function () {
+                      $ionicLoading.hide();
+                    }, 3000);
+                  }).error(function () {
+                    $ionicLoading.show({
+                      "template": "Υπήρξε κάποιο σφάλμα κατά την αποστολή! Παρακαλώ ξαναπροσπαθήστε!"
+                    });
+                    $timeout(function () {
+                      $ionicLoading.hide();
+                    }, 3000);
+                  });
+
+
+                }
+              }
+            }]
+          });
+
+
+        };
+
+
       });//end of image on complete
-    }, 500);//end of timeout
-  });
+    }, 500);
+//end of timeout
+  })
+;
