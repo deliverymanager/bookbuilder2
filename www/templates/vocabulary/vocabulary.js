@@ -3,83 +3,53 @@ angular.module("bookbuilder2")
 
     console.log("VocabularyController loaded!");
 
-
-    /*- TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST -*/
-
-    $rootScope.selectedLesson = {
-      "lessonTitle": "Lesson 1",
-      "title": "Family shopping",
-      "id": "lesson1",
-      "lessonMenu": [
-        {
-          "name": "Vocabulary 1",
-          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
-          "activityFolder": "vocabulary1",
-          "activityTemplate": "multiple",
-          "numberOfQuestions": 10
-        },
-        {
-          "name": "Vocabulary 2",
-          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
-          "activityFolder": "vocabulary2",
-          "activityTemplate": "draganddrop",
-          "numberOfQuestions": 5
-        },
-        {
-          "name": "Vocabulary 3",
-          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
-          "activityFolder": "vocabulary3",
-          "activityTemplate": "multiple",
-          "numberOfQuestions": 5
-        },
-        {
-          "name": "Grammar 1",
-          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
-          "activityFolder": "grammar1",
-          "activityTemplate": "multiple",
-          "numberOfQuestions": 15
-        },
-        {
-          "name": "Grammar 2",
-          "buttonFileName": "first_menu_lesson_1_button_sprite.json",
-          "activityFolder": "grammar2",
-          "activityTemplate": "multiple",
-          "numberOfQuestions": 15
-        }
-      ],
-      "lessonButtons": {
-        "resultsButtonFileName": "lesson_results_button_sprite.json",
-        "vocabularyButtonFileName": "lesson_results_button_sprite.json",
-        "readingButtonFileName": "lesson_results_button_sprite.json"
-      }
-    };
-    $rootScope.rootDir = "";
-
-
-    /*- TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST - - TEST -*/
+    //START OF DEVELOPMENT SNIPPET
+    if (window.cordova && window.cordova.platformId !== "browser") {
+     $rootScope.rootDir = window.cordova.file.dataDirectory;
+     } else {
+     $rootScope.rootDir = "";
+     }
+     $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+     $rootScope.activityFolder = window.localStorage.getItem("activityFolder");
+     $rootScope.activityName = window.localStorage.getItem("activityName");
+    //END OF DEVELOPMENT SNIPPET
 
     $timeout(function () {
 
-      var stage = new createjs.Stage(document.getElementById("vocabularyCanvas"));
-      var ctx = document.getElementById("vocabularyCanvas").getContext("2d");
-      stage.canvas.height = window.innerHeight;
-      stage.canvas.width = window.innerWidth;
-      stage.enableDOMEvents(false);
-      ctx.mozImageSmoothingEnabled = true;
-      ctx.webkitImageSmoothingEnabled = true;
-      ctx.msImageSmoothingEnabled = true;
-      ctx.imageSmoothingEnabled = true;
-      stage.regX = stage.width / 2;
-      stage.regY = stage.height / 2;
+      var PIXEL_RATIO = (function () {
+        var ctx = document.getElementById("canvas").getContext("2d"),
+          dpr = window.devicePixelRatio || 1,
+          bsr = ctx.webkitBackingStorePixelRatio ||
+            ctx.mozBackingStorePixelRatio ||
+            ctx.msBackingStorePixelRatio ||
+            ctx.oBackingStorePixelRatio ||
+            ctx.backingStorePixelRatio || 1;
+        return dpr / bsr;
+      })();
+      var createHiDPICanvas = function (w, h, ratio) {
+        if (!ratio) {
+          ratio = PIXEL_RATIO;
+        }
+        console.log("ratio", PIXEL_RATIO);
+        var can = document.getElementById("canvas");
+        can.width = w * ratio;
+        can.height = h * ratio;
+        can.style.width = w + "px";
+        can.style.height = h + "px";
+        can.getContext("2d").setTransform(ratio, 0, 0, ratio, 0, 0);
+        return can;
+      };
+      $scope.stage = new createjs.Stage(createHiDPICanvas(window.innerWidth, window.innerHeight));
+      $scope.stage.enableDOMEvents(false);
       createjs.MotionGuidePlugin.install();
-      createjs.Touch.enable(stage);
-      stage.enableMouseOver(0);
-      stage.mouseMoveOutside = false;
+      createjs.Touch.enable($scope.stage);
+      $scope.stage.enableMouseOver(0);
+      $scope.stage.mouseMoveOutside = false;
 
       createjs.Ticker.framerate = 20;
       var handleTick = function () {
         $scope.$apply();
-        stage.update();
+        $scope.stage.update();
       };
       createjs.Ticker.addEventListener("tick", handleTick);
 
