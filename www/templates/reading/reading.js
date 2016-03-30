@@ -117,30 +117,30 @@ angular.module("bookbuilder2")
             //Reassigning images with the rest of resource
             response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
             var buttonPlaySpriteSheet = new createjs.SpriteSheet(response);
-            var playButton = new createjs.Sprite(buttonPlaySpriteSheet, "playNormal");
+            $scope.playButton = new createjs.Sprite(buttonPlaySpriteSheet, "playNormal");
 
-            playButton.addEventListener("mousedown", function (event) {
+            $scope.playButton.addEventListener("mousedown", function (event) {
               console.log("mousedown event on a button !");
 
               if ($scope.playing) {
-                playButton.gotoAndPlay("pauseOnSelection");
+                $scope.playButton.gotoAndPlay("pauseOnSelection");
               } else {
-                playButton.gotoAndPlay("playOnSelection");
+                $scope.playButton.gotoAndPlay("playOnSelection");
               }
               $scope.stage.update();
             });
 
-            playButton.addEventListener("pressup", function (event) {
+            $scope.playButton.addEventListener("pressup", function (event) {
               console.log("pressup event Play", $scope.playing);
 
               if ($scope.playing) {
-                playButton.gotoAndPlay("playNormal");
+                $scope.playButton.gotoAndPlay("playNormal");
                 $scope.playing = false;
                 if (window.cordova && window.cordova.platformId !== "browser") {
                   $scope.sound.pause();
                 }
               } else {
-                playButton.gotoAndPlay("pauseNormal");
+                $scope.playButton.gotoAndPlay("pauseNormal");
                 $scope.playing = true;
                 if (window.cordova && window.cordova.platformId !== "browser") {
                   $scope.sound.play();
@@ -148,11 +148,11 @@ angular.module("bookbuilder2")
               }
             });
 
-            playButton.scaleX = playButton.scaleY = scale;
-            playButton.x = backgroundPosition.x + (backgroundPosition.width / 1.13);
-            playButton.y = backgroundPosition.y + (backgroundPosition.height / 1.09);
+            $scope.playButton.scaleX = $scope.playButton.scaleY = scale;
+            $scope.playButton.x = backgroundPosition.x + (backgroundPosition.width / 1.13);
+            $scope.playButton.y = backgroundPosition.y + (backgroundPosition.height / 1.09);
 
-            $scope.stage.addChild(playButton);
+            $scope.stage.addChild($scope.playButton);
             $scope.stage.update();
           })
           .error(function (error) {
@@ -182,7 +182,7 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
-              $state.go("lesson", {}, { reload: true });
+              $state.go("lesson", {}, {reload: true});
             });
 
             menuButton.scaleX = menuButton.scaleY = scale;
@@ -244,6 +244,8 @@ angular.module("bookbuilder2")
               console.log(entry);
               $scope.sound = new Media(entry.toInternalURL(), function () {
                 console.log("Sound success");
+                $scope.playButton.gotoAndPlay("playNormal");
+                completedActivity();
               }, function (err) {
                 console.log("Sound error", err);
               }, function (status) {
@@ -253,6 +255,8 @@ angular.module("bookbuilder2")
           } else {
             $scope.sound = new Media(assetPath + "reading.mp3", function () {
               console.log("Sound success");
+              $scope.playButton.gotoAndPlay("playNormal");
+              completedActivity();
             }, function (err) {
               console.log("Sound error", err);
             }, function (status) {
@@ -303,6 +307,7 @@ angular.module("bookbuilder2")
         }
 
         var completedActivity = function () {
+          console.log("completed activity!");
           $scope.activityData.completed = true;
           window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
         };
@@ -328,10 +333,6 @@ angular.module("bookbuilder2")
           } else {
             $scope.currentPage = parseInt(cue.Name);
             $scope.pages["reading_book_" + cue.Name].visible = true;
-
-            if (parseInt(cue.Name) === $scope.activityData.CuePoint.length) {
-              completedActivity();
-            }
           }
         };
       });//end of image on complete

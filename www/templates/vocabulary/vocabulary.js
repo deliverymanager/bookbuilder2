@@ -5,13 +5,13 @@ angular.module("bookbuilder2")
 
     //START OF DEVELOPMENT SNIPPET
     if (window.cordova && window.cordova.platformId !== "browser") {
-     $rootScope.rootDir = window.cordova.file.dataDirectory;
-     } else {
-     $rootScope.rootDir = "";
-     }
-     $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
-     $rootScope.activityFolder = window.localStorage.getItem("activityFolder");
-     $rootScope.activityName = window.localStorage.getItem("activityName");
+      $rootScope.rootDir = window.cordova.file.dataDirectory;
+    } else {
+      $rootScope.rootDir = "";
+    }
+    $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+    $rootScope.activityFolder = window.localStorage.getItem("activityFolder");
+    $rootScope.activityName = window.localStorage.getItem("activityName");
     //END OF DEVELOPMENT SNIPPET
 
     $timeout(function () {
@@ -139,7 +139,7 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
-              $state.go("lesson", {}, { reload: true });
+              $state.go("lesson", {}, {reload: true});
             });
 
             menuButton.scaleX = menuButton.scaleY = scale;
@@ -379,13 +379,6 @@ angular.module("bookbuilder2")
 
           stage.addChild($scope.englishWordsContainer);
           stage.update();
-
-
-
-
-
-
-
 
 
           /*EQUALS SIGN CONTAINER*/
@@ -2320,6 +2313,12 @@ angular.module("bookbuilder2")
           .error(function (error) {
             console.error("Error on getting json for greek big button...", error);
           });//end of get greek button
+
+
+
+        $scope.playAllSounds = function () {
+
+        }
 
 
       });//end of image on complete
