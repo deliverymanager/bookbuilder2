@@ -2284,6 +2284,7 @@ angular.module("bookbuilder2")
                     $scope.greekDerivativesBitmaps[derivative.name].visible = false;
                   });
 
+
                   greekBigButton.gotoAndPlay("selected");
                   stage.update();
 
