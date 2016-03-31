@@ -2266,7 +2266,7 @@ angular.module("bookbuilder2")
 
 
         /* BIG GREEK BUTTON */
-        $http.get($rootScope.rootDir + "data/assets/vocabulary_vocabulary_greek_big_button_sprite.json")
+        $http.get($rootScope.rootDir + "data/assets/vocabulary_greek_big_button_sprite.json")
           .success(function (response) {
 
             //Reassigning images with the rest of resource

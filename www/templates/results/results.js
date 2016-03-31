@@ -421,7 +421,7 @@ angular.module("bookbuilder2")
               "percentCorrectQuestions": 100
             };
           } else {
-            readingActivityData["reading"] = {
+            $scope.calculatedActivityScores["reading"] = {
               "title": "Reading",
               "completed": false,
               "attempts": 0,
