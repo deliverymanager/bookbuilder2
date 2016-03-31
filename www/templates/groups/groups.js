@@ -3,18 +3,18 @@ angular.module("bookbuilder2")
 
     console.log("GroupsController loaded!");
 
+    if (window.cordova && window.cordova.platformId !== "browser") {
+      $rootScope.rootDir = window.cordova.file.dataDirectory;
+    } else {
+      $rootScope.rootDir = "";
+    }
+
     $scope.backgroundView = {
       "background": "url(" + $rootScope.rootDir + "data/assets/first_menu_background.png) no-repeat center top",
       "-webkit-background-size": "cover",
       "-moz-background-size": "cover",
       "background-size": "cover"
     };
-
-    if (window.cordova && window.cordova.platformId !== "browser") {
-      $rootScope.rootDir = window.cordova.file.dataDirectory;
-    } else {
-      $rootScope.rootDir = "";
-    }
 
     $timeout(function () {
 
@@ -341,7 +341,7 @@ angular.module("bookbuilder2")
                                 historyRoot: true,
                                 disableBack: true
                               });
-                              $state.go("lesson", {}, { reload: true });
+                              $state.go("lesson", {}, {reload: true});
                             } else {
                               showDownloadingError(lesson);
                             }
@@ -358,14 +358,11 @@ angular.module("bookbuilder2")
                               downloadLessonAssets(lesson, function (response) {
                                 if (response) {
                                   //Clearing Lesson after downloading for the first time!
-                                  _.each(lesson.lessonMenu, function (activity, key, list) {
-                                    window.localStorage.removeItem(lesson.id + "_" + activity.activityFolder);
-                                  });
                                   $ionicHistory.nextViewOptions({
                                     historyRoot: true,
                                     disableBack: true
                                   });
-                                  $state.go("lesson", {}, { reload: true });
+                                  $state.go("lesson", {}, {reload: true});
                                 } else {
                                   showDownloadingError(lesson);
                                 }
@@ -584,7 +581,7 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
-              $state.go("lesson", {}, { reload: true });
+              $state.go("lesson", {}, {reload: true});
             } else {
               showDownloadingError(lesson);
             }
@@ -594,7 +591,7 @@ angular.module("bookbuilder2")
             historyRoot: true,
             disableBack: true
           });
-          $state.go("lesson", {}, { reload: true });
+          $state.go("lesson", {}, {reload: true});
         }
       });
     };
@@ -674,21 +671,40 @@ angular.module("bookbuilder2")
 
     var deleteLessonGroup = function (groupId, callback) {
 
-
       var waterFallFunctions = [];
 
       _.each(_.findWhere($rootScope.book.lessonGroups, {"groupId": groupId}).lessons, function (lesson, key, list) {
 
         waterFallFunctions.push(function (waterFallCallback) {
 
-          $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data/lessons/" + lesson.id)
-            .then(function (success) {
-              console.log(lesson.id + " assets directory deleted!");
-              waterFallCallback();
-            }, function (error) {
-              console.log(error);
-              waterFallCallback();
+          var lessonResourceUrl = $rootScope.rootDir + 'data/lessons/' + lesson.id + "/lesson.json";
+
+          $http.get(lessonResourceUrl).success(function (response) {
+
+            _.each(response.lessonMenu, function (activity, key, list) {
+              console.log("Clearing", lesson.id + "_" + activity.activityFolder);
+              window.localStorage.removeItem(lesson.id + "_" + activity.activityFolder);
             });
+
+            $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data/lessons/" + lesson.id)
+              .then(function (success) {
+                console.log(lesson.id + " assets directory deleted!");
+                waterFallCallback();
+              }, function (error) {
+                console.log(error);
+                waterFallCallback();
+              });
+          }).error(function (err) {
+            $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data/lessons/" + lesson.id)
+              .then(function (success) {
+                console.log(lesson.id + " assets directory deleted!");
+                waterFallCallback();
+              }, function (error) {
+                console.log(error);
+                waterFallCallback();
+              });
+          });
+
         });
       });
 

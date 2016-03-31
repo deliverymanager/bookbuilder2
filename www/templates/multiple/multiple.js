@@ -419,6 +419,7 @@ angular.module("bookbuilder2")
             $scope.questionsContainer.height = background.image.height / 3;
             $scope.questionsContainer.scaleX = $scope.questionsContainer.scaleY = scale;
             $scope.questionsContainer.x = backgroundPosition.x + (backgroundPosition.height / 22);
+            $scope.questionsContainer.y = -1500;
             $scope.stage.addChild($scope.questionsContainer);
 
 
@@ -472,6 +473,7 @@ angular.module("bookbuilder2")
             $scope.answersContainer.height = background.image.height / 3.2;
             $scope.answersContainer.scaleX = $scope.answersContainer.scaleY = scale;
             $scope.answersContainer.x = backgroundPosition.x + (backgroundPosition.width / 22);
+            $scope.answersContainer.y = +1500;
             $scope.stage.addChild($scope.answersContainer);
 
             /*var graphicsCon = new createjs.Graphics().beginFill("blue").drawRect(0, 0, $scope.answersContainer.width, $scope.answersContainer.height);
@@ -968,6 +970,9 @@ angular.module("bookbuilder2")
           var currentPretexts = {};
           var textHeight = 40;
           _.each(pretexts, function (text, l, li) {
+            if (!text) {
+              text = " ";
+            }
             currentPretexts[l] = new createjs.Text(text, "25px Arial", "#69B8C7");
             currentPretexts[l].y = textHeight * l;
             $scope.questionsTextContainer.addChild(currentPretexts[l]);
@@ -991,6 +996,9 @@ angular.module("bookbuilder2")
             var currentMidtexts = {};
 
             _.each(midtexts, function (text, l, li) {
+              if (!text) {
+                text = " ";
+              }
               currentMidtexts[l] = new createjs.Text(text, "25px Arial", "#69B8C7");
               currentMidtexts[l].y = pretexts.length * textHeight + textHeight * l;
               console.log("currentMidtexts[l].y ", currentMidtexts[l].y);
@@ -1015,6 +1023,9 @@ angular.module("bookbuilder2")
               var currentPostexts = {};
 
               if (postexts.length > 1) {
+                if (!postexts[0]) {
+                  postexts[0] = " ";
+                }
                 currentPostexts[0] = new createjs.Text(postexts[0], "25px Arial", "#69B8C7");
                 currentPostexts[0].x = secondGapUnderlinedText.x + secondGapUnderlinedText.getBounds().width;
                 currentPostexts[0].y = secondGapUnderlinedText.y;
@@ -1040,6 +1051,9 @@ angular.module("bookbuilder2")
               var currentPostexts = {};
 
               if (postexts.length > 1) {
+                if (!postexts[0]) {
+                  postexts[0] = " ";
+                }
                 currentPostexts[0] = new createjs.Text(postexts[0], "25px Arial", "#69B8C7");
                 currentPostexts[0].x = firstGapUnderlinedText.x + firstGapUnderlinedText.getBounds().width;
                 currentPostexts[0].y = firstGapUnderlinedText.y;
