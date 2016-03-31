@@ -645,6 +645,7 @@ angular.module("bookbuilder2")
             var englishPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("lightgreen").drawRect(0, 0, $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].width, $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].height);
             $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].englishPhrasesBackground = new createjs.Shape(englishPhrasesSubContainerGraphics);
             $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].addChild(scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].englishPhrasesBackground);
+            $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].englishPhrasesBackground.alpha = 0.5;
             stage.update();
             $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].englishPhrasesBackground.visible = false;
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
@@ -689,9 +690,10 @@ angular.module("bookbuilder2")
             $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].y = key * 30;
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-            var equalsPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].width, $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].height);
+            var equalsPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("lightgreen").drawRect(0, 0, $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].width, $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].height);
             $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].equalsPhrasesBackground = new createjs.Shape(equalsPhrasesSubContainerGraphics);
             $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].addChild($scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].equalsPhrasesBackground);
+            $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].equalsPhrasesBackground.alpha = 0.5;
             stage.update();
             $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].equalsPhrasesBackground.visible = false;
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
@@ -736,9 +738,10 @@ angular.module("bookbuilder2")
             $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].y = key * 30;
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-            var greekPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].width, $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].height);
+            var greekPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("lightgreen").drawRect(0, 0, $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].width, $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].height);
             $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].greekPhrasesBackground = new createjs.Shape(greekPhrasesSubContainerGraphics);
             $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].addChild($scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].greekPhrasesBackground);
+            $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].greekPhrasesBackground.alpha = 0.5;
             stage.update();
             $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].greekPhrasesBackground.visible = false;
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
