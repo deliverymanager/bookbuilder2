@@ -40,7 +40,6 @@ angular.module("bookbuilder2")
         return can;
       };
       $scope.stage = new createjs.Stage(createHiDPICanvas(window.innerWidth, window.innerHeight));
-      var stage = $scope.stage;
       $scope.stage.enableDOMEvents(false);
       createjs.MotionGuidePlugin.install();
       createjs.Touch.enable($scope.stage);
@@ -93,9 +92,9 @@ angular.module("bookbuilder2")
         var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/vocabulary_background_image_blue.png");
 
         /**** CALCULATING SCALING ****/
-        var scaleY = stage.canvas.height / background.image.height;
+        var scaleY = $scope.stage.canvas.height / background.image.height;
         scaleY = scaleY.toFixed(2);
-        var scaleX = stage.canvas.width / background.image.width;
+        var scaleX = $scope.stage.canvas.width / background.image.width;
         scaleX = scaleX.toFixed(2);
         var scale = 1;
         if (scaleX >= scaleY) {
@@ -110,10 +109,10 @@ angular.module("bookbuilder2")
         background.scaleY = scale;
         background.regX = background.image.width / 2;
         background.regY = background.image.height / 2;
-        background.x = stage.canvas.width / 2;
-        background.y = stage.canvas.height / 2;
-        stage.addChild(background);
-        stage.update();
+        background.x = $scope.stage.canvas.width / 2;
+        background.y = $scope.stage.canvas.height / 2;
+        $scope.stage.addChild(background);
+        $scope.stage.update();
 
         var backgroundPosition = background.getTransformedBounds();
         /*var backgroundPositionOriginal = background.getBounds();*/
@@ -130,7 +129,7 @@ angular.module("bookbuilder2")
             menuButton.addEventListener("mousedown", function (event) {
               console.log("mousedown event on a button !");
               menuButton.gotoAndPlay("onSelection");
-              stage.update();
+              $scope.stage.update();
             });
 
             menuButton.addEventListener("pressup", function (event) {
@@ -147,8 +146,8 @@ angular.module("bookbuilder2")
             menuButton.x = 0;
             menuButton.y = -menuButton.getTransformedBounds().height / 5;
 
-            stage.addChild(menuButton);
-            stage.update();
+            $scope.stage.addChild(menuButton);
+            $scope.stage.update();
 
 
             $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/vocabulary.json")
@@ -269,7 +268,7 @@ angular.module("bookbuilder2")
           $scope.buttonsContainer.scaleX = $scope.buttonsContainer.scaleY = scale;
           $scope.buttonsContainer.x = backgroundPosition.x + (backgroundPosition.width / 17);
           $scope.buttonsContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
-          stage.addChild($scope.buttonsContainer);
+          $scope.stage.addChild($scope.buttonsContainer);
 
           $scope.buttonsContainer.buttonsSubContainers = {};
           _.each($scope.activityData.words, function (word, key, list) {
@@ -288,7 +287,7 @@ angular.module("bookbuilder2")
           $scope.indexContainer.scaleX = $scope.indexContainer.scaleY = scale;
           $scope.indexContainer.x = backgroundPosition.x + (backgroundPosition.width / 7);
           $scope.indexContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
-          stage.addChild($scope.indexContainer);
+          $scope.stage.addChild($scope.indexContainer);
 
           $scope.indexContainer.indexSubContainers = {};
           _.each($scope.activityData.words, function (word, key, list) {
@@ -315,7 +314,7 @@ angular.module("bookbuilder2")
           $scope.englishWordsContainer.scaleX = $scope.englishWordsContainer.scaleY = scale;
           $scope.englishWordsContainer.x = backgroundPosition.x + (backgroundPosition.width / 5.5);
           $scope.englishWordsContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
-          stage.addChild($scope.englishWordsContainer);
+          $scope.stage.addChild($scope.englishWordsContainer);
 
           $scope.englishWordsContainer.englishSubContainers = {};
           _.each($scope.activityData.words, function (word, key, list) {
@@ -339,7 +338,7 @@ angular.module("bookbuilder2")
           $scope.equalsSignContainer.scaleX = $scope.equalsSignContainer.scaleY = scale;
           $scope.equalsSignContainer.x = backgroundPosition.x + (backgroundPosition.width / 2.2);
           $scope.equalsSignContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
-          stage.addChild($scope.equalsSignContainer);
+          $scope.stage.addChild($scope.equalsSignContainer);
 
           $scope.equalsSignContainer.equalsSubContainers = {};
           _.each($scope.activityData.words, function (word, key, list) {
@@ -364,7 +363,7 @@ angular.module("bookbuilder2")
           $scope.greekWordsContainer.scaleX = $scope.greekWordsContainer.scaleY = scale;
           $scope.greekWordsContainer.x = backgroundPosition.x + (backgroundPosition.width / 2);
           $scope.greekWordsContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
-          stage.addChild($scope.greekWordsContainer);
+          $scope.stage.addChild($scope.greekWordsContainer);
 
           $scope.greekWordsContainer.greekWordsSubContainers = {};
           _.each($scope.activityData.words, function (word, key, list) {
@@ -393,7 +392,7 @@ angular.module("bookbuilder2")
           $scope.buttonsPhrasesContainer.scaleX = $scope.buttonsPhrasesContainer.scaleY = scale;
           $scope.buttonsPhrasesContainer.x = backgroundPosition.x + (backgroundPosition.width / 17);
           $scope.buttonsPhrasesContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
-          stage.addChild($scope.buttonsPhrasesContainer);
+          $scope.stage.addChild($scope.buttonsPhrasesContainer);
 
           $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers = {};
           _.each($scope.activityData.phrases, function (phrase, key, list) {
@@ -417,7 +416,7 @@ angular.module("bookbuilder2")
           $scope.indexPhrasesContainer.scaleX = $scope.indexPhrasesContainer.scaleY = scale;
           $scope.indexPhrasesContainer.x = backgroundPosition.x + (backgroundPosition.width / 7);
           $scope.indexPhrasesContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
-          stage.addChild($scope.indexPhrasesContainer);
+          $scope.stage.addChild($scope.indexPhrasesContainer);
 
           $scope.indexPhrasesContainer.indexPhrasesSubContainers = {};
           _.each($scope.activityData.phrases, function (phrase, key, list) {
@@ -440,7 +439,7 @@ angular.module("bookbuilder2")
           $scope.englishPhrasesContainer.scaleX = $scope.englishPhrasesContainer.scaleY = scale;
           $scope.englishPhrasesContainer.x = backgroundPosition.x + (backgroundPosition.width / 5.5);
           $scope.englishPhrasesContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
-          stage.addChild($scope.englishPhrasesContainer);
+          $scope.stage.addChild($scope.englishPhrasesContainer);
 
           $scope.englishPhrasesContainer.englishPhrasesSubContainers = {};
           _.each($scope.activityData.phrases, function (phrase, key, list) {
@@ -464,7 +463,7 @@ angular.module("bookbuilder2")
           $scope.equalsSignPhrasesContainer.scaleX = $scope.equalsSignPhrasesContainer.scaleY = scale;
           $scope.equalsSignPhrasesContainer.x = backgroundPosition.x + (backgroundPosition.width / 2.2);
           $scope.equalsSignPhrasesContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
-          stage.addChild($scope.equalsSignPhrasesContainer);
+          $scope.stage.addChild($scope.equalsSignPhrasesContainer);
 
           $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers = {};
           _.each($scope.activityData.phrases, function (phrase, key, list) {
@@ -487,7 +486,7 @@ angular.module("bookbuilder2")
           $scope.greekPhrasesContainer.scaleX = $scope.greekPhrasesContainer.scaleY = scale;
           $scope.greekPhrasesContainer.x = backgroundPosition.x + (backgroundPosition.width / 2);
           $scope.greekPhrasesContainer.y = backgroundPosition.y + (backgroundPosition.height / 10);
-          stage.addChild($scope.greekPhrasesContainer);
+          $scope.stage.addChild($scope.greekPhrasesContainer);
 
           $scope.greekPhrasesContainer.greekPhrasesSubContainers = {};
           _.each($scope.activityData.phrases, function (phrase, key, list) {
@@ -517,7 +516,7 @@ angular.module("bookbuilder2")
           $scope.derivativeContainers["verbs"].scaleX = $scope.derivativeContainers["verbs"].scaleY = scale;
           $scope.derivativeContainers["verbs"].x = backgroundPosition.x + (backgroundPosition.width / 17);
           $scope.derivativeContainers["verbs"].y = backgroundPosition.y + (backgroundPosition.height / 10);
-          stage.addChild($scope.derivativeContainers["verbs"]);
+          $scope.stage.addChild($scope.derivativeContainers["verbs"]);
 
           $scope.derivativeContainers["verbs"].subContainers = {};
           var verbsTitle = new createjs.Text("VERBS", "17px Arial", "red");
@@ -534,7 +533,7 @@ angular.module("bookbuilder2")
           $scope.derivativeContainers["nouns"].scaleX = $scope.derivativeContainers["nouns"].scaleY = scale;
           $scope.derivativeContainers["nouns"].x = backgroundPosition.x + (backgroundPosition.width / 2.3);
           $scope.derivativeContainers["nouns"].y = backgroundPosition.y + (backgroundPosition.height / 10);
-          stage.addChild($scope.derivativeContainers["nouns"]);
+          $scope.stage.addChild($scope.derivativeContainers["nouns"]);
 
           $scope.derivativeContainers["nouns"].subContainers = {};
           var nounsTitle = new createjs.Text("NOUNS", "17px Arial", "red");
@@ -552,7 +551,7 @@ angular.module("bookbuilder2")
           $scope.derivativeContainers["noun"].scaleX = $scope.derivativeContainers["noun"].scaleY = scale;
           $scope.derivativeContainers["noun"].x = backgroundPosition.x + (backgroundPosition.width / 17);
           $scope.derivativeContainers["noun"].y = backgroundPosition.y + (backgroundPosition.height / 2);
-          stage.addChild($scope.derivativeContainers["noun"]);
+          $scope.stage.addChild($scope.derivativeContainers["noun"]);
 
           $scope.derivativeContainers["noun"].subContainers = {};
           var nounTitle = new createjs.Text("NOUN", "17px Arial", "red");
@@ -569,7 +568,7 @@ angular.module("bookbuilder2")
           $scope.derivativeContainers["adjective"].scaleX = $scope.derivativeContainers["adjective"].scaleY = scale;
           $scope.derivativeContainers["adjective"].x = backgroundPosition.x + (backgroundPosition.width / 2.3);
           $scope.derivativeContainers["adjective"].y = backgroundPosition.y + (backgroundPosition.height / 2);
-          stage.addChild($scope.derivativeContainers["adjective"]);
+          $scope.stage.addChild($scope.derivativeContainers["adjective"]);
 
           $scope.derivativeContainers["adjective"].subContainers = {};
 
@@ -833,7 +832,7 @@ angular.module("bookbuilder2")
                 enSmallButton.addEventListener("mousedown", function (event) {
                   console.log("Mouse down event on a button !");
                   enSmallButton.gotoAndPlay("onSelection");
-                  stage.update();
+                  $scope.stage.update();
                 });
 
                 enSmallButton.addEventListener("pressup", function (event) {
@@ -853,7 +852,7 @@ angular.module("bookbuilder2")
                 grSmallButton.addEventListener("mousedown", function (event) {
                   console.log("Mouse down event on a button !");
                   grSmallButton.gotoAndPlay("onSelection");
-                  stage.update();
+                  $scope.stage.update();
                 });
 
                 grSmallButton.addEventListener("pressup", function (event) {
@@ -871,7 +870,7 @@ angular.module("bookbuilder2")
                 playSmallButton.addEventListener("mousedown", function (event) {
                   console.log("Mouse down event on a button !");
                   playSmallButton.gotoAndPlay("onSelection");
-                  stage.update();
+                  $scope.stage.update();
                 });
 
                 playSmallButton.addEventListener("pressup", function (event) {
@@ -894,7 +893,7 @@ angular.module("bookbuilder2")
                 $scope.buttonsContainer.buttonsSubContainers[word.name].addChild(enSmallButton);
                 $scope.buttonsContainer.buttonsSubContainers[word.name].addChild(grSmallButton);
                 $scope.buttonsContainer.buttonsSubContainers[word.name].addChild(playSmallButton);
-                stage.update();
+                $scope.stage.update();
 
               });
             }
@@ -917,7 +916,7 @@ angular.module("bookbuilder2")
             /* wordIndex.maxWidth = $scope.indexContainer.width;*/
 
             $scope.indexContainer.indexSubContainers[word.name].addChild(wordIndex);
-            stage.update();
+            $scope.stage.update();
 
           });
 
@@ -938,7 +937,7 @@ angular.module("bookbuilder2")
             $scope.englishWordsBitmaps[word.name].y = $scope.englishWordsContainer.englishSubContainers[word.name].height / 1.5;
             $scope.englishWordsBitmaps[word.name].regY = $scope.englishWordsContainer.englishSubContainers[word.name].height / 2;
             $scope.englishWordsContainer.englishSubContainers[word.name].addChild($scope.englishWordsBitmaps[word.name]);
-            stage.update();
+            $scope.stage.update();
 
           });
         }//End of loadEnglishWords function
@@ -958,7 +957,7 @@ angular.module("bookbuilder2")
             equals.maxWidth = $scope.equalsSignContainer.width;
 
             $scope.equalsSignContainer.equalsSubContainers[word.name].addChild(equals);
-            stage.update();
+            $scope.stage.update();
           });
 
         }//End of loadIndexes function
@@ -977,7 +976,7 @@ angular.module("bookbuilder2")
             $scope.greekWordsBitmaps[word.name].y = $scope.greekWordsContainer.greekWordsSubContainers[word.name].height / 1.5;
             $scope.greekWordsBitmaps[word.name].regY = $scope.greekWordsContainer.greekWordsSubContainers[word.name].height / 2;
             $scope.greekWordsContainer.greekWordsSubContainers[word.name].addChild($scope.greekWordsBitmaps[word.name]);
-            stage.update();
+            $scope.stage.update();
           });
         }//End of loadGreekWords function
 
@@ -1061,7 +1060,7 @@ angular.module("bookbuilder2")
                 enSmallButton.addEventListener("mousedown", function (event) {
                   console.log("Mouse down event on a button !");
                   enSmallButton.gotoAndPlay("onSelection");
-                  stage.update();
+                  $scope.stage.update();
                 });
 
                 enSmallButton.addEventListener("pressup", function (event) {
@@ -1081,7 +1080,7 @@ angular.module("bookbuilder2")
                 grSmallButton.addEventListener("mousedown", function (event) {
                   console.log("Mouse down event on a button !");
                   grSmallButton.gotoAndPlay("onSelection");
-                  stage.update();
+                  $scope.stage.update();
                 });
 
                 grSmallButton.addEventListener("pressup", function (event) {
@@ -1099,7 +1098,7 @@ angular.module("bookbuilder2")
                 playSmallButton.addEventListener("mousedown", function (event) {
                   console.log("Mouse down event on a button !");
                   playSmallButton.gotoAndPlay("onSelection");
-                  stage.update();
+                  $scope.stage.update();
                 });
 
                 playSmallButton.addEventListener("pressup", function (event) {
@@ -1122,7 +1121,7 @@ angular.module("bookbuilder2")
                 $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].addChild(enSmallButton);
                 $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].addChild(grSmallButton);
                 $scope.buttonsPhrasesContainer.buttonsPhrasesSubContainers[phrase.name].addChild(playSmallButton);
-                stage.update();
+                $scope.stage.update();
 
               });
             }
@@ -1145,7 +1144,7 @@ angular.module("bookbuilder2")
             phraseIndex.textAlign = "center";
 
             $scope.indexPhrasesContainer.indexPhrasesSubContainers[phrase.name].addChild(phraseIndex);
-            stage.update();
+            $scope.stage.update();
 
           });
 
@@ -1166,7 +1165,7 @@ angular.module("bookbuilder2")
             $scope.englishPhrasesBitmaps[phrase.name].y = $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].height / 1.5;
             $scope.englishPhrasesBitmaps[phrase.name].regY = $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].height / 2;
             $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].addChild($scope.englishPhrasesBitmaps[phrase.name]);
-            stage.update();
+            $scope.stage.update();
           });
         }//End of loadEnglishPhrases function
 
@@ -1184,7 +1183,7 @@ angular.module("bookbuilder2")
             equals.textAlign = "center";
 
             $scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name].addChild(equals);
-            stage.update();
+            $scope.stage.update();
 
           });
 
@@ -1205,7 +1204,7 @@ angular.module("bookbuilder2")
             $scope.greekPhrasesBitmaps[phrase.name].y = $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].height / 1.5;
             $scope.greekPhrasesBitmaps[phrase.name].regY = $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].height / 2;
             $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].addChild($scope.greekPhrasesBitmaps[phrase.name]);
-            stage.update();
+            $scope.stage.update();
 
           });
         }//End of loadGreekPhrases function
@@ -1295,7 +1294,7 @@ angular.module("bookbuilder2")
                 enSmallButton.addEventListener("mousedown", function (event) {
                   console.log("Mouse down event on a button !");
                   enSmallButton.gotoAndPlay("onSelection");
-                  stage.update();
+                  $scope.stage.update();
                 });
 
                 enSmallButton.addEventListener("pressup", function (event) {
@@ -1315,7 +1314,7 @@ angular.module("bookbuilder2")
                 grSmallButton.addEventListener("mousedown", function (event) {
                   console.log("Mouse down event on a button !");
                   grSmallButton.gotoAndPlay("onSelection");
-                  stage.update();
+                  $scope.stage.update();
                 });
 
                 grSmallButton.addEventListener("pressup", function (event) {
@@ -1333,19 +1332,16 @@ angular.module("bookbuilder2")
                 playSmallButton.addEventListener("mousedown", function (event) {
                   console.log("Mouse down event on a button !");
                   playSmallButton.gotoAndPlay("onSelection");
-                  stage.update();
+                  $scope.stage.update();
                 });
 
                 playSmallButton.addEventListener("pressup", function (event) {
                   console.log("Press up event!");
                   playSmallButton.gotoAndPlay("normal");
                   console.log("Playing sound: ", event);
-                  /*playingSound()*/
                   console.log("Playing sound for element with derivative.type: " + derivative.type + " and key:", key);
 
                   var elementIndex = _.findIndex(_.filter($scope.activityData.derivatives, {type: derivative.type}), {name: $scope.activityData.derivatives[key].name});
-                  console.log("Formatted activityData.derivatives: ", _.filter($scope.activityData.derivatives, {type: derivative.type}));
-                  console.log("The selected element index: ", elementIndex);
 
                   $scope.derivativesBackgrounds[derivative.type].indexBackground[elementIndex].visible = true;
                   $scope.derivativesBackgrounds[derivative.type].englishBackground[elementIndex].visible = true;
@@ -1359,26 +1355,26 @@ angular.module("bookbuilder2")
                   $scope.derivativeContainers['verbs'].subContainers["buttons"].rowContainers[verbsIndex].addChild(enSmallButton);
                   $scope.derivativeContainers['verbs'].subContainers["buttons"].rowContainers[verbsIndex].addChild(grSmallButton);
                   $scope.derivativeContainers['verbs'].subContainers["buttons"].rowContainers[verbsIndex].addChild(playSmallButton);
-                  stage.update();
+                  $scope.stage.update();
                   verbsIndex++;
                 } else if (derivative.type === 'nouns') {
                   console.log("$scope.derivativeContainers['nouns'].subContainers.rowContainers: ", $scope.derivativeContainers['nouns'].subContainers["buttons"].rowContainers);
                   $scope.derivativeContainers['nouns'].subContainers["buttons"].rowContainers[nounsIndex].addChild(enSmallButton);
                   $scope.derivativeContainers['nouns'].subContainers["buttons"].rowContainers[nounsIndex].addChild(grSmallButton);
                   $scope.derivativeContainers['nouns'].subContainers["buttons"].rowContainers[nounsIndex].addChild(playSmallButton);
-                  stage.update();
+                  $scope.stage.update();
                   nounsIndex++;
                 } else if (derivative.type === 'noun') {
                   $scope.derivativeContainers['noun'].subContainers["buttons"].rowContainers[nounIndex].addChild(enSmallButton);
                   $scope.derivativeContainers['noun'].subContainers["buttons"].rowContainers[nounIndex].addChild(grSmallButton);
                   $scope.derivativeContainers['noun'].subContainers["buttons"].rowContainers[nounIndex].addChild(playSmallButton);
-                  stage.update();
+                  $scope.stage.update();
                   nounIndex++;
                 } else {
                   $scope.derivativeContainers['adjective'].subContainers["buttons"].rowContainers[adjectiveIndex].addChild(enSmallButton);
                   $scope.derivativeContainers['adjective'].subContainers["buttons"].rowContainers[adjectiveIndex].addChild(grSmallButton);
                   $scope.derivativeContainers['adjective'].subContainers["buttons"].rowContainers[adjectiveIndex].addChild(playSmallButton);
-                  stage.update();
+                  $scope.stage.update();
                   adjectiveIndex++;
                 }
 
@@ -1409,19 +1405,19 @@ angular.module("bookbuilder2")
             /*Resolving on which container should be added*/
             if (derivative.type === 'verbs') {
               $scope.derivativeContainers['verbs'].subContainers["index"].rowContainers[verbsIndex].addChild(derivativeIndex);
-              stage.update();
+              $scope.stage.update();
               verbsIndex++;
             } else if (derivative.type === 'nouns') {
               $scope.derivativeContainers['nouns'].subContainers["index"].rowContainers[nounsIndex].addChild(derivativeIndex);
-              stage.update();
+              $scope.stage.update();
               nounsIndex++;
             } else if (derivative.type === 'noun') {
               $scope.derivativeContainers['noun'].subContainers["index"].rowContainers[nounIndex].addChild(derivativeIndex);
-              stage.update();
+              $scope.stage.update();
               nounIndex++;
             } else {
               $scope.derivativeContainers['adjective'].subContainers["index"].rowContainers[adjectiveIndex].addChild(derivativeIndex);
-              stage.update();
+              $scope.stage.update();
               adjectiveIndex++;
             }
 
@@ -1452,19 +1448,19 @@ angular.module("bookbuilder2")
             /*Resolving on which container should be added*/
             if (derivative.type === 'verbs') {
               $scope.derivativeContainers['verbs'].subContainers["english"].rowContainers[verbsIndex].addChild($scope.englishDerivativesBitmaps[derivative.name]);
-              stage.update();
+              $scope.stage.update();
               verbsIndex++;
             } else if (derivative.type === 'nouns') {
               $scope.derivativeContainers['nouns'].subContainers["english"].rowContainers[nounsIndex].addChild($scope.englishDerivativesBitmaps[derivative.name]);
-              stage.update();
+              $scope.stage.update();
               nounsIndex++;
             } else if (derivative.type === 'noun') {
               $scope.derivativeContainers['noun'].subContainers["english"].rowContainers[nounIndex].addChild($scope.englishDerivativesBitmaps[derivative.name]);
-              stage.update();
+              $scope.stage.update();
               nounIndex++;
             } else {
               $scope.derivativeContainers['adjective'].subContainers["english"].rowContainers[adjectiveIndex].addChild($scope.englishDerivativesBitmaps[derivative.name]);
-              stage.update();
+              $scope.stage.update();
               adjectiveIndex++;
             }
 
@@ -1496,19 +1492,19 @@ angular.module("bookbuilder2")
             /*Resolving on which container should be added*/
             if (derivative.type === 'verbs') {
               $scope.derivativeContainers['verbs'].subContainers["greek"].rowContainers[verbsIndex].addChild($scope.greekDerivativesBitmaps[derivative.name]);
-              stage.update();
+              $scope.stage.update();
               verbsIndex++;
             } else if (derivative.type === 'nouns') {
               $scope.derivativeContainers['nouns'].subContainers["greek"].rowContainers[nounsIndex].addChild($scope.greekDerivativesBitmaps[derivative.name]);
-              stage.update();
+              $scope.stage.update();
               nounsIndex++;
             } else if (derivative.type === 'noun') {
               $scope.derivativeContainers['noun'].subContainers["greek"].rowContainers[nounIndex].addChild($scope.greekDerivativesBitmaps[derivative.name]);
-              stage.update();
+              $scope.stage.update();
               nounIndex++;
             } else {
               $scope.derivativeContainers['adjective'].subContainers["greek"].rowContainers[adjectiveIndex].addChild($scope.greekDerivativesBitmaps[derivative.name]);
-              stage.update();
+              $scope.stage.update();
               adjectiveIndex++;
             }
 
@@ -1535,7 +1531,7 @@ angular.module("bookbuilder2")
             $scope.bigPauseButton.addEventListener("mousedown", function (event) {
               console.log("Mouse down event on a button !");
               $scope.bigPauseButton.gotoAndPlay("onSelection");
-              stage.update();
+              $scope.stage.update();
             });
 
             $scope.bigPauseButton.addEventListener("pressup", function (event) {
@@ -1551,8 +1547,8 @@ angular.module("bookbuilder2")
             $scope.bigPauseButton.x = backgroundPosition.x + (backgroundPosition.width / 9);
             $scope.bigPauseButton.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
 
-            stage.addChild($scope.bigPauseButton);
-            stage.update();
+            $scope.stage.addChild($scope.bigPauseButton);
+            $scope.stage.update();
 
           })
           .error(function (error) {
@@ -1574,7 +1570,7 @@ angular.module("bookbuilder2")
             $scope.bigStopButton.addEventListener("mousedown", function (event) {
               console.log("Mouse down event on a button !");
               $scope.bigStopButton.gotoAndPlay("onSelection");
-              stage.update();
+              $scope.stage.update();
             });
 
             $scope.bigStopButton.addEventListener("pressup", function (event) {
@@ -1590,8 +1586,8 @@ angular.module("bookbuilder2")
             $scope.bigStopButton.x = backgroundPosition.x + (backgroundPosition.width / 6);
             $scope.bigStopButton.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
 
-            stage.addChild($scope.bigStopButton);
-            stage.update();
+            $scope.stage.addChild($scope.bigStopButton);
+            $scope.stage.update();
 
           })
           .error(function (error) {
@@ -1613,7 +1609,7 @@ angular.module("bookbuilder2")
             $scope.bigPlayButton.addEventListener("mousedown", function (event) {
               console.log("Mouse down event on a button !");
               $scope.bigPlayButton.gotoAndPlay("onSelection");
-              stage.update();
+              $scope.stage.update();
             });
 
             $scope.bigPlayButton.addEventListener("pressup", function (event) {
@@ -1628,8 +1624,8 @@ angular.module("bookbuilder2")
             $scope.bigPlayButton.x = backgroundPosition.x + (backgroundPosition.width / 7);
             $scope.bigPlayButton.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
 
-            stage.addChild($scope.bigPlayButton);
-            stage.update();
+            $scope.stage.addChild($scope.bigPlayButton);
+            $scope.stage.update();
 
           })
           .error(function (error) {
@@ -1649,7 +1645,7 @@ angular.module("bookbuilder2")
             $scope.wordsButton.addEventListener("mousedown", function (event) {
               console.log("Mouse down event on a button !");
               $scope.wordsButton.gotoAndPlay("onSelection");
-              stage.update();
+              $scope.stage.update();
             });
 
             $scope.wordsButton.addEventListener("pressup", function (event) {
@@ -1665,8 +1661,8 @@ angular.module("bookbuilder2")
             $scope.wordsButton.y = backgroundPosition.y + (backgroundPosition.height / 5.2);
             /*$scope.wordsButton.y = -$scope.wordsButton.getTransformedBounds().height / 5;*/
 
-            stage.addChild($scope.wordsButton);
-            stage.update();
+            $scope.stage.addChild($scope.wordsButton);
+            $scope.stage.update();
 
           })
           .error(function (error) {
@@ -1686,7 +1682,7 @@ angular.module("bookbuilder2")
             $scope.phrasesButton.addEventListener("mousedown", function (event) {
               console.log("Mouse down event on a button !");
               $scope.phrasesButton.gotoAndPlay("onSelection");
-              stage.update();
+              $scope.stage.update();
             });
 
             $scope.phrasesButton.addEventListener("pressup", function (event) {
@@ -1702,8 +1698,8 @@ angular.module("bookbuilder2")
             $scope.phrasesButton.y = backgroundPosition.y + (backgroundPosition.height / 2.1);
             /*$scope.phrasesButton.y = -$scope.phrasesButton.getTransformedBounds().height / 5;*/
 
-            stage.addChild($scope.phrasesButton);
-            stage.update();
+            $scope.stage.addChild($scope.phrasesButton);
+            $scope.stage.update();
 
           })
           .error(function (error) {
@@ -1723,7 +1719,7 @@ angular.module("bookbuilder2")
             $scope.derivativesButton.addEventListener("mousedown", function (event) {
               console.log("mousedown event on a button !");
               $scope.derivativesButton.gotoAndPlay("onSelection");
-              stage.update();
+              $scope.stage.update();
             });
 
             $scope.derivativesButton.addEventListener("pressup", function (event) {
@@ -1739,8 +1735,8 @@ angular.module("bookbuilder2")
             $scope.derivativesButton.y = backgroundPosition.y + (backgroundPosition.height / 1.35);
             /*$scope.derivativesButton.y = -$scope.derivativesButton.getTransformedBounds().height / 5;*/
 
-            stage.addChild($scope.derivativesButton);
-            stage.update();
+            $scope.stage.addChild($scope.derivativesButton);
+            $scope.stage.update();
 
           })
           .error(function (error) {
@@ -1760,7 +1756,7 @@ angular.module("bookbuilder2")
             englishBigButton.addEventListener("mousedown", function (event) {
               console.log("Mouse down event on big English button!");
               englishBigButton.gotoAndPlay("onSelection");
-              stage.update();
+              $scope.stage.update();
             });
 
             englishBigButton.addEventListener("pressup", function (event) {
@@ -1776,7 +1772,7 @@ angular.module("bookbuilder2")
                   });
 
                   englishBigButton.gotoAndPlay("selected");
-                  stage.update();
+                  $scope.stage.update();
 
                 } else {
 
@@ -1785,7 +1781,7 @@ angular.module("bookbuilder2")
                     $scope.englishWordsBitmaps[word.name].visible = true;
                   });
                   englishBigButton.gotoAndPlay("normal");
-                  stage.update();
+                  $scope.stage.update();
                 }
               } else if ($scope.selectedVocabularySection === 'phrases') {
                 if ($scope.englishPhrasesBitmaps[$scope.activityData.phrases[0].name].visible === true) {
@@ -1797,7 +1793,7 @@ angular.module("bookbuilder2")
                   });
 
                   englishBigButton.gotoAndPlay("selected");
-                  stage.update();
+                  $scope.stage.update();
 
                 } else {
 
@@ -1806,7 +1802,7 @@ angular.module("bookbuilder2")
                     $scope.englishPhrasesBitmaps[phrase.name].visible = true;
                   });
                   englishBigButton.gotoAndPlay("normal");
-                  stage.update();
+                  $scope.stage.update();
                 }
               } else {
                 if ($scope.englishDerivativesBitmaps[$scope.activityData.derivatives[0].name].visible === true) {
@@ -1818,7 +1814,7 @@ angular.module("bookbuilder2")
                   });
 
                   englishBigButton.gotoAndPlay("selected");
-                  stage.update();
+                  $scope.stage.update();
 
                 } else {
 
@@ -1827,7 +1823,7 @@ angular.module("bookbuilder2")
                     $scope.englishDerivativesBitmaps[derivative.name].visible = true;
                   });
                   englishBigButton.gotoAndPlay("normal");
-                  stage.update();
+                  $scope.stage.update();
                 }
               }
 
@@ -1838,8 +1834,8 @@ angular.module("bookbuilder2")
             englishBigButton.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
             /*englishBigButton.y = -englishBigButton.getTransformedBounds().height / 5;*/
 
-            stage.addChild(englishBigButton);
-            stage.update();
+            $scope.stage.addChild(englishBigButton);
+            $scope.stage.update();
 
           })
           .error(function (error) {
@@ -1859,7 +1855,7 @@ angular.module("bookbuilder2")
             greekBigButton.addEventListener("mousedown", function (event) {
               console.log("Mouse down event on a button !");
               greekBigButton.gotoAndPlay("onSelection");
-              stage.update();
+              $scope.stage.update();
             });
 
             greekBigButton.addEventListener("pressup", function (event) {
@@ -1875,7 +1871,7 @@ angular.module("bookbuilder2")
                   });
 
                   greekBigButton.gotoAndPlay("selected");
-                  stage.update();
+                  $scope.stage.update();
 
                 } else {
 
@@ -1884,7 +1880,7 @@ angular.module("bookbuilder2")
                     $scope.greekWordsBitmaps[word.name].visible = true;
                   });
                   greekBigButton.gotoAndPlay("normal");
-                  stage.update();
+                  $scope.stage.update();
                 }
               } else if ($scope.selectedVocabularySection === 'phrases') {
                 if ($scope.greekPhrasesBitmaps[$scope.activityData.phrases[0].name].visible === true) {
@@ -1896,7 +1892,7 @@ angular.module("bookbuilder2")
                   });
 
                   greekBigButton.gotoAndPlay("selected");
-                  stage.update();
+                  $scope.stage.update();
 
                 } else {
 
@@ -1905,7 +1901,7 @@ angular.module("bookbuilder2")
                     $scope.greekPhrasesBitmaps[phrase.name].visible = true;
                   });
                   greekBigButton.gotoAndPlay("normal");
-                  stage.update();
+                  $scope.stage.update();
                 }
               } else {
                 if ($scope.greekDerivativesBitmaps[$scope.activityData.derivatives[0].name].visible === true) {
@@ -1917,7 +1913,7 @@ angular.module("bookbuilder2")
                   });
 
                   greekBigButton.gotoAndPlay("selected");
-                  stage.update();
+                  $scope.stage.update();
 
                 } else {
 
@@ -1926,7 +1922,7 @@ angular.module("bookbuilder2")
                     $scope.greekDerivativesBitmaps[derivative.name].visible = true;
                   });
                   greekBigButton.gotoAndPlay("normal");
-                  stage.update();
+                  $scope.stage.update();
                 }
               }
 
@@ -1938,8 +1934,8 @@ angular.module("bookbuilder2")
             greekBigButton.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
             /*greekBigButton.y = -greekBigButton.getTransformedBounds().height / 5;*/
 
-            stage.addChild(greekBigButton);
-            stage.update();
+            $scope.stage.addChild(greekBigButton);
+            $scope.stage.update();
 
           })
           .error(function (error) {
