@@ -642,11 +642,11 @@ angular.module("bookbuilder2")
             $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].y = key * 30;
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
-            var englishPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].width, $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].height);
+            var englishPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("lightgreen").drawRect(0, 0, $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].width, $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].height);
             $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].englishPhrasesBackground = new createjs.Shape(englishPhrasesSubContainerGraphics);
             $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].addChild(scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].englishPhrasesBackground);
             stage.update();
-            scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].englishPhrasesBackground.visible = false;
+            $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].englishPhrasesBackground.visible = false;
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
 
             $scope.englishPhrasesContainer.addChild($scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name]);
