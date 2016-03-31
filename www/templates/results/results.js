@@ -114,6 +114,8 @@ angular.module("bookbuilder2")
 
         async.parallel([function (callback) {
 
+
+          /**** MENU BUTTON ****/
             $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
               .success(function (response) {
 
@@ -181,7 +183,6 @@ angular.module("bookbuilder2")
                       clearAllActivitiesLocalStorage();
                     }
                   });
-
                 });
                 returnButton.scaleX = returnButton.scaleY = scale;
                 returnButton.x = backgroundPosition.x + (backgroundPosition.width / 1.15);
@@ -291,35 +292,37 @@ angular.module("bookbuilder2")
 
             $scope.vocReadContainer = new createjs.Container();
             $scope.vocReadContainer.scaleX = $scope.vocReadContainer.scaleY = scale;
-            $scope.vocReadContainer.x = backgroundPosition.x + (backgroundPosition.width / 10);
-            $scope.vocReadContainer.y = backgroundPosition.y + (backgroundPosition.height / 5);
-            $scope.vocReadContainer.width = backgroundPosition.width / 5.7;
-            $scope.vocReadContainer.height = backgroundPosition.height / 10;
+            $scope.vocReadContainer.x = backgroundPosition.x + (backgroundPosition.width / 9);
+            $scope.vocReadContainer.y = backgroundPosition.y + (backgroundPosition.height / 4);
+            $scope.vocReadContainer.width = background.image.width / 2.7;
+            $scope.vocReadContainer.height = background.image.height / 8;
             $scope.stage.addChild($scope.vocReadContainer);
 
 
             $scope.scoreContainer = new createjs.Container();
             $scope.scoreContainer.scaleX = $scope.scoreContainer.scaleY = scale;
             $scope.scoreContainer.x = backgroundPosition.x + (backgroundPosition.width / 2);
-            $scope.scoreContainer.y = backgroundPosition.y + (backgroundPosition.height / 4.3);
-            $scope.scoreContainer.width = backgroundPosition.width / 6.6;
-            $scope.scoreContainer.height = backgroundPosition.height / 14;
+            $scope.scoreContainer.y = backgroundPosition.y + (backgroundPosition.height / 4);
+            $scope.scoreContainer.width = background.image.width / 3.2;
+            $scope.scoreContainer.height = background.image.height / 8;
             $scope.stage.addChild($scope.scoreContainer);
 
 
             $scope.activitiesContainer = new createjs.Container();
             $scope.activitiesContainer.scaleX = $scope.activitiesContainer.scaleY = scale;
-            $scope.activitiesContainer.x = backgroundPosition.x + (backgroundPosition.width / 10);
-            $scope.activitiesContainer.y = backgroundPosition.y + (backgroundPosition.height / 2.35);
-            $scope.activitiesContainer.width = backgroundPosition.width / 2.85;
-            $scope.activitiesContainer.height = backgroundPosition.height / 4.7;
+            $scope.activitiesContainer.x = backgroundPosition.x + (backgroundPosition.width / 9);
+            $scope.activitiesContainer.y = backgroundPosition.y + (backgroundPosition.height / 2.5);
+            $scope.activitiesContainer.width = background.image.width/1.44;
+            $scope.activitiesContainer.height = background.image.height / 2.3;
             $scope.stage.addChild($scope.activitiesContainer);
 
             $scope.stage.update();
 
             callback();
-          }
-          ],
+          }],
+
+
+          /*** MAIN PARALLELS CALLBACK ***/
           function (err, results) {
 
             var lessonTitle = new createjs.Text($rootScope.selectedLesson.lessonTitle, "33px Arial", "white");
@@ -334,20 +337,16 @@ angular.module("bookbuilder2")
             title.y = backgroundPosition.y + (backgroundPosition.height / 16);
             $scope.stage.addChild(title);
             $scope.stage.update();
-
             showResults();
-
-          }
-        )
-        ;
+          });
 
 
+        /*Showing results*/
         function showResults() {
 
           $scope.scoreContainer.removeAllChildren();
           $scope.vocReadContainer.removeAllChildren();
           $scope.activitiesContainer.removeAllChildren();
-
 
           var vocabularyReadingGraphics = new createjs.Graphics().beginFill(null);
           vocabularyReadingGraphics.setStrokeStyle(3).beginStroke("white");
@@ -442,7 +441,7 @@ angular.module("bookbuilder2")
           $scope.totalScore = score / counter;
 
 
-          var scoreText = new createjs.Text("Total Score: " + $scope.totalScore.toFixed() + "%", "33px Arial", "white");
+          var scoreText = new createjs.Text("Total Score: " + $scope.totalScore.toFixed() + "%", "27px Arial", "white");
           scoreText.textAlign = "center";
           scoreText.x = $scope.scoreContainer.width / 2;
           scoreText.y = $scope.scoreContainer.height / 2;
@@ -450,9 +449,9 @@ angular.module("bookbuilder2")
           $scope.scoreContainer.addChild(scoreText);
 
 
-          var vocText = new createjs.Text($scope.calculatedActivityScores["vocabulary"].title, "25px Arial", "white");
+          var vocText = new createjs.Text($scope.calculatedActivityScores["vocabulary"].title, "21px Arial", "white");
           vocText.x = $scope.vocReadContainer.width / 20;
-          vocText.y = $scope.vocReadContainer.height / 4;
+          vocText.y = $scope.vocReadContainer.height / 14;
 
           $scope.activityStateVoc = new createjs.Sprite($scope.activityState, $scope.calculatedActivityScores["vocabulary"].completed ? "completed" : "notCompleted");
           $scope.activityStateVoc.x = $scope.vocReadContainer.width / 2;
@@ -467,9 +466,9 @@ angular.module("bookbuilder2")
           $scope.vocReadContainer.addChild(vocAttempts);
 
 
-          var readText = new createjs.Text($scope.calculatedActivityScores["reading"].title, "25px Arial", "white");
+          var readText = new createjs.Text($scope.calculatedActivityScores["reading"].title, "21px Arial", "white");
           readText.x = $scope.vocReadContainer.width / 20;
-          readText.y = $scope.vocReadContainer.height / 1.65;
+          readText.y = $scope.vocReadContainer.height / 1.9;
           $scope.vocReadContainer.addChild(readText);
 
           $scope.activityStateRead = new createjs.Sprite($scope.activityState, $scope.calculatedActivityScores["reading"].completed ? "completed" : "notCompleted");
@@ -489,7 +488,7 @@ angular.module("bookbuilder2")
             if (key === "reading" || key === "vocabulary") {
               return;
             }
-            var vocText = new createjs.Text(activity.title, "25px Arial", "white");
+            var vocText = new createjs.Text(activity.title, "21px Arial", "white");
             vocText.x = $scope.activitiesContainer.width / 40;
             vocText.y = stepHeight;
 
@@ -500,18 +499,18 @@ angular.module("bookbuilder2")
 
             $scope.activitiesContainer.addChild(vocText);
 
-            var vocAttempts = new createjs.Text((activity.attempts ? activity.attempts : 0) + " attempts", "25px Arial", "white");
+            var vocAttempts = new createjs.Text((activity.attempts ? activity.attempts : 0) + " attempts", "21px Arial", "white");
             vocAttempts.x = $scope.activitiesContainer.width / 3;
             vocAttempts.y = stepHeight;
             $scope.activitiesContainer.addChild(vocAttempts);
 
-            var vocCorrect = new createjs.Text("correct : " + activity.correct + " / " + activity.numberOfQuestions, "25px Arial", "white");
+            var vocCorrect = new createjs.Text("correct : " + activity.correct + " / " + activity.numberOfQuestions, "21px Arial", "white");
             vocCorrect.x = $scope.activitiesContainer.width / 1.85;
             vocCorrect.y = stepHeight;
             $scope.activitiesContainer.addChild(vocCorrect);
 
 
-            var vocPerCent = new createjs.Text("score : " + activity.percentCorrectQuestions.toFixed() + "%", "25px Arial", "white");
+            var vocPerCent = new createjs.Text("score : " + activity.percentCorrectQuestions.toFixed() + "%", "21px Arial", "white");
             vocPerCent.x = $scope.activitiesContainer.width / 1.25;
             vocPerCent.y = stepHeight;
             $scope.activitiesContainer.addChild(vocPerCent);
@@ -519,10 +518,11 @@ angular.module("bookbuilder2")
             stepHeight += 50;
 
           });
-        };
+        }
 
+
+        /*Calculating answers*/
         function calculateCorrectAnswers(activityData) {
-
           return _.filter(activityData.questions, function (question) {
             if (question.userAnswer === question.answerChoice) {
               return true;
@@ -530,22 +530,21 @@ angular.module("bookbuilder2")
               return false;
             }
           }).length;
-        };
+        }
 
 
+        /*This function evokes when a lesson is downloaded for the first time*/
         function clearAllActivitiesLocalStorage() {
 
           _.each($rootScope.selectedLesson.lessonMenu, function (activity, key, list) {
             window.localStorage.removeItem($rootScope.selectedLesson.id + "_" + activity.activityFolder);
           });
-
-          Toast.show($rootScope.selectedLesson.title + " is cleared succesfully!");
-
+          Toast.show($rootScope.selectedLesson.title + " is cleared successfully!");
           showResults();
+        }
 
-        };
 
-
+        /*Function that handles email process*/
         $scope.popEmail = function () {
 
           $scope.data = {};
