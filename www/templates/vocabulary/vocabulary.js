@@ -215,9 +215,7 @@ angular.module("bookbuilder2")
 
                             console.log("Sound status: ", status);
                           });
-                          $timeout(function () {
-                            waterfallCallback();
-                          }, 100);
+                          waterfallCallback();
                         });
                       } else {
                         console.log("Else Android");
@@ -241,9 +239,7 @@ angular.module("bookbuilder2")
                           });
                         }
 
-                        $timeout(function () {
-                          waterfallCallback();
-                        }, 100);
+                        waterfallCallback();
                       }
                     });
                   });
@@ -1186,7 +1182,7 @@ angular.module("bookbuilder2")
             function (buttonsSpriteSheetCallback) {
 
               /*English Button*/
-              $http.get($rootScope.rootDir + "data/assets/english_small_button_sprite.json")
+              $http.get($rootScope.rootDir + "data/assets/vocabulary_english_small_button_sprite.json")
                 .success(function (response) {
                   console.log("Success on getting json data for english button!");
                   response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
@@ -1204,7 +1200,7 @@ angular.module("bookbuilder2")
             function (buttonsSpriteSheetCallback) {
 
               /*Greek Button*/
-              $http.get($rootScope.rootDir + "data/assets/greek_small_button_sprite.json")
+              $http.get($rootScope.rootDir + "data/assets/vocabulary_greek_small_button_sprite.json")
                 .success(function (response) {
                   console.log("Success on getting json data for greek button!");
                   response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
@@ -1223,7 +1219,7 @@ angular.module("bookbuilder2")
             function (buttonsSpriteSheetCallback) {
 
               /*Play Button*/
-              $http.get($rootScope.rootDir + "data/assets/play_small_button_sprite.json")
+              $http.get($rootScope.rootDir + "data/assets/vocabulary_play_small_button_sprite.json")
                 .success(function (response) {
 
                   console.log("Success on getting json data for play button!");
@@ -1354,7 +1350,7 @@ angular.module("bookbuilder2")
           /*Iterating and populating the container*/
           _.each($scope.activityData.words, function (word, key, list) {
 
-            $scope.englishWordsBitmaps[word.name] = new createjs.Bitmap("data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + word.name + ".png");
+            $scope.englishWordsBitmaps[word.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + word.name + ".png");
 
             $scope.englishWordsBitmaps[word.name].x = 0;
             $scope.englishWordsBitmaps[word.name].y = $scope.englishWordsContainer.englishSubContainers[word.name].height / 1.5;
@@ -1394,7 +1390,7 @@ angular.module("bookbuilder2")
           /*Iterating and populating the container*/
           _.each($scope.activityData.words, function (word, key, list) {
 
-            $scope.greekWordsBitmaps[word.name] = new createjs.Bitmap("data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + word.name + "_gr.png");
+            $scope.greekWordsBitmaps[word.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + word.name + "_gr.png");
             $scope.greekWordsBitmaps[word.name].x = 0;
             $scope.greekWordsBitmaps[word.name].y = $scope.greekWordsContainer.greekWordsSubContainers[word.name].height / 1.5;
             $scope.greekWordsBitmaps[word.name].regY = $scope.greekWordsContainer.greekWordsSubContainers[word.name].height / 2;
@@ -1414,7 +1410,7 @@ angular.module("bookbuilder2")
             function (buttonsSpriteSheetCallback) {
 
               /*English Button*/
-              $http.get($rootScope.rootDir + "data/assets/english_small_button_sprite.json")
+              $http.get($rootScope.rootDir + "data/assets/vocabulary_english_small_button_sprite.json")
                 .success(function (response) {
                   console.log("Success on getting json data for english button!");
                   response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
@@ -1432,7 +1428,7 @@ angular.module("bookbuilder2")
             function (buttonsSpriteSheetCallback) {
 
               /*Greek Button*/
-              $http.get($rootScope.rootDir + "data/assets/greek_small_button_sprite.json")
+              $http.get($rootScope.rootDir + "data/assets/vocabulary_greek_small_button_sprite.json")
                 .success(function (response) {
                   console.log("Success on getting json data for greek button!");
                   response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
@@ -1451,7 +1447,7 @@ angular.module("bookbuilder2")
             function (buttonsSpriteSheetCallback) {
 
               /*Play Button*/
-              $http.get($rootScope.rootDir + "data/assets/play_small_button_sprite.json")
+              $http.get($rootScope.rootDir + "data/assets/vocabulary_play_small_button_sprite.json")
                 .success(function (response) {
 
                   console.log("Success on getting json data for play button!");
@@ -1582,7 +1578,7 @@ angular.module("bookbuilder2")
           /*Iterating and populating the container*/
           _.each($scope.activityData.phrases, function (phrase, key, list) {
 
-            $scope.englishPhrasesBitmaps[phrase.name] = new createjs.Bitmap("data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + phrase.name + ".png");
+            $scope.englishPhrasesBitmaps[phrase.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + phrase.name + ".png");
 
             $scope.englishPhrasesBitmaps[phrase.name].x = 0;
             $scope.englishPhrasesBitmaps[phrase.name].y = $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].height / 1.5;
@@ -1621,7 +1617,7 @@ angular.module("bookbuilder2")
           /*Iterating and populating the container*/
           _.each($scope.activityData.phrases, function (phrase, key, list) {
 
-            $scope.greekPhrasesBitmaps[phrase.name] = new createjs.Bitmap("data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + phrase.name + "_gr.png");
+            $scope.greekPhrasesBitmaps[phrase.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + phrase.name + "_gr.png");
 
             $scope.greekPhrasesBitmaps[phrase.name].x = 0;
             $scope.greekPhrasesBitmaps[phrase.name].y = $scope.greekPhrasesContainer.greekPhrasesSubContainers[phrase.name].height / 1.5;
@@ -1643,7 +1639,7 @@ angular.module("bookbuilder2")
             function (buttonsSpriteSheetCallback) {
 
               /*English Button*/
-              $http.get($rootScope.rootDir + "data/assets/english_small_button_sprite.json")
+              $http.get($rootScope.rootDir + "data/assets/vocabulary_english_small_button_sprite.json")
                 .success(function (response) {
                   console.log("Success on getting json data for english button!");
                   response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
@@ -1661,7 +1657,7 @@ angular.module("bookbuilder2")
             function (buttonsSpriteSheetCallback) {
 
               /*Greek Button*/
-              $http.get($rootScope.rootDir + "data/assets/greek_small_button_sprite.json")
+              $http.get($rootScope.rootDir + "data/assets/vocabulary_greek_small_button_sprite.json")
                 .success(function (response) {
                   console.log("Success on getting json data for greek button!");
                   response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
@@ -1680,7 +1676,7 @@ angular.module("bookbuilder2")
             function (buttonsSpriteSheetCallback) {
 
               /*Play Button*/
-              $http.get($rootScope.rootDir + "data/assets/play_small_button_sprite.json")
+              $http.get($rootScope.rootDir + "data/assets/vocabulary_play_small_button_sprite.json")
                 .success(function (response) {
 
                   console.log("Success on getting json data for play button!");
@@ -1865,7 +1861,7 @@ angular.module("bookbuilder2")
           /*Iterating and populating the container*/
           _.each($scope.activityData.derivatives, function (derivative, key, list) {
 
-            $scope.englishDerivativesBitmaps[derivative.name] = new createjs.Bitmap("data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + derivative.name + ".png");
+            $scope.englishDerivativesBitmaps[derivative.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + derivative.name + ".png");
 
             $scope.englishDerivativesBitmaps[derivative.name].regY = $scope.derivativeContainers['verbs'].subContainers["english"].rowContainers[0].height / 2;
             $scope.englishDerivativesBitmaps[derivative.name].x = 0;
@@ -1909,7 +1905,7 @@ angular.module("bookbuilder2")
           /*Iterating and populating the container*/
           _.each($scope.activityData.derivatives, function (derivative, key, list) {
 
-            $scope.greekDerivativesBitmaps[derivative.name] = new createjs.Bitmap("data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + derivative.name + "_gr.png");
+            $scope.greekDerivativesBitmaps[derivative.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + derivative.name + "_gr.png");
 
             $scope.greekDerivativesBitmaps[derivative.name].regY = $scope.derivativeContainers['verbs'].subContainers["greek"].rowContainers[0].height / 2;
             $scope.greekDerivativesBitmaps[derivative.name].x = 0;
@@ -2060,7 +2056,7 @@ angular.module("bookbuilder2")
 
 
         /* WORDS BUTTON */
-        $http.get($rootScope.rootDir + "data/assets/words_button_sprite.json")
+        $http.get($rootScope.rootDir + "data/assets/vocabulary_words_button_sprite.json")
           .success(function (response) {
 
             //Reassigning images with the rest of resource
@@ -2097,7 +2093,7 @@ angular.module("bookbuilder2")
 
 
         /* PHRASES BUTTON */
-        $http.get($rootScope.rootDir + "data/assets/phrases_button_sprite.json")
+        $http.get($rootScope.rootDir + "data/assets/vocabulary_phrases_button_sprite.json")
           .success(function (response) {
 
             //Reassigning images with the rest of resource
@@ -2134,7 +2130,7 @@ angular.module("bookbuilder2")
 
 
         /* DERIVATIVES BUTTON */
-        $http.get($rootScope.rootDir + "data/assets/derivatives_button_sprite.json")
+        $http.get($rootScope.rootDir + "data/assets/vocabulary_derivatives_button_sprite.json")
           .success(function (response) {
 
             //Reassigning images with the rest of resource
@@ -2171,7 +2167,7 @@ angular.module("bookbuilder2")
 
 
         /* BIG ENGLISH BUTTON */
-        $http.get($rootScope.rootDir + "data/assets/english_big_button_sprite.json")
+        $http.get($rootScope.rootDir + "data/assets/vocabulary_english_big_button_sprite.json")
           .success(function (response) {
 
             //Reassigning images with the rest of resource
@@ -2270,7 +2266,7 @@ angular.module("bookbuilder2")
 
 
         /* BIG GREEK BUTTON */
-        $http.get($rootScope.rootDir + "data/assets/greek_big_button_sprite.json")
+        $http.get($rootScope.rootDir + "data/assets/vocabulary_vocabulary_greek_big_button_sprite.json")
           .success(function (response) {
 
             //Reassigning images with the rest of resource
@@ -2370,6 +2366,7 @@ angular.module("bookbuilder2")
 
 
         $scope.playAllSounds = function () {
+
 
         }
 
