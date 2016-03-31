@@ -263,6 +263,7 @@ angular.module("bookbuilder2")
 
         function createSingleColumnWordsContainers(parallelCallback) {
           $scope.buttonsContainer = new createjs.Container();
+          $scope.buttonsContainer.visible = false;
           $scope.buttonsContainer.width = background.image.width / 12;
           $scope.buttonsContainer.height = background.image.height / 1.3;
           $scope.buttonsContainer.scaleX = $scope.buttonsContainer.scaleY = scale;
@@ -281,6 +282,7 @@ angular.module("bookbuilder2")
           });
 
           $scope.indexContainer = new createjs.Container();
+          $scope.indexContainer.visible = false;
           $scope.indexContainer.width = background.image.width / 28;
           $scope.indexContainer.height = background.image.height / 1.3;
           $scope.indexContainer.scaleX = $scope.indexContainer.scaleY = scale;
@@ -307,6 +309,7 @@ angular.module("bookbuilder2")
           });
 
           $scope.englishWordsContainer = new createjs.Container();
+          $scope.englishWordsContainer.visible = false;
           $scope.englishWordsContainer.width = background.image.width / 4;
           $scope.englishWordsContainer.height = background.image.height / 1.3;
           $scope.englishWordsContainer.scaleX = $scope.englishWordsContainer.scaleY = scale;
@@ -330,6 +333,7 @@ angular.module("bookbuilder2")
             $scope.englishWordsContainer.addChild($scope.englishWordsContainer.englishSubContainers[word.name]);
           });
           $scope.equalsSignContainer = new createjs.Container();
+          $scope.equalsSignContainer.visible = false;
           $scope.equalsSignContainer.width = background.image.width / 28;
           $scope.equalsSignContainer.height = backgroundPosition.height / 1.15;
           $scope.equalsSignContainer.scaleX = $scope.equalsSignContainer.scaleY = scale;
@@ -354,6 +358,7 @@ angular.module("bookbuilder2")
             $scope.equalsSignContainer.addChild($scope.equalsSignContainer.equalsSubContainers[word.name]);
           });
           $scope.greekWordsContainer = new createjs.Container();
+          $scope.greekWordsContainer.visible = false;
           $scope.greekWordsContainer.width = 300;
           $scope.greekWordsContainer.height = backgroundPosition.height / 1.15;
           $scope.greekWordsContainer.scaleX = $scope.greekWordsContainer.scaleY = scale;
@@ -382,6 +387,7 @@ angular.module("bookbuilder2")
 
         function createSingleColumnPhrasesContainers(parallelCallback) {
           $scope.buttonsPhrasesContainer = new createjs.Container();
+          $scope.buttonsPhrasesContainer.visible = false;
           $scope.buttonsPhrasesContainer.width = background.image.width / 12;
           $scope.buttonsPhrasesContainer.height = background.image.height / 1.3;
           $scope.buttonsPhrasesContainer.scaleX = $scope.buttonsPhrasesContainer.scaleY = scale;
@@ -405,6 +411,7 @@ angular.module("bookbuilder2")
           });
 
           $scope.indexPhrasesContainer = new createjs.Container();
+          $scope.indexPhrasesContainer.visible = false;
           $scope.indexPhrasesContainer.width = background.image.width / 28;
           $scope.indexPhrasesContainer.height = background.image.height / 1.3;
           $scope.indexPhrasesContainer.scaleX = $scope.indexPhrasesContainer.scaleY = scale;
@@ -427,6 +434,7 @@ angular.module("bookbuilder2")
             $scope.indexPhrasesContainer.addChild($scope.indexPhrasesContainer.indexPhrasesSubContainers[phrase.name]);
           });
           $scope.englishPhrasesContainer = new createjs.Container();
+          $scope.englishPhrasesContainer.visible = false;
           $scope.englishPhrasesContainer.width = background.image.width / 4;
           $scope.englishPhrasesContainer.height = background.image.height / 1.3;
           $scope.englishPhrasesContainer.scaleX = $scope.englishPhrasesContainer.scaleY = scale;
@@ -450,6 +458,7 @@ angular.module("bookbuilder2")
           });
 
           $scope.equalsSignPhrasesContainer = new createjs.Container();
+          $scope.equalsSignPhrasesContainer.visible = false;
           $scope.equalsSignPhrasesContainer.width = background.image.width / 28;
           $scope.equalsSignPhrasesContainer.height = backgroundPosition.height / 1.15;
           $scope.equalsSignPhrasesContainer.scaleX = $scope.equalsSignPhrasesContainer.scaleY = scale;
@@ -472,6 +481,7 @@ angular.module("bookbuilder2")
             $scope.equalsSignPhrasesContainer.addChild($scope.equalsSignPhrasesContainer.equalsPhrasesSubContainers[phrase.name]);
           });
           $scope.greekPhrasesContainer = new createjs.Container();
+          $scope.greekPhrasesContainer.visible = false;
           $scope.greekPhrasesContainer.width = 300;
           $scope.greekPhrasesContainer.height = backgroundPosition.height / 1.15;
           $scope.greekPhrasesContainer.scaleX = $scope.greekPhrasesContainer.scaleY = scale;
@@ -501,6 +511,7 @@ angular.module("bookbuilder2")
 
           $scope.derivativeContainers = {};
           $scope.derivativeContainers["verbs"] = new createjs.Container();
+          $scope.derivativeContainers["verbs"].visible = false;
           $scope.derivativeContainers["verbs"].width = background.image.width / 2.6;
           $scope.derivativeContainers["verbs"].height = background.image.height / 2.5;
           $scope.derivativeContainers["verbs"].scaleX = $scope.derivativeContainers["verbs"].scaleY = scale;
@@ -517,6 +528,7 @@ angular.module("bookbuilder2")
           $scope.derivativeContainers["verbs"].addChild(verbsTitle);
 
           $scope.derivativeContainers["nouns"] = new createjs.Container();
+          $scope.derivativeContainers["nouns"].visible = false;
           $scope.derivativeContainers["nouns"].width = background.image.width / 2.6;
           $scope.derivativeContainers["nouns"].height = background.image.height / 2.5;
           $scope.derivativeContainers["nouns"].scaleX = $scope.derivativeContainers["nouns"].scaleY = scale;
@@ -531,7 +543,10 @@ angular.module("bookbuilder2")
           nounsTitle.textBaseline = "top";
           nounsTitle.textAlign = "center";
           $scope.derivativeContainers["nouns"].addChild(nounsTitle);
+
+
           $scope.derivativeContainers["noun"] = new createjs.Container();
+          $scope.derivativeContainers["noun"].visible = false;
           $scope.derivativeContainers["noun"].width = background.image.width / 2.6;
           $scope.derivativeContainers["noun"].height = background.image.height / 2.5;
           $scope.derivativeContainers["noun"].scaleX = $scope.derivativeContainers["noun"].scaleY = scale;
@@ -548,6 +563,7 @@ angular.module("bookbuilder2")
           $scope.derivativeContainers["noun"].addChild(nounTitle);
 
           $scope.derivativeContainers["adjective"] = new createjs.Container();
+          $scope.derivativeContainers["adjective"].visible = false;
           $scope.derivativeContainers["adjective"].width = background.image.width / 2.6;
           $scope.derivativeContainers["adjective"].height = background.image.height / 2.5;
           $scope.derivativeContainers["adjective"].scaleX = $scope.derivativeContainers["adjective"].scaleY = scale;
@@ -682,23 +698,17 @@ angular.module("bookbuilder2")
 
           $scope.selectedVocabularySection = vocabularySection;
 
-          /*Hides containers of other templates, and make selectedTemplate*/
-
           if (vocabularySection === "words") {
-
-            console.log("Loading Vocabulary's Words!");
 
             $scope.buttonsPhrasesContainer.visible = false;
             $scope.indexPhrasesContainer.visible = false;
             $scope.greekPhrasesContainer.visible = false;
             $scope.equalsSignPhrasesContainer.visible = false;
             $scope.englishPhrasesContainer.visible = false;
-
             $scope.derivativeContainers["verbs"].visible = false;
             $scope.derivativeContainers["nouns"].visible = false;
             $scope.derivativeContainers["noun"].visible = false;
             $scope.derivativeContainers["adjective"].visible = false;
-
             $scope.buttonsContainer.visible = true;
             $scope.indexContainer.visible = true;
             $scope.greekWordsContainer.visible = true;
@@ -707,19 +717,15 @@ angular.module("bookbuilder2")
 
           } else if (vocabularySection === "phrases") {
 
-            console.log("Loading Vocabulary's Phrases!");
-
             $scope.buttonsContainer.visible = false;
             $scope.indexContainer.visible = false;
             $scope.greekWordsContainer.visible = false;
             $scope.equalsSignContainer.visible = false;
             $scope.englishWordsContainer.visible = false;
-
             $scope.derivativeContainers["verbs"].visible = false;
             $scope.derivativeContainers["nouns"].visible = false;
             $scope.derivativeContainers["noun"].visible = false;
             $scope.derivativeContainers["adjective"].visible = false;
-
             $scope.buttonsPhrasesContainer.visible = true;
             $scope.indexPhrasesContainer.visible = true;
             $scope.greekPhrasesContainer.visible = true;
@@ -728,20 +734,16 @@ angular.module("bookbuilder2")
 
           } else {
 
-            console.log("Loading Derivatives' Phrases!");
-
             $scope.buttonsContainer.visible = false;
             $scope.indexContainer.visible = false;
             $scope.greekWordsContainer.visible = false;
             $scope.equalsSignContainer.visible = false;
             $scope.englishWordsContainer.visible = false;
-
             $scope.buttonsPhrasesContainer.visible = false;
             $scope.indexPhrasesContainer.visible = false;
             $scope.greekPhrasesContainer.visible = false;
             $scope.equalsSignPhrasesContainer.visible = false;
             $scope.englishPhrasesContainer.visible = false;
-
             $scope.derivativeContainers["verbs"].visible = true;
             $scope.derivativeContainers["nouns"].visible = true;
             $scope.derivativeContainers["noun"].visible = true;
