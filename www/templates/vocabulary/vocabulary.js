@@ -350,10 +350,10 @@ angular.module("bookbuilder2")
 
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
             var indexPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("lightgreen").drawRect(0, 0,
-              $scope.indexContainer.indexSubContainers[phrase.name].width,
-              $scope.indexContainer.indexSubContainers[phrase.name].height);
+              $scope.indexContainer.indexSubContainers[word.name].width,
+              $scope.indexContainer.indexSubContainers[word.name].height);
             $scope.indexContainer.indexSubContainers[word.name].indexBackground = new createjs.Shape(indexPhrasesSubContainerGraphics);
-            $scope.indexContainer.indexSubContainers[phrase.name].addChild($scope.indexContainer.indexSubContainers[word.name].indexBackground);
+            $scope.indexContainer.indexSubContainers[word.name].addChild($scope.indexContainer.indexSubContainers[word.name].indexBackground);
             $scope.indexContainer.indexSubContainers[word.name].indexBackground.alpha = 0.5;
             stage.update();
             $scope.indexContainer.indexSubContainers[word.name].indexBackground.visible = false;
@@ -644,7 +644,7 @@ angular.module("bookbuilder2")
             /*- - - - - - - - - - - TEST SHAPE - - - - - - - - - - -*/
             var englishPhrasesSubContainerGraphics = new createjs.Graphics().beginFill("lightgreen").drawRect(0, 0, $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].width, $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].height);
             $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].englishPhrasesBackground = new createjs.Shape(englishPhrasesSubContainerGraphics);
-            $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].addChild(scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].englishPhrasesBackground);
+            $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].addChild($scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].englishPhrasesBackground);
             $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].englishPhrasesBackground.alpha = 0.5;
             stage.update();
             $scope.englishPhrasesContainer.englishPhrasesSubContainers[phrase.name].englishPhrasesBackground.visible = false;
