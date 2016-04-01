@@ -151,392 +151,837 @@ angular.module("bookbuilder2")
             $scope.stage.addChild(menuButton);
             $scope.stage.update();
 
+            async.waterfall([function (waterfallCall) {
+              if (window.localStorage.getItem(activityNameInLocalStorage)) {
+                $scope.activityData = JSON.parse(window.localStorage.getItem(activityNameInLocalStorage));
 
-            $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/vocabulary.json")
-              .success(function (response) {
-
-                $scope.activityData = response;
-                $scope.activityData.attempts = 1;
+                $scope.activityData.attempts = $scope.activityData.attempts + 1;
                 window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+                waterfallCall();
+              } else {
 
-                $scope.sounds = {};
-                var assetPath = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/";
-                console.log("$scope.activityData: ", $scope.activityData);
+                $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/vocabulary.json")
+                  .success(function (response) {
 
-                var waterFallFunctions = [];
-                _.each($scope.activityData, function (tabWords, tab, list) {
-                  _.each(tabWords, function (word, key, list) {
+                    $scope.activityData = response;
+                    $scope.activityData.attempts = 1;
+                    window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+                    waterfallCall();
+                  })
+                  .error(function (error) {
+                    console.error("Error on getting json for results button...", error);
+                  });//end of get menu button
 
-                    waterFallFunctions.push(function (waterfallCallback) {
-                      console.log("Sound", word.name);
-                      if (ionic.Platform.isIOS() && window.cordova) {
-                        console.log("Else iOS");
-                        resolveLocalFileSystemURL(assetPath + word.name + ".mp3", function (entry) {
-                          console.log(entry);
-                          $scope.sounds[word.name] = new Media(entry.toInternalURL(), function () {
+              }
+            }, function (waterfallCall) {
 
-                            if (tab === "words" || tab === "phrases") {
-                              $scope.indexContainer.indexSubContainers[word.name].indexBackground.visible = false;
-                              $scope.indexContainer.indexSubContainers[word.name].englishBackground.visible = false;
-                              $scope.indexContainer.indexSubContainers[word.name].greekBackground.visible = false;
-                            } else {
-                              var elementIndex = _.findIndex(_.filter($scope.activityData.derivatives, {type: word.type}), {name: $scope.activityData.derivatives[key].name});
-                              $scope.derivativesBackgrounds[$scope.quartiles[word.type]].indexBackground[elementIndex].visible = false;
-                              $scope.derivativesBackgrounds[$scope.quartiles[word.type]].englishBackground[elementIndex].visible = false;
-                              $scope.derivativesBackgrounds[$scope.quartiles[word.type]].greekBackground[elementIndex].visible = false;
-                            }
+              /*BIG PAUSE BUTTON*/
+              $http.get($rootScope.rootDir + "data/assets/vocabulary_pause_button_sprite.json")
+                .success(function (response) {
+                  console.log("Success on getting json for the big pause button");
+
+                  //Reassigning images with the rest of resource
+                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  var bigPauseButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  $scope.bigPauseButton = new createjs.Sprite(bigPauseButtonSpriteSheet, "normal");
+
+                  $scope.bigPauseButton.visible = false;
+
+                  $scope.bigPauseButton.addEventListener("mousedown", function (event) {
+                    console.log("Mouse down event on a button !");
+                    $scope.bigPauseButton.gotoAndPlay("onSelection");
+
+                  });
+
+                  $scope.bigPauseButton.addEventListener("pressup", function (event) {
+                    console.log("Press up event!");
+                    $scope.bigPauseButton.visible = false;
+                    $scope.bigStopButton.visible = false;
+                    $scope.bigPauseButton.gotoAndPlay("normal");
+                    $scope.playAll = false;
+                    $scope.stage.update();
+                  });
+
+                  $scope.bigPauseButton.scaleX = $scope.bigPauseButton.scaleY = scale;
+                  $scope.bigPauseButton.x = backgroundPosition.x + (backgroundPosition.width / 12);
+                  $scope.bigPauseButton.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
+                  $scope.stage.addChild($scope.bigPauseButton);
+                  waterfallCall();
+
+                })
+                .error(function (error) {
+                  console.error("Error on getting json for bigPauseButton button...", error);
+                  waterfallCall();
+
+                });//end of get bigPause button
+            }, function (waterfallCall) {
+
+              /*BIG STOP BUTTON*/
+              $http.get($rootScope.rootDir + "data/assets/vocabulary_stop_button_sprite.json")
+                .success(function (response) {
+                  console.log("Success on getting json for the big pause button");
+
+                  //Reassigning images with the rest of resource
+                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  var bigStopButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  $scope.bigStopButton = new createjs.Sprite(bigStopButtonSpriteSheet, "normal");
+
+                  $scope.bigStopButton.visible = false;
+
+                  $scope.bigStopButton.addEventListener("mousedown", function (event) {
+                    console.log("Mouse down event on a button !");
+                    $scope.bigStopButton.gotoAndPlay("onSelection");
+                    $scope.stage.update();
+                  });
+
+                  $scope.bigStopButton.addEventListener("pressup", function (event) {
+                    console.log("Press up event!");
+                    $scope.bigPauseButton.visible = false;
+                    $scope.bigStopButton.visible = false;
+                    $scope.bigStopButton.gotoAndPlay("normal");
+                    $scope.currentWord = $scope.activityData[$scope.selectedVocabularySection][0].name;
+                    $scope.playAll = false;
+                    $scope.stage.update();
+                  });
+
+                  $scope.bigStopButton.scaleX = $scope.bigStopButton.scaleY = scale;
+                  $scope.bigStopButton.x = backgroundPosition.x + (backgroundPosition.width / 8);
+                  $scope.bigStopButton.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
+                  $scope.stage.addChild($scope.bigStopButton);
+                  waterfallCall();
+
+                })
+                .error(function (error) {
+                  console.error("Error on getting json for bigStopButton button...", error);
+                  waterfallCall();
+
+                });//end of get bigStop button
+            }, function (waterfallCall) {
+
+              /*BIG PLAY BUTTON*/
+              $http.get($rootScope.rootDir + "data/assets/vocabulary_play_big_button_sprite.json")
+                .success(function (response) {
+                  console.log("Success on getting json for the big play button");
+
+                  //Reassigning images with the rest of resource
+                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  var bigPlayButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  $scope.bigPlayButton = new createjs.Sprite(bigPlayButtonSpriteSheet, "normal");
+
+                  $scope.bigPlayButton.visible = true;
+
+                  $scope.bigPlayButton.addEventListener("mousedown", function (event) {
+                    console.log("Mouse down event on a button !");
+                    $scope.bigPlayButton.gotoAndPlay("onSelection");
+                    $scope.stage.update();
+                  });
+
+                  $scope.bigPlayButton.addEventListener("pressup", function (event) {
+                    console.log("Press up event!");
+                    $scope.bigPlayButton.visible = false;
+                    $scope.bigPauseButton.visible = true;
+                    $scope.bigStopButton.visible = true;
+                    $scope.bigPlayButton.gotoAndPlay("normal");
+                    $scope.playAll = true;
+
+                    if ($scope.selectedVocabularySection === "derivatives") {
+                      playDerivativeSound($scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                        name: $scope.currentWord
+                      })]);
+                    } else {
+                      playWordSound($scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                        name: $scope.currentWord
+                      })]);
+                    }
+                    $scope.stage.update();
+                  });
+
+                  $scope.bigPlayButton.scaleX = $scope.bigPlayButton.scaleY = scale;
+                  $scope.bigPlayButton.x = backgroundPosition.x + (backgroundPosition.width / 10);
+                  $scope.bigPlayButton.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
+                  $scope.stage.addChild($scope.bigPlayButton);
+                  waterfallCall();
+
+                })
+                .error(function (error) {
+                  console.error("Error on getting json for bigPlayButton button...", error);
+                  waterfallCall();
+
+                });//end of get bigPlay button
+
+            }, function (waterfallCall) {
+
+              /* WORDS BUTTON */
+              $http.get($rootScope.rootDir + "data/assets/vocabulary_words_button_sprite.json")
+                .success(function (response) {
+
+                  //Reassigning images with the rest of resource
+                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  var wordsButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  $scope.wordsButton = new createjs.Sprite(wordsButtonSpriteSheet, "normal");
+
+                  $scope.wordsButton.addEventListener("mousedown", function (event) {
+                    console.log("Mouse down event on a button !");
+                    $scope.wordsButton.gotoAndPlay("onSelection");
+                    $scope.stage.update();
+                  });
+
+                  $scope.wordsButton.addEventListener("pressup", function (event) {
+                    console.log("Press up event!");
+                    $scope.phrasesButton.gotoAndPlay("normal");
+                    $scope.derivativesButton.gotoAndPlay("normal");
+                    $scope.wordsButton.gotoAndPlay("selected");
+                    loadPage("words");
+                    $scope.stage.update();
+                  });
+
+                  $scope.wordsButton.scaleX = $scope.wordsButton.scaleY = scale * 0.7;
+                  $scope.wordsButton.x = backgroundPosition.x + (backgroundPosition.width / 2.5);
+                  $scope.wordsButton.y = backgroundPosition.y + (backgroundPosition.height / 1.07);
+                  $scope.stage.addChild($scope.wordsButton);
+                  waterfallCall();
+
+                })
+                .error(function (error) {
+                  console.error("Error on getting json for words button...", error);
+                  waterfallCall();
+
+                });//end of get words button
 
 
-                            console.log("Sound success");
-                            if ($scope.playAll && _.findWhere($scope.activityData[$scope.selectedVocabularySection], {
+            }, function (waterfallCall) {
+
+
+              /* PHRASES BUTTON */
+              $http.get($rootScope.rootDir + "data/assets/vocabulary_phrases_button_sprite.json")
+                .success(function (response) {
+
+                  //Reassigning images with the rest of resource
+                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  var phrasesButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  $scope.phrasesButton = new createjs.Sprite(phrasesButtonSpriteSheet, "normal");
+
+                  $scope.phrasesButton.addEventListener("mousedown", function (event) {
+                    console.log("Mouse down event on a button !");
+                    $scope.phrasesButton.gotoAndPlay("onSelection");
+                    $scope.stage.update();
+                  });
+
+                  $scope.phrasesButton.addEventListener("pressup", function (event) {
+                    console.log("Press up event!");
+                    $scope.phrasesButton.gotoAndPlay("selected");
+                    $scope.wordsButton.gotoAndPlay("normal");
+                    $scope.derivativesButton.gotoAndPlay("normal");
+                    loadPage("phrases");
+                    $scope.stage.update();
+                  });
+
+                  $scope.phrasesButton.scaleX = $scope.phrasesButton.scaleY = scale * 0.7;
+                  $scope.phrasesButton.x = backgroundPosition.x + (backgroundPosition.width / 2);
+                  $scope.phrasesButton.y = backgroundPosition.y + (backgroundPosition.height / 1.07);
+                  $scope.stage.addChild($scope.phrasesButton);
+                  waterfallCall();
+
+                })
+                .error(function (error) {
+                  console.error("Error on getting json for phrases button...", error);
+                  waterfallCall();
+
+                });//end of get phrases button
+            }, function (waterfallCall) {
+
+              /* DERIVATIVES BUTTON */
+              $http.get($rootScope.rootDir + "data/assets/vocabulary_derivatives_button_sprite.json")
+                .success(function (response) {
+
+                  //Reassigning images with the rest of resource
+                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  var derivativesButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  $scope.derivativesButton = new createjs.Sprite(derivativesButtonSpriteSheet, "normal");
+
+                  $scope.derivativesButton.addEventListener("mousedown", function (event) {
+                    console.log("mousedown event on a button !");
+                    $scope.derivativesButton.gotoAndPlay("onSelection");
+                    $scope.stage.update();
+                  });
+
+                  $scope.derivativesButton.addEventListener("pressup", function (event) {
+                    console.log("pressup event!");
+                    $scope.derivativesButton.gotoAndPlay("selected");
+                    $scope.wordsButton.gotoAndPlay("normal");
+                    $scope.phrasesButton.gotoAndPlay("normal");
+                    loadPage("derivatives");
+                    $scope.stage.update();
+                  });
+
+                  $scope.derivativesButton.scaleX = $scope.derivativesButton.scaleY = scale * 0.7;
+                  $scope.derivativesButton.x = backgroundPosition.x + (backgroundPosition.width / 1.67);
+                  $scope.derivativesButton.y = backgroundPosition.y + (backgroundPosition.height / 1.07);
+                  $scope.stage.addChild($scope.derivativesButton);
+                  waterfallCall();
+
+                })
+                .error(function (error) {
+                  console.error("Error on getting json for derivatives button...", error);
+                  waterfallCall();
+
+                });//end of get derivatives button
+
+
+            }, function (waterfallCall) {
+              /* BIG ENGLISH BUTTON */
+              $http.get($rootScope.rootDir + "data/assets/vocabulary_english_big_button_sprite.json")
+                .success(function (response) {
+
+                  //Reassigning images with the rest of resource
+                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  var englishBigButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  var englishBigButton = new createjs.Sprite(englishBigButtonSpriteSheet, "normal");
+
+                  englishBigButton.addEventListener("mousedown", function (event) {
+                    console.log("Mouse down event on big English button!");
+                    englishBigButton.gotoAndPlay("onSelection");
+                    $scope.stage.update();
+                  });
+
+                  englishBigButton.addEventListener("pressup", function (event) {
+                    console.log("Press up event!");
+
+                    if ($scope.selectedVocabularySection === 'words' || $scope.selectedVocabularySection === 'phrases') {
+                      if ($scope.englishWordsBitmaps[$scope.activityData.words[0].name].visible === true) {
+
+                        console.log("Hiding all english words...");
+                        _.each($scope.activityData.words, function (word, key, list) {
+
+                          $scope.englishWordsBitmaps[word.name].visible = false;
+                        });
+
+                        englishBigButton.gotoAndPlay("selected");
+                        $scope.stage.update();
+
+                      } else {
+
+                        console.log("Making all english words visible again...");
+                        _.each($scope.activityData.words, function (word, key, list) {
+                          $scope.englishWordsBitmaps[word.name].visible = true;
+                        });
+                        englishBigButton.gotoAndPlay("normal");
+                        $scope.stage.update();
+                      }
+                    } else {
+                      if ($scope.englishDerivativesBitmaps[$scope.activityData.derivatives[0].name].visible === true) {
+
+                        console.log("Hiding all english phrases...");
+                        _.each($scope.activityData.derivatives, function (derivative, key, list) {
+
+                          $scope.englishDerivativesBitmaps[derivative.name].visible = false;
+                        });
+
+                        englishBigButton.gotoAndPlay("selected");
+                        $scope.stage.update();
+
+                      } else {
+
+                        console.log("Making all english phrases visible again...");
+                        _.each($scope.activityData.derivatives, function (derivative, key, list) {
+                          $scope.englishDerivativesBitmaps[derivative.name].visible = true;
+                        });
+                        englishBigButton.gotoAndPlay("normal");
+                        $scope.stage.update();
+                      }
+                    }
+
+                  });
+
+                  englishBigButton.scaleX = englishBigButton.scaleY = scale;
+                  englishBigButton.x = backgroundPosition.x + (backgroundPosition.width / 1.17);
+                  englishBigButton.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
+                  $scope.stage.addChild(englishBigButton);
+                  waterfallCall();
+
+                })
+                .error(function (error) {
+                  console.error("Error on getting json for english big button...", error);
+                  waterfallCall();
+
+                });//end of get english big button
+
+
+            }, function (waterfallCall) {
+
+
+              /* BIG GREEK BUTTON */
+              $http.get($rootScope.rootDir + "data/assets/vocabulary_greek_big_button_sprite.json")
+                .success(function (response) {
+
+                  //Reassigning images with the rest of resource
+                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  var greekBigButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  var greekBigButton = new createjs.Sprite(greekBigButtonSpriteSheet, "normal");
+
+                  greekBigButton.addEventListener("mousedown", function (event) {
+                    console.log("Mouse down event on a button !");
+                    greekBigButton.gotoAndPlay("onSelection");
+                    $scope.stage.update();
+                  });
+
+                  greekBigButton.addEventListener("pressup", function (event) {
+                    console.log("Press up event!");
+
+                    if ($scope.selectedVocabularySection === 'words' || $scope.selectedVocabularySection === 'phrases') {
+                      if ($scope.greekWordsBitmaps[$scope.activityData.words[0].name].visible === true) {
+
+                        console.log("Hiding all greek words...");
+                        _.each($scope.activityData.words, function (word, key, list) {
+
+                          $scope.greekWordsBitmaps[word.name].visible = false;
+                        });
+
+                        greekBigButton.gotoAndPlay("selected");
+                        $scope.stage.update();
+
+                      } else {
+
+                        console.log("Making all greek words visible again...");
+                        _.each($scope.activityData.words, function (word, key, list) {
+                          $scope.greekWordsBitmaps[word.name].visible = true;
+                        });
+                        greekBigButton.gotoAndPlay("normal");
+                        $scope.stage.update();
+                      }
+                    } else {
+                      if ($scope.greekDerivativesBitmaps[$scope.activityData.derivatives[0].name].visible === true) {
+
+                        console.log("Hiding all english phrases...");
+                        _.each($scope.activityData.derivatives, function (derivative, key, list) {
+
+                          $scope.greekDerivativesBitmaps[derivative.name].visible = false;
+                        });
+
+                        greekBigButton.gotoAndPlay("selected");
+                        $scope.stage.update();
+
+                      } else {
+
+                        console.log("Making all english phrases visible again...");
+                        _.each($scope.activityData.derivatives, function (derivative, key, list) {
+                          $scope.greekDerivativesBitmaps[derivative.name].visible = true;
+                        });
+                        greekBigButton.gotoAndPlay("normal");
+                        $scope.stage.update();
+                      }
+                    }
+
+
+                  });
+
+                  greekBigButton.scaleX = greekBigButton.scaleY = scale;
+                  greekBigButton.x = backgroundPosition.x + (backgroundPosition.width / 1.08);
+                  greekBigButton.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
+                  $scope.stage.addChild(greekBigButton);
+                  waterfallCall();
+                })
+                .error(function (error) {
+                  console.error("Error on getting json for greek big button...", error);
+                  waterfallCall();
+
+                });//end of get greek butt§on
+            }], function (err, result) {
+              $scope.sounds = {};
+              var assetPath = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/";
+              console.log("$scope.activityData: ", $scope.activityData);
+
+              var waterFallFunctions = [];
+              _.each($scope.activityData, function (tabWords, tab, list) {
+                _.each(tabWords, function (word, key, list) {
+
+                  waterFallFunctions.push(function (waterfallCallback) {
+                    console.log("Sound", word.name);
+                    if (ionic.Platform.isIOS() && window.cordova) {
+                      console.log("Else iOS");
+                      resolveLocalFileSystemURL(assetPath + word.name + ".mp3", function (entry) {
+                        console.log(entry);
+                        $scope.sounds[word.name] = new Media(entry.toInternalURL(), function () {
+
+                          if (tab === "words" || tab === "phrases") {
+                            $scope.indexContainer.indexSubContainers[word.name].indexBackground.visible = false;
+                            $scope.indexContainer.indexSubContainers[word.name].englishBackground.visible = false;
+                            $scope.indexContainer.indexSubContainers[word.name].greekBackground.visible = false;
+                          } else {
+                            var elementIndex = _.findIndex(_.filter($scope.activityData.derivatives, {type: word.type}), {name: $scope.activityData.derivatives[key].name});
+                            $scope.derivativesBackgrounds[$scope.quartiles[word.type]].indexBackground[elementIndex].visible = false;
+                            $scope.derivativesBackgrounds[$scope.quartiles[word.type]].englishBackground[elementIndex].visible = false;
+                            $scope.derivativesBackgrounds[$scope.quartiles[word.type]].greekBackground[elementIndex].visible = false;
+                          }
+
+
+                          console.log("Sound success");
+
+                          if ($scope.playAll && _.findWhere($scope.activityData[$scope.selectedVocabularySection], {
+                              name: $scope.currentWord
+                            })) {
+                            if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                                 name: $scope.currentWord
-                              })) {
+                              }) < $scope.activityData[$scope.selectedVocabularySection].length - 1) {
+
+                              console.log("$scope.activityData[$scope.selectedVocabularySection].length", $scope.activityData[$scope.selectedVocabularySection].length);
+                              console.log("current word ", $scope.currentWord + " index:" + _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                                  name: $scope.currentWord
+                                }));
+
+                              console.log("next word:" + $scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                                  name: $scope.currentWord
+                                }) + 1].name);
+
                               if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                                   name: $scope.currentWord
-                                }) < $scope.activityData[$scope.selectedVocabularySection].length - 1) {
-
-                                console.log("$scope.activityData[$scope.selectedVocabularySection].length", $scope.activityData[$scope.selectedVocabularySection].length);
-                                console.log("current word ", $scope.currentWord + " index:" + _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-                                    name: $scope.currentWord
-                                  }));
-
-                                console.log("next word:" + $scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-                                    name: $scope.currentWord
-                                  }) + 1].name);
-
-                                if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-                                    name: $scope.currentWord
-                                  }) > 18) {
-                                  $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.mainContainer.height;
-                                } else {
-                                  $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
-                                }
-
-                                if ($scope.selectedVocabularySection === "derivatives") {
-                                  playDerivativeSound($scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-                                    name: $scope.currentWord
-                                  }) + 1], _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-                                      name: $scope.currentWord
-                                    }) + 1);
-                                } else {
-                                  playWordSound($scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-                                    name: $scope.currentWord
-                                  }) + 1]);
-                                }
-
+                                }) > 18) {
+                                $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.mainContainer.height;
+                              } else {
+                                $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
                               }
+
+                              if ($scope.selectedVocabularySection === "derivatives") {
+                                playDerivativeSound($scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                                  name: $scope.currentWord
+                                }) + 1]);
+                              } else {
+                                playWordSound($scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                                  name: $scope.currentWord
+                                }) + 1]);
+                              }
+
+                            } else {
+                              console.log("This is the last sound from the section ", $scope.selectedVocabularySection);
+                              $scope.bigPauseButton.visible = false;
+                              $scope.bigStopButton.visible = false;
+                              $scope.bigPlayButton.visible = true;
+                              $scope.bigStopButton.gotoAndPlay("normal");
+                              $scope.currentWord = $scope.activityData[$scope.selectedVocabularySection][0].name;
+                              $scope.playAll = false;
+                              $scope.stage.update();
+
                             }
 
-                            $scope.stage.update();
+                          } else {
+                            $scope.bigPauseButton.visible = false;
+                            $scope.bigStopButton.visible = false;
+                            $scope.bigPlayButton.visible = true;
+                          }
+                        }, function (err) {
+                          console.log("Sound error: ", err);
+                        }, function (status) {
 
-                          }, function (err) {
-                            console.log("Sound error: ", err);
-                          }, function (status) {
+                          if (status === 1) {
+                            $scope.activityData[tab][key].soundWasPlayed = true;
+                            window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+                          }
+                          checkIfAllSoundsWerePlayed();
 
+                          console.log("Sound status: ", status);
+                        });
+                        waterfallCallback();
+                      });
+                    } else {
+                      console.log("Else Android");
+
+                      if (status === 1) {
+                        $scope.sounds[word.name].soundWasPlayed = true;
+                      }
+
+                      /**************** Media ***************/
+                      if (window.cordova && window.cordova.platformId !== "browser") {
+
+                        $scope.sounds[word.name] = new Media(assetPath + word.name + ".mp3", function () {
+                          console.log("Sound success");
+
+                          if (tab === "words" || tab === "phrases") {
+                            $scope.indexContainer.indexSubContainers[word.name].indexBackground.visible = false;
+                            $scope.englishWordsContainer.englishSubContainers[word.name].englishBackground.visible = false;
+                            $scope.greekWordsContainer.greekWordsSubContainers[word.name].greekBackground.visible = false;
+                          } else {
+                            var elementIndex = _.findIndex(_.filter($scope.activityData.derivatives, {type: word.type}), {name: $scope.activityData.derivatives[key].name});
+                            $scope.derivativesBackgrounds[$scope.quartiles[word.type]].indexBackground[elementIndex].visible = false;
+                            $scope.derivativesBackgrounds[$scope.quartiles[word.type]].englishBackground[elementIndex].visible = false;
+                            $scope.derivativesBackgrounds[$scope.quartiles[word.type]].greekBackground[elementIndex].visible = false;
+                          }
+                          if ($scope.playAll && _.findWhere($scope.activityData[$scope.selectedVocabularySection], {
+                              name: $scope.currentWord
+                            })) {
+                            if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                                name: $scope.currentWord
+                              }) < $scope.activityData[$scope.selectedVocabularySection].length - 1) {
+
+                              console.log("$scope.activityData[$scope.selectedVocabularySection].length", $scope.activityData[$scope.selectedVocabularySection].length);
+                              console.log("current word ", $scope.currentWord + " index:" + _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                                  name: $scope.currentWord
+                                }));
+
+                              console.log("next word:" + $scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                                  name: $scope.currentWord
+                                }) + 1].name);
+
+                              if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                                  name: $scope.currentWord
+                                }) > 19) {
+                                $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.mainContainer.height;
+                              } else {
+                                $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
+                              }
+
+                              if ($scope.selectedVocabularySection === "derivatives") {
+                                playDerivativeSound($scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                                  name: $scope.currentWord
+                                }) + 1]);
+                              } else {
+                                playWordSound($scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                                  name: $scope.currentWord
+                                }) + 1]);
+                              }
+
+                            } else {
+                              console.log("This is the last sound from the section ", $scope.selectedVocabularySection);
+                              $scope.bigPauseButton.visible = false;
+                              $scope.bigStopButton.visible = false;
+                              $scope.bigPlayButton.visible = true;
+                              $scope.bigStopButton.gotoAndPlay("normal");
+                              $scope.currentWord = $scope.activityData[$scope.selectedVocabularySection][0].name;
+                              $scope.playAll = false;
+                              $scope.stage.update();
+
+                            }
+                          } else {
+                            $scope.bigPauseButton.visible = false;
+                            $scope.bigStopButton.visible = false;
+                            $scope.bigPlayButton.visible = true;
+                          }
+
+                        }, function (err) {
+                          console.log("Sound error", err);
+                        }, function (status) {
+                          console.log("Sound status", status);
+                          if (status === 1) {
                             if (status === 1) {
                               $scope.activityData[tab][key].soundWasPlayed = true;
                               window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
                             }
-                            $scope.checkIfAllSoundsWerePlayed();
-
-                            console.log("Sound status: ", status);
-                          });
-                          waterfallCallback();
+                          }
+                          checkIfAllSoundsWerePlayed();
                         });
-                      } else {
-                        console.log("Else Android");
-
-                        if (status === 1) {
-                          $scope.sounds[word.name].soundWasPlayed = true;
-                        }
-
-                        /**************** Media ***************/
-                        if (window.cordova && window.cordova.platformId !== "browser") {
-
-                          $scope.sounds[word.name] = new Media(assetPath + word.name + ".mp3", function () {
-                            console.log("Sound success");
-
-                            if (tab === "words" || tab === "phrases") {
-                              $scope.indexContainer.indexSubContainers[word.name].indexBackground.visible = false;
-                              $scope.englishWordsContainer.englishSubContainers[word.name].englishBackground.visible = false;
-                              $scope.greekWordsContainer.greekWordsSubContainers[word.name].greekBackground.visible = false;
-
-
-                            } else {
-                              var elementIndex = _.findIndex(_.filter($scope.activityData.derivatives, {type: word.type}), {name: $scope.activityData.derivatives[key].name});
-                              $scope.derivativesBackgrounds[$scope.quartiles[word.type]].indexBackground[elementIndex].visible = false;
-                              $scope.derivativesBackgrounds[$scope.quartiles[word.type]].englishBackground[elementIndex].visible = false;
-                              $scope.derivativesBackgrounds[$scope.quartiles[word.type]].greekBackground[elementIndex].visible = false;
-
-                            }
-                            $scope.stage.update();
-
-                            if ($scope.playAll && _.findWhere($scope.activityData[$scope.selectedVocabularySection], {
-                                name: $scope.currentWord
-                              })) {
-                              if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-                                  name: $scope.currentWord
-                                }) < $scope.activityData[$scope.selectedVocabularySection].length - 1) {
-
-                                console.log("$scope.activityData[$scope.selectedVocabularySection].length", $scope.activityData[$scope.selectedVocabularySection].length);
-                                console.log("current word ", $scope.currentWord + " index:" + _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-                                    name: $scope.currentWord
-                                  }));
-
-                                console.log("next word:" + $scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-                                    name: $scope.currentWord
-                                  }) + 1].name);
-
-                                if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-                                    name: $scope.currentWord
-                                  }) > 19) {
-                                  $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.mainContainer.height;
-                                } else {
-                                  $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
-                                }
-
-                                if ($scope.selectedVocabularySection === "derivatives") {
-                                  playDerivativeSound($scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-                                    name: $scope.currentWord
-                                  }) + 1], _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-                                      name: $scope.currentWord
-                                    }) + 1);
-                                } else {
-                                  playWordSound($scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-                                    name: $scope.currentWord
-                                  }) + 1]);
-                                }
-
-                              }
-                            }
-
-                          }, function (err) {
-                            console.log("Sound error", err);
-                          }, function (status) {
-                            console.log("Sound status", status);
-                            if (status === 1) {
-                              if (status === 1) {
-                                $scope.activityData[tab][key].soundWasPlayed = true;
-                                window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
-                              }
-                            }
-                            $scope.checkIfAllSoundsWerePlayed();
-                          });
-                        }
-
-                        waterfallCallback();
                       }
-                    });
+
+                      waterfallCallback();
+                    }
                   });
                 });
+              });
 
+              $scope.wordContainersHeight = 25;
+              $scope.playAll = false;
+              $scope.currentWord = "";
 
-                $scope.wordContainersHeight = 25;
-                $scope.playAll = false;
-                $scope.currentWord = "";
+              async.waterfall([function (parallelCallback) {
+                async.waterfall([
+                  function (buttonsSpriteSheetCallback) {
 
-                async.waterfall([function (parallelCallback) {
-                  async.waterfall([
-                    function (buttonsSpriteSheetCallback) {
+                    var loadingBitmaps = [];
+                    _.each(["vocabulary_scroll_up.png", "vocabulary_scroll_down.png"], function (file, key, list) {
 
-                      var loadingBitmaps = [];
-                      _.each(["vocabulary_scroll_up.png", "vocabulary_scroll_down.png"], function (file, key, list) {
+                      loadingBitmaps.push(function (seriesCallback) {
+                        var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
+                          src: $rootScope.rootDir + "data/assets/" + file
+                        }));
+
+                        imageLoader.load();
+
+                        imageLoader.on("complete", function (r) {
+                          console.log("file", file);
+                          $timeout(function () {
+                            seriesCallback();
+                          });
+                        });
+                      });
+                    });
+
+                    _.each($scope.activityData, function (tabWords, tab, list) {
+                      _.each(tabWords, function (word, key, list) {
 
                         loadingBitmaps.push(function (seriesCallback) {
                           var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                            src: $rootScope.rootDir + "data/assets/" + file
+                            src: $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + word.name + ".png"
                           }));
 
                           imageLoader.load();
 
                           imageLoader.on("complete", function (r) {
-                            console.log("file", file);
+                            console.log("file", word.name);
                             $timeout(function () {
                               seriesCallback();
                             });
                           });
                         });
+
                       });
+                    });
 
-                      _.each($scope.activityData, function (tabWords, tab, list) {
-                        _.each(tabWords, function (word, key, list) {
 
-                          loadingBitmaps.push(function (seriesCallback) {
-                            var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                              src: $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + word.name + ".png"
-                            }));
+                    _.each($scope.activityData, function (tabWords, tab, list) {
+                      _.each(tabWords, function (word, key, list) {
 
-                            imageLoader.load();
+                        loadingBitmaps.push(function (seriesCallback) {
+                          var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
+                            src: $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + word.name + "_gr.png"
+                          }));
 
-                            imageLoader.on("complete", function (r) {
-                              console.log("file", word.name);
-                              $timeout(function () {
-                                seriesCallback();
-                              });
+                          imageLoader.load();
+
+                          imageLoader.on("complete", function (r) {
+                            console.log("file", word.name);
+                            $timeout(function () {
+                              seriesCallback();
                             });
                           });
-
                         });
+
+                      });
+                    });
+
+
+                    async.parallelLimit(loadingBitmaps, 10, function (err, response) {
+
+                      $scope.scrollDown = new createjs.Bitmap($rootScope.rootDir + "data/assets/vocabulary_scroll_down.png");
+                      $scope.scrollDown.scaleX = $scope.scrollDown.scaleY = scale * 0.2;
+                      $scope.scrollDown.x = backgroundPosition.x + backgroundPosition.width / 1.1;
+                      $scope.scrollDown.y = backgroundPosition.y + (backgroundPosition.height / 1.3);
+                      $scope.stage.addChild($scope.scrollDown);
+
+
+                      $scope.scrollDown.addEventListener("mousedown", function (event) {
+                        $scope.scrollDown.alpha = 0.5;
+                        $scope.stage.update();
                       });
 
 
-                      _.each($scope.activityData, function (tabWords, tab, list) {
-                        _.each(tabWords, function (word, key, list) {
-
-                          loadingBitmaps.push(function (seriesCallback) {
-                            var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                              src: $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + word.name + "_gr.png"
-                            }));
-
-                            imageLoader.load();
-
-                            imageLoader.on("complete", function (r) {
-                              console.log("file", word.name);
-                              $timeout(function () {
-                                seriesCallback();
-                              });
-                            });
-                          });
-
-                        });
+                      $scope.scrollDown.addEventListener("pressup", function (event) {
+                        $scope.scrollDown.alpha = 1;
+                        $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.mainContainer.height;
+                        $scope.stage.update();
                       });
 
+                      $scope.scrollUp = new createjs.Bitmap($rootScope.rootDir + "data/assets/vocabulary_scroll_up.png");
+                      $scope.scrollUp.scaleX = $scope.scrollUp.scaleY = scale * 0.2;
+                      $scope.scrollUp.x = backgroundPosition.x + backgroundPosition.width / 1.1;
+                      $scope.scrollUp.y = backgroundPosition.y + (backgroundPosition.height / 7);
+                      $scope.stage.addChild($scope.scrollUp);
 
-                      async.parallelLimit(loadingBitmaps, 10, function (err, response) {
+                      $scope.scrollUp.addEventListener("mousedown", function (event) {
+                        $scope.scrollUp.alpha = 0.5;
+                        $scope.stage.update();
+                      });
 
-                        $scope.scrollDown = new createjs.Bitmap($rootScope.rootDir + "data/assets/vocabulary_scroll_down.png");
-                        $scope.scrollDown.scaleX = $scope.scrollDown.scaleY = scale * 0.2;
-                        $scope.scrollDown.x = backgroundPosition.x + backgroundPosition.width / 1.1;
-                        $scope.scrollDown.y = backgroundPosition.y + (backgroundPosition.height / 1.3);
-                        $scope.stage.addChild($scope.scrollDown);
+                      $scope.scrollUp.addEventListener("pressup", function (event) {
+                        $scope.scrollUp.alpha = 1;
+                        $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
+                        $scope.stage.update();
+                      });
 
+                      buttonsSpriteSheetCallback();
 
-                        $scope.scrollDown.addEventListener("mousedown", function (event) {
-                          $scope.scrollDown.alpha = 0.5;
-                          $scope.stage.update();
-                        });
+                    });
+                  }, function (buttonsSpriteSheetCallback) {
 
-
-                        $scope.scrollDown.addEventListener("pressup", function (event) {
-                          $scope.scrollDown.alpha = 1;
-                          $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.mainContainer.height;
-                          $scope.stage.update();
-                        });
-
-                        $scope.scrollUp = new createjs.Bitmap($rootScope.rootDir + "data/assets/vocabulary_scroll_up.png");
-                        $scope.scrollUp.scaleX = $scope.scrollUp.scaleY = scale * 0.2;
-                        $scope.scrollUp.x = backgroundPosition.x + backgroundPosition.width / 1.1;
-                        $scope.scrollUp.y = backgroundPosition.y + (backgroundPosition.height / 7);
-                        $scope.stage.addChild($scope.scrollUp);
-
-                        $scope.scrollUp.addEventListener("mousedown", function (event) {
-                          $scope.scrollUp.alpha = 0.5;
-                          $scope.stage.update();
-                        });
-
-                        $scope.scrollUp.addEventListener("pressup", function (event) {
-                          $scope.scrollUp.alpha = 1;
-                          $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
-                          $scope.stage.update();
-                        });
+                    /*English Button*/
+                    $http.get($rootScope.rootDir + "data/assets/vocabulary_english_big_button_sprite.json")
+                      .success(function (response) {
+                        console.log("vocabulary_english_big_button_sprite");
+                        response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                        $scope.enSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
 
                         buttonsSpriteSheetCallback();
-
+                      })
+                      .error(function (error) {
+                        buttonsSpriteSheetCallback();
                       });
-                    }, function (buttonsSpriteSheetCallback) {
+                  },
+                  function (buttonsSpriteSheetCallback) {
 
-                      /*English Button*/
-                      $http.get($rootScope.rootDir + "data/assets/vocabulary_english_big_button_sprite.json")
-                        .success(function (response) {
-                          console.log("vocabulary_english_big_button_sprite");
-                          response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-                          $scope.enSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
+                    /*Greek Button*/
+                    $http.get($rootScope.rootDir + "data/assets/vocabulary_greek_big_button_sprite.json")
+                      .success(function (response) {
+                        console.log("Success on getting json data for greek button!");
+                        response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                        $scope.grSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
+                        buttonsSpriteSheetCallback();
+                      })
+                      .error(function (error) {
+                        buttonsSpriteSheetCallback();
+                      });
+                  },
+                  function (buttonsSpriteSheetCallback) {
 
-                          buttonsSpriteSheetCallback();
-                        })
-                        .error(function (error) {
-                          buttonsSpriteSheetCallback();
-                        });
-                    },
-                    function (buttonsSpriteSheetCallback) {
+                    /*Play Button*/
+                    $http.get($rootScope.rootDir + "data/assets/vocabulary_play_big_button_sprite.json")
+                      .success(function (response) {
+                        response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                        $scope.playSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
 
-                      /*Greek Button*/
-                      $http.get($rootScope.rootDir + "data/assets/vocabulary_greek_big_button_sprite.json")
-                        .success(function (response) {
-                          console.log("Success on getting json data for greek button!");
-                          response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-                          $scope.grSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
-                          buttonsSpriteSheetCallback();
-                        })
-                        .error(function (error) {
-                          buttonsSpriteSheetCallback();
-                        });
-                    },
-                    function (buttonsSpriteSheetCallback) {
-
-                      /*Play Button*/
-                      $http.get($rootScope.rootDir + "data/assets/vocabulary_play_big_button_sprite.json")
-                        .success(function (response) {
-                          response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-                          $scope.playSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
-
-                          buttonsSpriteSheetCallback();
-                        })
-                        .error(function (error) {
-                          buttonsSpriteSheetCallback();
-                        });
-                    }
-                  ], function (err, result) {
-                    parallelCallback();
-                  });
-
-                }, function (parallelCallback) {
-
-                  var title = new createjs.Text("Vocabulary", "27px Arial", "white");
-                  title.scaleX = title.scaleY = scale;
-                  title.x = backgroundPosition.x + (backgroundPosition.width / 1.4);
-                  title.y = backgroundPosition.y + (backgroundPosition.height / 15);
-                  title.textBaseline = "alphabetic";
-                  $scope.stage.addChild(title);
-
-                  var lessonTitle = new createjs.Text($rootScope.selectedLesson.lessonTitle, "27px Arial", "white");
-                  lessonTitle.scaleX = lessonTitle.scaleY = scale;
-                  lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 10);
-                  lessonTitle.y = backgroundPosition.y + (backgroundPosition.height / 15);
-                  lessonTitle.textBaseline = "alphabetic";
-                  lessonTitle.textAlign = "center";
-                  $scope.stage.addChild(lessonTitle);
-
-                  var descriptionText = new createjs.Text("Listen repeat and learn.", "18px Arial", "white");
-                  descriptionText.scaleX = descriptionText.scaleY = scale;
-                  descriptionText.x = backgroundPosition.x + (backgroundPosition.width / 1.4);
-                  descriptionText.y = backgroundPosition.y + (backgroundPosition.height / 8.7);
-                  descriptionText.textBaseline = "alphabetic";
-                  $scope.stage.addChild(descriptionText);
-
-                  $scope.mainContainer = new createjs.Container();
-                  $scope.mainContainer.width = background.image.width;
-                  $scope.mainContainer.height = background.image.height * 2;
-                  $scope.mainContainer.scaleX = $scope.mainContainer.scaleY = scale;
-                  $scope.mainContainer.x = backgroundPosition.x;
-                  $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
-                  $scope.stage.addChild($scope.mainContainer);
-
-                  var graphics = new createjs.Graphics().beginFill("red").drawRect(backgroundPosition.x, backgroundPosition.y + (backgroundPosition.height / 8), backgroundPosition.width, backgroundPosition.height * 0.73);
-                  var shape = new createjs.Shape(graphics);
-                  $scope.mainContainer.mask = shape;
-
+                        buttonsSpriteSheetCallback();
+                      })
+                      .error(function (error) {
+                        buttonsSpriteSheetCallback();
+                      });
+                  }
+                ], function (err, result) {
                   parallelCallback();
-                }], function (err, response) {
-                  async.waterfall(waterFallFunctions, function (err, response) {
-                    $scope.wordsButton.gotoAndPlay("selected");
-                    loadPage("words");
-                  });
                 });
-              })
-              .error(function (error) {
-                console.error("Error on getting json for menu button...", error);
-              });//end of get menu button
+
+              }, function (parallelCallback) {
+
+                var title = new createjs.Text("Vocabulary", "27px Arial", "white");
+                title.scaleX = title.scaleY = scale;
+                title.x = backgroundPosition.x + (backgroundPosition.width / 1.4);
+                title.y = backgroundPosition.y + (backgroundPosition.height / 15);
+                title.textBaseline = "alphabetic";
+                $scope.stage.addChild(title);
+
+                var lessonTitle = new createjs.Text($rootScope.selectedLesson.lessonTitle, "27px Arial", "white");
+                lessonTitle.scaleX = lessonTitle.scaleY = scale;
+                lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 10);
+                lessonTitle.y = backgroundPosition.y + (backgroundPosition.height / 15);
+                lessonTitle.textBaseline = "alphabetic";
+                lessonTitle.textAlign = "center";
+                $scope.stage.addChild(lessonTitle);
+
+                var descriptionText = new createjs.Text("Listen repeat and learn.", "18px Arial", "white");
+                descriptionText.scaleX = descriptionText.scaleY = scale;
+                descriptionText.x = backgroundPosition.x + (backgroundPosition.width / 1.4);
+                descriptionText.y = backgroundPosition.y + (backgroundPosition.height / 8.7);
+                descriptionText.textBaseline = "alphabetic";
+                $scope.stage.addChild(descriptionText);
+
+                $scope.mainContainer = new createjs.Container();
+                $scope.mainContainer.width = background.image.width;
+                $scope.mainContainer.height = background.image.height * 2;
+                $scope.mainContainer.scaleX = $scope.mainContainer.scaleY = scale;
+                $scope.mainContainer.x = backgroundPosition.x;
+                $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
+                $scope.stage.addChild($scope.mainContainer);
+
+                var graphics = new createjs.Graphics().beginFill("red").drawRect(backgroundPosition.x, backgroundPosition.y + (backgroundPosition.height / 8), backgroundPosition.width, backgroundPosition.height * 0.73);
+                var shape = new createjs.Shape(graphics);
+                $scope.mainContainer.mask = shape;
+
+                parallelCallback();
+              }], function (err, response) {
+                async.waterfall(waterFallFunctions, function (err, response) {
+                  $scope.wordsButton.gotoAndPlay("selected");
+                  loadPage("words");
+                });
+              });
+
+
+            });
+
           })
           .error(function (error) {
             console.error("Error on getting json for menu button...", error);
@@ -790,10 +1235,14 @@ angular.module("bookbuilder2")
 
         function loadPage(vocabularySection) {
           $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
-          $scope.stage.update();
           $scope.selectedVocabularySection = vocabularySection;
           $scope.playAll = false;
           $scope.currentWord = $scope.activityData[vocabularySection][0].name;
+
+          $scope.bigPauseButton.visible = false;
+          $scope.bigStopButton.visible = false;
+          $scope.bigPlayButton.visible = true;
+          $scope.bigStopButton.gotoAndPlay("normal");
 
 
           if ($scope.selectedVocabularySection === "words" || $scope.selectedVocabularySection === "phrases") {
@@ -806,9 +1255,17 @@ angular.module("bookbuilder2")
             });
           } else {
             $scope.quartiles = {};
+            $scope.quartilesButtons = {};
+            $scope.quartilesIndex = {};
+            $scope.quartilesEnglish = {};
+            $scope.quartilesGreek = {};
             _.each($scope.activityData.derivatives, function (derivative, key, list) {
               if (!$scope.quartiles[derivative.type] && $scope.quartiles[derivative.type] !== derivative.type) {
                 $scope.quartiles[derivative.type] = "q" + (_.keys($scope.quartiles).length);
+                $scope.quartilesButtons[derivative.type] = 0;
+                $scope.quartilesIndex[derivative.type] = 0;
+                $scope.quartilesEnglish[derivative.type] = 0;
+                $scope.quartilesGreek[derivative.type] = 0;
               }
             });
             console.log("$scope.quartiles", $scope.quartiles);
@@ -862,6 +1319,7 @@ angular.module("bookbuilder2")
               console.log("Press up event!");
               enSmallButton.gotoAndPlay("normal");
               $scope.englishWordsBitmaps[word.name].visible = !$scope.englishWordsBitmaps[word.name].visible;
+              $scope.stage.update();
             });
 
             enSmallButton.regX = enSmallButton.x / 2;
@@ -885,6 +1343,7 @@ angular.module("bookbuilder2")
               console.log("Press up event!");
               grSmallButton.gotoAndPlay("normal");
               $scope.greekWordsBitmaps[word.name].visible = !$scope.greekWordsBitmaps[word.name].visible;
+              $scope.stage.update();
 
             });
             grSmallButton.regX = grSmallButton.x / 2;
@@ -905,10 +1364,10 @@ angular.module("bookbuilder2")
               playSmallButton.gotoAndPlay("normal");
               playWordSound(word);
               $scope.stage.update();
+              $scope.playAll = false;
               $scope.bigPauseButton.visible = false;
               $scope.bigStopButton.visible = false;
-              $scope.bigPlayButton.visible = true;
-              $scope.playAll = false;
+              $scope.bigPlayButton.visible = false;
             });
 
             playSmallButton.regX = playSmallButton.x / 2;
@@ -916,12 +1375,9 @@ angular.module("bookbuilder2")
             playSmallButton.scaleX = playSmallButton.scaleY = 0.7;
             playSmallButton.x = $scope.buttonsContainer.buttonsSubContainers[word.name].width / 1.5;
             playSmallButton.y = $scope.buttonsContainer.buttonsSubContainers[word.name].height / 2;
-
             $scope.buttonsContainer.buttonsSubContainers[word.name].addChild(enSmallButton);
             $scope.buttonsContainer.buttonsSubContainers[word.name].addChild(grSmallButton);
             $scope.buttonsContainer.buttonsSubContainers[word.name].addChild(playSmallButton);
-            $scope.stage.update();
-
           });
         }//End of loadButtons function
 
@@ -933,15 +1389,17 @@ angular.module("bookbuilder2")
             return;
           }
           if (window.cordova && window.cordova.platformId !== "browser") {
+            $scope.bigPlayButton.visible = false;
             $scope.sounds[word.name].play();
           }
           $scope.currentWord = word.name;
           $scope.indexContainer.indexSubContainers[word.name].indexBackground.visible = true;
           $scope.englishWordsContainer.englishSubContainers[word.name].englishBackground.visible = true;
           $scope.greekWordsContainer.greekWordsSubContainers[word.name].greekBackground.visible = true;
+          $scope.stage.update();
         };
 
-        function playDerivativeSound(derivative, key) {
+        function playDerivativeSound(derivative) {
           if (!_.findWhere($scope.activityData[$scope.selectedVocabularySection], {
               name: derivative.name
             })) {
@@ -949,13 +1407,15 @@ angular.module("bookbuilder2")
           }
 
           if (window.cordova && window.cordova.platformId !== "browser") {
-            $scope.sounds[$scope.activityData.derivatives[key].name].play();
+            $scope.bigPlayButton.visible = false;
+            $scope.sounds[derivative.name].play();
           }
-          $scope.currentWord = derivative.word;
-          var elementIndex = _.findIndex(_.filter($scope.activityData.derivatives, {type: derivative.type}), {name: $scope.activityData.derivatives[key].name});
+          $scope.currentWord = derivative.name;
+          var elementIndex = _.findIndex(_.filter($scope.activityData.derivatives, {type: derivative.type}), {name: derivative.name});
           $scope.derivativesBackgrounds[$scope.quartiles[derivative.type]].indexBackground[elementIndex].visible = true;
           $scope.derivativesBackgrounds[$scope.quartiles[derivative.type]].englishBackground[elementIndex].visible = true;
           $scope.derivativesBackgrounds[$scope.quartiles[derivative.type]].greekBackground[elementIndex].visible = true;
+          $scope.stage.update();
         };
 
 
@@ -970,12 +1430,7 @@ angular.module("bookbuilder2")
             wordIndex.y = $scope.indexContainer.indexSubContainers[word.name].height / 2;
             wordIndex.textBaseline = "middle";
             wordIndex.textAlign = "center";
-
-            /* wordIndex.maxWidth = $scope.indexContainer.width;*/
-
             $scope.indexContainer.indexSubContainers[word.name].addChild(wordIndex);
-            $scope.stage.update();
-
           });
 
         }//End of loadIndexes function
@@ -988,21 +1443,17 @@ angular.module("bookbuilder2")
 
           /*Iterating and populating the container*/
           _.each(wordsArray, function (word, key, list) {
-
             $scope.englishWordsBitmaps[word.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + word.name + ".png");
             $scope.englishWordsBitmaps[word.name].x = 0;
             $scope.englishWordsBitmaps[word.name].y = $scope.englishWordsContainer.englishSubContainers[word.name].height / 1.5;
             $scope.englishWordsBitmaps[word.name].regY = $scope.englishWordsContainer.englishSubContainers[word.name].height / 2;
             $scope.englishWordsContainer.englishSubContainers[word.name].addChild($scope.englishWordsBitmaps[word.name]);
-            $scope.stage.update();
-
           });
         }//End of loadEnglishWords function
 
 
         /*LOAD GREEK WORDS*/
         function loadGreekWords(wordsArray) {
-
           $scope.greekWordsBitmaps = {};
           _.each(wordsArray, function (word, key, list) {
             $scope.greekWordsBitmaps[word.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + word.name + "_gr.png");
@@ -1010,7 +1461,6 @@ angular.module("bookbuilder2")
             $scope.greekWordsBitmaps[word.name].y = $scope.greekWordsContainer.greekWordsSubContainers[word.name].height / 1.5;
             $scope.greekWordsBitmaps[word.name].regY = $scope.greekWordsContainer.greekWordsSubContainers[word.name].height / 2;
             $scope.greekWordsContainer.greekWordsSubContainers[word.name].addChild($scope.greekWordsBitmaps[word.name]);
-            $scope.stage.update();
           });
         }//End of loadGreekWords function
 
@@ -1020,11 +1470,6 @@ angular.module("bookbuilder2")
         function loadDerivativesButtons(wordsArray) {
 
           console.log("loadDerivativesButtons", wordsArray);
-
-          var verbsIndex = 0;
-          var nounsIndex = 0;
-          var nounIndex = 0;
-          var adjectiveIndex = 0;
 
           /*Iterating and populating the container*/
           _.each(wordsArray, function (derivative, key, list) {
@@ -1042,6 +1487,7 @@ angular.module("bookbuilder2")
               console.log("Press up event!");
               enSmallButton.gotoAndPlay("normal");
               $scope.englishDerivativesBitmaps[derivative.name].visible = !$scope.englishDerivativesBitmaps[derivative.name].visible;
+              $scope.stage.update();
             });
 
             enSmallButton.regY = enSmallButton.y / 2;
@@ -1061,7 +1507,7 @@ angular.module("bookbuilder2")
               console.log("Press up event!");
               grSmallButton.gotoAndPlay("normal");
               $scope.greekDerivativesBitmaps[derivative.name].visible = !$scope.greekDerivativesBitmaps[derivative.name].visible;
-
+              $scope.stage.update();
             });
 
             grSmallButton.regX = grSmallButton.x / 2;
@@ -1079,12 +1525,12 @@ angular.module("bookbuilder2")
 
             playSmallButton.addEventListener("pressup", function (event) {
               playSmallButton.gotoAndPlay("normal");
-              playDerivativeSound(derivative, key);
-              $scope.stage.update();
+              playDerivativeSound(derivative);
               $scope.bigPauseButton.visible = false;
               $scope.bigStopButton.visible = false;
-              $scope.bigPlayButton.visible = true;
+              $scope.bigPlayButton.visible = false;
               $scope.playAll = false;
+              $scope.stage.update();
             });
             playSmallButton.regX = playSmallButton.x / 2;
             playSmallButton.regY = playSmallButton.y / 2;
@@ -1092,73 +1538,25 @@ angular.module("bookbuilder2")
             playSmallButton.x = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[0].width / 1.15;
             playSmallButton.y = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[0].height / 2;
 
-            if (derivative.type === 'verbs') {
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[verbsIndex].addChild(enSmallButton);
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[verbsIndex].addChild(grSmallButton);
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[verbsIndex].addChild(playSmallButton);
-              $scope.stage.update();
-              verbsIndex++;
-            } else if (derivative.type === 'nouns') {
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[nounsIndex].addChild(enSmallButton);
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[nounsIndex].addChild(grSmallButton);
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[nounsIndex].addChild(playSmallButton);
-              $scope.stage.update();
-              nounsIndex++;
-            } else if (derivative.type === 'noun') {
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[nounIndex].addChild(enSmallButton);
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[nounIndex].addChild(grSmallButton);
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[nounIndex].addChild(playSmallButton);
-              $scope.stage.update();
-              nounIndex++;
-            } else {
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[adjectiveIndex].addChild(enSmallButton);
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[adjectiveIndex].addChild(grSmallButton);
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[adjectiveIndex].addChild(playSmallButton);
-              $scope.stage.update();
-              adjectiveIndex++;
-            }
+            $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[$scope.quartilesButtons[derivative.type]].addChild(enSmallButton);
+            $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[$scope.quartilesButtons[derivative.type]].addChild(grSmallButton);
+            $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[$scope.quartilesButtons[derivative.type]].addChild(playSmallButton);
+            $scope.quartilesButtons[derivative.type]++;
 
           });
-
         }//End of loadDerivativesButtons function
 
 
         /*LOAD DERIVATIVES INDEXES*/
         function loadDerivativesIndexes(wordsArray) {
-
-          var verbsIndex = 0;
-          var nounsIndex = 0;
-          var nounIndex = 0;
-          var adjectiveIndex = 0;
-
           _.each(wordsArray, function (derivative, key, list) {
-
             var derivativeIndex = new createjs.Text(key + 1 + ".", "20px Arial", "black");
-
             derivativeIndex.x = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["index"].rowContainers[0].width / 2;
             derivativeIndex.regX = derivativeIndex.getBounds().width / 2;
             derivativeIndex.y = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["index"].rowContainers[0].height / 2;
             derivativeIndex.textBaseline = "middle";
-
-            /*Resolving on which container should be added*/
-            if (derivative.type === 'verbs') {
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["index"].rowContainers[verbsIndex].addChild(derivativeIndex);
-              $scope.stage.update();
-              verbsIndex++;
-            } else if (derivative.type === 'nouns') {
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["index"].rowContainers[nounsIndex].addChild(derivativeIndex);
-              $scope.stage.update();
-              nounsIndex++;
-            } else if (derivative.type === 'noun') {
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["index"].rowContainers[nounIndex].addChild(derivativeIndex);
-              $scope.stage.update();
-              nounIndex++;
-            } else {
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["index"].rowContainers[adjectiveIndex].addChild(derivativeIndex);
-              $scope.stage.update();
-              adjectiveIndex++;
-            }
-
+            $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["index"].rowContainers[$scope.quartilesIndex[derivative.type]].addChild(derivativeIndex);
+            $scope.quartilesIndex[derivative.type]++;
           });
         }//End of loadDerivativesIndexes function
 
@@ -1167,43 +1565,16 @@ angular.module("bookbuilder2")
         function loadEnglishDerivatives(wordsArray) {
 
           $scope.englishDerivativesBitmaps = {};
-          var verbsIndex = 0;
-          var nounsIndex = 0;
-          var nounIndex = 0;
-          var adjectiveIndex = 0;
-
           _.each(wordsArray, function (derivative, key, list) {
-
             $scope.englishDerivativesBitmaps[derivative.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + derivative.name + ".png");
-
             $scope.englishDerivativesBitmaps[derivative.name].regY = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["english"].rowContainers[0].height / 2;
             $scope.englishDerivativesBitmaps[derivative.name].x = 0;
             if ($scope.englishDerivativesBitmaps[derivative.name].image.width > $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[0].width) {
               $scope.englishDerivativesBitmaps[derivative.name].scaleX = $scope.englishDerivativesBitmaps[derivative.name].scaleY = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[0].width / $scope.englishDerivativesBitmaps[derivative.name].image.width;
             }
-
             $scope.englishDerivativesBitmaps[derivative.name].y = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["english"].rowContainers[0].height / 1.5;
-
-            /*Resolving on which container should be added*/
-            if (derivative.type === 'verbs') {
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["english"].rowContainers[verbsIndex].addChild($scope.englishDerivativesBitmaps[derivative.name]);
-              $scope.stage.update();
-              verbsIndex++;
-            } else if (derivative.type === 'nouns') {
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["english"].rowContainers[nounsIndex].addChild($scope.englishDerivativesBitmaps[derivative.name]);
-              $scope.stage.update();
-              nounsIndex++;
-            } else if (derivative.type === 'noun') {
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["english"].rowContainers[nounIndex].addChild($scope.englishDerivativesBitmaps[derivative.name]);
-              $scope.stage.update();
-              nounIndex++;
-            } else {
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["english"].rowContainers[adjectiveIndex].addChild($scope.englishDerivativesBitmaps[derivative.name]);
-              $scope.stage.update();
-              adjectiveIndex++;
-            }
-
-
+            $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["english"].rowContainers[$scope.quartilesEnglish[derivative.type]].addChild($scope.englishDerivativesBitmaps[derivative.name]);
+            $scope.quartilesEnglish[derivative.type]++;
           });
         }//End of loadEnglishDerivatives function
 
@@ -1211,454 +1582,29 @@ angular.module("bookbuilder2")
         /*LOAD GREEK DERIVATIVES*/
         function loadGreekDerivatives(wordsArray) {
 
-          /*Initializing y that will change dynamically for every button*/
-          var verbsIndex = 0;
-          var nounsIndex = 0;
-          var nounIndex = 0;
-          var adjectiveIndex = 0;
-
           $scope.greekDerivativesBitmaps = {};
-
           /*Iterating and populating the container*/
           _.each(wordsArray, function (derivative, key, list) {
-
             $scope.greekDerivativesBitmaps[derivative.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + derivative.name + "_gr.png");
             $scope.greekDerivativesBitmaps[derivative.name].regY = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[0].height / 2;
             $scope.greekDerivativesBitmaps[derivative.name].x = 0;
             $scope.greekDerivativesBitmaps[derivative.name].y = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[0].height / 1.5;
-
             if ($scope.greekDerivativesBitmaps[derivative.name].image.width > $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[0].width) {
               $scope.greekDerivativesBitmaps[derivative.name].scaleX = $scope.greekDerivativesBitmaps[derivative.name].scaleY = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[0].width / $scope.greekDerivativesBitmaps[derivative.name].image.width;
             }
-
-            /*Resolving on which container should be added*/
-            if (derivative.type === 'verbs') {
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[verbsIndex].addChild($scope.greekDerivativesBitmaps[derivative.name]);
-              $scope.stage.update();
-              verbsIndex++;
-            } else if (derivative.type === 'nouns') {
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[nounsIndex].addChild($scope.greekDerivativesBitmaps[derivative.name]);
-              $scope.stage.update();
-              nounsIndex++;
-            } else if (derivative.type === 'noun') {
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[nounIndex].addChild($scope.greekDerivativesBitmaps[derivative.name]);
-              $scope.stage.update();
-              nounIndex++;
-            } else {
-              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[adjectiveIndex].addChild($scope.greekDerivativesBitmaps[derivative.name]);
-              $scope.stage.update();
-              adjectiveIndex++;
-            }
-
+            $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[$scope.quartilesGreek[derivative.type]].addChild($scope.greekDerivativesBitmaps[derivative.name]);
+            $scope.quartilesGreek[derivative.type]++;
           });
 
         }//End of loadGreekDerivatives function
 
-
-        /******************************************* Adding Page Buttons *******************************************/
-
-
-        /*BIG PAUSE BUTTON*/
-        $http.get($rootScope.rootDir + "data/assets/vocabulary_pause_button_sprite.json")
-          .success(function (response) {
-            console.log("Success on getting json for the big pause button");
-
-            //Reassigning images with the rest of resource
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-            var bigPauseButtonSpriteSheet = new createjs.SpriteSheet(response);
-            $scope.bigPauseButton = new createjs.Sprite(bigPauseButtonSpriteSheet, "normal");
-
-            $scope.bigPauseButton.visible = false;
-
-            $scope.bigPauseButton.addEventListener("mousedown", function (event) {
-              console.log("Mouse down event on a button !");
-              $scope.bigPauseButton.gotoAndPlay("onSelection");
-              $scope.stage.update();
-            });
-
-            $scope.bigPauseButton.addEventListener("pressup", function (event) {
-              console.log("Press up event!");
-              $scope.bigPauseButton.visible = false;
-              $scope.bigStopButton.visible = false;
-              $scope.bigPlayButton.visible = true;
-              $scope.bigPauseButton.gotoAndPlay("normal");
-              $scope.playAll = false;
-            });
-
-            $scope.bigPauseButton.scaleX = $scope.bigPauseButton.scaleY = scale;
-            $scope.bigPauseButton.x = backgroundPosition.x + (backgroundPosition.width / 12);
-            $scope.bigPauseButton.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
-
-            $scope.stage.addChild($scope.bigPauseButton);
-            $scope.stage.update();
-
-          })
-          .error(function (error) {
-            console.error("Error on getting json for bigPauseButton button...", error);
-          });//end of get bigPause button
-
-        /*BIG STOP BUTTON*/
-        $http.get($rootScope.rootDir + "data/assets/vocabulary_stop_button_sprite.json")
-          .success(function (response) {
-            console.log("Success on getting json for the big pause button");
-
-            //Reassigning images with the rest of resource
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-            var bigStopButtonSpriteSheet = new createjs.SpriteSheet(response);
-            $scope.bigStopButton = new createjs.Sprite(bigStopButtonSpriteSheet, "normal");
-
-            $scope.bigStopButton.visible = false;
-
-            $scope.bigStopButton.addEventListener("mousedown", function (event) {
-              console.log("Mouse down event on a button !");
-              $scope.bigStopButton.gotoAndPlay("onSelection");
-              $scope.stage.update();
-            });
-
-            $scope.bigStopButton.addEventListener("pressup", function (event) {
-              console.log("Press up event!");
-              $scope.bigPauseButton.visible = false;
-              $scope.bigStopButton.visible = false;
-              $scope.bigPlayButton.visible = true;
-              $scope.bigStopButton.gotoAndPlay("normal");
-              $scope.currentWord = $scope.activityData[$scope.selectedVocabularySection][0].name;
-              $scope.playAll = false;
-            });
-
-            $scope.bigStopButton.scaleX = $scope.bigStopButton.scaleY = scale;
-            $scope.bigStopButton.x = backgroundPosition.x + (backgroundPosition.width / 8);
-            $scope.bigStopButton.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
-
-            $scope.stage.addChild($scope.bigStopButton);
-            $scope.stage.update();
-
-          })
-          .error(function (error) {
-            console.error("Error on getting json for bigStopButton button...", error);
-          });//end of get bigStop button
-
-        /*BIG PLAY BUTTON*/
-        $http.get($rootScope.rootDir + "data/assets/vocabulary_play_big_button_sprite.json")
-          .success(function (response) {
-            console.log("Success on getting json for the big play button");
-
-            //Reassigning images with the rest of resource
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-            var bigPlayButtonSpriteSheet = new createjs.SpriteSheet(response);
-            $scope.bigPlayButton = new createjs.Sprite(bigPlayButtonSpriteSheet, "normal");
-
-            $scope.bigPlayButton.visible = true;
-
-            $scope.bigPlayButton.addEventListener("mousedown", function (event) {
-              console.log("Mouse down event on a button !");
-              $scope.bigPlayButton.gotoAndPlay("onSelection");
-              $scope.stage.update();
-            });
-
-            $scope.bigPlayButton.addEventListener("pressup", function (event) {
-              console.log("Press up event!");
-              $scope.bigPlayButton.visible = false;
-              $scope.bigPauseButton.visible = true;
-              $scope.bigStopButton.visible = true;
-              $scope.bigPlayButton.gotoAndPlay("normal");
-              $scope.playAll = true;
-
-              if ($scope.selectedVocabularySection === "derivatives") {
-                playDerivativeSound($scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-                  name: $scope.currentWord
-                })], _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-                  name: $scope.currentWord
-                }));
-              } else {
-                playWordSound($scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-                  name: $scope.currentWord
-                })]);
-              }
-            });
-
-            $scope.bigPlayButton.scaleX = $scope.bigPlayButton.scaleY = scale;
-            $scope.bigPlayButton.x = backgroundPosition.x + (backgroundPosition.width / 10);
-            $scope.bigPlayButton.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
-
-            $scope.stage.addChild($scope.bigPlayButton);
-            $scope.stage.update();
-
-          })
-          .error(function (error) {
-            console.error("Error on getting json for bigPlayButton button...", error);
-          });//end of get bigPlay button
-
-
-        /* WORDS BUTTON */
-        $http.get($rootScope.rootDir + "data/assets/vocabulary_words_button_sprite.json")
-          .success(function (response) {
-
-            //Reassigning images with the rest of resource
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-            var wordsButtonSpriteSheet = new createjs.SpriteSheet(response);
-            $scope.wordsButton = new createjs.Sprite(wordsButtonSpriteSheet, "normal");
-
-            $scope.wordsButton.addEventListener("mousedown", function (event) {
-              console.log("Mouse down event on a button !");
-              $scope.wordsButton.gotoAndPlay("onSelection");
-              $scope.stage.update();
-            });
-
-            $scope.wordsButton.addEventListener("pressup", function (event) {
-              console.log("Press up event!");
-              $scope.phrasesButton.gotoAndPlay("normal");
-              $scope.derivativesButton.gotoAndPlay("normal");
-              $scope.wordsButton.gotoAndPlay("selected");
-              loadPage("words");
-            });
-
-            $scope.wordsButton.scaleX = $scope.wordsButton.scaleY = scale * 0.7;
-            $scope.wordsButton.x = backgroundPosition.x + (backgroundPosition.width / 2.5);
-            $scope.wordsButton.y = backgroundPosition.y + (backgroundPosition.height / 1.07);
-
-            $scope.stage.addChild($scope.wordsButton);
-            $scope.stage.update();
-
-          })
-          .error(function (error) {
-            console.error("Error on getting json for words button...", error);
-          });//end of get words button
-
-
-        /* PHRASES BUTTON */
-        $http.get($rootScope.rootDir + "data/assets/vocabulary_phrases_button_sprite.json")
-          .success(function (response) {
-
-            //Reassigning images with the rest of resource
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-            var phrasesButtonSpriteSheet = new createjs.SpriteSheet(response);
-            $scope.phrasesButton = new createjs.Sprite(phrasesButtonSpriteSheet, "normal");
-
-            $scope.phrasesButton.addEventListener("mousedown", function (event) {
-              console.log("Mouse down event on a button !");
-              $scope.phrasesButton.gotoAndPlay("onSelection");
-              $scope.stage.update();
-            });
-
-            $scope.phrasesButton.addEventListener("pressup", function (event) {
-              console.log("Press up event!");
-              $scope.phrasesButton.gotoAndPlay("selected");
-              $scope.wordsButton.gotoAndPlay("normal");
-              $scope.derivativesButton.gotoAndPlay("normal");
-              loadPage("phrases");
-            });
-
-            $scope.phrasesButton.scaleX = $scope.phrasesButton.scaleY = scale * 0.7;
-            $scope.phrasesButton.x = backgroundPosition.x + (backgroundPosition.width / 2);
-            $scope.phrasesButton.y = backgroundPosition.y + (backgroundPosition.height / 1.07);
-
-            $scope.stage.addChild($scope.phrasesButton);
-            $scope.stage.update();
-
-          })
-          .error(function (error) {
-            console.error("Error on getting json for phrases button...", error);
-          });//end of get phrases button
-
-
-        /* DERIVATIVES BUTTON */
-        $http.get($rootScope.rootDir + "data/assets/vocabulary_derivatives_button_sprite.json")
-          .success(function (response) {
-
-            //Reassigning images with the rest of resource
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-            var derivativesButtonSpriteSheet = new createjs.SpriteSheet(response);
-            $scope.derivativesButton = new createjs.Sprite(derivativesButtonSpriteSheet, "normal");
-
-            $scope.derivativesButton.addEventListener("mousedown", function (event) {
-              console.log("mousedown event on a button !");
-              $scope.derivativesButton.gotoAndPlay("onSelection");
-              $scope.stage.update();
-            });
-
-            $scope.derivativesButton.addEventListener("pressup", function (event) {
-              console.log("pressup event!");
-              $scope.derivativesButton.gotoAndPlay("selected");
-              $scope.wordsButton.gotoAndPlay("normal");
-              $scope.phrasesButton.gotoAndPlay("normal");
-              loadPage("derivatives");
-            });
-
-            $scope.derivativesButton.scaleX = $scope.derivativesButton.scaleY = scale * 0.7;
-            $scope.derivativesButton.x = backgroundPosition.x + (backgroundPosition.width / 1.67);
-            $scope.derivativesButton.y = backgroundPosition.y + (backgroundPosition.height / 1.07);
-            $scope.stage.addChild($scope.derivativesButton);
-            $scope.stage.update();
-
-          })
-          .error(function (error) {
-            console.error("Error on getting json for derivatives button...", error);
-          });//end of get derivatives button
-
-
-        /* BIG ENGLISH BUTTON */
-        $http.get($rootScope.rootDir + "data/assets/vocabulary_english_big_button_sprite.json")
-          .success(function (response) {
-
-            //Reassigning images with the rest of resource
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-            var englishBigButtonSpriteSheet = new createjs.SpriteSheet(response);
-            var englishBigButton = new createjs.Sprite(englishBigButtonSpriteSheet, "normal");
-
-            englishBigButton.addEventListener("mousedown", function (event) {
-              console.log("Mouse down event on big English button!");
-              englishBigButton.gotoAndPlay("onSelection");
-              $scope.stage.update();
-            });
-
-            englishBigButton.addEventListener("pressup", function (event) {
-              console.log("Press up event!");
-
-              if ($scope.selectedVocabularySection === 'words' || $scope.selectedVocabularySection === 'phrases') {
-                if ($scope.englishWordsBitmaps[$scope.activityData.words[0].name].visible === true) {
-
-                  console.log("Hiding all english words...");
-                  _.each($scope.activityData.words, function (word, key, list) {
-
-                    $scope.englishWordsBitmaps[word.name].visible = false;
-                  });
-
-                  englishBigButton.gotoAndPlay("selected");
-                  $scope.stage.update();
-
-                } else {
-
-                  console.log("Making all english words visible again...");
-                  _.each($scope.activityData.words, function (word, key, list) {
-                    $scope.englishWordsBitmaps[word.name].visible = true;
-                  });
-                  englishBigButton.gotoAndPlay("normal");
-                  $scope.stage.update();
-                }
-              } else {
-                if ($scope.englishDerivativesBitmaps[$scope.activityData.derivatives[0].name].visible === true) {
-
-                  console.log("Hiding all english phrases...");
-                  _.each($scope.activityData.derivatives, function (derivative, key, list) {
-
-                    $scope.englishDerivativesBitmaps[derivative.name].visible = false;
-                  });
-
-                  englishBigButton.gotoAndPlay("selected");
-                  $scope.stage.update();
-
-                } else {
-
-                  console.log("Making all english phrases visible again...");
-                  _.each($scope.activityData.derivatives, function (derivative, key, list) {
-                    $scope.englishDerivativesBitmaps[derivative.name].visible = true;
-                  });
-                  englishBigButton.gotoAndPlay("normal");
-                  $scope.stage.update();
-                }
-              }
-
-            });
-
-            englishBigButton.scaleX = englishBigButton.scaleY = scale;
-            englishBigButton.x = backgroundPosition.x + (backgroundPosition.width / 1.17);
-            englishBigButton.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
-            /*englishBigButton.y = -englishBigButton.getTransformedBounds().height / 5;*/
-
-            $scope.stage.addChild(englishBigButton);
-            $scope.stage.update();
-
-          })
-          .error(function (error) {
-            console.error("Error on getting json for english big button...", error);
-          });//end of get english big button
-
-
-        /* BIG GREEK BUTTON */
-        $http.get($rootScope.rootDir + "data/assets/vocabulary_greek_big_button_sprite.json")
-          .success(function (response) {
-
-            //Reassigning images with the rest of resource
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-            var greekBigButtonSpriteSheet = new createjs.SpriteSheet(response);
-            var greekBigButton = new createjs.Sprite(greekBigButtonSpriteSheet, "normal");
-
-            greekBigButton.addEventListener("mousedown", function (event) {
-              console.log("Mouse down event on a button !");
-              greekBigButton.gotoAndPlay("onSelection");
-              $scope.stage.update();
-            });
-
-            greekBigButton.addEventListener("pressup", function (event) {
-              console.log("Press up event!");
-
-              if ($scope.selectedVocabularySection === 'words' || $scope.selectedVocabularySection === 'phrases') {
-                if ($scope.greekWordsBitmaps[$scope.activityData.words[0].name].visible === true) {
-
-                  console.log("Hiding all greek words...");
-                  _.each($scope.activityData.words, function (word, key, list) {
-
-                    $scope.greekWordsBitmaps[word.name].visible = false;
-                  });
-
-                  greekBigButton.gotoAndPlay("selected");
-                  $scope.stage.update();
-
-                } else {
-
-                  console.log("Making all greek words visible again...");
-                  _.each($scope.activityData.words, function (word, key, list) {
-                    $scope.greekWordsBitmaps[word.name].visible = true;
-                  });
-                  greekBigButton.gotoAndPlay("normal");
-                  $scope.stage.update();
-                }
-              } else {
-                if ($scope.greekDerivativesBitmaps[$scope.activityData.derivatives[0].name].visible === true) {
-
-                  console.log("Hiding all english phrases...");
-                  _.each($scope.activityData.derivatives, function (derivative, key, list) {
-
-                    $scope.greekDerivativesBitmaps[derivative.name].visible = false;
-                  });
-
-                  greekBigButton.gotoAndPlay("selected");
-                  $scope.stage.update();
-
-                } else {
-
-                  console.log("Making all english phrases visible again...");
-                  _.each($scope.activityData.derivatives, function (derivative, key, list) {
-                    $scope.greekDerivativesBitmaps[derivative.name].visible = true;
-                  });
-                  greekBigButton.gotoAndPlay("normal");
-                  $scope.stage.update();
-                }
-              }
-
-
-            });
-
-            greekBigButton.scaleX = greekBigButton.scaleY = scale;
-            greekBigButton.x = backgroundPosition.x + (backgroundPosition.width / 1.08);
-            greekBigButton.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
-            /*greekBigButton.y = -greekBigButton.getTransformedBounds().height / 5;*/
-
-            $scope.stage.addChild(greekBigButton);
-            $scope.stage.update();
-
-          })
-          .error(function (error) {
-            console.error("Error on getting json for greek big button...", error);
-          });//end of get greek butt§on
-
-        var completedActivity = function () {
+        function completedActivity() {
           console.log("completed activity!");
           $scope.activityData.completed = true;
           window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
         };
 
-        $scope.checkIfAllSoundsWerePlayed = function () {
+        function checkIfAllSoundsWerePlayed() {
           var completed = true;
 
           _.each($scope.activityData, function (tabWords, tab, list) {

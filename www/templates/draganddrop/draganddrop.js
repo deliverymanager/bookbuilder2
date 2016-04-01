@@ -173,7 +173,7 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
-              $state.go("lesson", {}, { reload: true });
+              $state.go("lesson", {}, {reload: true});
             });
 
             menuButton.scaleX = menuButton.scaleY = scale;
@@ -262,21 +262,40 @@ angular.module("bookbuilder2")
               $scope.stage.addChild($scope.underlinedText[key]);
               $scope.stage.addChild($scope.questionText[key]);
 
-              var currentPostexts = new createjs.Text(question.postext, "23px Arial", "blue");
-              currentPostexts.scaleX = currentPostexts.scaleY = scale;
-              if (pretexts.length === 1) {
-                currentPostexts.x = backgroundPosition.x + (backgroundPosition.width / 40);
-                currentPostexts.y = $scope.questionText[key].getTransformedBounds().y + $scope.questionText[key].getTransformedBounds().height * 2;
-              } else {
-                currentPostexts.x = $scope.questionText[key].getTransformedBounds().x + $scope.questionText[key].getTransformedBounds().width;
-                currentPostexts.y = $scope.questionText[key].getTransformedBounds().y + $scope.questionText[key].getTransformedBounds().height / 1.3;
+
+              if (question.postext) {
+
+                var postexts = question.postext.split("\n");
+                console.log("postexts", postexts.length);
+                var currentPostexts = {};
+
+                if (postexts.length > 1) {
+                  if (!postexts[0]) {
+                    postexts[0] = " ";
+                  }
+                  currentPostexts[0] = new createjs.Text(postexts[0], "23px Arial", "blue");
+                  currentPostexts[0].scaleX = currentPostexts[0].scaleY = scale;
+                  currentPostexts[0].x = $scope.questionText[key].getTransformedBounds().x + $scope.questionText[key].getTransformedBounds().width;
+                  currentPostexts[0].y = $scope.questionText[key].getTransformedBounds().y + $scope.questionText[key].getTransformedBounds().height / 1.3;
+                  currentPostexts[0].textBaseline = "alphabetic";
+                  $scope.stage.addChild(currentPostexts[0]);
+
+                  currentPostexts[1] = new createjs.Text(postexts[1], "23px Arial", "blue");
+                  currentPostexts[1].scaleX = currentPostexts[1].scaleY = scale;
+                  currentPostexts[1].x = backgroundPosition.x + (backgroundPosition.width / 40);
+                  currentPostexts[1].y = $scope.questionText[key].getTransformedBounds().y + $scope.questionText[key].getTransformedBounds().height / 1.3 * 2.5;
+                  currentPostexts[1].textBaseline = "alphabetic";
+                  $scope.stage.addChild(currentPostexts[1]);
+                } else {
+
+                  currentPostexts[0] = new createjs.Text(postexts[0], "23px Arial", "blue");
+                  currentPostexts[0].scaleX = currentPostexts[0].scaleY = scale;
+                  currentPostexts[0].x = $scope.questionText[key].getTransformedBounds().x + $scope.questionText[key].getTransformedBounds().width;
+                  currentPostexts[0].y = $scope.questionText[key].getTransformedBounds().y + $scope.questionText[key].getTransformedBounds().height / 1.3;
+                  currentPostexts[0].textBaseline = "alphabetic";
+                  $scope.stage.addChild(currentPostexts[0]);
+                }
               }
-
-              currentPostexts.textBaseline = "alphabetic";
-              currentPostexts.lineHeight = 30;
-
-              $scope.stage.addChild(currentPostexts);
-
 
               questionY += questionHeight;
               $scope.stage.update();
@@ -488,7 +507,6 @@ angular.module("bookbuilder2")
             console.log("Questions Inserted!");
 
             /* ------------------------------------------ Lesson Title ---------------------------------------------- */
-
 
             var lessonTitle = new createjs.Text($rootScope.selectedLesson.lessonTitle, "27px Arial", "yellow");
 
@@ -812,13 +830,13 @@ angular.module("bookbuilder2")
               historyRoot: true,
               disableBack: true
             });
-            $state.go($rootScope.selectedLesson.lessonMenu[index + 1].activityTemplate, {}, { reload: true });
+            $state.go($rootScope.selectedLesson.lessonMenu[index + 1].activityTemplate, {}, {reload: true});
           } else {
             $ionicHistory.nextViewOptions({
               historyRoot: true,
               disableBack: true
             });
-            $state.go("results", {}, { reload: true });
+            $state.go("results", {}, {reload: true});
           }
         }
 

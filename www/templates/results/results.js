@@ -115,7 +115,7 @@ angular.module("bookbuilder2")
         async.parallel([function (callback) {
 
 
-          /**** MENU BUTTON ****/
+            /**** MENU BUTTON ****/
             $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
               .success(function (response) {
 
@@ -312,7 +312,7 @@ angular.module("bookbuilder2")
             $scope.activitiesContainer.scaleX = $scope.activitiesContainer.scaleY = scale;
             $scope.activitiesContainer.x = backgroundPosition.x + (backgroundPosition.width / 9);
             $scope.activitiesContainer.y = backgroundPosition.y + (backgroundPosition.height / 2.5);
-            $scope.activitiesContainer.width = background.image.width/1.44;
+            $scope.activitiesContainer.width = background.image.width / 1.44;
             $scope.activitiesContainer.height = background.image.height / 2.3;
             $scope.stage.addChild($scope.activitiesContainer);
 
@@ -372,17 +372,21 @@ angular.module("bookbuilder2")
           _.each($rootScope.selectedLesson.lessonMenu, function (activity, key, list) {
             var activityData = JSON.parse(window.localStorage.getItem($rootScope.selectedLesson.id + "_" + activity.activityFolder));
             console.log("activity", activityData);
+
             if (activityData) {
+              console.log("activity correct", calculateCorrectAnswers(activityData, activity.activityTemplate));
               $scope.calculatedActivityScores[activity.activityFolder] = {
+                "activityFolder": activity.activityFolder,
                 "title": activity.name,
                 "completed": activityData.completed ? true : false,
                 "attempts": activityData.attempts ? activityData.attempts : 0,
-                "correct": calculateCorrectAnswers(activityData),
+                "correct": calculateCorrectAnswers(activityData, activity.activityTemplate),
                 "numberOfQuestions": activity.numberOfQuestions,
-                "percentCorrectQuestions": parseInt(calculateCorrectAnswers(activityData) / activityData.questions.length * 100)
+                "percentCorrectQuestions": parseInt(calculateCorrectAnswers(activityData, activity.activityTemplate) / activityData.questions.length * 100)
               }
             } else {
               $scope.calculatedActivityScores[activity.activityFolder] = {
+                "activityFolder": activity.activityFolder,
                 "title": activity.name,
                 "completed": false,
                 "attempts": 0,
@@ -393,10 +397,11 @@ angular.module("bookbuilder2")
             }
           });
 
-          var vocabularyActivityData = window.localStorage.getItem($rootScope.selectedLesson.id + "_vocabulary");
+          var vocabularyActivityData = JSON.parse(window.localStorage.getItem($rootScope.selectedLesson.id + "_vocabulary"));
 
           if (vocabularyActivityData) {
             $scope.calculatedActivityScores["vocabulary"] = {
+              "activityFolder": "vocabulary",
               "title": "Vocabulary",
               "completed": vocabularyActivityData.completed,
               "attempts": vocabularyActivityData.attempts,
@@ -404,16 +409,17 @@ angular.module("bookbuilder2")
             };
           } else {
             $scope.calculatedActivityScores["vocabulary"] = {
+              "activityFolder": "vocabulary",
               "title": "Vocabulary",
               "completed": false,
               "attempts": 0,
               "percentCorrectQuestions": 0
             };
           }
-          var readingActivityData = window.localStorage.getItem($rootScope.selectedLesson.id + "_reading");
-
+          var readingActivityData = JSON.parse(window.localStorage.getItem($rootScope.selectedLesson.id + "_reading"));
           if (readingActivityData) {
             $scope.calculatedActivityScores["reading"] = {
+              "activityFolder": "reading",
               "title": "Reading",
               "completed": readingActivityData.completed,
               "attempts": readingActivityData.attempts,
@@ -421,6 +427,7 @@ angular.module("bookbuilder2")
             };
           } else {
             $scope.calculatedActivityScores["reading"] = {
+              "activityFolder": "reading",
               "title": "Reading",
               "completed": false,
               "attempts": 0,
@@ -522,21 +529,33 @@ angular.module("bookbuilder2")
 
 
         /*Calculating answers*/
-        function calculateCorrectAnswers(activityData) {
-          return _.filter(activityData.questions, function (question) {
-            if (question.userAnswer === question.answerChoice) {
-              return true;
-            } else {
-              return false;
-            }
-          }).length;
+        function calculateCorrectAnswers(activityData, activityTemplate) {
+          if (activityTemplate === "draganddrop") {
+            return _.filter(activityData.questions, function (question) {
+              if (question.userAnswerLabel === question.answer) {
+                return true;
+              } else {
+                return false;
+              }
+            }).length;
+          } else if (activityTemplate === "multiple") {
+            return _.filter(activityData.questions, function (question) {
+              console.log("question.userAnswer: " + question.userAnswer + " question.answerChoice: " + question.answerChoice);
+              if (question.userAnswer === question.answerChoice) {
+                return true;
+              } else {
+                return false;
+              }
+            }).length;
+          }
+
         }
 
 
         /*This function evokes when a lesson is downloaded for the first time*/
         function clearAllActivitiesLocalStorage() {
 
-          _.each($rootScope.selectedLesson.lessonMenu, function (activity, key, list) {
+          _.each($scope.calculatedActivityScores, function (activity, key, list) {
             window.localStorage.removeItem($rootScope.selectedLesson.id + "_" + activity.activityFolder);
           });
           Toast.show($rootScope.selectedLesson.title + " is cleared successfully!");
