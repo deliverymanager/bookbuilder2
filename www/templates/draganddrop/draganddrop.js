@@ -231,6 +231,9 @@ angular.module("bookbuilder2")
               var currentPretexts = {};
               var yPreText = questionHeight / 3;
               _.each(pretexts, function (text, l, li) {
+                if (!text) {
+                  text = " ";
+                }
                 currentPretexts[l] = new createjs.Text(text, "23px Arial", "blue");
                 currentPretexts[l].scaleX = currentPretexts[l].scaleY = scale;
                 currentPretexts[l].x = backgroundPosition.x + (backgroundPosition.width / 40);
