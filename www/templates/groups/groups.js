@@ -488,7 +488,6 @@ angular.module("bookbuilder2")
                   });
                 }
               });
-
             });
 
             $scope.deleteIcon.scaleX = $scope.deleteIcon.scaleY = scale / 4;
