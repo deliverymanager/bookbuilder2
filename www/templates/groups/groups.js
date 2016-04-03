@@ -493,6 +493,7 @@ angular.module("bookbuilder2")
             $scope.stage.addChild($scope.deleteIcon);
             $scope.stage.update();
           });
+          
         }, 500);
       });//end of image on complete
     }, 500);//end of timeout

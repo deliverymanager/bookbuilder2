@@ -116,8 +116,7 @@ angular.module("bookbuilder2")
 
                                       $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data")
                                         .then(function (success) {
-
-                                          console.log("assets directory deleted!", success);
+                                          console.log("assets directory deleted!");
                                           $scope.deploy.update().then(function (res) {
                                             console.log('Ionic Deploy: Update Success! ', res);
 
@@ -199,7 +198,7 @@ angular.module("bookbuilder2")
           historyRoot: true,
           disableBack: true
         });
-        $state.go("groups", {}, {reload: true});
+        $state.go("groupsNew", {}, {reload: true});
       }
     });
 
