@@ -116,7 +116,8 @@ angular.module("bookbuilder2")
 
                                       $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data")
                                         .then(function (success) {
-                                          console.log("assets directory deleted!");
+
+                                          console.log("assets directory deleted!", success);
                                           $scope.deploy.update().then(function (res) {
                                             console.log('Ionic Deploy: Update Success! ', res);
 

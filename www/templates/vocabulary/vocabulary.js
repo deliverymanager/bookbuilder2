@@ -971,7 +971,9 @@ angular.module("bookbuilder2")
                 var shape = new createjs.Shape(graphics);
                 $scope.mainContainer.mask = shape;
 
-                parallelCallback();
+                $timeout(function(){
+                  parallelCallback();
+                });
               }], function (err, response) {
                 async.waterfall(waterFallFunctions, function (err, response) {
                   $scope.wordsButton.gotoAndPlay("selected");
