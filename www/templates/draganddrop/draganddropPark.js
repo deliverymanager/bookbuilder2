@@ -127,7 +127,7 @@ angular.module("bookbuilder2")
 
       }
 
-      var userChoice = " _________________________________ ";
+      var userChoice = "";
 
       /****************************** Image Loader ******************************/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
@@ -165,7 +165,6 @@ angular.module("bookbuilder2")
         background.x = $scope.stage.canvas.width / 2;
         background.y = $scope.stage.canvas.height / 2;
         $scope.stage.addChild(background);
-        $scope.stage.update();
         var backgroundPosition = background.getTransformedBounds();
         console.log(backgroundPosition);
 
@@ -202,7 +201,6 @@ angular.module("bookbuilder2")
         questionsContainerBackground.alpha = 0.5;
 
         $scope.questionsContainer.addChild(questionsContainerBackground);
-
 
         /* ------------------------------------------ ANSWERS CONTAINER ---------------------------------------------- */
         $scope.answersContainer = new createjs.Container();
@@ -268,39 +266,76 @@ angular.module("bookbuilder2")
           $scope.scoreText.textBaseline = "middle";
           $scope.mainContainer.addChild($scope.scoreText);
 
+
           /* ------------------------------------------ QUESTIONS & ANSWERS ---------------------------------------------- */
           $scope.questionText = {};
           $scope.underlinedText = {};
           $scope.answerText = {};
           var waterfallFunctions = [];
-          var questionHeight = 530 * scale / $scope.activityData.questions.length;
-          var questionY = backgroundPosition.y + (backgroundPosition.height / 5);
+
+          $scope.questionRowContainers = {};
+
+          /*Creating the bitmap for the question*/
 
           _.each($scope.activityData.questions, function (question, key, list) {
+
+            console.log("The question is: ", question);
 
             //Filling the waterfall
             waterfallFunctions.push(function (waterfallCallback) {
 
               var pretexts = question.pretext.split("\n");
-              var currentPretexts = {};
-              var yPreText = questionHeight / 3;
-              _.each(pretexts, function (text, l, li) {
+              $scope.currentPretexts = {};
+              console.log("Pretext Array for the question: ", pretexts);
+              _.each(pretexts, function (text, ke, li) {
                 if (!text) {
                   text = " ";
                 }
-                currentPretexts[l] = new createjs.Text(text, "13px Arial", "black");
-                currentPretexts[l].scaleX = currentPretexts[l].scaleY = scale;
-                currentPretexts[l].x = backgroundPosition.x + (backgroundPosition.width / 40);
-                currentPretexts[l].y = questionY + yPreText * l;
-                currentPretexts[l].textBaseline = "middle";
-                currentPretexts[l].lineHeight = 20;
-                $scope.stage.addChild(currentPretexts[l]);
+                $scope.currentPretexts[ke] = new createjs.Text(text, "13px Arial", "black");
+                $scope.currentPretexts[ke].x = 10;
+                $scope.currentPretexts[ke].y = 10 + ke * 20 + key * 60;
+                $scope.currentPretexts[ke].textBaseline = "middle";
+                $scope.currentPretexts[ke].lineHeight = 30;
+                $scope.questionsContainer.addChild($scope.currentPretexts[ke]);
               });
 
+              console.log("currentPretexts: ", $scope.currentPretexts);
+
+
+              /*Creating the row container*/
+              console.log("$scope.questionRowContainers[key]");
+              $scope.questionRowContainers[key] = new createjs.Container();
+              $scope.questionRowContainers[key].height = 27;
+              $scope.questionRowContainers[key].width = 159;
+              $scope.questionRowContainers[key].regY = $scope.questionRowContainers[key].height/2;
+              $scope.questionRowContainers[key].x = $scope.currentPretexts[pretexts.length === 1 ? 0 : 1].x + $scope.currentPretexts[pretexts.length === 1 ? 0 : 1].getBounds().width;
+              $scope.questionRowContainers[key].y = $scope.currentPretexts[pretexts.length === 1 ? 0 : 1].y;
+              $scope.questionRowContainers[key].startingPointX = $scope.questionRowContainers[key].x;
+              $scope.questionRowContainers[key].startingPointY = $scope.questionRowContainers[key].y;
+
+
+              /*Creating the question bitmap*/
+              var questionImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
+                src: $rootScope.rootDir + "data/assets/drag_and_drop_chat_answer_holder.png"
+              }));
+              questionImageLoader.load();
+
+              questionImageLoader.on("complete", function (r) {
+
+                /*Creating Bitmap Background for Canvas*/
+                var questionImage = new createjs.Bitmap($rootScope.rootDir + "data/assets/drag_and_drop_park_answer_holder.png");
+                questionImage.x = 0;
+                questionImage.y = 0;
+                $scope.questionRowContainers[key].addChild(questionImage);
+                $scope.questionsContainer.addChild($scope.questionRowContainers[key]);
+
+              });
+
+
+              //Text that will be filled when user drop an answer ?
               $scope.questionText[key] = new createjs.Text(userChoice, "13px Arial", "black");
-              $scope.questionText[key].scaleX = $scope.questionText[key].scaleY = scale;
-              $scope.questionText[key].x = currentPretexts[pretexts.length - 1].getTransformedBounds().x + currentPretexts[pretexts.length - 1].getTransformedBounds().width;
-              $scope.questionText[key].y = currentPretexts[pretexts.length - 1].getTransformedBounds().y + currentPretexts[pretexts.length - 1].getTransformedBounds().height / 1.3;
+              $scope.questionText[key].x = $scope.currentPretexts[pretexts.length === 1 ? 0 : 1].x + $scope.currentPretexts[pretexts.length === 1 ? 0 : 1].getBounds().width;
+              $scope.questionText[key].y = $scope.currentPretexts[pretexts.length === 1 ? 0 : 1].y;
 
               $scope.questionText[key].startingPointX = $scope.questionText[key].x;
               $scope.questionText[key].startingPointY = $scope.questionText[key].y;
@@ -308,13 +343,10 @@ angular.module("bookbuilder2")
 
               $scope.questionText[key].textBaseline = "middle";
               $scope.questionText[key].lineHeight = 20;
-              $scope.questionText[key].maxWidth = $scope.questionText[key].getTransformedBounds().width;
+              $scope.questionText[key].maxWidth = $scope.questionRowContainers[key].width;
 
 
-              $scope.underlinedText[key] = $scope.questionText[key].clone();
-
-              $scope.stage.addChild($scope.underlinedText[key]);
-              $scope.stage.addChild($scope.questionText[key]);
+              $scope.questionRowContainers[key].addChild($scope.questionText[key]);
 
 
               if (question.postext) {
@@ -327,43 +359,33 @@ angular.module("bookbuilder2")
                   if (!postexts[0]) {
                     postexts[0] = " ";
                   }
-                  currentPostexts[0] = new createjs.Text(postexts[0], "15px Arial", "black");
-                  currentPostexts[0].scaleX = currentPostexts[0].scaleY = scale;
-                  currentPostexts[0].x = $scope.questionText[key].getTransformedBounds().x + $scope.questionText[key].getTransformedBounds().width;
-                  currentPostexts[0].y = $scope.questionText[key].getTransformedBounds().y + $scope.questionText[key].getTransformedBounds().height / 1.3;
-                  currentPostexts[0].textBaseline = "alphabetic";
-                  $scope.stage.addChild(currentPostexts[0]);
+                  currentPostexts[0] = new createjs.Text(postexts[0], "13px Arial", "black");
+                  currentPostexts[0].x = $scope.questionRowContainers[key].x + $scope.questionRowContainers[key].width;
+                  currentPostexts[0].y = $scope.questionRowContainers[key].y;
+                  currentPostexts[0].textBaseline = "middle";
+                  $scope.questionsContainer.addChild(currentPostexts[0]);
 
-                  currentPostexts[1] = new createjs.Text(postexts[1], "15px Arial", "black");
-                  currentPostexts[1].scaleX = currentPostexts[1].scaleY = scale;
-                  currentPostexts[1].x = backgroundPosition.x + (backgroundPosition.width / 40);
-                  currentPostexts[1].y = $scope.questionText[key].getTransformedBounds().y + $scope.questionText[key].getTransformedBounds().height / 1.3 * 2.5;
-                  currentPostexts[1].textBaseline = "alphabetic";
-                  $scope.stage.addChild(currentPostexts[1]);
+                  currentPostexts[1] = new createjs.Text(postexts[1], "13px Arial", "black");
+                  currentPostexts[1].x = 10;
+                  currentPostexts[1].y = currentPostexts[0].y + 20;
+                  currentPostexts[1].textBaseline = "middle";
+                  $scope.questionsContainer.addChild(currentPostexts[1]);
+
                 } else {
 
-                  currentPostexts[0] = new createjs.Text(postexts[0], "15px Arial", "black");
-                  currentPostexts[0].scaleX = currentPostexts[0].scaleY = scale;
-                  currentPostexts[0].x = $scope.questionText[key].getTransformedBounds().x + $scope.questionText[key].getTransformedBounds().width;
-                  currentPostexts[0].y = $scope.questionText[key].getTransformedBounds().y + $scope.questionText[key].getTransformedBounds().height / 1.3;
-                  currentPostexts[0].textBaseline = "alphabetic";
-                  $scope.stage.addChild(currentPostexts[0]);
+                  currentPostexts[0] = new createjs.Text(postexts[0], "13px Arial", "black");
+                  currentPostexts[0].x = $scope.questionRowContainers[key].x + $scope.questionRowContainers[key].width;
+                  currentPostexts[0].y = $scope.questionRowContainers[key].y;
+                  currentPostexts[0].textBaseline = "middle";
+                  $scope.questionsContainer.addChild(currentPostexts[0]);
                 }
               }
 
-              questionY += questionHeight;
-              $scope.stage.update();
-
-
-              var hit = new createjs.Shape();
-              var bounds = $scope.questionText[key].getBounds();
-              hit.graphics.beginFill("yellow").drawRect(bounds.x, bounds.y, bounds.width * 1.5, bounds.height * 1.5);
-              $scope.questionText[key].hitArea = hit;
-
-
-              $scope.questionText[key].on("mousedown", function (evt) {
+              /*EVENT HANDLING*/
+              $scope.questionRowContainers[key].on("mousedown", function (evt) {
 
                 if ($scope.activityData.completed) {
+                  console.log("On mouse down event ---> $scope.activityData.completed is true so the function aborts...");
                   return;
                 }
 
@@ -380,16 +402,19 @@ angular.module("bookbuilder2")
                   'x': global.x,
                   'y': global.y
                 };
+
+                console.log("this.offset: "+this.offset+" this.global: ",this.global);
+
               });
 
               /*DRAG AND DROP EVENT*/
-              $scope.questionText[key].on("pressmove", function (evt) {
+              $scope.questionRowContainers[key].on("pressmove", function (evt) {
 
                 if ($scope.activityData.completed) {
                   return;
                 }
 
-                if ($scope.questionText[key].text === userChoice) {
+                if ($scope.questionRowContainers[key].text === userChoice) {
                   return;
                 }
 
@@ -400,8 +425,8 @@ angular.module("bookbuilder2")
               });
 
 
-              $scope.questionText[key].on("pressup", function (evt) {
-                console.log("up");
+              $scope.questionRowContainers[key].on("pressup", function (evt) {
+                console.log("Press up event!");
 
                 if ($scope.activityData.completed) {
                   return;
@@ -415,40 +440,40 @@ angular.module("bookbuilder2")
 
                 if (collisionDetectedQuestion !== -1) {
 
-                  $scope.questionText[key].x = $scope.questionText[key].startingPointX;
-                  $scope.questionText[key].y = $scope.questionText[key].startingPointY;
+                  $scope.questionRowContainers[key].x = $scope.questionRowContainers[key].startingPointX;
+                  $scope.questionRowContainers[key].y = $scope.questionRowContainers[key].startingPointY;
 
                   placeAnswer(_.findIndex($scope.activityData.answers, {
-                    "text": $scope.questionText[key].text
+                    "text": $scope.questionRowContainers[key].text
                   }), collisionDetectedQuestion);
 
                   $scope.activityData.questions[key].userAnswer = "";
                   $scope.activityData.questions[key].userAnswerLabel = "";
-                  $scope.questionText[key].text = userChoice;
+                  $scope.questionRowContainers[key].text = userChoice;
                 } else {
                   $scope.answerText[_.findIndex($scope.activityData.answers, {
-                    "text": $scope.questionText[key].text
+                    "text": $scope.questionRowContainers[key].text
                   })].visible = true;
 
                   $scope.answerText[_.findIndex($scope.activityData.answers, {
-                    "text": $scope.questionText[key].text
+                    "text": $scope.questionRowContainers[key].text
                   })].x = $scope.answerText[_.findIndex($scope.activityData.answers, {
-                    "text": $scope.questionText[key].text
+                    "text": $scope.questionRowContainers[key].text
                   })].startingPointX;
 
                   $scope.answerText[_.findIndex($scope.activityData.answers, {
-                    "text": $scope.questionText[key].text
+                    "text": $scope.questionRowContainers[key].text
                   })].y = $scope.answerText[_.findIndex($scope.activityData.answers, {
-                    "text": $scope.questionText[key].text
+                    "text": $scope.questionRowContainers[key].text
                   })].startingPointY;
 
                   $scope.activityData.questions[key].userAnswer = "";
                   $scope.activityData.questions[key].userAnswerLabel = "";
-                  $scope.questionText[key].text = userChoice;
-                  $scope.questionText[key].x = $scope.questionText[key].startingPointX;
-                  $scope.questionText[key].y = $scope.questionText[key].startingPointY;
+                  $scope.questionRowContainers[key].text = userChoice;
+                  $scope.questionRowContainers[key].x = $scope.questionRowContainers[key].startingPointX;
+                  $scope.questionRowContainers[key].y = $scope.questionRowContainers[key].startingPointY;
                 }
-                
+
                 $scope.stage.update();
               });
 
@@ -461,7 +486,7 @@ angular.module("bookbuilder2")
 
           /******** ANSWERS ********/
 
-          $scope.answersContainers = {};
+          $scope.answerRowContainers = {};
           var answerWaterfallFunctions = [];
 
           //Populating container with answers
@@ -471,24 +496,23 @@ angular.module("bookbuilder2")
             answerWaterfallFunctions.push(function (waterfallCallback) {
 
               /*Creating the answer container*/
-              $scope.answersContainers[key] = new createjs.Container();
-              $scope.answersContainers[key].width = 180;
-              $scope.answersContainers[key].height = 30;
-              $scope.answersContainers[key].x = 0;
-              $scope.answersContainers[key].y = key * 50 + 20;
-              $scope.answersContainers[key].startingPointX = $scope.answersContainers[key].x;
-              $scope.answersContainers[key].startingPointY = $scope.answersContainers[key].y;
+              $scope.answerRowContainers[key] = new createjs.Container();
+              $scope.answerRowContainers[key].width = 180;
+              $scope.answerRowContainers[key].height = 30;
+              $scope.answerRowContainers[key].x = 0;
+              $scope.answerRowContainers[key].y = key * 50 + 20;
+              $scope.answerRowContainers[key].startingPointX = $scope.answerRowContainers[key].x;
+              $scope.answerRowContainers[key].startingPointY = $scope.answerRowContainers[key].y;
+              $scope.answerRowContainers[key].answerText = answer.text;
 
-
-              var hit = new createjs.Shape();
-              hit.graphics.beginFill("yellow").drawRect($scope.answersContainers[key].x, $scope.answersContainers[key].y, $scope.answersContainers[key].width, $scope.answersContainers[key].height);
-              $scope.answersContainers[key].hitArea = hit;
-
-              $scope.answersContainers[key].on("mousedown", function (evt) {
+              /*Mouse down event*/
+              $scope.answerRowContainers[key].on("mousedown", function (evt) {
 
                 if ($scope.activityData.completed) {
                   return;
                 }
+
+                userChoice = $scope.answerRowContainers[key].answerText;
 
                 if (window.cordova && window.cordova.platformId !== "browser") {
                   $scope.sounds["drag"].play();
@@ -503,10 +527,13 @@ angular.module("bookbuilder2")
                   'x': global.x,
                   'y': global.y
                 };
+
+                console.log("this.offset: "+this.offset+" this.global: ",this.global);
+
               });
 
               /*DRAG AND DROP EVENT*/
-              $scope.answersContainers[key].on("pressmove", function (evt) {
+              $scope.answerRowContainers[key].on("pressmove", function (evt) {
                 if ($scope.activityData.completed) {
                   return;
                 }
@@ -515,10 +542,14 @@ angular.module("bookbuilder2")
                 this.x = local.x;
                 this.y = local.y;
                 $scope.stage.update();
+
+                console.log("this.x: "+this.x+" this.y: ",this.y);
+
               });
 
-              $scope.answersContainers[key].on("pressup", function (evt) {
-                console.log("up");
+              /*Press up event*/
+              $scope.answerRowContainers[key].on("pressup", function (evt) {
+                console.log("Press up event while dropping the answer!");
 
                 if ($scope.activityData.completed) {
                   return;
@@ -530,6 +561,7 @@ angular.module("bookbuilder2")
 
                 if (collisionDetectedQuestion !== -1) {
 
+
                   placeAnswer(key, collisionDetectedQuestion);
 
                 } else {
@@ -537,16 +569,17 @@ angular.module("bookbuilder2")
                     .to({x: this.startingPointX, y: this.startingPointY}, 200, createjs.Ease.getPowIn(2));
                   $scope.stage.update()
                 }
-              });
-
-              $scope.answersContainer.addChild($scope.answersContainers[key]);
+              });//end of press up event
 
 
-              var singleAnswerContainerContainerGraphic = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.answersContainers[key].width, $scope.answersContainers[key].height);
+              $scope.answersContainer.addChild($scope.answerRowContainers[key]);
+
+
+              var singleAnswerContainerContainerGraphic = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.answerRowContainers[key].width, $scope.answerRowContainers[key].height);
               var singleAnswerContainerBackground = new createjs.Shape(singleAnswerContainerContainerGraphic);
               singleAnswerContainerBackground.alpha = 0.5;
 
-              $scope.answersContainers[key].addChild(singleAnswerContainerBackground);
+              $scope.answerRowContainers[key].addChild(singleAnswerContainerBackground);
 
               /*Creating the answer bitmap*/
               var answerImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
@@ -557,14 +590,14 @@ angular.module("bookbuilder2")
               answerImageLoader.on("complete", function (r) {
 
                 /*Creating Bitmap Background for Canvas*/
-                var answerImage = new createjs.Bitmap($rootScope.rootDir + "data/assets/drag_and_drop_chat_answer_holder.png");
-                answerImage.width = $scope.answersContainers[key].width;
-                answerImage.height = $scope.answersContainers[key].height;
+                var answerImage = new createjs.Bitmap($rootScope.rootDir + "data/assets/drag_and_drop_park_answer_holder.png");
+                answerImage.width = $scope.answerRowContainers[key].width;
+                answerImage.height = $scope.answerRowContainers[key].height;
                 answerImage.x = 0;
                 answerImage.y = 0;
-                answerImage.maxWidth = $scope.answersContainers[key].width;
+                answerImage.maxWidth = $scope.answerRowContainers[key].width;
 
-                $scope.answersContainers[key].addChild(answerImage);
+                $scope.answerRowContainers[key].addChild(answerImage);
 
                 /*Adding the answer text after image has loaded*/
                 var answerText = new createjs.Text(answer.text, "13px Arial", "black");
@@ -572,7 +605,7 @@ angular.module("bookbuilder2")
                 answerText.y = answerImage.height / 2;
                 answerText.textBaseline = "middle";
                 answerText.textAlign = "center";
-                $scope.answersContainers[key].addChild(answerText);
+                $scope.answerRowContainers[key].addChild(answerText);
 
                 waterfallCallback();
 
@@ -580,7 +613,6 @@ angular.module("bookbuilder2")
 
             });
           });
-
 
           async.waterfall(waterfallFunctions, function (callback) {
             console.log("Questions Inserted!");
@@ -722,7 +754,6 @@ angular.module("bookbuilder2")
 
 
           });
-
 
         };
         /************************************** Initializing Page **************************************/
@@ -870,7 +901,6 @@ angular.module("bookbuilder2")
           $scope.activityData.questions[questionKey].userAnswer = $scope.activityData.answers[answerKey].answer;
           $scope.questionText[questionKey].color = "black";
           $scope.questionText[questionKey].x = $scope.underlinedText[questionKey].getTransformedBounds().x + $scope.underlinedText[questionKey].getTransformedBounds().width / 2 - $scope.questionText[questionKey].getTransformedBounds().width / 2;
-          $scope.stage.update();
           window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
         }
 
@@ -907,8 +937,10 @@ angular.module("bookbuilder2")
 
         function collision(x, y) {
           for (var i = 0; i < $scope.activityData.questions.length; i++) {
-            var bounds = $scope.questionText[i].getTransformedBounds();
-            if (ionic.DomUtil.rectContains(x, y, bounds.x, bounds.y, bounds.x + bounds.width, bounds.y + bounds.height) && $scope.questionText[i].text === userChoice) {
+            /*var bounds = $scope.questionText[i].getTransformedBounds();*/
+            console.log("$scope.questionRowContainers[i]: ",$scope.questionRowContainers[i]);
+            /*if (ionic.DomUtil.rectContains(x, y, bounds.x, bounds.y, bounds.x + bounds.width, bounds.y + bounds.height) && $scope.questionText[i].text === userChoice) {*/
+            if (ionic.DomUtil.rectContains(x, y, $scope.questionRowContainers[i].x, $scope.questionRowContainers[i].y, $scope.questionRowContainers[i].x + $scope.questionRowContainers[i].width, $scope.questionRowContainers[i].y + $scope.questionRowContainers[i].height) && $scope.questionText[i].text === userChoice) {
               return i;
             }
           }
