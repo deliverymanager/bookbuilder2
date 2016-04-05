@@ -42,25 +42,13 @@ angular.module("bookbuilder2")
       };
       createjs.Ticker.addEventListener("tick", handleTick);
 
-      //EVENTS THAT SHOULD BE USED TO CONTROL THE APP
-      $scope.$on('$destroy', function () {
-        console.log('destroy');
-        createjs.Ticker.framerate = 0;
-        $scope.sound.stop();
-        $scope.sound.release();
-        $interval.cancel($scope.playSoundIntervalPromise);
-      });
-
       $ionicPlatform.on('pause', function () {
         console.log('pause');
         createjs.Ticker.framerate = 0;
+        ionic.Platform.exitApp();
       });
-
       $ionicPlatform.on('resume', function () {
-        console.log('resume');
-        $timeout(function () {
-          createjs.Ticker.framerate = 20;
-        }, 2000);
+        createjs.Ticker.framerate = 20;
       });
 
       /*Image Loader*/
@@ -102,12 +90,7 @@ angular.module("bookbuilder2")
         background.x = $scope.stage.canvas.width / 2;
         background.y = $scope.stage.canvas.height / 2;
         $scope.stage.addChild(background);
-        $scope.stage.update();
         var backgroundPosition = background.getTransformedBounds();
-        console.log("backgroundPosition", backgroundPosition);
-
-
-        /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
 
         $http.get($rootScope.rootDir + "data/assets/reading_play_button_sprite.json")
           .success(function (response) {
@@ -146,14 +129,13 @@ angular.module("bookbuilder2")
                   $scope.sound.play();
                 }
               }
+              $scope.stage.update();
             });
 
             $scope.playButton.scaleX = $scope.playButton.scaleY = scale;
             $scope.playButton.x = backgroundPosition.x + (backgroundPosition.width / 1.13);
             $scope.playButton.y = backgroundPosition.y + (backgroundPosition.height / 1.09);
-
             $scope.stage.addChild($scope.playButton);
-            $scope.stage.update();
           })
           .error(function (error) {
             console.error("Error on getting json for results button...", error);
@@ -178,6 +160,10 @@ angular.module("bookbuilder2")
             menuButton.addEventListener("pressup", function (event) {
               console.log("pressup event!");
               menuButton.gotoAndPlay("normal");
+              $scope.stage.update();
+              $scope.sound.stop();
+              $scope.sound.release();
+              $interval.cancel($scope.playSoundIntervalPromise);
               $ionicHistory.nextViewOptions({
                 historyRoot: true,
                 disableBack: true
@@ -188,9 +174,7 @@ angular.module("bookbuilder2")
             menuButton.scaleX = menuButton.scaleY = scale;
             menuButton.x = 0;
             menuButton.y = -menuButton.getTransformedBounds().height / 5;
-
             $scope.stage.addChild(menuButton);
-            $scope.stage.update();
           })
           .error(function (error) {
             console.error("Error on getting json for results button...", error);
@@ -206,9 +190,7 @@ angular.module("bookbuilder2")
           title.x = backgroundPosition.x + (backgroundPosition.width / 10);
           title.y = backgroundPosition.y + (backgroundPosition.height / 17);
           title.textBaseline = "alphabetic";
-
           $scope.stage.addChild(title);
-          $scope.stage.update();
 
           $scope.pageImageLoader = {};
           $scope.pages = {};
@@ -244,8 +226,6 @@ angular.module("bookbuilder2")
               console.log(entry);
               $scope.sound = new Media(entry.toInternalURL(), function () {
                 console.log("Sound success");
-                $scope.playButton.gotoAndPlay("playNormal");
-                completedActivity();
               }, function (err) {
                 console.log("Sound error", err);
               }, function (status) {
@@ -255,8 +235,6 @@ angular.module("bookbuilder2")
           } else {
             $scope.sound = new Media(assetPath + "reading.mp3", function () {
               console.log("Sound success");
-              $scope.playButton.gotoAndPlay("playNormal");
-              completedActivity();
             }, function (err) {
               console.log("Sound error", err);
             }, function (status) {
@@ -317,6 +295,12 @@ angular.module("bookbuilder2")
           var cue = _.find($scope.activityData.CuePoint, function (cue) {
             return parseInt(cue.Time) < currentTime * 1000 && $scope.currentPage + 1 === parseInt(cue.Name);
           });
+
+          if ($scope.currentPage === $scope.activityData.CuePoint.length) {
+            $scope.playButton.gotoAndPlay("playNormal");
+            $scope.stage.update();
+            completedActivity();
+          }
 
           if (!cue || $scope.currentPage === parseInt(cue.Name)) {
             return;

@@ -55,35 +55,19 @@ angular.module("bookbuilder2")
       };
       createjs.Ticker.addEventListener("tick", handleTick);
 
-      //EVENTS THAT SHOULD BE USED TO CONTROL THE APP
-      $scope.$on('$destroy', function () {
-        console.log('destroy');
-        createjs.Ticker.framerate = 0;
-
-        _.each($scope.sounds, function (sound, key, list) {
-          $scope.sounds[key].stop();
-          $scope.sounds[key].release();
-        });
-
-      });
-
       $ionicPlatform.on('pause', function () {
         console.log('pause');
         createjs.Ticker.framerate = 0;
+        ionic.Platform.exitApp();
       });
-
       $ionicPlatform.on('resume', function () {
-        console.log('resume');
-        $timeout(function () {
-          createjs.Ticker.framerate = 20;
-        }, 2000);
+        createjs.Ticker.framerate = 20;
       });
 
       $scope.sounds = {};
       if (window.cordova && window.cordova.platformId !== "browser") {
         _.each(["drag", "drop", "check"], function (sound, key, list) {
           if (ionic.Platform.isIOS() && window.cordova) {
-            console.log("Else iOS");
             resolveLocalFileSystemURL($rootScope.rootDir + "data/assets/" + sound + ".mp3", function (entry) {
               $scope.sounds[sound] = new Media(entry.toInternalURL(), function () {
                 console.log("Sound success");
@@ -118,12 +102,7 @@ angular.module("bookbuilder2")
       /*IMAGE LOADER COMPLETED*/
       imageLoader.on("complete", function (r) {
 
-        console.log("Image Loaded...");
-
-        /*Creating Bitmap Background for Canvas*/
         var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/background_image_for_draganddrop_blue.png");
-
-        /**** CALCULATING SCALING ****/
         var scaleY = $scope.stage.canvas.height / background.image.height;
         scaleY = scaleY.toFixed(2);
         var scaleX = $scope.stage.canvas.width / background.image.width;
@@ -134,9 +113,6 @@ angular.module("bookbuilder2")
         } else {
           scale = scaleX;
         }
-        console.log("GENERAL SCALING FACTOR", scale);
-        //IN ORDER TO FIND THE CORRECT COORDINATES FIRST WE NEED TO ENTER THE EXACT SAME DIMENSIONS IN THE EMULATOR OF THE BACKGROUND IMAGE
-
 
         background.scaleX = scale;
         background.scaleY = scale;
@@ -145,11 +121,7 @@ angular.module("bookbuilder2")
         background.x = $scope.stage.canvas.width / 2;
         background.y = $scope.stage.canvas.height / 2;
         $scope.stage.addChild(background);
-        $scope.stage.update();
         var backgroundPosition = background.getTransformedBounds();
-        console.log(backgroundPosition);
-
-        /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
 
         $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
           .success(function (response) {
@@ -161,14 +133,17 @@ angular.module("bookbuilder2")
             var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
 
             menuButton.addEventListener("mousedown", function (event) {
-              console.log("mousedown event on a button !");
               menuButton.gotoAndPlay("onSelection");
               $scope.stage.update();
             });
 
             menuButton.addEventListener("pressup", function (event) {
-              console.log("pressup event!");
               menuButton.gotoAndPlay("normal");
+              $scope.stage.update();
+              _.each($scope.sounds, function (sound, key, list) {
+                $scope.sounds[key].stop();
+                $scope.sounds[key].release();
+              });
               $ionicHistory.nextViewOptions({
                 historyRoot: true,
                 disableBack: true
@@ -179,9 +154,7 @@ angular.module("bookbuilder2")
             menuButton.scaleX = menuButton.scaleY = scale;
             menuButton.x = 0;
             menuButton.y = -menuButton.getTransformedBounds().height / 5;
-
             $scope.stage.addChild(menuButton);
-            $scope.stage.update();
           })
           .error(function (error) {
             console.error("Error on getting json for results button...", error);
@@ -190,20 +163,12 @@ angular.module("bookbuilder2")
 
         var init = function () {
 
-          /* ---------------------------------- Description -----------------------------------------*/
-
-          console.log($scope.activityData.description);
           var descriptionText = new createjs.Text($scope.activityData.description, "17px Arial", "white");
-
-          /*background.scaleX = background.scaleY = scale;*/
           descriptionText.scaleX = descriptionText.scaleY = scale;
           descriptionText.x = backgroundPosition.x + (backgroundPosition.width / 1.3);
           descriptionText.y = backgroundPosition.y + (backgroundPosition.height / 9.6);
           descriptionText.textBaseline = "alphabetic";
-
           $scope.stage.addChild(descriptionText);
-          $scope.stage.update();
-
 
           $scope.scoreText = new createjs.Text("Score: " + "0" + " / " + $scope.activityData.questions.length, "27px Arial", "white");
           $scope.scoreText.scaleX = $scope.scoreText.scaleY = scale;
@@ -211,10 +176,7 @@ angular.module("bookbuilder2")
           $scope.scoreText.y = backgroundPosition.y + (backgroundPosition.height / 17);
           $scope.scoreText.textBaseline = "alphabetic";
           $scope.stage.addChild($scope.scoreText);
-          $scope.stage.update();
 
-
-          /* ------------------------------------------ QUESTIONS & ANSWERS ---------------------------------------------- */
           $scope.questionText = {};
           $scope.underlinedText = {};
           $scope.answerText = {};
@@ -224,7 +186,6 @@ angular.module("bookbuilder2")
 
           _.each($scope.activityData.questions, function (question, key, list) {
 
-            //Filling the waterfall
             waterfallFunctions.push(function (waterfallCallback) {
 
               var pretexts = question.pretext.split("\n");
@@ -298,8 +259,6 @@ angular.module("bookbuilder2")
               }
 
               questionY += questionHeight;
-              $scope.stage.update();
-
 
               var hit = new createjs.Shape();
               var bounds = $scope.questionText[key].getBounds();
@@ -411,9 +370,6 @@ angular.module("bookbuilder2")
           var answerY = backgroundPosition.y + (backgroundPosition.height / 5);
           var answerHeight = 530 * scale / $scope.activityData.answers.length;
 
-          console.log("answerHeight", answerHeight);
-
-          //Populating container with answers
           _.each($scope.activityData.answers, function (answer, key, list) {
             //Filling the waterfall
             answerWaterfallFunctions.push(function (waterfallCallback) {
@@ -434,9 +390,7 @@ angular.module("bookbuilder2")
               var bounds = $scope.answerText[key].getBounds();
               hit.graphics.beginFill("yellow").drawRect(bounds.x, bounds.y, bounds.width * 1.5, bounds.height * 1.5);
               $scope.answerText[key].hitArea = hit;
-
               $scope.stage.addChild($scope.answerText[key]);
-              $scope.stage.update();
 
               answerY += answerHeight;
 
@@ -496,7 +450,6 @@ angular.module("bookbuilder2")
                 }
               });
 
-              $scope.stage.update();
               waterfallCallback();
 
             });
@@ -515,9 +468,8 @@ angular.module("bookbuilder2")
             lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 27);
             lessonTitle.y = backgroundPosition.y + (backgroundPosition.height / 1.04);
             lessonTitle.textBaseline = "alphabetic";
-
             $scope.stage.addChild(lessonTitle);
-            $scope.stage.update();
+
 
             /********************************** BUTTONS ***********************************/
 
@@ -539,7 +491,7 @@ angular.module("bookbuilder2")
                   returnButton.addEventListener("pressup", function (event) {
                     console.log("pressup event!");
                     returnButton.gotoAndPlay("normal");
-
+                    $scope.stage.update();
                     //action
                     restart();
 
@@ -548,7 +500,6 @@ angular.module("bookbuilder2")
                   returnButton.x = backgroundPosition.x + (backgroundPosition.width / 3.1);
                   returnButton.y = backgroundPosition.y + (backgroundPosition.height / 1.055);
                   $scope.stage.addChild(returnButton);
-                  $scope.stage.update();
                   callback();
                 })
                 .error(function (error) {
@@ -585,6 +536,7 @@ angular.module("bookbuilder2")
                       if (window.cordova && window.cordova.platformId !== "browser") {
                         $scope.sounds["check"].play();
                       }
+                      $scope.stage.update();
                       check();
                     }
                   });
@@ -592,7 +544,6 @@ angular.module("bookbuilder2")
                   $scope.checkButton.x = backgroundPosition.x + (backgroundPosition.width / 1.5);
                   $scope.checkButton.y = backgroundPosition.y + (backgroundPosition.height / 1.055);
                   $scope.stage.addChild($scope.checkButton);
-                  $scope.stage.update();
                   callback();
                 })
                 .error(function (error) {
@@ -622,6 +573,7 @@ angular.module("bookbuilder2")
 
                     if ($scope.activityData.completed) {
                       $scope.nextButton.gotoAndPlay("normal");
+                      $scope.stage.update();
                       next();
                     }
 
@@ -630,7 +582,6 @@ angular.module("bookbuilder2")
                   $scope.nextButton.x = backgroundPosition.x + (backgroundPosition.width / 1.18);
                   $scope.nextButton.y = backgroundPosition.y + (backgroundPosition.height / 1.085);
                   $scope.stage.addChild($scope.nextButton);
-                  $scope.stage.update();
                   callback();
                 })
                 .error(function (error) {
@@ -710,9 +661,7 @@ angular.module("bookbuilder2")
         title.x = backgroundPosition.x + (backgroundPosition.width / 10);
         title.y = backgroundPosition.y + (backgroundPosition.height / 15);
         title.textBaseline = "alphabetic";
-
         $scope.stage.addChild(title);
-        $scope.stage.update();
 
 
         /********************************** FUNCTIONS ***********************************/
@@ -791,9 +740,7 @@ angular.module("bookbuilder2")
           });
 
           window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
-
           $scope.scoreText.text = "Score: " + rightAnswers + " / " + $scope.activityData.questions.length;
-          $scope.stage.update();
         }
 
         function placeAnswer(answerKey, questionKey) {

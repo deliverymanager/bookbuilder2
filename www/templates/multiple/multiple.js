@@ -56,28 +56,13 @@ angular.module("bookbuilder2")
       };
       createjs.Ticker.addEventListener("tick", handleTick);
 
-      //EVENTS THAT SHOULD BE USED TO CONTROL THE APP
-      $scope.$on('$destroy', function () {
-        console.log('destroy');
-        createjs.Ticker.framerate = 0;
-
-        _.each($scope.sounds, function (sound, key, list) {
-          $scope.sounds[key].stop();
-          $scope.sounds[key].release();
-        });
-
-      });
-
       $ionicPlatform.on('pause', function () {
         console.log('pause');
         createjs.Ticker.framerate = 0;
+        ionic.Platform.exitApp();
       });
-
       $ionicPlatform.on('resume', function () {
-        console.log('resume');
-        $timeout(function () {
-          createjs.Ticker.framerate = 20;
-        }, 2000);
+        createjs.Ticker.framerate = 20;
       });
 
       $scope.sounds = {};
@@ -142,12 +127,8 @@ angular.module("bookbuilder2")
         background.x = $scope.stage.canvas.width / 2;
         background.y = $scope.stage.canvas.height / 2;
         $scope.stage.addChild(background);
-        $scope.stage.update();
         var backgroundPosition = background.getTransformedBounds();
-        //When we give width and height to containers, we need to give the not scaled relative width and height of the background.image.width / height
-        //because we need to place a scale factor to the container too!!!
 
-        /*Page Initializations*/
         $scope.activeQuestionIndex = 0;
         var noChoice = " _________________ ";
 
@@ -204,15 +185,12 @@ angular.module("bookbuilder2")
             }
           }, function (callback) {
 
-            console.log("Waterfall loading scores");
-
             $scope.scoreText = new createjs.Text("Score: " + "0" + " / " + $scope.activityData.questions.length, "27px Arial", "white");
             $scope.scoreText.scaleX = $scope.scoreText.scaleY = scale;
             $scope.scoreText.x = backgroundPosition.x + (backgroundPosition.width / 1.3);
             $scope.scoreText.y = backgroundPosition.y + (backgroundPosition.height / 17);
             $scope.scoreText.textBaseline = "alphabetic";
             $scope.stage.addChild($scope.scoreText);
-            $scope.stage.update();
 
             /*RESTART BUTTON*/
             $http.get($rootScope.rootDir + "data/assets/lesson_restart_button_sprite.json")
@@ -229,14 +207,13 @@ angular.module("bookbuilder2")
                 returnButton.addEventListener("pressup", function (event) {
                   console.log("Pressup event on Restart button!");
                   returnButton.gotoAndPlay("normal");
+                  $scope.stage.update();
                   restart();
-
                 });
                 returnButton.scaleX = returnButton.scaleY = scale;
                 returnButton.x = backgroundPosition.x + (backgroundPosition.width / 3.1);
                 returnButton.y = backgroundPosition.y + (backgroundPosition.height / 1.063);
                 $scope.stage.addChild(returnButton);
-                $scope.stage.update();
                 callback();
               })
               .error(function (error) {
@@ -262,20 +239,16 @@ angular.module("bookbuilder2")
                   $scope.stage.update();
                 });
                 $scope.nextButton.addEventListener("pressup", function (event) {
-                  console.log("pressup event!");
-
-
                   if ($scope.activityData.completed) {
                     $scope.nextButton.gotoAndPlay("normal");
+                    $scope.stage.update();
                     next();
                   }
-
                 });
                 $scope.nextButton.scaleX = $scope.nextButton.scaleY = scale;
                 $scope.nextButton.x = backgroundPosition.x + (backgroundPosition.width / 1.18);
                 $scope.nextButton.y = backgroundPosition.y + (backgroundPosition.height / 1.10);
                 $scope.stage.addChild($scope.nextButton);
-                $scope.stage.update();
                 callback();
               })
               .error(function (error) {
@@ -309,7 +282,7 @@ angular.module("bookbuilder2")
 
                   if (!$scope.activityData.completed) {
                     $scope.checkButton.gotoAndPlay("normal");
-
+                    $scope.stage.update();
                     if (window.cordova && window.cordova.platformId !== "browser") {
                       $scope.sounds["check"].play();
                     }
@@ -320,7 +293,6 @@ angular.module("bookbuilder2")
                 $scope.checkButton.x = backgroundPosition.x + (backgroundPosition.width / 1.5);
                 $scope.checkButton.y = backgroundPosition.y + (backgroundPosition.height / 1.063);
                 $scope.stage.addChild($scope.checkButton);
-                $scope.stage.update();
                 callback();
               })
               .error(function (error) {
@@ -330,8 +302,6 @@ angular.module("bookbuilder2")
               });
           }, function (callback) {
 
-            console.log("Waterfall loading head menu button");
-
             $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
               .success(function (response) {
 
@@ -340,14 +310,17 @@ angular.module("bookbuilder2")
                 var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
 
                 menuButton.addEventListener("mousedown", function (event) {
-                  console.log("mousedown event on a button !");
                   menuButton.gotoAndPlay("onSelection");
                   $scope.stage.update();
                 });
 
                 menuButton.addEventListener("pressup", function (event) {
-                  console.log("pressup event!");
                   menuButton.gotoAndPlay("normal");
+                  $scope.stage.update();
+                  _.each($scope.sounds, function (sound, key, list) {
+                    $scope.sounds[key].stop();
+                    $scope.sounds[key].release();
+                  });
                   $ionicHistory.nextViewOptions({
                     historyRoot: true,
                     disableBack: true
@@ -360,7 +333,6 @@ angular.module("bookbuilder2")
                 menuButton.y = -menuButton.getTransformedBounds().height / 5;
 
                 $scope.stage.addChild(menuButton);
-                $scope.stage.update();
                 callback();
               })
               .error(function (error) {
@@ -378,7 +350,6 @@ angular.module("bookbuilder2")
             title.y = backgroundPosition.y + (backgroundPosition.height / 15);
             title.textBaseline = "alphabetic";
             $scope.stage.addChild(title);
-            $scope.stage.update();
             callback();
 
           }, function (callback) {
@@ -392,7 +363,6 @@ angular.module("bookbuilder2")
             lessonTitle.textBaseline = "alphabetic";
             lessonTitle.textAlign = "center";
             $scope.stage.addChild(lessonTitle);
-            $scope.stage.update();
             callback();
 
           }, function (callback) {
@@ -405,14 +375,10 @@ angular.module("bookbuilder2")
             descriptionText.y = backgroundPosition.y + (backgroundPosition.height / 8.7);
             descriptionText.textBaseline = "alphabetic";
             $scope.stage.addChild(descriptionText);
-            $scope.stage.update();
-
             callback();
 
 
           }, function (callback) {
-
-            console.log("Waterfall loading question containers");
 
             $scope.questionsContainer = new createjs.Container();
             $scope.questionsContainer.width = background.image.width / 1.1;
@@ -422,22 +388,11 @@ angular.module("bookbuilder2")
             $scope.questionsContainer.y = -1500;
             $scope.stage.addChild($scope.questionsContainer);
 
-
-            /*var graphics = new createjs.Graphics().beginFill("red").drawRect(0, 0, $scope.questionsContainer.width, $scope.questionsContainer.height);
-             var shape = new createjs.Shape(graphics);
-             shape.alpha = 0.2;
-             $scope.questionsContainer.addChild(shape);
-             $scope.stage.update();*/
-
             var questionBackground = new createjs.Bitmap($rootScope.rootDir + "data/assets/multiple_choice_text_bubble.png");
-            questionBackground.regY = questionBackground.image.height / 2;
-            questionBackground.regX = questionBackground.image.width / 2;
-            questionBackground.x = $scope.questionsContainer.width / 2;
-            questionBackground.y = $scope.questionsContainer.height / 2;
-
+            //questionBackground.regY = questionBackground.image.height / 2;
+            //questionBackground.regX = questionBackground.image.width / 2;
+            questionBackground.x = 40;
             $scope.questionsContainer.addChild(questionBackground);
-            $scope.stage.update();
-
 
             $scope.questionNumber = new createjs.Text("1", "33px Arial", "#69B8C7");
             $scope.questionNumber.regX = $scope.questionNumber.getBounds().width / 2;
@@ -445,9 +400,6 @@ angular.module("bookbuilder2")
             $scope.questionNumber.x = $scope.questionsContainer.width / 12.5;
             $scope.questionNumber.y = $scope.questionsContainer.height / 7.5;
             $scope.questionsContainer.addChild($scope.questionNumber);
-
-            console.log("backgroundPosition", backgroundPosition);
-
 
             $scope.questionsTextContainer = new createjs.Container();
             $scope.questionsTextContainer.x = $scope.questionsContainer.width / 7;
@@ -457,16 +409,10 @@ angular.module("bookbuilder2")
             $scope.questionsTextContainer.width = $scope.questionsContainer.width / 1.4;
             $scope.questionsTextContainer.height = $scope.questionsContainer.height / 1.5;
             $scope.questionsContainer.addChild($scope.questionsTextContainer);
-            /*var graphicsT = new createjs.Graphics().beginFill("blue").drawRect(0, 0, $scope.questionsTextContainer.width, $scope.questionsTextContainer.height);
-             var shapeT = new createjs.Shape(graphicsT);
-             shapeT.alpha = 0.2;
-             $scope.questionsTextContainer.addChild(shapeT);
-             $scope.stage.update();*/
+
             callback();
 
           }, function (callback) {
-
-            console.log("Waterfall loading answer containers");
 
             $scope.answersContainer = new createjs.Container();
             $scope.answersContainer.width = background.image.width / 1.1;
@@ -475,14 +421,6 @@ angular.module("bookbuilder2")
             $scope.answersContainer.x = backgroundPosition.x + (backgroundPosition.width / 22);
             $scope.answersContainer.y = +1500;
             $scope.stage.addChild($scope.answersContainer);
-
-            /*var graphicsCon = new createjs.Graphics().beginFill("blue").drawRect(0, 0, $scope.answersContainer.width, $scope.answersContainer.height);
-             var shapeCon = new createjs.Shape(graphicsCon);
-             shapeCon.alpha = 0.2;
-             $scope.answersContainer.addChild(shapeCon);
-             $scope.stage.update();*/
-
-
             $scope.buttonContainers = {};
 
             $scope.buttonContainers["aChoice"] = new createjs.Container();
@@ -493,13 +431,6 @@ angular.module("bookbuilder2")
             $scope.buttonContainers["aChoice"].visible = false;
             $scope.answersContainer.addChild($scope.buttonContainers["aChoice"]);
 
-            /*var graphicsA = new createjs.Graphics().beginFill("red").drawRect(0, 0, $scope.buttonContainers["aChoice"].width, $scope.buttonContainers["aChoice"].height);
-             var shapeA = new createjs.Shape(graphicsA);
-             shapeA.alpha = 0.2;
-             $scope.buttonContainers["aChoice"].addChild(shapeA);
-             $scope.stage.update();*/
-
-
             $scope.buttonContainers["bChoice"] = new createjs.Container();
             $scope.buttonContainers["bChoice"].width = $scope.answersContainer.width / 2;
             $scope.buttonContainers["bChoice"].height = $scope.answersContainer.height / 2;
@@ -507,13 +438,6 @@ angular.module("bookbuilder2")
             $scope.buttonContainers["bChoice"].y = 0;
             $scope.buttonContainers["bChoice"].visible = false;
             $scope.answersContainer.addChild($scope.buttonContainers["bChoice"]);
-
-            /*var graphicsB = new createjs.Graphics().beginFill("yellow").drawRect(0, 0, $scope.buttonContainers["bChoice"].width, $scope.buttonContainers["bChoice"].height);
-             var shapeB = new createjs.Shape(graphicsB);
-             shapeB.alpha = 0.2;
-             $scope.buttonContainers["bChoice"].addChild(shapeB);
-             $scope.stage.update();*/
-
 
             $scope.buttonContainers["cChoice"] = new createjs.Container();
             $scope.buttonContainers["cChoice"].width = $scope.answersContainer.width / 2;
@@ -523,13 +447,6 @@ angular.module("bookbuilder2")
             $scope.buttonContainers["cChoice"].visible = false;
             $scope.answersContainer.addChild($scope.buttonContainers["cChoice"]);
 
-            /*var graphicsC = new createjs.Graphics().beginFill("yellow").drawRect(0, 0, $scope.buttonContainers["cChoice"].width, $scope.buttonContainers["cChoice"].height);
-             var shapeC = new createjs.Shape(graphicsC);
-             shapeC.alpha = 0.2;
-             $scope.buttonContainers["cChoice"].addChild(shapeC);
-             $scope.stage.update();*/
-
-
             $scope.buttonContainers["dChoice"] = new createjs.Container();
             $scope.buttonContainers["dChoice"].width = $scope.answersContainer.width / 2;
             $scope.buttonContainers["dChoice"].height = $scope.answersContainer.height / 2;
@@ -537,13 +454,6 @@ angular.module("bookbuilder2")
             $scope.buttonContainers["dChoice"].y = $scope.buttonContainers["dChoice"].height;
             $scope.buttonContainers["dChoice"].visible = false;
             $scope.answersContainer.addChild($scope.buttonContainers["dChoice"]);
-
-            /*var graphicsD = new createjs.Graphics().beginFill("red").drawRect(0, 0, $scope.buttonContainers["dChoice"].width, $scope.buttonContainers["dChoice"].height);
-             var shapeD = new createjs.Shape(graphicsD);
-             shapeD.alpha = 0.2;
-             $scope.buttonContainers["dChoice"].addChild(shapeD);
-             $scope.stage.update();*/
-
 
             $scope.buttonContainers["onlyCChoice"] = new createjs.Container();
             $scope.buttonContainers["onlyCChoice"].width = $scope.answersContainer.width;
@@ -553,20 +463,12 @@ angular.module("bookbuilder2")
             $scope.buttonContainers["onlyCChoice"].visible = false;
             $scope.answersContainer.addChild($scope.buttonContainers["onlyCChoice"]);
 
-            /*var graphicsOnlyC = new createjs.Graphics().beginFill("black").drawRect(0, 0, $scope.buttonContainers["onlyCChoice"].width, $scope.buttonContainers["onlyCChoice"].height);
-             var shapeOnlyC = new createjs.Shape(graphicsOnlyC);
-             shapeOnlyC.alpha = 0.3;
-             $scope.buttonContainers["onlyCChoice"].addChild(shapeOnlyC);
-             $scope.stage.update();*/
-
-
             $http.get($rootScope.rootDir + "data/assets/multiple_choice_choice_button_sprite.json")
               .success(function (response) {
 
                 response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
 
                 var answerButtonSpriteSheet = new createjs.SpriteSheet(response);
-
 
                 $scope.buttonChoices = {};
                 $scope.buttonChoicesText = {};
@@ -747,9 +649,6 @@ angular.module("bookbuilder2")
 
           }, function (callback) {
 
-            console.log("Waterfall navugator buttons");
-
-
             $scope.navigatorContainer = new createjs.Container();
             $scope.navigatorContainer.width = background.image.width / 1.1;
             $scope.navigatorContainer.height = background.image.height / 8;
@@ -758,22 +657,13 @@ angular.module("bookbuilder2")
             $scope.navigatorContainer.y = backgroundPosition.y + (backgroundPosition.height / 1.28);
             $scope.stage.addChild($scope.navigatorContainer);
 
-
-            /* var graphics = new createjs.Graphics().beginFill("red").drawRect(0, 0, $scope.navigatorContainer.width, $scope.navigatorContainer.height);
-             var shape = new createjs.Shape(graphics);
-             shape.alpha = 0.2;
-             $scope.navigatorContainer.addChild(shape);
-             $scope.stage.update();
-             */
-
             var yellowBar = new createjs.Bitmap($rootScope.rootDir + "data/assets/lesson_yellow_line.png");
             yellowBar.scaleX = 1.4;
-            yellowBar.regX = yellowBar.image.width / 2;
-            yellowBar.regY = yellowBar.image.height / 2;
-            yellowBar.x = $scope.navigatorContainer.width / 2;
-            yellowBar.y = $scope.navigatorContainer.height / 2;
+            //yellowBar.regX = yellowBar.image.width / 2;
+            //yellowBar.regY = yellowBar.image.height / 2;
+            yellowBar.x = 20;
+            yellowBar.y = 30;
             $scope.navigatorContainer.addChild(yellowBar);
-            $scope.stage.update();
 
             /*Yellow bar button Sprite Button*/
             $http.get($rootScope.rootDir + "data/assets/yellow_line_big_bubble.json")
@@ -795,14 +685,6 @@ angular.module("bookbuilder2")
                   $scope.yellowBarContainers[key].x = $scope.yellowBarContainers[key].width + $scope.yellowBarContainers[key].width * key;
                   $scope.yellowBarContainers[key].y = $scope.yellowBarContainers[key].height / 2;
                   $scope.navigatorContainer.addChild($scope.yellowBarContainers[key]);
-                  $scope.stage.update();
-
-                  /*var graphics = new createjs.Graphics().beginFill("black").drawRect(0, 0, $scope.yellowBarContainers[key].width, $scope.yellowBarContainers[key].height);
-                   var shape = new createjs.Shape(graphics);
-                   shape.alpha = 0.2;
-                   $scope.yellowBarContainers[key].addChild(shape);
-                   $scope.stage.update();*/
-
 
                   $scope.yellowBarContainers[key].yellowBarButtons = {};
                   $scope.yellowBarContainers[key].yellowBarButtons[key] = new createjs.Sprite(yellowBarButtonSpriteSheet, "white");
@@ -846,16 +728,12 @@ angular.module("bookbuilder2")
                   });
 
                   $scope.yellowBarContainers[key].addChild($scope.yellowBarContainers[key].yellowBarButtons[key]);
-                  $scope.stage.update();
-
                   var yellowBarButtonIndex = new createjs.Text(key + 1, "15px Arial", "black");
                   yellowBarButtonIndex.regY = yellowBarButtonIndex.getBounds().height / 2;
                   yellowBarButtonIndex.x = $scope.yellowBarContainers[key].width / 2.15;
                   yellowBarButtonIndex.y = $scope.yellowBarContainers[key].height / 6;
                   yellowBarButtonIndex.textAlign = "center";
-
                   $scope.yellowBarContainers[key].addChild(yellowBarButtonIndex);
-                  $scope.stage.update();
 
                 });
                 callback();
@@ -925,8 +803,7 @@ angular.module("bookbuilder2")
               }
             }
           });
-          $scope.stage.update();
-          loadQuestion(0)
+          loadQuestion(0);
           check();
         }
 
@@ -1142,8 +1019,6 @@ angular.module("bookbuilder2")
               }
             }
           }
-
-          $scope.stage.update();
 
           createjs.Tween.get($scope.answersContainer, {loop: false})
             .to({
