@@ -62,7 +62,8 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
         url: "/lesson",
         templateUrl: "templates/lesson/lesson.html",
         controller: "LessonController"
-      }).state('lessonNew', {
+      })
+      .state('lessonNew', {
         cache: false,
         url: "/lessonNew",
         templateUrl: "templates/lessonNew/lessonNew.html",
@@ -73,7 +74,8 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
         url: "/vocabulary",
         templateUrl: "templates/vocabulary/vocabulary.html",
         controller: "VocabularyController"
-      }).state('vocabularyNew', {
+      })
+      .state('vocabularyNew', {
         cache: false,
         url: "/vocabularyNew",
         templateUrl: "templates/vocabularyNew/vocabularyNew.html",
@@ -101,6 +103,12 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
         url: "/draganddrop",
         templateUrl: "templates/draganddrop/draganddrop.html",
         controller: "DraganddropController"
+      })
+      .state('draganddropPark', {
+        cache: false,
+        url: "/draganddropPark",
+        templateUrl: "templates/draganddrop/draganddropPark.html",
+        controller: "DraganddropParkController"
       })
       .state('results', {
         cache: false,
