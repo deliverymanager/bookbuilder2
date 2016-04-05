@@ -55,25 +55,15 @@ angular.module("bookbuilder2")
       };
       createjs.Ticker.addEventListener("tick", handleTick);
 
-      //EVENTS THAT SHOULD BE USED TO CONTROL THE APP
-      $scope.$on('$destroy', function () {
-        console.log('destroy');
-        createjs.Ticker.framerate = 0;
-      });
-
       $ionicPlatform.on('pause', function () {
         console.log('pause');
         createjs.Ticker.framerate = 0;
+        ionic.Platform.exitApp();
       });
-
       $ionicPlatform.on('resume', function () {
-        console.log('resume');
-        $timeout(function () {
-          createjs.Ticker.framerate = 20;
-        }, 2000);
+        createjs.Ticker.framerate = 20;
       });
 
-      /*Image Loader*/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
         src: $rootScope.rootDir + "data/assets/results_backgroung_image_blue.png"
       }));
@@ -108,7 +98,6 @@ angular.module("bookbuilder2")
         background.x = $scope.stage.canvas.width / 2;
         background.y = $scope.stage.canvas.height / 2;
         $scope.stage.addChild(background);
-        $scope.stage.update();
         var backgroundPosition = background.getTransformedBounds();
 
 
@@ -144,9 +133,7 @@ angular.module("bookbuilder2")
                 menuButton.scaleX = menuButton.scaleY = scale;
                 menuButton.x = 0;
                 menuButton.y = -menuButton.getTransformedBounds().height / 5;
-
                 $scope.stage.addChild(menuButton);
-                $scope.stage.update();
                 callback();
               })
               .error(function (error) {
@@ -172,7 +159,7 @@ angular.module("bookbuilder2")
                 returnButton.addEventListener("pressup", function (event) {
                   console.log("pressup event!");
                   returnButton.gotoAndPlay("normal");
-
+                  $scope.stage.update();
 
                   var confirmPopup = $ionicPopup.confirm({
                     title: 'Restart all activities in ' + $rootScope.selectedLesson.lessonTitle,
@@ -188,7 +175,6 @@ angular.module("bookbuilder2")
                 returnButton.x = backgroundPosition.x + (backgroundPosition.width / 1.15);
                 returnButton.y = backgroundPosition.y + (backgroundPosition.height / 8);
                 $scope.stage.addChild(returnButton);
-                $scope.stage.update();
                 callback();
               })
               .error(function (error) {
@@ -227,7 +213,7 @@ angular.module("bookbuilder2")
                 resultsExitButton.addEventListener("pressup", function (event) {
                   console.log("pressup event!");
                   resultsExitButton.gotoAndPlay("normal");
-
+                  $scope.stage.update();
                   if (ionic.Platform.isAndroid()) {
                     ionic.Platform.exitApp();
                   } else {
@@ -278,7 +264,6 @@ angular.module("bookbuilder2")
                 resultsEmailButton.x = backgroundPosition.x + (backgroundPosition.width / 12);
                 resultsEmailButton.y = backgroundPosition.y + (backgroundPosition.height / 1.14);
                 $scope.stage.addChild(resultsEmailButton);
-                $scope.stage.update();
                 callback();
               })
               .error(function (error) {
@@ -316,8 +301,6 @@ angular.module("bookbuilder2")
             $scope.activitiesContainer.height = background.image.height / 2.3;
             $scope.stage.addChild($scope.activitiesContainer);
 
-            $scope.stage.update();
-
             callback();
           }],
 
@@ -336,7 +319,6 @@ angular.module("bookbuilder2")
             title.x = backgroundPosition.x + (backgroundPosition.width / 2.8);
             title.y = backgroundPosition.y + (backgroundPosition.height / 16);
             $scope.stage.addChild(title);
-            $scope.stage.update();
             showResults();
           });
 
@@ -353,13 +335,11 @@ angular.module("bookbuilder2")
           vocabularyReadingGraphics.drawRoundRect(0, 0, $scope.vocReadContainer.width, $scope.vocReadContainer.height, 15);
           var vocabularyReadingShape = new createjs.Shape(vocabularyReadingGraphics);
           $scope.vocReadContainer.addChild(vocabularyReadingShape);
-          $scope.stage.update();
 
           var graphics = new createjs.Graphics().beginFill("blue").drawRect(0, 0, $scope.scoreContainer.width, $scope.scoreContainer.height);
           var shape = new createjs.Shape(graphics);
           shape.alpha = 0.8;
           $scope.scoreContainer.addChild(shape);
-          $scope.stage.update();
 
           var activitiesGraphics = new createjs.Graphics().beginFill(null);
           activitiesGraphics.setStrokeStyle(3).beginStroke("white");
