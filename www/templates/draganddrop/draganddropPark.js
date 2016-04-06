@@ -307,7 +307,7 @@ angular.module("bookbuilder2")
               $scope.questionRowContainers[key] = new createjs.Container();
               $scope.questionRowContainers[key].height = 27;
               $scope.questionRowContainers[key].width = 159;
-              $scope.questionRowContainers[key].regY = $scope.questionRowContainers[key].height/2;
+              $scope.questionRowContainers[key].regY = $scope.questionRowContainers[key].height / 2;
               $scope.questionRowContainers[key].x = $scope.currentPretexts[pretexts.length === 1 ? 0 : 1].x + $scope.currentPretexts[pretexts.length === 1 ? 0 : 1].getBounds().width;
               $scope.questionRowContainers[key].y = $scope.currentPretexts[pretexts.length === 1 ? 0 : 1].y;
               $scope.questionRowContainers[key].startingPointX = $scope.questionRowContainers[key].x;
@@ -403,7 +403,7 @@ angular.module("bookbuilder2")
                   'y': global.y
                 };
 
-                console.log("this.offset: "+this.offset+" this.global: ",this.global);
+                console.log("this.offset: " + this.offset + " this.global: ", this.global);
 
               });
 
@@ -518,7 +518,7 @@ angular.module("bookbuilder2")
                   $scope.sounds["drag"].play();
                 }
 
-                var global = $scope.stage.localToGlobal(this.x, this.y);
+                var global = $scope.mainContainer.localToGlobal(this.x, this.y);
                 this.offset = {
                   'x': global.x - evt.stageX,
                   'y': global.y - evt.stageY
@@ -528,7 +528,8 @@ angular.module("bookbuilder2")
                   'y': global.y
                 };
 
-                console.log("this.offset: "+this.offset+" this.global: ",this.global);
+                console.log("In side mouse down event ---> this.offset: ", this.offset);
+                console.log("In side mouse down event ---> this.global: ", this.global);
 
               });
 
@@ -538,12 +539,12 @@ angular.module("bookbuilder2")
                   return;
                 }
 
-                var local = $scope.stage.globalToLocal(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
+                var local = $scope.mainContainer.globalToLocal(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
                 this.x = local.x;
                 this.y = local.y;
                 $scope.stage.update();
 
-                console.log("this.x: "+this.x+" this.y: ",this.y);
+                console.log("this.x: " + this.x + " this.y: ", this.y);
 
               });
 
@@ -936,14 +937,37 @@ angular.module("bookbuilder2")
 
 
         function collision(x, y) {
+
+          console.log("Collision x: "+x+" y: "+y);
+
+          var formattedQuestionXY = $scope.answerRowContainers[0].localToGlobal(x,y);
+
+          console.log("After Question XY formatted: ",formattedQuestionXY);
+
+
           for (var i = 0; i < $scope.activityData.questions.length; i++) {
             /*var bounds = $scope.questionText[i].getTransformedBounds();*/
-            console.log("$scope.questionRowContainers[i]: ",$scope.questionRowContainers[i]);
+
+            /*var formattedQuestionXY = $scope.answersContainer.globalToLocal($scope.questionRowContainers[i].getTransformedBounds().x,$scope.questionRowContainers[i].getTransformedBounds().y);*/
+            /*var formattedQuestionXYPlusWidthHeight = $scope.questionRowContainers[i].localToLocal($scope.questionRowContainers[i].getTransformedBounds().x + $scope.questionRowContainers[i].getTransformedBounds().width,
+              $scope.questionRowContainers[i].getTransformedBounds().y + $scope.questionRowContainers[i].getTransformedBounds().height,$scope.answersContainer);*/
+           /*
+           console.log("After Question XY formatted: ",formattedQuestionXY);
+            console.log("After Question XY + Width and Height formatted: ",formattedQuestionXYPlusWidthHeight);
+            console.log("$scope.questionRowContainers[i]: ", $scope.questionRowContainers[i]);*/
             /*if (ionic.DomUtil.rectContains(x, y, bounds.x, bounds.y, bounds.x + bounds.width, bounds.y + bounds.height) && $scope.questionText[i].text === userChoice) {*/
-            if (ionic.DomUtil.rectContains(x, y, $scope.questionRowContainers[i].x, $scope.questionRowContainers[i].y, $scope.questionRowContainers[i].x + $scope.questionRowContainers[i].width, $scope.questionRowContainers[i].y + $scope.questionRowContainers[i].height) && $scope.questionText[i].text === userChoice) {
+            if (ionic.DomUtil.rectContains(
+                formattedQuestionXY.x,
+                formattedQuestionXY.y,
+                $scope.questionRowContainers[i].getTransformedBounds().x,
+                $scope.questionRowContainers[i].getTransformedBounds().y,
+                $scope.questionRowContainers[i].getTransformedBounds().x + $scope.questionRowContainers[i].getTransformedBounds().width,
+                $scope.questionRowContainers[i].getTransformedBounds().y + $scope.questionRowContainers[i].getTransformedBounds().height)) {
+              console.log("Collision returns i");
               return i;
             }
           }
+          console.log("Collision returns -1");
           return -1;
         }
 

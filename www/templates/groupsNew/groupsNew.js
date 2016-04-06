@@ -162,7 +162,7 @@ angular.module("bookbuilder2")
                 ionic.Platform.exitApp();
               });
               exitButton.x = $scope.mainContainer.width / 2;
-              exitButton.y = 670;
+              exitButton.y = 666;
               $scope.mainContainer.addChild(exitButton);
               $scope.stage.update();
             })
@@ -294,7 +294,7 @@ angular.module("bookbuilder2")
           /*It's important too define containers height before start calculating buttons*/
           $scope.lessonsMenuContainer.width = 236;
           $scope.lessonsMenuContainer.height = 440;
-          $scope.lessonsMenuContainer.x = 630;
+          $scope.lessonsMenuContainer.x = 645;
           $scope.lessonsMenuContainer.y = 190;
 
           //Background for lessonContainer
@@ -475,7 +475,7 @@ angular.module("bookbuilder2")
             });
             $scope.downloadIcon.scaleX = $scope.downloadIcon.scaleY = 0.3;
             $scope.downloadIcon.x = 780;
-            $scope.downloadIcon.y = 630;
+            $scope.downloadIcon.y = 627;
             $scope.mainContainer.addChild($scope.downloadIcon);
             $scope.stage.update();
           });
@@ -519,7 +519,7 @@ angular.module("bookbuilder2")
 
             $scope.deleteIcon.scaleX = $scope.deleteIcon.scaleY = 0.3;
             $scope.deleteIcon.x = 680;
-            $scope.deleteIcon.y = 630;
+            $scope.deleteIcon.y = 627;
             $scope.mainContainer.addChild($scope.deleteIcon);
             $scope.stage.update();
           });

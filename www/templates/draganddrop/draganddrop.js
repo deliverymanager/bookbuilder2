@@ -755,9 +755,8 @@ angular.module("bookbuilder2")
           $scope.questionText[questionKey].x = $scope.underlinedText[questionKey].getTransformedBounds().x + $scope.underlinedText[questionKey].getTransformedBounds().width / 2 - $scope.questionText[questionKey].getTransformedBounds().width / 2;
           $scope.stage.update();
           window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
-        };
-
-
+        }
+        
         /*Function that goes to the next activity*/
 
         function next() {
