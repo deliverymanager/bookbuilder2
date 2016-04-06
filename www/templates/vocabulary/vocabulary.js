@@ -224,6 +224,8 @@ angular.module("bookbuilder2")
                     $scope.bigPauseButton.visible = false;
                     $scope.bigStopButton.visible = false;
                     $scope.bigStopButton.gotoAndPlay("normal");
+                    $scope.currentScroll = 10;
+                    $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
                     $scope.currentWord = $scope.activityData[$scope.selectedVocabularySection][0].name;
                     $scope.playAll = false;
                     $scope.stage.update();
@@ -254,6 +256,7 @@ angular.module("bookbuilder2")
                   $scope.bigPlayButton = new createjs.Sprite(bigPlayButtonSpriteSheet, "normal");
 
                   $scope.bigPlayButton.visible = true;
+                  $scope.currentScroll = 10;
 
                   $scope.bigPlayButton.addEventListener("mousedown", function (event) {
                     console.log("Mouse down event on a button !");
@@ -569,7 +572,7 @@ angular.module("bookbuilder2")
                 });
               });
 
-              $scope.wordContainersHeight = 25;
+              $scope.wordContainersHeight = 50;
               $scope.playAll = false;
               $scope.currentWord = "";
 
@@ -640,6 +643,7 @@ angular.module("bookbuilder2")
                     });
 
 
+                    $scope.currentScroll = 10;
                     async.parallelLimit(loadingBitmaps, 10, function (err, response) {
 
                       $scope.scrollDown = new createjs.Bitmap($rootScope.rootDir + "data/assets/vocabulary_scroll_down.png");
@@ -657,7 +661,18 @@ angular.module("bookbuilder2")
 
                       $scope.scrollDown.addEventListener("pressup", function (event) {
                         $scope.scrollDown.alpha = 1;
-                        $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.mainContainer.height;
+
+                        if ($scope.currentScroll === 10) {
+                          $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * scale * 10;
+                          $scope.currentScroll = 20;
+                        } else if ($scope.currentScroll === 20 && $scope.activityData[$scope.selectedVocabularySection].length > 20) {
+                          $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * scale * 10;
+                          $scope.currentScroll = 30;
+                        } else if ($scope.currentScroll === 30 && $scope.activityData[$scope.selectedVocabularySection].length > 30) {
+                          $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * scale * 10;
+                          $scope.currentScroll = 40;
+                        }
+
                         $scope.stage.update();
                       });
 
@@ -674,7 +689,20 @@ angular.module("bookbuilder2")
 
                       $scope.scrollUp.addEventListener("pressup", function (event) {
                         $scope.scrollUp.alpha = 1;
-                        $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
+
+                        if ($scope.currentScroll === 20) {
+                          $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8;
+                          $scope.currentScroll = 10;
+                        } else if ($scope.currentScroll === 30) {
+                          $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * scale * 10;
+                          $scope.currentScroll = 20;
+                        } else if ($scope.currentScroll === 40) {
+                          $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * scale * 20;
+                          $scope.currentScroll = 30;
+                        } else {
+                          $scope.currentScroll = 10;
+                        }
+
                         $scope.stage.update();
                       });
 
@@ -739,7 +767,7 @@ angular.module("bookbuilder2")
 
                 var lessonTitle = new createjs.Text($rootScope.selectedLesson.lessonTitle, "27px Arial", "white");
                 lessonTitle.scaleX = lessonTitle.scaleY = scale;
-                lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 10);
+                lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 5);
                 lessonTitle.y = backgroundPosition.y + (backgroundPosition.height / 15);
                 lessonTitle.textBaseline = "alphabetic";
                 lessonTitle.textAlign = "center";
@@ -837,12 +865,27 @@ angular.module("bookbuilder2")
                 name: $scope.currentWord
               }) < $scope.activityData[$scope.selectedVocabularySection].length - 1) {
 
-              if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+
+              console.log("$scope.currentScroll", $scope.currentScroll);
+              console.log("current word index", _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                name: $scope.currentWord
+              }));
+
+              if ($scope.currentScroll === 10 && _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                  name: $scope.currentWord
+                }) > 8) {
+                $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * scale * 10;
+                $scope.currentScroll = 20;
+              } else if ($scope.currentScroll === 20 && _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                   name: $scope.currentWord
                 }) > 18) {
-                $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.mainContainer.height;
-              } else {
-                $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
+                $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * scale * 10;
+                $scope.currentScroll = 30;
+              } else if ($scope.currentScroll === 30 && _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                  name: $scope.currentWord
+                }) > 28) {
+                $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * scale * 10;
+                $scope.currentScroll = 40;
               }
 
               if ($scope.selectedVocabularySection === "derivatives") {
@@ -860,6 +903,8 @@ angular.module("bookbuilder2")
               $scope.bigPauseButton.visible = false;
               $scope.bigStopButton.visible = false;
               $scope.bigPlayButton.visible = true;
+              $scope.currentScroll = 10;
+              $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
               $scope.bigStopButton.gotoAndPlay("normal");
               $scope.currentWord = $scope.activityData[$scope.selectedVocabularySection][0].name;
               $scope.playAll = false;
@@ -876,7 +921,7 @@ angular.module("bookbuilder2")
         };
 
         function createSingleColumnContainers(wordsArray, parallelCallback) {
-          if (wordsArray.length > 19) {
+          if (wordsArray.length > 10) {
             $scope.scrollUp.visible = true;
             $scope.scrollDown.visible = true;
           } else {
@@ -887,7 +932,7 @@ angular.module("bookbuilder2")
           $scope.mainContainer.removeAllChildren();
           $scope.mainContainer.height = (wordsArray.length - 1 ) * $scope.wordContainersHeight;
           $scope.buttonsContainer = new createjs.Container();
-          $scope.buttonsContainer.width = $scope.mainContainer.width / 6;
+          $scope.buttonsContainer.width = $scope.mainContainer.width / 5;
           $scope.buttonsContainer.height = $scope.mainContainer.height;
           $scope.mainContainer.addChild($scope.buttonsContainer);
 
@@ -902,9 +947,9 @@ angular.module("bookbuilder2")
           });
 
           $scope.indexContainer = new createjs.Container();
-          $scope.indexContainer.width = $scope.mainContainer.width / 20;
+          $scope.indexContainer.width = $scope.mainContainer.width / 25;
           $scope.indexContainer.height = $scope.mainContainer.height;
-          $scope.indexContainer.x = $scope.mainContainer.width / 8;
+          $scope.indexContainer.x = $scope.mainContainer.width / 6.5;
           $scope.mainContainer.addChild($scope.indexContainer);
 
           $scope.indexContainer.indexSubContainers = {};
@@ -950,6 +995,7 @@ angular.module("bookbuilder2")
           $scope.greekWordsContainer = new createjs.Container();
           $scope.greekWordsContainer.width = $scope.mainContainer.width / 2.5;
           $scope.greekWordsContainer.height = $scope.mainContainer.height;
+          $scope.greekWordsContainer.y = 0;
           $scope.greekWordsContainer.x = $scope.indexContainer.x + $scope.indexContainer.width + $scope.englishWordsContainer.width;
           $scope.mainContainer.addChild($scope.greekWordsContainer);
 
@@ -1013,7 +1059,7 @@ angular.module("bookbuilder2")
           $scope.derivativesBackgrounds = {};
           _.each($scope.derivativeContainers, function (container, key, list) {
             $scope.derivativeContainers[key].subContainers["buttons"] = new createjs.Container();
-            $scope.derivativeContainers[key].subContainers["buttons"].width = $scope.derivativeContainers[key].width / 4.5;
+            $scope.derivativeContainers[key].subContainers["buttons"].width = $scope.derivativeContainers[key].width / 3.3;
             $scope.derivativeContainers[key].subContainers["buttons"].height = $scope.derivativeContainers[key].height;
             $scope.derivativeContainers[key].addChild($scope.derivativeContainers[key].subContainers["buttons"]);
 
@@ -1025,17 +1071,17 @@ angular.module("bookbuilder2")
             $scope.derivativeContainers[key].addChild($scope.derivativeContainers[key].subContainers["index"]);
 
             $scope.derivativeContainers[key].subContainers["english"] = new createjs.Container();
-            $scope.derivativeContainers[key].subContainers["english"].width = $scope.derivativeContainers[key].width / 2.8;
+            $scope.derivativeContainers[key].subContainers["english"].width = $scope.derivativeContainers[key].width / 3;
             $scope.derivativeContainers[key].subContainers["english"].height = $scope.derivativeContainers[key].height;
-            $scope.derivativeContainers[key].subContainers["english"].x = $scope.derivativeContainers[key].subContainers["buttons"].width + $scope.derivativeContainers[key].subContainers["index"].width;
+            $scope.derivativeContainers[key].subContainers["english"].x = $scope.derivativeContainers[key].subContainers["buttons"].width;
             $scope.derivativeContainers[key].subContainers["english"].y = 0;
             $scope.derivativeContainers[key].addChild($scope.derivativeContainers[key].subContainers["english"]);
 
             $scope.derivativeContainers[key].subContainers["greek"] = new createjs.Container();
-            $scope.derivativeContainers[key].subContainers["greek"].width = $scope.derivativeContainers[key].width / 2.7;
+            $scope.derivativeContainers[key].subContainers["greek"].width = $scope.derivativeContainers[key].width / 2.8;
             $scope.derivativeContainers[key].subContainers["greek"].height = $scope.derivativeContainers[key].height;
             $scope.derivativeContainers[key].subContainers["greek"].x = $scope.derivativeContainers[key].subContainers["buttons"].width
-              + $scope.derivativeContainers[key].subContainers["index"].width + $scope.derivativeContainers[key].subContainers["english"].width;
+              + $scope.derivativeContainers[key].subContainers["english"].width;
 
             $scope.derivativeContainers[key].subContainers["greek"].y = 0;
             $scope.derivativeContainers[key].addChild($scope.derivativeContainers[key].subContainers["greek"]);
@@ -1065,6 +1111,7 @@ angular.module("bookbuilder2")
               $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["index"].rowContainers[k] = new createjs.Container();
               $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["index"].rowContainers[k].width = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["index"].width;
               $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["index"].rowContainers[k].height = $scope.wordContainersHeight;
+              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["index"].rowContainers[k].visible = false;
               $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["index"].rowContainers[k].x = 0;
               $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["index"].rowContainers[k].y = (k + 1) * $scope.wordContainersHeight;
               $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["index"].addChild($scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["index"].rowContainers[k]);
@@ -1115,6 +1162,7 @@ angular.module("bookbuilder2")
           $scope.bigPauseButton.visible = false;
           $scope.bigStopButton.visible = false;
           $scope.bigPlayButton.visible = true;
+          $scope.currentScroll = 10;
           $scope.bigStopButton.gotoAndPlay("normal");
 
 
@@ -1158,7 +1206,7 @@ angular.module("bookbuilder2")
 
           _.each($scope.quartiles, function (q, key, list) {
             console.log("q " + q + " key " + key);
-            var title = new createjs.Text(key.toUpperCase(), "17px Arial", "red");
+            var title = new createjs.Text(key.toUpperCase(), "25px Arial", "red");
             title.x = $scope.derivativeContainers[q].width / 2;
             title.y = 0;
             title.textBaseline = "top";
@@ -1191,7 +1239,7 @@ angular.module("bookbuilder2")
 
             enSmallButton.regX = enSmallButton.x / 2;
             enSmallButton.regY = enSmallButton.y / 2;
-            enSmallButton.scaleX = enSmallButton.scaleY = 0.7;
+            //enSmallButton.scaleX = enSmallButton.scaleY = 0.7;
             enSmallButton.x = enSmallButton.getBounds().width / 2;
             enSmallButton.y = $scope.buttonsContainer.buttonsSubContainers[word.name].height / 2;
 
@@ -1213,7 +1261,7 @@ angular.module("bookbuilder2")
             });
             grSmallButton.regX = grSmallButton.x / 2;
             grSmallButton.regY = grSmallButton.y / 2;
-            grSmallButton.scaleX = grSmallButton.scaleY = 0.7;
+            //grSmallButton.scaleX = grSmallButton.scaleY = 0.7;
             grSmallButton.x = $scope.buttonsContainer.buttonsSubContainers[word.name].width / 2.3;
             grSmallButton.y = $scope.buttonsContainer.buttonsSubContainers[word.name].height / 2;
 
@@ -1237,7 +1285,7 @@ angular.module("bookbuilder2")
 
             playSmallButton.regX = playSmallButton.x / 2;
             playSmallButton.regY = playSmallButton.y / 2;
-            playSmallButton.scaleX = playSmallButton.scaleY = 0.7;
+            //playSmallButton.scaleX = playSmallButton.scaleY = 0.7;
             playSmallButton.x = $scope.buttonsContainer.buttonsSubContainers[word.name].width / 1.5;
             playSmallButton.y = $scope.buttonsContainer.buttonsSubContainers[word.name].height / 2;
             $scope.buttonsContainer.buttonsSubContainers[word.name].addChild(enSmallButton);
@@ -1291,13 +1339,14 @@ angular.module("bookbuilder2")
 
           _.each(wordsArray, function (word, key, list) {
 
-            var wordIndex = new createjs.Text(key + 1 + ".", "20px Arial", "black");
-
-            wordIndex.x = $scope.indexContainer.indexSubContainers[word.name].width / 2;
-            wordIndex.y = $scope.indexContainer.indexSubContainers[word.name].height / 2;
-            wordIndex.textBaseline = "middle";
-            wordIndex.textAlign = "center";
-            $scope.indexContainer.indexSubContainers[word.name].addChild(wordIndex);
+            var wordIndex = new createjs.Text(key + 1 + ".", "25px Arial", "black");
+            $timeout(function () {
+              wordIndex.x = $scope.indexContainer.indexSubContainers[word.name].width / 2;
+              wordIndex.y = $scope.indexContainer.indexSubContainers[word.name].height / 2;
+              wordIndex.textBaseline = "middle";
+              wordIndex.textAlign = "center";
+              $scope.indexContainer.indexSubContainers[word.name].addChild(wordIndex);
+            });
           });
 
         }//End of loadIndexes function
@@ -1307,27 +1356,47 @@ angular.module("bookbuilder2")
         function loadEnglishWords(wordsArray) {
 
           $scope.englishWordsBitmaps = {};
+          var scaleImage = 1.5;
 
           /*Iterating and populating the container*/
           _.each(wordsArray, function (word, key, list) {
             $scope.englishWordsBitmaps[word.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + word.name + ".png");
-            $scope.englishWordsBitmaps[word.name].x = 0;
-            $scope.englishWordsBitmaps[word.name].y = $scope.englishWordsContainer.englishSubContainers[word.name].height / 1.5;
-            $scope.englishWordsBitmaps[word.name].regY = $scope.englishWordsContainer.englishSubContainers[word.name].height / 2;
-            $scope.englishWordsContainer.englishSubContainers[word.name].addChild($scope.englishWordsBitmaps[word.name]);
+            $timeout(function () {
+              $scope.englishWordsBitmaps[word.name].x = 0;
+              $scope.englishWordsBitmaps[word.name].regY = $scope.englishWordsBitmaps[word.name].image.height / 2;
+              console.log("$scope.englishWordsBitmaps[word.name].image.height", $scope.englishWordsBitmaps[word.name].image.height);
+
+              if ($scope.englishWordsBitmaps[word.name].image.width * scaleImage >= $scope.englishWordsContainer.englishSubContainers[word.name].width * 0.95) {
+                $scope.englishWordsBitmaps[word.name].scaleX = $scope.englishWordsBitmaps[word.name].scaleY = $scope.englishWordsContainer.englishSubContainers[word.name].width * 0.95 / $scope.englishWordsBitmaps[word.name].image.width;
+              } else {
+                $scope.englishWordsBitmaps[word.name].scaleX = $scope.englishWordsBitmaps[word.name].scaleY = scaleImage;
+              }
+
+              $scope.englishWordsBitmaps[word.name].y = $scope.englishWordsContainer.englishSubContainers[word.name].height / 2;
+              $scope.englishWordsContainer.englishSubContainers[word.name].addChild($scope.englishWordsBitmaps[word.name]);
+            }, 500);
           });
         }//End of loadEnglishWords function
 
 
         /*LOAD GREEK WORDS*/
         function loadGreekWords(wordsArray) {
+          var scaleImage = 1.5;
           $scope.greekWordsBitmaps = {};
           _.each(wordsArray, function (word, key, list) {
             $scope.greekWordsBitmaps[word.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + word.name + "_gr.png");
-            $scope.greekWordsBitmaps[word.name].x = 0;
-            $scope.greekWordsBitmaps[word.name].y = $scope.greekWordsContainer.greekWordsSubContainers[word.name].height / 1.5;
-            $scope.greekWordsBitmaps[word.name].regY = $scope.greekWordsContainer.greekWordsSubContainers[word.name].height / 2;
-            $scope.greekWordsContainer.greekWordsSubContainers[word.name].addChild($scope.greekWordsBitmaps[word.name]);
+            $timeout(function () {
+              $scope.greekWordsBitmaps[word.name].x = 0;
+              console.log("$scope.greekWordsBitmaps[word.name].image.height", $scope.greekWordsBitmaps[word.name].image.height);
+              $scope.greekWordsBitmaps[word.name].regY = $scope.greekWordsBitmaps[word.name].image.height / 2;
+              if ($scope.greekWordsBitmaps[word.name].image.width * scaleImage >= $scope.greekWordsContainer.greekWordsSubContainers[word.name].width * 0.95) {
+                $scope.greekWordsBitmaps[word.name].scaleX = $scope.greekWordsBitmaps[word.name].scaleY = $scope.greekWordsContainer.greekWordsSubContainers[word.name].width * 0.95 / $scope.greekWordsBitmaps[word.name].image.width;
+              } else {
+                $scope.greekWordsBitmaps[word.name].scaleX = $scope.greekWordsBitmaps[word.name].scaleY = scaleImage;
+              }
+              $scope.greekWordsBitmaps[word.name].y = $scope.greekWordsContainer.greekWordsSubContainers[word.name].height / 2;
+              $scope.greekWordsContainer.greekWordsSubContainers[word.name].addChild($scope.greekWordsBitmaps[word.name]);
+            }, 500);
           });
         }//End of loadGreekWords function
 
@@ -1358,9 +1427,9 @@ angular.module("bookbuilder2")
             });
 
             enSmallButton.regY = enSmallButton.y / 2;
-            enSmallButton.x = enSmallButton.getBounds().width / 3;
+            enSmallButton.x = enSmallButton.getBounds().width / 2.5;
             enSmallButton.y = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[0].height / 2;
-            enSmallButton.scaleX = enSmallButton.scaleY = 0.7;
+            //enSmallButton.scaleX = enSmallButton.scaleY = 0.7;
 
             /*********************Creating Greek button*********************/
             var grSmallButton = new createjs.Sprite($scope.grSmallButtonSpriteSheet, "normal");
@@ -1377,10 +1446,10 @@ angular.module("bookbuilder2")
               $scope.stage.update();
             });
 
-            grSmallButton.regX = grSmallButton.x / 2;
+            grSmallButton.regX = grSmallButton.getBounds().x / 2;
             grSmallButton.regY = grSmallButton.y / 2;
-            grSmallButton.scaleX = grSmallButton.scaleY = 0.7;
-            grSmallButton.x = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[0].width / 1.8;
+            //grSmallButton.scaleX = grSmallButton.scaleY = 0.7;
+            grSmallButton.x = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[0].width / 2.5;
             grSmallButton.y = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[0].height / 2;
 
             /********************* Creating Play button *********************/
@@ -1399,10 +1468,10 @@ angular.module("bookbuilder2")
               $scope.playAll = false;
               $scope.stage.update();
             });
-            playSmallButton.regX = playSmallButton.x / 2;
+            playSmallButton.regX = playSmallButton.getBounds().x / 2;
             playSmallButton.regY = playSmallButton.y / 2;
-            playSmallButton.scaleX = playSmallButton.scaleY = 0.7;
-            playSmallButton.x = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[0].width / 1.15;
+            //playSmallButton.scaleX = playSmallButton.scaleY = 0.7;
+            playSmallButton.x = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[0].width / 1.3;
             playSmallButton.y = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[0].height / 2;
 
             $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["buttons"].rowContainers[$scope.quartilesButtons[derivative.type]].addChild(enSmallButton);
@@ -1430,37 +1499,51 @@ angular.module("bookbuilder2")
 
         /*LOAD ENGLISH DERIVATIVES*/
         function loadEnglishDerivatives(wordsArray) {
-
+          var scaleImage = 1.5;
           $scope.englishDerivativesBitmaps = {};
           _.each(wordsArray, function (derivative, key, list) {
             $scope.englishDerivativesBitmaps[derivative.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + derivative.name + ".png");
-            $scope.englishDerivativesBitmaps[derivative.name].regY = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["english"].rowContainers[0].height / 2;
-            $scope.englishDerivativesBitmaps[derivative.name].x = 0;
-            if ($scope.englishDerivativesBitmaps[derivative.name].image.width > $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[0].width) {
-              $scope.englishDerivativesBitmaps[derivative.name].scaleX = $scope.englishDerivativesBitmaps[derivative.name].scaleY = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[0].width / $scope.englishDerivativesBitmaps[derivative.name].image.width;
-            }
-            $scope.englishDerivativesBitmaps[derivative.name].y = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["english"].rowContainers[0].height / 1.5;
-            $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["english"].rowContainers[$scope.quartilesEnglish[derivative.type]].addChild($scope.englishDerivativesBitmaps[derivative.name]);
-            $scope.quartilesEnglish[derivative.type]++;
+            $timeout(function () {
+
+              $scope.englishDerivativesBitmaps[derivative.name].regY = $scope.englishDerivativesBitmaps[derivative.name].image.height / 2;
+              $scope.englishDerivativesBitmaps[derivative.name].x = 0;
+
+              if ($scope.englishDerivativesBitmaps[derivative.name].image.width * scaleImage >= $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["english"].rowContainers[0].width * 0.95) {
+                $scope.englishDerivativesBitmaps[derivative.name].scaleX = $scope.englishDerivativesBitmaps[derivative.name].scaleY = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["english"].rowContainers[0].width / $scope.englishDerivativesBitmaps[derivative.name].image.width;
+              } else {
+                $scope.englishDerivativesBitmaps[derivative.name].scaleX = $scope.englishDerivativesBitmaps[derivative.name].scaleY = scaleImage;
+              }
+
+              $scope.englishDerivativesBitmaps[derivative.name].y = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["english"].rowContainers[0].height / 2;
+              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["english"].rowContainers[$scope.quartilesEnglish[derivative.type]].addChild($scope.englishDerivativesBitmaps[derivative.name]);
+              $scope.quartilesEnglish[derivative.type]++;
+            }, 500);
           });
         }//End of loadEnglishDerivatives function
 
 
         /*LOAD GREEK DERIVATIVES*/
         function loadGreekDerivatives(wordsArray) {
-
+          var scaleImage = 1.5;
           $scope.greekDerivativesBitmaps = {};
           /*Iterating and populating the container*/
           _.each(wordsArray, function (derivative, key, list) {
             $scope.greekDerivativesBitmaps[derivative.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + derivative.name + "_gr.png");
-            $scope.greekDerivativesBitmaps[derivative.name].regY = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[0].height / 2;
-            $scope.greekDerivativesBitmaps[derivative.name].x = 0;
-            $scope.greekDerivativesBitmaps[derivative.name].y = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[0].height / 1.5;
-            if ($scope.greekDerivativesBitmaps[derivative.name].image.width > $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[0].width) {
-              $scope.greekDerivativesBitmaps[derivative.name].scaleX = $scope.greekDerivativesBitmaps[derivative.name].scaleY = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[0].width / $scope.greekDerivativesBitmaps[derivative.name].image.width;
-            }
-            $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[$scope.quartilesGreek[derivative.type]].addChild($scope.greekDerivativesBitmaps[derivative.name]);
-            $scope.quartilesGreek[derivative.type]++;
+            $timeout(function () {
+
+              $scope.greekDerivativesBitmaps[derivative.name].regY = $scope.greekDerivativesBitmaps[derivative.name].image.height / 2;
+              $scope.greekDerivativesBitmaps[derivative.name].regX = $scope.greekDerivativesBitmaps[derivative.name].image.width / 2;
+              $scope.greekDerivativesBitmaps[derivative.name].x = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[0].width / 2;
+              $scope.greekDerivativesBitmaps[derivative.name].y = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[0].height / 2;
+
+              if ($scope.greekDerivativesBitmaps[derivative.name].image.width * scaleImage >= $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[0].width * 0.95) {
+                $scope.greekDerivativesBitmaps[derivative.name].scaleX = $scope.greekDerivativesBitmaps[derivative.name].scaleY = $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[0].width / $scope.greekDerivativesBitmaps[derivative.name].image.width;
+              } else {
+                $scope.greekDerivativesBitmaps[derivative.name].scaleX = $scope.greekDerivativesBitmaps[derivative.name].scaleY = scaleImage;
+              }
+              $scope.derivativeContainers[$scope.quartiles[derivative.type]].subContainers["greek"].rowContainers[$scope.quartilesGreek[derivative.type]].addChild($scope.greekDerivativesBitmaps[derivative.name]);
+              $scope.quartilesGreek[derivative.type]++;
+            }, 500);
           });
 
         }//End of loadGreekDerivatives function
