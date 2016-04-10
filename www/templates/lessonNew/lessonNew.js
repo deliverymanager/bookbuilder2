@@ -226,11 +226,11 @@ angular.module("bookbuilder2")
         $scope.mainContainer.addChild($scope.activitiesMenuContainer);
 
         //mainContainer Background
-        var activitiesMenuContainerGraphic = new createjs.Graphics().beginFill("green").drawRect(0, 0, $scope.activitiesMenuContainer.width, $scope.activitiesMenuContainer.height);
+        /*var activitiesMenuContainerGraphic = new createjs.Graphics().beginFill("green").drawRect(0, 0, $scope.activitiesMenuContainer.width, $scope.activitiesMenuContainer.height);
          var activitiesMenuContainerBackground = new createjs.Shape(activitiesMenuContainerGraphic);
          activitiesMenuContainerBackground.alpha = 0.5;
 
-         $scope.activitiesMenuContainer.addChild(activitiesMenuContainerBackground);
+         $scope.activitiesMenuContainer.addChild(activitiesMenuContainerBackground);*/
 
 
         /* -------------------------------- END BUTTON -------------------------------- */
