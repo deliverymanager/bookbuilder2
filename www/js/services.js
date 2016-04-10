@@ -8,7 +8,7 @@ angular.module("bookbuilder2")
           return $http({
             method: 'POST',
             timeout: 20000,
-            url: 'http://www.supercourse.gr/ibook_mail/email.php',
+            url: 'http://www.supercourse.gr/ibook_mail/email1.php',
             data: params,
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded'

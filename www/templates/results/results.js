@@ -377,43 +377,112 @@ angular.module("bookbuilder2")
             }
           });
 
-          var vocabularyActivityData = JSON.parse(window.localStorage.getItem($rootScope.selectedLesson.id + "_vocabulary"));
 
-          if (vocabularyActivityData) {
-            $scope.calculatedActivityScores["vocabulary"] = {
-              "activityFolder": "vocabulary",
-              "title": "Vocabulary",
-              "completed": vocabularyActivityData.completed,
-              "attempts": vocabularyActivityData.attempts,
-              "percentCorrectQuestions": 100
-            };
-          } else {
-            $scope.calculatedActivityScores["vocabulary"] = {
-              "activityFolder": "vocabulary",
-              "title": "Vocabulary",
-              "completed": false,
-              "attempts": 0,
-              "percentCorrectQuestions": 0
-            };
+          if (_.findWhere($rootScope.selectedLesson.lessonMenu, {
+              "activityFolder": "vocabulary"
+            }) || _.findWhere($rootScope.selectedLesson.activitiesMenu, {
+              "activityFolder": "vocabulary"
+            })) {
+            var vocabularyActivityData = JSON.parse(window.localStorage.getItem($rootScope.selectedLesson.id + "_vocabulary"));
+
+            if (vocabularyActivityData) {
+              $scope.calculatedActivityScores["vocabulary"] = {
+                "activityFolder": "vocabulary",
+                "title": "Vocabulary",
+                "completed": vocabularyActivityData.completed,
+                "attempts": vocabularyActivityData.attempts,
+                "percentCorrectQuestions": 100
+              };
+            } else {
+              $scope.calculatedActivityScores["vocabulary"] = {
+                "activityFolder": "vocabulary",
+                "title": "Vocabulary",
+                "completed": false,
+                "attempts": 0,
+                "percentCorrectQuestions": 0
+              };
+            }
           }
-          var readingActivityData = JSON.parse(window.localStorage.getItem($rootScope.selectedLesson.id + "_reading"));
-          if (readingActivityData) {
-            $scope.calculatedActivityScores["reading"] = {
-              "activityFolder": "reading",
-              "title": "Reading",
-              "completed": readingActivityData.completed,
-              "attempts": readingActivityData.attempts,
-              "percentCorrectQuestions": 100
-            };
-          } else {
-            $scope.calculatedActivityScores["reading"] = {
-              "activityFolder": "reading",
-              "title": "Reading",
-              "completed": false,
-              "attempts": 0,
-              "percentCorrectQuestions": 0
-            };
+
+          if (_.findWhere($rootScope.selectedLesson.lessonMenu, {
+              "activityFolder": "reading"
+            }) || _.findWhere($rootScope.selectedLesson.activitiesMenu, {
+              "activityFolder": "reading"
+            })) {
+
+            var readingActivityData = JSON.parse(window.localStorage.getItem($rootScope.selectedLesson.id + "_reading"));
+            if (readingActivityData) {
+              $scope.calculatedActivityScores["reading"] = {
+                "activityFolder": "reading",
+                "title": "Reading",
+                "completed": readingActivityData.completed,
+                "attempts": readingActivityData.attempts,
+                "percentCorrectQuestions": 100
+              };
+            } else {
+              $scope.calculatedActivityScores["reading"] = {
+                "activityFolder": "reading",
+                "title": "Reading",
+                "completed": false,
+                "attempts": 0,
+                "percentCorrectQuestions": 0
+              };
+            }
           }
+
+          if (_.findWhere($rootScope.selectedLesson.lessonMenu, {
+              "activityFolder": "song"
+            }) || _.findWhere($rootScope.selectedLesson.activitiesMenu, {
+              "activityFolder": "song"
+            })) {
+
+            var songActivityData = JSON.parse(window.localStorage.getItem($rootScope.selectedLesson.id + "_song"));
+            if (songActivityData) {
+              $scope.calculatedActivityScores["song"] = {
+                "activityFolder": "song",
+                "title": "Song",
+                "completed": songActivityData.completed,
+                "attempts": songActivityData.attempts,
+                "percentCorrectQuestions": 100
+              };
+            } else {
+              $scope.calculatedActivityScores["song"] = {
+                "activityFolder": "song",
+                "title": "Song",
+                "completed": false,
+                "attempts": 0,
+                "percentCorrectQuestions": 0
+              };
+            }
+          }
+
+          if (_.findWhere($rootScope.selectedLesson.lessonMenu, {
+              "activityFolder": "video"
+            }) || _.findWhere($rootScope.selectedLesson.activitiesMenu, {
+              "activityFolder": "video"
+            })) {
+
+
+            var videoActivityData = JSON.parse(window.localStorage.getItem($rootScope.selectedLesson.id + "_video"));
+            if (videoActivityData) {
+              $scope.calculatedActivityScores["video"] = {
+                "activityFolder": "video",
+                "title": "Video",
+                "completed": videoActivityData.completed,
+                "attempts": videoActivityData.attempts,
+                "percentCorrectQuestions": 100
+              };
+            } else {
+              $scope.calculatedActivityScores["video"] = {
+                "activityFolder": "video",
+                "title": "Video",
+                "completed": false,
+                "attempts": 0,
+                "percentCorrectQuestions": 0
+              };
+            }
+          }
+
 
           $scope.totalScore = 0;
           var score = 0;
@@ -573,52 +642,122 @@ angular.module("bookbuilder2")
                   $scope.data.lessonTitle = $rootScope.selectedLesson.lessonTitle;
                   $scope.data.totalScore = $scope.totalScore.toFixed();
 
-                  $scope.data.voc_check = $scope.calculatedActivityScores["vocabulary"].completed ? 1 : 2;
-                  $scope.data.text1 = $scope.calculatedActivityScores["vocabulary"].title;
-                  $scope.data.voc_attempt = $scope.calculatedActivityScores["vocabulary"].attempts;
 
-                  $scope.data.read_check = $scope.calculatedActivityScores["reading"].completed ? 1 : 2;
-                  $scope.data.text2 = $scope.calculatedActivityScores["reading"].title;
-                  $scope.data.read_attempt = $scope.calculatedActivityScores["reading"].attempts;
+                  if ($scope.calculatedActivityScores["vocabulary"]) {
+                    $scope.data.voc_check = $scope.calculatedActivityScores["vocabulary"].completed ? 1 : 2;
+                    $scope.data.text1 = $scope.calculatedActivityScores["vocabulary"].title;
+                    $scope.data.voc_attempt = $scope.calculatedActivityScores["vocabulary"].attempts;
+                  }
 
+                  if ($scope.calculatedActivityScores["reading"]) {
+                    $scope.data.read_check = $scope.calculatedActivityScores["reading"].completed ? 1 : 2;
+                    $scope.data.text2 = $scope.calculatedActivityScores["reading"].title;
+                    $scope.data.read_attempt = $scope.calculatedActivityScores["reading"].attempts;
+                  }
 
-                  $scope.data.voc1_check = $scope.calculatedActivityScores["vocabulary1"].completed ? 1 : 2;
-                  $scope.data.text6 = $scope.calculatedActivityScores["vocabulary1"].title;
-                  $scope.data.voc1_attempt = $scope.calculatedActivityScores["vocabulary1"].attempts;
-                  $scope.data.answers1 = $scope.calculatedActivityScores["vocabulary1"].correct;
-                  $scope.data.score1 = $scope.calculatedActivityScores["vocabulary1"].percentCorrectQuestions;
-                  $scope.data.total1 = $scope.calculatedActivityScores["vocabulary1"].numberOfQuestions;
-
-
-                  $scope.data.voc2_check = $scope.calculatedActivityScores["vocabulary2"].completed ? 1 : 2;
-                  $scope.data.text7 = $scope.calculatedActivityScores["vocabulary2"].title;
-                  $scope.data.voc2_attempt = $scope.calculatedActivityScores["vocabulary2"].attempts;
-                  $scope.data.answers2 = $scope.calculatedActivityScores["vocabulary2"].correct;
-                  $scope.data.score2 = $scope.calculatedActivityScores["vocabulary2"].percentCorrectQuestions;
-                  $scope.data.total2 = $scope.calculatedActivityScores["vocabulary2"].numberOfQuestions;
-
-                  /*$scope.data.voc3_check = $scope.calculatedActivityScores["vocabulary3"].completed ? 1 : 2;
-                   $scope.data.text11 = $scope.calculatedActivityScores["vocabulary3"].title;
-                   $scope.data.voc3_attempt = $scope.calculatedActivityScores["vocabulary3"].attempts;
-                   $scope.data.answers6 = $scope.calculatedActivityScores["vocabulary3"].correct;
-                   $scope.data.score6 = $scope.calculatedActivityScores["vocabulary3"].percentCorrectQuestions;
-                   $scope.data.total6 = $scope.calculatedActivityScores["vocabulary3"].numberOfQuestions;*/
+                  if ($scope.calculatedActivityScores["song"]) {
+                    $scope.data.song_check = $scope.calculatedActivityScores["song"].completed ? 1 : 2;
+                    $scope.data.text3 = $scope.calculatedActivityScores["song"].title;
+                    $scope.data.song_attempt = $scope.calculatedActivityScores["song"].attempts;
+                  }
 
 
-                  $scope.data.gram1_check = $scope.calculatedActivityScores["grammar1"].completed ? 1 : 2;
-                  $scope.data.text8 = $scope.calculatedActivityScores["grammar1"].title;
-                  $scope.data.gram1_attempt = $scope.calculatedActivityScores["grammar1"].attempts;
-                  $scope.data.answers3 = $scope.calculatedActivityScores["grammar1"].correct;
-                  $scope.data.score3 = $scope.calculatedActivityScores["grammar1"].percentCorrectQuestions;
-                  $scope.data.total3 = $scope.calculatedActivityScores["grammar1"].numberOfQuestions;
+                  if ($scope.calculatedActivityScores["video"]) {
+                    $scope.data.vid_check = $scope.calculatedActivityScores["video"].completed ? 1 : 2;
+                    $scope.data.text4 = $scope.calculatedActivityScores["video"].title;
+                    $scope.data.vid_attempt = $scope.calculatedActivityScores["video"].attempts;
+                  }
 
-                  $scope.data.gram2_check = $scope.calculatedActivityScores["grammar2"].completed ? 1 : 2;
-                  $scope.data.text9 = $scope.calculatedActivityScores["grammar2"].title;
-                  $scope.data.gram2_attempt = $scope.calculatedActivityScores["grammar2"].attempts;
-                  $scope.data.answers4 = $scope.calculatedActivityScores["grammar2"].correct;
-                  $scope.data.score4 = $scope.calculatedActivityScores["grammar2"].percentCorrectQuestions;
-                  $scope.data.total4 = $scope.calculatedActivityScores["grammar2"].numberOfQuestions;
+                  if ($scope.calculatedActivityScores["vocabulary1"]) {
 
+                    $scope.data.voc1_check = $scope.calculatedActivityScores["vocabulary1"].completed ? 1 : 2;
+                    $scope.data.text6 = $scope.calculatedActivityScores["vocabulary1"].title;
+                    $scope.data.voc1_attempt = $scope.calculatedActivityScores["vocabulary1"].attempts;
+                    $scope.data.answers1 = $scope.calculatedActivityScores["vocabulary1"].correct;
+                    $scope.data.score1 = $scope.calculatedActivityScores["vocabulary1"].percentCorrectQuestions;
+                    $scope.data.total1 = $scope.calculatedActivityScores["vocabulary1"].numberOfQuestions;
+                  }
+                  if ($scope.calculatedActivityScores["vocabulary2"]) {
+
+                    $scope.data.voc2_check = $scope.calculatedActivityScores["vocabulary2"].completed ? 1 : 2;
+                    $scope.data.text7 = $scope.calculatedActivityScores["vocabulary2"].title;
+                    $scope.data.voc2_attempt = $scope.calculatedActivityScores["vocabulary2"].attempts;
+                    $scope.data.answers2 = $scope.calculatedActivityScores["vocabulary2"].correct;
+                    $scope.data.score2 = $scope.calculatedActivityScores["vocabulary2"].percentCorrectQuestions;
+                    $scope.data.total2 = $scope.calculatedActivityScores["vocabulary2"].numberOfQuestions;
+                  }
+                  if ($scope.calculatedActivityScores["vocabulary3"]) {
+
+                    $scope.data.voc3_check = $scope.calculatedActivityScores["vocabulary3"].completed ? 1 : 2;
+                    $scope.data.text8 = $scope.calculatedActivityScores["vocabulary3"].title;
+                    $scope.data.voc3_attempt = $scope.calculatedActivityScores["vocabulary3"].attempts;
+                    $scope.data.answers3 = $scope.calculatedActivityScores["vocabulary3"].correct;
+                    $scope.data.score3 = $scope.calculatedActivityScores["vocabulary3"].percentCorrectQuestions;
+                    $scope.data.total3 = $scope.calculatedActivityScores["vocabulary3"].numberOfQuestions;
+                  }
+                  if ($scope.calculatedActivityScores["vocabulary4"]) {
+
+                    $scope.data.voc4_check = $scope.calculatedActivityScores["vocabulary4"].completed ? 1 : 2;
+                    $scope.data.text9 = $scope.calculatedActivityScores["vocabulary4"].title;
+                    $scope.data.voc4_attempt = $scope.calculatedActivityScores["vocabulary4"].attempts;
+                    $scope.data.answers4 = $scope.calculatedActivityScores["vocabulary4"].correct;
+                    $scope.data.score4 = $scope.calculatedActivityScores["vocabulary4"].percentCorrectQuestions;
+                    $scope.data.total4 = $scope.calculatedActivityScores["vocabulary4"].numberOfQuestions;
+                  }
+                  if ($scope.calculatedActivityScores["vocabulary5"]) {
+
+                    $scope.data.voc5_check = $scope.calculatedActivityScores["vocabulary5"].completed ? 1 : 2;
+                    $scope.data.text10 = $scope.calculatedActivityScores["vocabulary5"].title;
+                    $scope.data.voc5_attempt = $scope.calculatedActivityScores["vocabulary5"].attempts;
+                    $scope.data.answers5 = $scope.calculatedActivityScores["vocabulary5"].correct;
+                    $scope.data.score5 = $scope.calculatedActivityScores["vocabulary5"].percentCorrectQuestions;
+                    $scope.data.total5 = $scope.calculatedActivityScores["vocabulary5"].numberOfQuestions;
+                  }
+                  if ($scope.calculatedActivityScores["grammar1"]) {
+
+                    $scope.data.gram1_check = $scope.calculatedActivityScores["grammar1"].completed ? 1 : 2;
+                    $scope.data.text11 = $scope.calculatedActivityScores["grammar1"].title;
+                    $scope.data.gram1_attempt = $scope.calculatedActivityScores["grammar1"].attempts;
+                    $scope.data.answers6 = $scope.calculatedActivityScores["grammar1"].correct;
+                    $scope.data.score6 = $scope.calculatedActivityScores["grammar1"].percentCorrectQuestions;
+                    $scope.data.total6 = $scope.calculatedActivityScores["grammar1"].numberOfQuestions;
+                  }
+                  if ($scope.calculatedActivityScores["grammar2"]) {
+
+                    $scope.data.gram2_check = $scope.calculatedActivityScores["grammar2"].completed ? 1 : 2;
+                    $scope.data.text12 = $scope.calculatedActivityScores["grammar2"].title;
+                    $scope.data.gram2_attempt = $scope.calculatedActivityScores["grammar2"].attempts;
+                    $scope.data.answers7 = $scope.calculatedActivityScores["grammar2"].correct;
+                    $scope.data.score7 = $scope.calculatedActivityScores["grammar2"].percentCorrectQuestions;
+                    $scope.data.total7 = $scope.calculatedActivityScores["grammar2"].numberOfQuestions;
+                  }
+                  if ($scope.calculatedActivityScores["grammar3"]) {
+
+                    $scope.data.gram3_check = $scope.calculatedActivityScores["grammar3"].completed ? 1 : 2;
+                    $scope.data.text13 = $scope.calculatedActivityScores["grammar3"].title;
+                    $scope.data.gram3_attempt = $scope.calculatedActivityScores["grammar3"].attempts;
+                    $scope.data.answers8 = $scope.calculatedActivityScores["grammar3"].correct;
+                    $scope.data.score8 = $scope.calculatedActivityScores["grammar3"].percentCorrectQuestions;
+                    $scope.data.total8 = $scope.calculatedActivityScores["grammar3"].numberOfQuestions;
+                  }
+                  if ($scope.calculatedActivityScores["grammar4"]) {
+
+                    $scope.data.gram4_check = $scope.calculatedActivityScores["grammar4"].completed ? 1 : 2;
+                    $scope.data.text14 = $scope.calculatedActivityScores["grammar4"].title;
+                    $scope.data.gram4_attempt = $scope.calculatedActivityScores["grammar4"].attempts;
+                    $scope.data.answers9 = $scope.calculatedActivityScores["grammar4"].correct;
+                    $scope.data.score9 = $scope.calculatedActivityScores["grammar4"].percentCorrectQuestions;
+                    $scope.data.total9 = $scope.calculatedActivityScores["grammar4"].numberOfQuestions;
+                  }
+                  if ($scope.calculatedActivityScores["grammar5"]) {
+
+                    $scope.data.gram5_check = $scope.calculatedActivityScores["grammar5"].completed ? 1 : 2;
+                    $scope.data.text15 = $scope.calculatedActivityScores["grammar5"].title;
+                    $scope.data.gram5_attempt = $scope.calculatedActivityScores["grammar5"].attempts;
+                    $scope.data.answers10 = $scope.calculatedActivityScores["grammar5"].correct;
+                    $scope.data.score10 = $scope.calculatedActivityScores["grammar5"].percentCorrectQuestions;
+                    $scope.data.total10 = $scope.calculatedActivityScores["grammar5"].numberOfQuestions;
+                  }
 
                   console.log($scope.data);
                   Email.send($scope.data).success(function (response) {
