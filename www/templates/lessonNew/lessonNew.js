@@ -226,11 +226,11 @@ angular.module("bookbuilder2")
         $scope.mainContainer.addChild($scope.activitiesMenuContainer);
 
         //mainContainer Background
-       /* var activitiesMenuContainerGraphic = new createjs.Graphics().beginFill("green").drawRect(0, 0, $scope.activitiesMenuContainer.width, $scope.activitiesMenuContainer.height);
+        var activitiesMenuContainerGraphic = new createjs.Graphics().beginFill("green").drawRect(0, 0, $scope.activitiesMenuContainer.width, $scope.activitiesMenuContainer.height);
          var activitiesMenuContainerBackground = new createjs.Shape(activitiesMenuContainerGraphic);
          activitiesMenuContainerBackground.alpha = 0.5;
 
-         $scope.activitiesMenuContainer.addChild(activitiesMenuContainerBackground);*/
+         $scope.activitiesMenuContainer.addChild(activitiesMenuContainerBackground);
 
 
         /* -------------------------------- END BUTTON -------------------------------- */
@@ -261,10 +261,10 @@ angular.module("bookbuilder2")
           });
 
         /* -------------------------------- END BUTTON TEXT -------------------------------- */
-        var lessonTitle = new createjs.Text("END", "40px Arial", "white");
-        lessonTitle.x = 180;
-        lessonTitle.y = 620;
-        $scope.mainContainer.addChild(lessonTitle);
+        var endText = new createjs.Text("END", "40px Arial", "white");
+        endText.x = 160;
+        endText.y = 620;
+        $scope.mainContainer.addChild(endText);
 
 
         /*********************************************** GETTING JSON FOR THE SELECTED LESSON ***********************************************/
@@ -287,11 +287,18 @@ angular.module("bookbuilder2")
 
             /*--------------------------------------- TITLE CREATION------------------------------------------*/
 
-            console.log("Lesson Title: ", $rootScope.selectedLesson.title);
-            var lessonTitle = new createjs.Text($rootScope.selectedLesson.title, "25px Arial", "white");
+            console.log("Lesson Title: ", $rootScope.selectedLesson.lessonTitle);
+            console.log("Title: ", $rootScope.selectedLesson.title);
+
+            var lessonTitle = new createjs.Text($rootScope.selectedLesson.lessonTitle+"-", "33px Arial", "white");
             lessonTitle.x = 480;
-            lessonTitle.y = 110;
+            lessonTitle.y = 105;
             $scope.mainContainer.addChild(lessonTitle);
+
+            var title = new createjs.Text($rootScope.selectedLesson.title , "33px Arial", "white");
+            title.x = 500;
+            title.y = 100;
+            $scope.mainContainer.addChild(title);
 
 
             /*-------------------------------- Populating Activities Menu -----------------------------------*/
@@ -307,10 +314,10 @@ angular.module("bookbuilder2")
                 function (waterfallCallback) {
 
                   /*The right URL definition*/
-                  /*var spriteResourceUrl = $rootScope.rootDir + "data/assets/" + activity.buttonFileName;*/
+                  var spriteResourceUrl = $rootScope.rootDir + "data/assets/" + activity.buttonFileName;
 
                   //!!!!! TEMPORARY Url definition
-                  var spriteResourceUrl = $rootScope.rootDir + "data/assets/first_menu_choose_lesson_1-6_sprite.json";
+                  /*var spriteResourceUrl = $rootScope.rootDir + "data/assets/first_menu_choose_lesson_1-6_sprite.json";*/
 
                   $http.get(spriteResourceUrl)
                     .success(function (response) {
@@ -322,14 +329,15 @@ angular.module("bookbuilder2")
                       $scope.mainActivitiesButtons[key].activityFolder = activity.activityFolder;
                       $scope.mainActivitiesButtons[key].activityName = activity.name;
                       $scope.mainActivitiesButtons[key].activityTemplate = activity.activityTemplate;
-                      $scope.mainActivitiesButtons[key].regY = -50;
-                      console.log("regX: ", $scope.mainActivitiesButtons[key].getBounds().width / 2);
-                      $scope.mainActivitiesButtons[key].regX = 0;
                       $scope.mainActivitiesButtons[key].y = key * 60;
-                      $scope.mainActivitiesButtons[key].x = -1500 * scale;
+                      $scope.mainActivitiesButtons[key].x = -1500 ;
+
+                      if(activity.activityTemplate !== "activities"){
+                        $scope.mainActivitiesButtons[key].scaleX = $scope.mainActivitiesButtons[key].scaleY = scale * 0.46;
+                      }
 
                       createjs.Tween.get($scope.mainActivitiesButtons[key], {loop: false}).wait(key * 50)
-                        .to({x: $scope.activitiesMenuContainer.width / 2}, 500, createjs.Ease.getPowIn(2));
+                        .to({x: 20}, 500, createjs.Ease.getPowIn(2));
 
                       /* -------------------------------- CLICK ON LESSON BUTTON -------------------------------- */
                       $scope.mainActivitiesButtons[key].addEventListener("mousedown", function (event) {
@@ -416,7 +424,8 @@ angular.module("bookbuilder2")
               function (waterfallSubMenuCallback) {
 
                 //!!!!! TEMPORARY Url definition
-                var spriteResourceUrl = $rootScope.rootDir + "data/assets/first_menu_lesson_1_button_sprite.json";
+                /*var spriteResourceUrl = $rootScope.rootDir + "data/assets/first_menu_lesson_1_button_sprite.json";*/
+                var spriteResourceUrl = $rootScope.rootDir + "data/assets/" + activity.buttonFileName;
 
                 $http.get(spriteResourceUrl)
                   .success(function (response) {
@@ -428,17 +437,12 @@ angular.module("bookbuilder2")
                     $scope.subActivitiesButtons[key].activityFolder = activity.activityFolder;
                     $scope.subActivitiesButtons[key].activityName = activity.name;
                     $scope.subActivitiesButtons[key].activityTemplate = activity.activityTemplate;
-                    $scope.subActivitiesButtons[key].regY = -50;
-                    console.log("regX: ", $scope.subActivitiesButtons[key].getBounds().width / 2);
-                    $scope.subActivitiesButtons[key].regX = 0;
-                    $scope.subActivitiesButtons[key].y = key * 40;
+                    $scope.subActivitiesButtons[key].y = key * 42;
                     backButtonY = $scope.subActivitiesButtons[key].y;
-                    $scope.subActivitiesButtons[key].scaleX = $scope.subActivitiesButtons[key].scaleY = 0.7;
+                    $scope.subActivitiesButtons[key].scaleX = $scope.subActivitiesButtons[key].scaleY = 0.75;
                     $scope.subActivitiesButtons[key].x = -1500 * scale;
                     $scope.backButtonWait = key * 50;
 
-                    /*createjs.Tween.get($scope.subActivitiesButtons[key], {loop: false}).wait(key * 50)
-                      .to({x: $scope.activitiesMenuContainer.width / 2}, 500, createjs.Ease.getPowIn(2));*/
 
                     /* -------------------------------- CLICK ON sub activity button -------------------------------- */
                     $scope.subActivitiesButtons[key].addEventListener("mousedown", function (event) {
@@ -500,18 +504,13 @@ angular.module("bookbuilder2")
                   var backButtonSpriteSheet = new createjs.SpriteSheet(response);
                   $scope.subActivitiesButtons["back"] = new createjs.Sprite(backButtonSpriteSheet, "normal");
 
-                  $scope.subActivitiesButtons["back"].regY = -50;
-                  $scope.subActivitiesButtons["back"].regX = 0;
                   console.log("backButtonY: ",backButtonY);
-                  $scope.subActivitiesButtons["back"].y = backButtonY + 40;
+                  $scope.subActivitiesButtons["back"].y = backButtonY + 60;
                   $scope.subActivitiesButtons["back"].label = "backButton";
                   $scope.subActivitiesButtons["back"].scaleX = $scope.subActivitiesButtons["back"].scaleY = 0.7;
                   $scope.subActivitiesButtons["back"].x =  -1500 * scale;
 
                   console.log("Back Button: ", $scope.subActivitiesButtons["back"]);
-
-                  /*createjs.Tween.get($scope.subActivitiesButtons["back"], {loop: false}).wait($scope.backButtonWait+50)
-                    .to({x: $scope.activitiesMenuContainer.width / 2}, 500, createjs.Ease.getPowIn(2));*/
 
                   /* -------------------------------- CLICK ON BACK BUTTON -------------------------------- */
                   $scope.subActivitiesButtons["back"].addEventListener("mousedown", function (event) {
@@ -528,8 +527,6 @@ angular.module("bookbuilder2")
                   });
 
                   $scope.activitiesMenuContainer.addChild($scope.subActivitiesButtons["back"]);
-
-                  console.log("activitiesMenuContainer after inserting Back button: ", $scope.activitiesMenuContainer);
 
                 }).error(function (error) {
                 console.log("There was an error on getting lesson json");
@@ -586,10 +583,10 @@ angular.module("bookbuilder2")
             if(!error){
               _.each($scope.subActivitiesButtons, function (button, key, list) {
                 createjs.Tween.get($scope.subActivitiesButtons[key], {loop: false}).wait(key * 50)
-                  .to({x: $scope.activitiesMenuContainer.width / 2}, 500, createjs.Ease.getPowIn(2));
+                  .to({x: 50}, 500, createjs.Ease.getPowIn(2));
               });
               createjs.Tween.get($scope.subActivitiesButtons["back"], {loop: false}).wait($scope.backButtonWait+50)
-                .to({x: $scope.activitiesMenuContainer.width / 2}, 500, createjs.Ease.getPowIn(2));
+                .to({x: 50}, 500, createjs.Ease.getPowIn(2));
             }
           });
         }

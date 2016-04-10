@@ -483,13 +483,13 @@ angular.module("bookbuilder2")
                   var returnButton = new createjs.Sprite(returnButtonSpriteSheet, "normal");
 
                   returnButton.addEventListener("mousedown", function (event) {
-                    console.log("mousedown event on a button !");
+                    console.log("Mouse down event on return button !");
                     returnButton.gotoAndPlay("onSelection");
                     $scope.stage.update();
                   });
 
                   returnButton.addEventListener("pressup", function (event) {
-                    console.log("pressup event!");
+                    console.log("Press up on return event!");
                     returnButton.gotoAndPlay("normal");
                     $scope.stage.update();
                     //action
