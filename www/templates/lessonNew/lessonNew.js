@@ -290,14 +290,14 @@ angular.module("bookbuilder2")
             console.log("Lesson Title: ", $rootScope.selectedLesson.lessonTitle);
             console.log("Title: ", $rootScope.selectedLesson.title);
 
-            var lessonTitle = new createjs.Text($rootScope.selectedLesson.lessonTitle+"-", "33px Arial", "white");
-            lessonTitle.x = 480;
+            var lessonTitle = new createjs.Text($rootScope.selectedLesson.lessonTitle+" -", "33px Arial", "white");
+            lessonTitle.x = 460;
             lessonTitle.y = 105;
             $scope.mainContainer.addChild(lessonTitle);
 
             var title = new createjs.Text($rootScope.selectedLesson.title , "33px Arial", "white");
-            title.x = 500;
-            title.y = 100;
+            title.x = 630;
+            title.y = 105;
             $scope.mainContainer.addChild(title);
 
 
