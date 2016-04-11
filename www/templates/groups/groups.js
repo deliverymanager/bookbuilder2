@@ -62,9 +62,7 @@ angular.module("bookbuilder2")
       $scope.savedGroupButtonsArray = {};
       $scope.savedLessonButtonsArray = {};
 
-      var imageLoader;
-      /*Image Loader*/
-      imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
+      var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
         src: $rootScope.rootDir + "data/assets/first_menu_background_b1.png"
       }));
 
