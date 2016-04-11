@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<ion-view align-title="center" can-swipe-back="false" style="background-color:black;" nav-transition="none">
+  <ion-nav-bar class="bar-stable transparentBar">
+  </ion-nav-bar>
+  <ion-nav-buttons side="primary">
+    <div id="backImg" class="backImg" on-touch="touchBackBtn('backImg')" on-release="releaseBackBtn('backImg')">
+      <button ng-click="backBtn()" class="button button-icon ion-arrow-left-c"
+              style="margin-top: 3px; border-color: transparent; background-color: transparent; color:white;"></button>
+    </div>
+  </ion-nav-buttons>
+  <ion-content has-bouncing="false" scroll="false" style="top: 0px; bottom: 0px">
+    <videogular vg-theme="config.theme" vg-player-ready="startVideoCheck($API)">
+      <vg-media vg-src="config.sources" vg-tracks="config.tracks">
+      </vg-media>
+      <vg-overlay-play></vg-overlay-play>
+      <vg-poster vg-url="config.plugins.poster"></vg-poster>
+    </videogular>
+  </ion-content>
+  <ion-footer-bar ng-if="interface.showFooter" class="transparentBar videoFooterBarBg">
+    <div class="title"><span style="background:rgba(0, 0, 0, 0.5); padding-left: 10px; padding-right: 10px;"
+                             ng-if="interface.showDialogs && interface.subtitle">{{interface.subtitle}}</span>
+    </div>
+    <button ng-style="{'color':color}" class="button button-icon icon ion-chatbubbles"
+            ng-click="toggleShowDialogs()"></button>
+  </ion-footer-bar>
+</ion-view>

@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-transitions', 'ngCordova'])
+angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-transitions', 'ngCordova', 'ngSanitize', 'com.2fdevs.videogular', 'com.2fdevs.videogular.plugins.controls', 'com.2fdevs.videogular.plugins.overlayplay', 'com.2fdevs.videogular.plugins.poster'])
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -50,12 +50,6 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
         url: "/groups",
         templateUrl: "templates/groups/groups.html",
         controller: "GroupsController"
-      })
-      .state('groupsNew', {
-        cache: false,
-        url: "/groupsNew",
-        templateUrl: "templates/groupsNew/groupsNew.html",
-        controller: "GroupsNewController"
       })
       .state('lesson', {
         cache: false,
@@ -116,6 +110,12 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
         url: "/draganddropPark",
         templateUrl: "templates/draganddrop/draganddropPark.html",
         controller: "DraganddropParkController"
+      })
+      .state('video', {
+        cache: false,
+        url: "/video",
+        templateUrl: "templates/video/video.html",
+        controller: "VideoController"
       })
       .state('results', {
         cache: false,

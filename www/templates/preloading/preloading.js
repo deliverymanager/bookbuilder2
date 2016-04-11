@@ -15,7 +15,7 @@ angular.module("bookbuilder2")
           historyRoot: true,
           disableBack: true
         });
-        $state.go($rootScope.book.bookTemplate, {}, {reload: true});
+        $state.go("groups", {}, {reload: true});
       });
     };
 
@@ -97,7 +97,7 @@ angular.module("bookbuilder2")
                                           historyRoot: true,
                                           disableBack: true
                                         });
-                                        $state.go($rootScope.book.bookTemplate, {}, {reload: true});
+                                        $state.go("groups", {}, {reload: true});
                                       }
                                     },
                                     {
@@ -129,7 +129,7 @@ angular.module("bookbuilder2")
                                                 historyRoot: true,
                                                 disableBack: true
                                               });
-                                              $state.go($rootScope.book.bookTemplate, {}, {reload: true});
+                                              $state.go("groups", {}, {reload: true});
                                             }, function (prog) {
                                               console.log('Ionic Deploy: Progress... ', prog);
                                               $ionicLoading.show({
@@ -142,7 +142,7 @@ angular.module("bookbuilder2")
                                               historyRoot: true,
                                               disableBack: true
                                             });
-                                            $state.go($rootScope.book.bookTemplate, {}, {reload: true});
+                                            $state.go("groups", {}, {reload: true});
                                           });
                                       }
                                     }
@@ -154,21 +154,21 @@ angular.module("bookbuilder2")
                                   historyRoot: true,
                                   disableBack: true
                                 });
-                                $state.go($rootScope.book.bookTemplate, {}, {reload: true});
+                                $state.go("groups", {}, {reload: true});
                               }, function (response) {
                                 console.log("callback meta 2", response);
                                 $ionicHistory.nextViewOptions({
                                   historyRoot: true,
                                   disableBack: true
                                 });
-                                $state.go($rootScope.book.bookTemplate, {}, {reload: true});
+                                $state.go("groups", {}, {reload: true});
                               });
                             } else {
                               $ionicHistory.nextViewOptions({
                                 historyRoot: true,
                                 disableBack: true
                               });
-                              $state.go($rootScope.book.bookTemplate, {}, {reload: true});
+                              $state.go("groups", {}, {reload: true});
 
                             }
                           }, function (error) {
@@ -177,7 +177,7 @@ angular.module("bookbuilder2")
                               historyRoot: true,
                               disableBack: true
                             });
-                            $state.go($rootScope.book.bookTemplate, {}, {reload: true});
+                            $state.go("groups", {}, {reload: true});
                           });
                         } else {
                           $rootScope.showPopup();
@@ -198,7 +198,7 @@ angular.module("bookbuilder2")
 
       } else {
         $rootScope.rootDir = "";
-        /*$state.go($rootScope.book.bookTemplate);*/
+        /*$state.go("groups");*/
         $ionicHistory.nextViewOptions({
           historyRoot: true,
           disableBack: true
