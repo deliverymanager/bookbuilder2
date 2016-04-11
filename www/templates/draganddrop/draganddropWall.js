@@ -276,9 +276,6 @@ angular.module("bookbuilder2")
           $scope.questionImages = {};
           $scope.currentPretexts = {};
 
-          /*$scope.questionBackgroundsContainers = {};*/
-          /*Creating the bitmap for the question*/
-
           _.each($scope.activityData.questions, function (question, key, list) {
 
             console.log("The question is: ", question);
