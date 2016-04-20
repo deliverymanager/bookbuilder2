@@ -60,22 +60,13 @@ angular.module("bookbuilder2")
       };
       createjs.Ticker.addEventListener("tick", handleTick);
 
-      //EVENTS THAT SHOULD BE USED TO CONTROL THE APP
-      $scope.$on('$destroy', function () {
-        console.log('destroy');
-        createjs.Ticker.framerate = 0;
-      });
-
       $ionicPlatform.on('pause', function () {
         console.log('pause');
         createjs.Ticker.framerate = 0;
+        ionic.Platform.exitApp();
       });
-
       $ionicPlatform.on('resume', function () {
-        console.log('resume');
-        $timeout(function () {
-          createjs.Ticker.framerate = 20;
-        }, 2000);
+        createjs.Ticker.framerate = 20;
       });
 
       /*Image Loader*/
@@ -94,18 +85,19 @@ angular.module("bookbuilder2")
         scaleY = scaleY.toFixed(2);
         var scaleX = $scope.stage.canvas.width / background.image.width;
         scaleX = scaleX.toFixed(2);
-        $scope.scale = 1;
+        $rootScope.scale = 1;
         if (scaleX >= scaleY) {
-          $scope.scale = scaleY;
+          $rootScope.scale = scaleY;
         } else {
-          $scope.scale = scaleX;
+          $rootScope.scale = scaleX;
         }
-        console.log("GENERAL SCALING FACTOR", $scope.scale);
+        window.localStorage.setItem("scale", $rootScope.scale);
+        console.log("GENERAL SCALING FACTOR", $rootScope.scale);
         //IN ORDER TO FIND THE CORRECT COORDINATES FIRST WE NEED TO ENTER THE EXACT SAME DIMENSIONS IN THE EMULATOR OF THE BACKGROUND IMAGE
 
 
-        background.scaleX = $scope.scale;
-        background.scaleY = $scope.scale;
+        background.scaleX = $rootScope.scale;
+        background.scaleY = $rootScope.scale;
         background.regX = background.image.width / 2;
         background.regY = background.image.height / 2;
         background.x = $scope.stage.canvas.width / 2;
@@ -120,7 +112,7 @@ angular.module("bookbuilder2")
         $scope.mainContainer = new createjs.Container();
         $scope.mainContainer.width = background.image.width;
         $scope.mainContainer.height = background.image.height;
-        $scope.mainContainer.scaleX = $scope.mainContainer.scaleY = $scope.scale;
+        $scope.mainContainer.scaleX = $scope.mainContainer.scaleY = $rootScope.scale;
         $scope.mainContainer.x = backgroundPosition.x;
         $scope.mainContainer.y = backgroundPosition.y;
         /*$scope.mainContainer.x = backgroundPosition.x + (backgroundPosition.width / 2);
@@ -181,14 +173,11 @@ angular.module("bookbuilder2")
             menuButton.addEventListener("pressup", function (event) {
               console.log("pressup event!");
               menuButton.gotoAndPlay("normal");
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-              $state.go("lessonNew", {}, {reload: true});
+              $scope.stage.update();
+
             });
 
-            menuButton.scaleX = menuButton.scaleY = $scope.scale;
+            menuButton.scaleX = menuButton.scaleY = $rootScope.scale;
             menuButton.x = 0;
             menuButton.y = -menuButton.getTransformedBounds().height / 5;
 
@@ -208,42 +197,6 @@ angular.module("bookbuilder2")
         $scope.activitiesMenuContainer.x = 20;
         $scope.activitiesMenuContainer.y = 180;
         $scope.mainContainer.addChild($scope.activitiesMenuContainer);
-
-        //mainContainer Background
-        /*var activitiesMenuContainerGraphic = new createjs.Graphics().beginFill("green").drawRect(0, 0, $scope.activitiesMenuContainer.width, $scope.activitiesMenuContainer.height);
-         var activitiesMenuContainerBackground = new createjs.Shape(activitiesMenuContainerGraphic);
-         activitiesMenuContainerBackground.alpha = 0.5;
-
-         $scope.activitiesMenuContainer.addChild(activitiesMenuContainerBackground);*/
-
-
-        /* /!* -------------------------------- END BUTTON -------------------------------- *!/
-         //Getting the element
-         $http.get($rootScope.rootDir + "data/assets/lesson_end_button_sprite.json")
-         .success(function (response) {
-         response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-         var exitButtonSpriteSheet = new createjs.SpriteSheet(response);
-         var exitButton = new createjs.Sprite(exitButtonSpriteSheet, "normal");
-
-         exitButton.addEventListener("mousedown", function (event) {
-         console.log("mousedown event on a button !");
-         exitButton.gotoAndPlay("onSelection");
-         $scope.stage.update();
-         });
-
-         exitButton.addEventListener("pressup", function (event) {
-         console.log("pressup event!");
-         exitButton.gotoAndPlay("normal");
-         ionic.Platform.exitApp();
-         });
-         exitButton.x = 100;
-         exitButton.y = 630;
-         $scope.mainContainer.addChild(exitButton);
-         })
-         .error(function (error) {
-         console.log("Error on getting json data for end button...");
-         });
-         */
 
 
         $http.get($rootScope.rootDir + "data/assets/lesson_end_button_sprite.json")
@@ -341,10 +294,8 @@ angular.module("bookbuilder2")
                       $scope.mainActivitiesButtons[key].x = -1500;
 
                       if (activity.activityTemplate !== "activities") {
-                        $scope.mainActivitiesButtons[key].scaleX = $scope.mainActivitiesButtons[key].scaleY = $scope.scale * 0.46;
+                        $scope.mainActivitiesButtons[key].scaleX = $scope.mainActivitiesButtons[key].scaleY = 0.41;
                       }
-
-
 
                       /* -------------------------------- CLICK ON LESSON BUTTON -------------------------------- */
                       $scope.mainActivitiesButtons[key].addEventListener("mousedown", function (event) {
@@ -360,8 +311,10 @@ angular.module("bookbuilder2")
                           $scope.stage.update();
                           $rootScope.activityFolder = $scope.mainActivitiesButtons[key].activityFolder;
                           $rootScope.activityName = $scope.mainActivitiesButtons[key].activityName;
+                          $rootScope.activityTemplate = $scope.mainActivitiesButtons[key].activityTemplate;
 
                           window.localStorage.setItem("activityFolder", $rootScope.activityFolder);
+                          window.localStorage.setItem("activityTemplate", $rootScope.activityTemplate);
                           window.localStorage.setItem("activityName", $rootScope.activityName);
 
                           console.log($rootScope.selectedLessonId);
@@ -390,8 +343,7 @@ angular.module("bookbuilder2")
 
                       $scope.activitiesMenuContainer.addChild($scope.mainActivitiesButtons[key]);
 
-                      createjs.Tween.get($scope.mainActivitiesButtons[key], {loop: false}).wait(key * 50)
-                        .to({x: 20}, 500, createjs.Ease.getPowIn(2)).call(function () {
+                      createjs.Tween.get($scope.mainActivitiesButtons[key], {loop: false}).to({x: 20}, 100, createjs.Ease.getPowIn(2)).call(function () {
                         waterfallCallback();
                       });
 
@@ -422,7 +374,6 @@ angular.module("bookbuilder2")
 
           /*Creating a variable that holds the Y for the back button and a second variable that holds the wait time for the animation*/
           var backButtonY = 0;
-          $scope.backButtonWait = 0;
 
           //Creating activities subMenu
           _.each($rootScope.selectedLesson.activitiesMenu, function (activity, key, list) {
@@ -443,9 +394,7 @@ angular.module("bookbuilder2")
                     $scope.subActivitiesButtons[key].y = key * 42;
                     backButtonY = $scope.subActivitiesButtons[key].y;
                     $scope.subActivitiesButtons[key].scaleX = $scope.subActivitiesButtons[key].scaleY = 0.75;
-                    $scope.subActivitiesButtons[key].x = -1500 * $scope.scale;
-                    $scope.backButtonWait = key * 50;
-
+                    $scope.subActivitiesButtons[key].x = -1500 * $rootScope.scale;
 
                     /* -------------------------------- CLICK ON sub activity button -------------------------------- */
                     $scope.subActivitiesButtons[key].addEventListener("mousedown", function (event) {
@@ -474,9 +423,7 @@ angular.module("bookbuilder2")
 
                     $scope.activitiesMenuContainer.addChild($scope.subActivitiesButtons[key]);
 
-                    $timeout(function () {
-                      waterfallSubMenuCallback();
-                    }, 100);
+                    waterfallSubMenuCallback();
 
                   }).error(function (error) {
                   console.log("There was an error on getting lesson json");
@@ -486,112 +433,93 @@ angular.module("bookbuilder2")
           });//end of _.each(selectedGroupLessons)
 
           async.waterfall(waterfallSubMenuFunctions, function (error, result) {
-            console.log("Buttons of activities are inserted...");
 
-            console.log("$scope.subActivitiesButtons: ", $scope.subActivitiesButtons);
+            $http.get($rootScope.rootDir + "data/assets/menu_activities_back_button_sprite.json")
+              .success(function (response) {
 
-            if (error) {
-              console.error("There was an error on executing waterfall: ", error);
-            } else {
-              //!!!!! TEMPORARY Url definition
-              var spriteResourceUrl = $rootScope.rootDir + "data/assets/menu_activities_back_button_sprite.json";
+                response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                console.log(response);
+                var backButtonSpriteSheet = new createjs.SpriteSheet(response);
+                $scope.subActivitiesButtons["back"] = new createjs.Sprite(backButtonSpriteSheet, "normal");
+                $scope.subActivitiesButtons["back"].y = backButtonY + 60;
+                $scope.subActivitiesButtons["back"].label = "backButton";
+                $scope.subActivitiesButtons["back"].scaleX = $scope.subActivitiesButtons["back"].scaleY = 0.75;
+                $scope.subActivitiesButtons["back"].x = -1500 * $rootScope.scale;
 
-              console.log("Creating Back button...");
-              /*At last the Back button gets inserted*/
-              $http.get(spriteResourceUrl)
-                .success(function (response) {
+                $scope.subActivitiesButtons["back"].addEventListener("mousedown", function (event) {
+                  $scope.subActivitiesButtons["back"].gotoAndPlay("onSelection");
+                  $scope.stage.update();
+                });
 
-                  console.log("Back button created!");
+                $scope.subActivitiesButtons["back"].addEventListener("pressup", function (event) {
+                  showingActivitiesMenu();
+                  $scope.subActivitiesButtons["back"].gotoAndPlay("normal");
+                  $scope.stage.update();
+                });
 
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                $scope.activitiesMenuContainer.addChild($scope.subActivitiesButtons["back"]);
 
-                  var backButtonSpriteSheet = new createjs.SpriteSheet(response);
-                  $scope.subActivitiesButtons["back"] = new createjs.Sprite(backButtonSpriteSheet, "normal");
-
-                  console.log("backButtonY: ", backButtonY);
-                  $scope.subActivitiesButtons["back"].y = backButtonY + 60;
-                  $scope.subActivitiesButtons["back"].label = "backButton";
-                  $scope.subActivitiesButtons["back"].scaleX = $scope.subActivitiesButtons["back"].scaleY = 1;
-                  $scope.subActivitiesButtons["back"].x = -1500 * $scope.scale;
-
-                  console.log("Back Button: ", $scope.subActivitiesButtons["back"]);
-
-                  /* -------------------------------- CLICK ON BACK BUTTON -------------------------------- */
-                  $scope.subActivitiesButtons["back"].addEventListener("mousedown", function (event) {
-                    console.log("Mouse down event on activities subMenu Back button!");
-                    $scope.subActivitiesButtons["back"].gotoAndPlay("onSelection");
-                    $scope.stage.update();
-                  });
-
-                  $scope.subActivitiesButtons["back"].addEventListener("pressup", function (event) {
-                    console.log("Press up event on activities subMenu Back button !");
-                    showingActivitiesMenu();
-                    $scope.subActivitiesButtons["back"].gotoAndPlay("normal");
-                    $scope.stage.update();
-                  });
-
-                  $scope.activitiesMenuContainer.addChild($scope.subActivitiesButtons["back"]);
-
-                }).error(function (error) {
-                console.log("There was an error on getting lesson json");
-              });
-            }
-
+              }).error(function (error) {
+              console.log("There was an error on getting lesson json");
+            });
           });//end of waterfall
         }//end of populating activitiesSubMenu
 
 
         /*Function for showing activitiesMenu*/
         function showingActivitiesMenu() {
-
-          async.waterfall([
-            //Hiding subMenu buttons
-            function (showingActivitiesMenuCallback) {
-              _.each($scope.subActivitiesButtons, function (button, key, list) {
-                createjs.Tween.get($scope.subActivitiesButtons[key], {loop: false}).wait(key * 50)
-                  .to({x: -1500}, 500, createjs.Ease.getPowIn(2));
-              });
-              createjs.Tween.get($scope.subActivitiesButtons["back"], {loop: false}).wait($scope.backButtonWait + 50)
-                .to({x: -1500}, 500, createjs.Ease.getPowIn(2));
-
-              showingActivitiesMenuCallback();
-            }
-          ], function (error, result) {
-            if (!error) {
-              //Showing Menu buttons
-              _.each($scope.mainActivitiesButtons, function (button, key, list) {
-                createjs.Tween.get($scope.mainActivitiesButtons[key], {loop: false}).wait(key * 50)
-                  .to({x: $scope.activitiesMenuContainer.width / 2}, 500, createjs.Ease.getPowIn(2));
-              });
-            }
+          showHidesubActivitiesButtons(-1500, 50, function () {
+            showHideMainActivitiesButtons(20, 100, function () {
+            });
           });
         }
 
-        /*Function for showing activitiesSubMenu*/
+
+        function showHidesubActivitiesButtons(xTarget, speed, callback) {
+
+          var waterfallFunctions = [];
+
+          _.each($scope.subActivitiesButtons, function (button, key, list) {
+            waterfallFunctions.push(function (waterFallCallback) {
+              createjs.Tween.get($scope.subActivitiesButtons[key], {loop: false}).to({x: xTarget}, speed, createjs.Ease.getPowIn(2)).call(function () {
+                waterFallCallback();
+              });
+            });
+          });
+
+          waterfallFunctions.push(function (waterFallCallback) {
+            createjs.Tween.get($scope.subActivitiesButtons["back"], {loop: false}).to({x: xTarget + 35}, speed, createjs.Ease.getPowIn(2)).call(function () {
+              waterFallCallback();
+            });
+          });
+
+          async.waterfall(waterfallFunctions, function (error, result) {
+            callback();
+          });
+
+        };
+
+        function showHideMainActivitiesButtons(xTarget, speed, callback) {
+
+          var waterfallFunctions = [];
+
+          _.each($scope.mainActivitiesButtons, function (button, key, list) {
+            waterfallFunctions.push(function (waterFallCallback) {
+              createjs.Tween.get($scope.mainActivitiesButtons[key], {loop: false}).to({x: xTarget}, speed, createjs.Ease.getPowIn(2)).call(function () {
+                waterFallCallback();
+              });
+            });
+          });
+
+          async.waterfall(waterfallFunctions, function (err, response) {
+            callback();
+          });
+        };
+
         function showingActivitiesSubMenu() {
-
-          async.waterfall([
-            //Hiding subMenu buttons
-            function (showingActivitiesSubMenuCallback) {
-
-              //Showing Menu buttons
-              _.each($scope.mainActivitiesButtons, function (button, key, list) {
-                createjs.Tween.get($scope.mainActivitiesButtons[key], {loop: false}).wait(key * 50)
-                  .to({x: -1500}, 500, createjs.Ease.getPowIn(2));
-              });
-
-              showingActivitiesSubMenuCallback();
-
-            }
-          ], function (error, result) {
-            if (!error) {
-              _.each($scope.subActivitiesButtons, function (button, key, list) {
-                createjs.Tween.get($scope.subActivitiesButtons[key], {loop: false}).wait(key * 50)
-                  .to({x: 50}, 500, createjs.Ease.getPowIn(2));
-              });
-              createjs.Tween.get($scope.subActivitiesButtons["back"], {loop: false}).wait($scope.backButtonWait + 50)
-                .to({x: 50}, 500, createjs.Ease.getPowIn(2));
-            }
+          showHideMainActivitiesButtons(-1500, 50, function () {
+            showHidesubActivitiesButtons(50, 100, function () {
+            });
           });
         }
 
