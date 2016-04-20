@@ -92,6 +92,24 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
         templateUrl: "templates/multiple/multiple.html",
         controller: "MultipleController"
       })
+      .state('multipleSoccer', {
+        cache: false,
+        url: "/multipleSoccer",
+        templateUrl: "templates/multiple/multipleSoccer.html",
+        controller: "MultipleSoccerController"
+      })
+      .state('multipleGolf', {
+        cache: false,
+        url: "/multipleGolf",
+        templateUrl: "templates/multiple/multipleGolf.html",
+        controller: "MultipleGolfController"
+      })
+      .state('multipleUfo', {
+        cache: false,
+        url: "/multipleUfo",
+        templateUrl: "templates/multiple/multipleUfo.html",
+        controller: "MultipleUfoController"
+      })
       .state('draganddrop', {
         cache: false,
         url: "/draganddrop",

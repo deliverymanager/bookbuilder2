@@ -154,7 +154,7 @@ angular.module("bookbuilder2")
         } else {
           scale = scaleX;
         }
-        console.log("GENERAL SCALING FACTOR", scale);
+        console.log("GENERAL SCALING FACTOR: ", scale);
         //IN ORDER TO FIND THE CORRECT COORDINATES FIRST WE NEED TO ENTER THE EXACT SAME DIMENSIONS IN THE EMULATOR OF THE BACKGROUND IMAGE
 
 
@@ -166,7 +166,7 @@ angular.module("bookbuilder2")
         background.y = $scope.stage.canvas.height / 2;
         $scope.stage.addChild(background);
         var backgroundPosition = background.getTransformedBounds();
-        console.log(backgroundPosition);
+        console.log("backgroundPosition: ",backgroundPosition);
 
         /* ------------------------------------------ MAIN CONTAINER ---------------------------------------------- */
         $scope.mainContainer = new createjs.Container();
@@ -758,7 +758,6 @@ angular.module("bookbuilder2")
                       }
                       check();
                     }
-
                   });
 
                   $scope.checkButton.x = 385;
@@ -1087,54 +1086,7 @@ angular.module("bookbuilder2")
             $state.go("results", {}, {reload: true});
           }
         }
-
-
-        /*function collision(x, y) {
-
-         console.log("Collision x: " + x + " y: " + y);
-
-         //Formatting the answerContainer coordinates
-         var formattedAnswerContainerCoordinates = $scope.answerRowContainers[0].localToGlobal(x,y);
-         console.log("formattedAnswerContainerCoordinates.x: ",formattedAnswerContainerCoordinates.x);
-         console.log("formattedAnswerContainerCoordinates.y: ",formattedAnswerContainerCoordinates.y);
-
-         for (var i = 0; i < $scope.activityData.questions.length; i++) {
-
-         var formattedQuestionContainerCoordinates = $scope.questionRowContainers[0].localToGlobal(x,y);
-
-         console.log("formattedQuestionContainerCoordinates.x: ",formattedQuestionContainerCoordinates.x);
-         console.log("formattedQuestionContainerCoordinates.y: ",formattedQuestionContainerCoordinates.y);
-
-         /!*console.log("Width: ", $scope.questionRowContainers[i].getBounds().width);
-         console.log("Height: ", $scope.questionRowContainers[i].getBounds().height);
-         console.log("Transformed Width: ", $scope.questionRowContainers[i].getTransformedBounds().width);
-         console.log("Transformed Height: ", $scope.questionRowContainers[i].getTransformedBounds().height);*!/
-
-         if (ionic.DomUtil.rectContains(
-         formattedAnswerContainerCoordinates.x, formattedAnswerContainerCoordinates.y,
-         formattedQuestionContainerCoordinates.x, formattedQuestionContainerCoordinates.y,
-         formattedQuestionContainerCoordinates.x + $scope.questionRowContainers[i].getTransformedBounds().width,
-         formattedQuestionContainerCoordinates.y + $scope.questionRowContainers[i].getTransformedBounds().height)) {
-         console.log("Collision returns i: ",i);
-         return i;
-         }
-         }
-         console.log("Collision returns -1...");
-
-         var checkWhatsWrongX =
-         formattedAnswerContainerCoordinates.x > formattedQuestionContainerCoordinates.x + $scope.questionRowContainers[0].getTransformedBounds().width ?
-         "Wrong! Answer X is greater than Question X" : "Right! Question X is greater than Answer X";
-
-         var checkWhatsWrongY =
-         formattedAnswerContainerCoordinates.y > formattedQuestionContainerCoordinates.y + $scope.questionRowContainers[0].getTransformedBounds().height ?
-         "Wrong! Answer Y is greater than Question Y" : "Right! Question Y is greater than Answer Y";
-
-         console.log(checkWhatsWrongX +"\n"+checkWhatsWrongY);
-
-         return -1;
-         }*/
-
-
+        
         function collision(x, y) {
 
           console.log("Collision x: " + x + " y: " + y);

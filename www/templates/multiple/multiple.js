@@ -163,7 +163,7 @@ angular.module("bookbuilder2")
 
             if (window.localStorage.getItem(activityNameInLocalStorage)) {
               $scope.activityData = JSON.parse(window.localStorage.getItem(activityNameInLocalStorage));
-              console.log("$scope.activityData from local Strage: ", $scope.activityData);
+              console.log("$scope.activityData from local Storage: ", $scope.activityData);
               callback();
             } else {
               $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/" + $rootScope.activityFolder + "/multiple.json")
