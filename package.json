@@ -1,7 +1,7 @@
 {
   "name": "bookbuilder2",
   "version": "1.1.1",
-  "description": "bookbuilder2: An Ionic project",
+  "description": "bookbuilder2",
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-sass": "^2.0.4",

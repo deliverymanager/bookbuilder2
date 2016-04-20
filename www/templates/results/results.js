@@ -787,7 +787,7 @@ angular.module("bookbuilder2")
 
 
       });//end of image on complete
-    }, 500);
+    }, 1500);
 //end of timeout
   })
 ;

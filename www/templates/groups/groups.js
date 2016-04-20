@@ -89,77 +89,33 @@ angular.module("bookbuilder2")
           scaleY = scaleY.toFixed(2);
           var scaleX = $scope.stage.canvas.width / background.image.width;
           scaleX = scaleX.toFixed(2);
-          var scale = 1;
+          $scope.scale = 1;
           if (scaleX >= scaleY) {
-            scale = scaleY;
+            $scope.scale = scaleY;
           } else {
-            scale = scaleX;
+            $scope.scale = scaleX;
           }
-          console.log("GENERAL SCALING FACTOR", scale);
+          console.log("GENERAL SCALING FACTOR", $scope.scale);
           //IN ORDER TO FIND THE CORRECT COORDINATES FIRST WE NEED TO ENTER THE EXACT SAME DIMENSIONS IN THE EMULATOR OF THE BACKGROUND IMAGE
 
-          background.scaleX = scale;
-          background.scaleY = scale;
+          background.scaleX = $scope.scale;
+          background.scaleY = $scope.scale;
           background.regX = background.image.width / 2;
           background.regY = background.image.height / 2;
           background.x = $scope.stage.canvas.width / 2;
           background.y = $scope.stage.canvas.height / 2;
           $scope.stage.addChild(background);
-          $scope.stage.update();
           var backgroundPosition = background.getTransformedBounds();
-          console.log("backgroundPosition", backgroundPosition);
 
 
           /* -------------------------------- MAIN CONTAINER -------------------------------- */
           $scope.mainContainer = new createjs.Container();
           $scope.mainContainer.width = background.image.width;
           $scope.mainContainer.height = background.image.height;
-          $scope.mainContainer.scaleX = $scope.mainContainer.scaleY = scale;
+          $scope.mainContainer.scaleX = $scope.mainContainer.scaleY = $scope.scale;
           $scope.mainContainer.x = backgroundPosition.x;
           $scope.mainContainer.y = backgroundPosition.y;
-          /*$scope.mainContainer.x = backgroundPosition.x + (backgroundPosition.width / 2);
-           $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 2);*/
           $scope.stage.addChild($scope.mainContainer);
-
-          //mainContainer Background
-          /*var mainContainerGraphic = new createjs.Graphics().beginFill("green").drawRect(0, 0, $scope.mainContainer.width, $scope.mainContainer.height);
-           var mainContainerBackground = new createjs.Shape(mainContainerGraphic);
-           mainContainerBackground.alpha = 0.5;
-
-           $scope.mainContainer.addChild(mainContainerBackground);*/
-
-
-          /* -------------------------------- EXIT BUTTON -------------------------------- */
-          //Getting the element
-          $http.get($rootScope.rootDir + "data/assets/first_menu_exit_button_sprite.json")
-            .success(function (response) {
-              //Reassigning images with the rest of resource
-              response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-              var exitButtonSpriteSheet = new createjs.SpriteSheet(response);
-              var exitButton = new createjs.Sprite(exitButtonSpriteSheet, "normal");
-              exitButton.visible = ionic.Platform.isAndroid();
-
-              exitButton.addEventListener("mousedown", function (event) {
-                console.log("mousedown event on a button !");
-                exitButton.gotoAndPlay("onSelection");
-                $scope.stage.update();
-              });
-
-              exitButton.addEventListener("pressup", function (event) {
-                console.log("pressup event!");
-                exitButton.gotoAndPlay("normal");
-                $scope.stage.update();
-                ionic.Platform.exitApp();
-              });
-              exitButton.x = $scope.mainContainer.width / 2;
-              exitButton.y = 595;
-              $scope.mainContainer.addChild(exitButton);
-              $scope.stage.update();
-            })
-            .error(function (error) {
-              console.log("Error on getting json data for exit button...");
-            });
-
 
           /* -------------------------------- POPULATING LEFT SIDE GROUP MENU -------------------------------- */
           //This groups.json is loaded within the application and not from the server!
@@ -171,26 +127,138 @@ angular.module("bookbuilder2")
               window.localStorage.setItem("book", JSON.stringify($rootScope.book));
 
 
+              $scope.spaceBetweenGroups = 55;
+              if ($rootScope.book.bookTemplate === "groups") {
+                $scope.leftMarginGroupButtons = 165;
+                $scope.downloadDeleteIconY = 500;
+                $scope.exitButtonY = 615;
+              } else {
+                $scope.leftMarginGroupButtons = 140;
+                $scope.downloadDeleteIconY = 555;
+                $scope.exitButtonY = 595;
+              }
+
+              $http.get($rootScope.rootDir + "data/assets/first_menu_exit_button_sprite.json")
+                .success(function (response) {
+                  //Reassigning images with the rest of resource
+                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  var exitButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  var exitButton = new createjs.Sprite(exitButtonSpriteSheet, "normal");
+                  exitButton.visible = ionic.Platform.isAndroid();
+
+                  exitButton.addEventListener("mousedown", function (event) {
+                    console.log("mousedown event on a button !");
+                    exitButton.gotoAndPlay("onSelection");
+                    $scope.stage.update();
+                  });
+
+                  exitButton.addEventListener("pressup", function (event) {
+                    console.log("pressup event!");
+                    exitButton.gotoAndPlay("normal");
+                    $scope.stage.update();
+                    ionic.Platform.exitApp();
+                  });
+                  exitButton.x = $scope.mainContainer.width / 2;
+                  exitButton.y = $scope.exitButtonY;
+                  $scope.mainContainer.addChild(exitButton);
+                })
+                .error(function (error) {
+                  console.log("Error on getting json data for exit button...");
+                });
+
+              var downloadIconLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
+                src: $rootScope.rootDir + "data/assets/downloadIcon.png"
+              }));
+              downloadIconLoader.load();
+
+              downloadIconLoader.on("complete", function (r) {
+
+                $scope.downloadIcon = new createjs.Bitmap($rootScope.rootDir + "data/assets/downloadIcon.png");
+                $scope.downloadIcon.visible = false;
+
+                $scope.downloadIcon.addEventListener("mousedown", function (event) {
+                  console.log("mousedown event on downloadIcon !");
+                  $scope.downloadIcon.alpha = 0.5;
+                  $scope.stage.update();
+                });
+
+                $scope.downloadIcon.addEventListener("pressup", function (event) {
+                  console.log("pressup event!");
+                  $scope.downloadIcon.alpha = 1;
+                  $scope.stage.update();
+
+                  var confirmPopup = $ionicPopup.confirm({
+                    title: 'Download ' + _.findWhere($rootScope.book.lessonGroups, {"groupId": $rootScope.selectedGroupId}).groupTitle,
+                    template: 'Do you want to download the contents of ' + _.findWhere($rootScope.book.lessonGroups, {"groupId": $rootScope.selectedGroupId}).groupTitle + "?"
+                  });
+                  confirmPopup.then(function (res) {
+                    if (res) {
+                      downloadLessonGroup($rootScope.selectedGroupId, function () {
+                        checkIfLessonGroupIsDownloaded($rootScope.selectedGroupId, function () {
+                          confirmPopup.close();
+                          Toast.show("Lessons Downloaded!");
+                        });
+                      });
+                    }
+                  });
+                });
+                $scope.downloadIcon.scaleX = $scope.downloadIcon.scaleY = 0.3;
+                $scope.downloadIcon.x = 780;
+                $scope.downloadIcon.y = $scope.downloadDeleteIconY;
+                $scope.mainContainer.addChild($scope.downloadIcon);
+              });
+
+              var deleteIconLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
+                src: $rootScope.rootDir + "data/assets/deleteIcon.png"
+              }));
+              deleteIconLoader.load();
+
+              deleteIconLoader.on("complete", function (r) {
+
+                $scope.deleteIcon = new createjs.Bitmap($rootScope.rootDir + "data/assets/deleteIcon.png");
+                $scope.deleteIcon.visible = false;
+
+                $scope.deleteIcon.addEventListener("mousedown", function (event) {
+                  console.log("mousedown event on deleteIcon !");
+                  $scope.deleteIcon.alpha = 0.5;
+                  $scope.stage.update();
+                });
+
+                $scope.deleteIcon.addEventListener("pressup", function (event) {
+                  console.log("pressup event!");
+                  $scope.deleteIcon.alpha = 1;
+                  $scope.stage.update();
+
+                  var confirmPopup = $ionicPopup.confirm({
+                    title: 'Delete ' + _.findWhere($rootScope.book.lessonGroups, {"groupId": $rootScope.selectedGroupId}).groupTitle,
+                    template: 'Do you want to delete the contents of ' + _.findWhere($rootScope.book.lessonGroups, {"groupId": $rootScope.selectedGroupId}).groupTitle + "?"
+                  });
+                  confirmPopup.then(function (res) {
+                    if (res) {
+                      deleteLessonGroup($rootScope.selectedGroupId, function () {
+                        checkIfLessonGroupIsDownloaded($rootScope.selectedGroupId, function () {
+                          confirmPopup.close();
+                          Toast.show("Lessons Deleted!");
+                        });
+                      });
+                    }
+                  });
+                });
+
+                $scope.deleteIcon.scaleX = $scope.deleteIcon.scaleY = 0.3;
+                $scope.deleteIcon.x = 680;
+                $scope.deleteIcon.y = $scope.downloadDeleteIconY;
+                $scope.mainContainer.addChild($scope.deleteIcon);
+              });
+
+
               //groupsMenuContainer CREATION
               $scope.groupsMenuContainer = new createjs.Container();
-              $scope.groupsMenuContainer.width = 236;
-              $scope.groupsMenuContainer.height = 440;
+              $scope.groupsMenuContainer.width = 330;
+              $scope.groupsMenuContainer.height = 500;
               $scope.groupsMenuContainer.x = 10;
-              $scope.groupsMenuContainer.y = 110;
-
-              //mainContainer Background
-              /* var groupsMenuContainerGraphic = new createjs.Graphics().beginFill("red").drawRect(0, 0, $scope.groupsMenuContainer.width, $scope.groupsMenuContainer.height);
-               var groupsMenuContainerBackground = new createjs.Shape(groupsMenuContainerGraphic);
-               groupsMenuContainerBackground.alpha = 0.5;
-               $scope.groupsMenuContainer.addChild(groupsMenuContainerBackground);
-               $scope.stage.update();*/
-
+              $scope.groupsMenuContainer.y = 90;
               $scope.mainContainer.addChild($scope.groupsMenuContainer);
-              $scope.stage.update();
-
-              var completedTween = function () {
-                console.log("Completed Tween");
-              };
 
               /* ---------------------------------------- ADDING GROUP BUTTONS ---------------------------------------- */
               var waterFallFunctions = [];
@@ -234,7 +302,7 @@ angular.module("bookbuilder2")
                         console.log("$scope.savedLessonButtonsArray", $scope.savedLessonButtonsArray);
                         _.each($scope.savedLessonButtonsArray, function (lesson, key, list) {
                           parallelFunctions.push(function (parallelCallback) {
-                            createjs.Tween.get($scope.savedLessonButtonsArray[key], {loop: false}).to({x: 1500 * scale}, 200, createjs.Ease.getPowIn(2)).call(parallelCallback);
+                            createjs.Tween.get($scope.savedLessonButtonsArray[key], {loop: false}).to({x: 1500 * $scope.scale}, 200, createjs.Ease.getPowIn(2)).call(parallelCallback);
                           });
                         });
 
@@ -247,17 +315,16 @@ angular.module("bookbuilder2")
 
                       $scope.savedGroupButtonsArray[lessonGroup.groupId].lessons = lessonGroup.lessons;
                       $scope.savedGroupButtonsArray[lessonGroup.groupId].groupId = lessonGroup.groupId;
-                      $scope.savedGroupButtonsArray[lessonGroup.groupId].y = ($scope.groupsMenuContainer.height - $rootScope.book.lessonGroups.length * 50) / 2 + (key * 60);
+                      $scope.savedGroupButtonsArray[lessonGroup.groupId].y = ($scope.groupsMenuContainer.height - $rootScope.book.lessonGroups.length * 50) / 2 + (key * $scope.spaceBetweenGroups);
                       $scope.savedGroupButtonsArray[lessonGroup.groupId].x = -1500;
-
-                      createjs.Tween.get($scope.savedGroupButtonsArray[lessonGroup.groupId], {loop: false}).to({x: 120}, 1000, createjs.Ease.getPowIn(2));
-
                       $scope.groupsMenuContainer.addChild($scope.savedGroupButtonsArray[lessonGroup.groupId]);
-                      $scope.stage.update();
+
+                      createjs.Tween.get($scope.savedGroupButtonsArray[lessonGroup.groupId], {loop: false}).to({x: $scope.leftMarginGroupButtons}, 1000, createjs.Ease.getPowIn(2));
 
                       $timeout(function () {
                         waterfallCallback();
                       }, 100);
+
 
                     })
                     .error(function (error) {
@@ -284,15 +351,7 @@ angular.module("bookbuilder2")
           $scope.lessonsMenuContainer.height = 440;
           $scope.lessonsMenuContainer.x = 645;
           $scope.lessonsMenuContainer.y = 110;
-
-          //Background for lessonContainer
-          /* var lessonsMenuContainerGraphic = new createjs.Graphics().beginFill("green").drawRect(0, 0, $scope.lessonsMenuContainer.width, $scope.lessonsMenuContainer.height);
-           var lessonsMenuContainerBackground = new createjs.Shape(lessonsMenuContainerGraphic);
-           lessonsMenuContainerBackground.alpha = 0.5;
-           $scope.lessonsMenuContainer.addChild(lessonsMenuContainerBackground);*/
-
           $scope.mainContainer.addChild($scope.lessonsMenuContainer);
-          $scope.stage.update();
 
 
           /*Function that populates right-side menu according to selected group menu*/
@@ -343,9 +402,7 @@ angular.module("bookbuilder2")
                           $scope.savedLessonButtonsArray[key].gotoAndPlay("normal");
                         }
                       });
-                      $scope.stage.update();
 
-                      console.log("Selected lesson id " + lesson.id + " active " + lesson.active);
                       $rootScope.selectedLessonId = lesson.id;
                       window.localStorage.setItem("selectedLessonId", $rootScope.selectedLessonId)
 
@@ -360,7 +417,11 @@ angular.module("bookbuilder2")
                                 historyRoot: true,
                                 disableBack: true
                               });
-                              $state.go("lessonNew", {}, {reload: true});
+                              if ($rootScope.book.bookTemplate === "groups") {
+                                $state.go("lesson", {}, {reload: true});
+                              } else {
+                                $state.go("lessonNew", {}, {reload: true});
+                              }
                             } else {
                               console.log("Error on downloading Lesson");
                               showDownloadingError(lesson);
@@ -385,7 +446,11 @@ angular.module("bookbuilder2")
                                     historyRoot: true,
                                     disableBack: true
                                   });
-                                  $state.go("lessonNew", {}, {reload: true});
+                                  if ($rootScope.book.bookTemplate === "groups") {
+                                    $state.go("lesson", {}, {reload: true});
+                                  } else {
+                                    $state.go("lessonNew", {}, {reload: true});
+                                  }
                                 } else {
                                   showDownloadingError(lesson);
                                 }
@@ -397,7 +462,7 @@ angular.module("bookbuilder2")
                         Toast.show("Coming soon...");
                       }
                     });
-                    $scope.savedLessonButtonsArray[lesson.id].y = ($scope.lessonsMenuContainer.height - selectedGroupLessons.length * 50) / 2 + (key * 60);
+                    $scope.savedLessonButtonsArray[lesson.id].y = ($scope.lessonsMenuContainer.height - selectedGroupLessons.length * 50) / 2 + (key * $scope.spaceBetweenGroups);
                     $scope.savedLessonButtonsArray[lesson.id].x = 1500;
 
                     createjs.Tween.get($scope.savedLessonButtonsArray[lesson.id], {loop: false}).wait(100)
@@ -405,7 +470,6 @@ angular.module("bookbuilder2")
 
                     //Adding Lesson button
                     $scope.lessonsMenuContainer.addChild($scope.savedLessonButtonsArray[lesson.id]);
-                    $scope.stage.update();
 
                     $timeout(function () {
                       waterfallCallback();
@@ -426,96 +490,9 @@ angular.module("bookbuilder2")
             });
           }//End of function
 
-          var downloadIconLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-            src: $rootScope.rootDir + "data/assets/downloadIcon.png"
-          }));
-          downloadIconLoader.load();
-
-          downloadIconLoader.on("complete", function (r) {
-
-            $scope.downloadIcon = new createjs.Bitmap($rootScope.rootDir + "data/assets/downloadIcon.png");
-            $scope.downloadIcon.visible = false;
-
-            $scope.downloadIcon.addEventListener("mousedown", function (event) {
-              console.log("mousedown event on downloadIcon !");
-              $scope.downloadIcon.alpha = 0.5;
-              $scope.stage.update();
-            });
-
-            $scope.downloadIcon.addEventListener("pressup", function (event) {
-              console.log("pressup event!");
-              $scope.downloadIcon.alpha = 1;
-              $scope.stage.update();
-
-              var confirmPopup = $ionicPopup.confirm({
-                title: 'Download ' + _.findWhere($rootScope.book.lessonGroups, {"groupId": $rootScope.selectedGroupId}).groupTitle,
-                template: 'Do you want to download the contents of ' + _.findWhere($rootScope.book.lessonGroups, {"groupId": $rootScope.selectedGroupId}).groupTitle + "?"
-              });
-              confirmPopup.then(function (res) {
-                if (res) {
-                  downloadLessonGroup($rootScope.selectedGroupId, function () {
-                    checkIfLessonGroupIsDownloaded($rootScope.selectedGroupId, function () {
-                      confirmPopup.close();
-                      Toast.show("Lessons Downloaded!");
-                    });
-                  });
-                }
-              });
-            });
-            $scope.downloadIcon.scaleX = $scope.downloadIcon.scaleY = 0.3;
-            $scope.downloadIcon.x = 780;
-            $scope.downloadIcon.y = 555;
-            $scope.mainContainer.addChild($scope.downloadIcon);
-            $scope.stage.update();
-          });
-
-          var deleteIconLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-            src: $rootScope.rootDir + "data/assets/deleteIcon.png"
-          }));
-          deleteIconLoader.load();
-
-          deleteIconLoader.on("complete", function (r) {
-
-            $scope.deleteIcon = new createjs.Bitmap($rootScope.rootDir + "data/assets/deleteIcon.png");
-            $scope.deleteIcon.visible = false;
-
-            $scope.deleteIcon.addEventListener("mousedown", function (event) {
-              console.log("mousedown event on deleteIcon !");
-              $scope.deleteIcon.alpha = 0.5;
-              $scope.stage.update();
-            });
-
-            $scope.deleteIcon.addEventListener("pressup", function (event) {
-              console.log("pressup event!");
-              $scope.deleteIcon.alpha = 1;
-              $scope.stage.update();
-
-              var confirmPopup = $ionicPopup.confirm({
-                title: 'Delete ' + _.findWhere($rootScope.book.lessonGroups, {"groupId": $rootScope.selectedGroupId}).groupTitle,
-                template: 'Do you want to delete the contents of ' + _.findWhere($rootScope.book.lessonGroups, {"groupId": $rootScope.selectedGroupId}).groupTitle + "?"
-              });
-              confirmPopup.then(function (res) {
-                if (res) {
-                  deleteLessonGroup($rootScope.selectedGroupId, function () {
-                    checkIfLessonGroupIsDownloaded($rootScope.selectedGroupId, function () {
-                      confirmPopup.close();
-                      Toast.show("Lessons Deleted!");
-                    });
-                  });
-                }
-              });
-            });
-
-            $scope.deleteIcon.scaleX = $scope.deleteIcon.scaleY = 0.3;
-            $scope.deleteIcon.x = 680;
-            $scope.deleteIcon.y = 555;
-            $scope.mainContainer.addChild($scope.deleteIcon);
-            $scope.stage.update();
-          });
-
-        }, 500);//End of timeout() for calculating scale
+        }, 500);//End of timeout() for calculating $scope.scale
       });//End of imageLoader()
-    }, 500);//End of general timeout()
+    }, 1500);//End of general timeout()
 
 
     var checkIfLessonGroupIsDownloaded = function (groupId, callback) {
@@ -530,7 +507,6 @@ angular.module("bookbuilder2")
             if (res) {
               $scope.savedLessonButtonsArray[lesson.id].downloaded = true;
               $scope.savedLessonButtonsArray[lesson.id].alpha = 1;
-              $scope.stage.update();
             } else {
               $scope.savedLessonButtonsArray[lesson.id].downloaded = false;
               if (lesson.active) {
@@ -538,7 +514,6 @@ angular.module("bookbuilder2")
               } else {
                 $scope.savedLessonButtonsArray[lesson.id].alpha = 0.15;
               }
-              $scope.stage.update();
             }
             waterFallCallback();
           });
@@ -632,6 +607,8 @@ angular.module("bookbuilder2")
         lessonSpecificFiles.push("background_image_icon.png");
         $rootScope.totalFilesLessonAssets++;
       }
+
+      $ionicLoading.show();
 
       Download.assets(lessonSpecificFiles, $rootScope.cdnUrl, "data/lessons", lesson.id, function (response) {
         console.log(lesson.id + " downloaded basic lesson file lesson.json and lessonassets.json ", response);

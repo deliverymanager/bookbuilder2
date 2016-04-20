@@ -445,6 +445,6 @@ angular.module("bookbuilder2")
 
       });
 
-    }, 500);
+    }, 1500);
   })
 ;

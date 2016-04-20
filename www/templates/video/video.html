@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <ion-view>
   <img
-    style="top: -15px; left: -5px; z-index: 10; position: absolute;"
+    style="top: -15px; left: -5px; -webkit-transform-origin-x: 0; -webkit-transform-origin-y: 0; z-index: 10; position: absolute; -webkit-transform: scale3d({{scale / ratio}},{{scale / ratio}},{{scale / ratio}})"
     ng-src="{{rootDir + 'data/assets/head_menu_button_sprite.png'}}"
     ng-click="backButton()">
   <ion-content has-bouncing="false" scroll="false">

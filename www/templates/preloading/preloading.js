@@ -105,7 +105,6 @@ angular.module("bookbuilder2")
                                       "type": "button-dark",
                                       "onTap": function (e) {
 
-
                                         window.localStorage.setItem("versionNumber", metadata.version);
                                         if (window.localStorage.getItem("versionNumber")) {
                                           $rootScope.versionNumber = window.localStorage.getItem("versionNumber");

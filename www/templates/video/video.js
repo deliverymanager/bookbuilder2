@@ -12,6 +12,7 @@ angular.module('bookbuilder2')
       $rootScope.activityFolder = window.localStorage.getItem("activityFolder");
       $rootScope.scale = window.localStorage.getItem("scale");
       $rootScope.book = JSON.parse(window.localStorage.getItem("book"));
+      $rootScope.ratio = window.localStorage.getItem("ratio");
 
       var activityNameInLocalStorage = $rootScope.selectedLesson.id + "_" + $rootScope.activityFolder;
 

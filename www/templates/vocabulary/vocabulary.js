@@ -1573,5 +1573,5 @@ angular.module("bookbuilder2")
           }
         };
       });//end of image on complete
-    }, 500);//end of timeout
+    }, 1500);//end of timeout
   });

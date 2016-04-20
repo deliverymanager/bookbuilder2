@@ -756,7 +756,7 @@ angular.module("bookbuilder2")
           $scope.stage.update();
           window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
         }
-        
+
         /*Function that goes to the next activity*/
 
         function next() {
@@ -798,5 +798,5 @@ angular.module("bookbuilder2")
         }
 
       });//end of image on complete
-    }, 500);//end of timeout
+    }, 1500);//end of timeout
   });

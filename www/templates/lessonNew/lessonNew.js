@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-  .controller("LessonNewController", function ($scope, $ionicPlatform, $timeout, $rootScope, $http, $state, $ionicHistory) {
+  .controller("LessonNewController", function ($scope, $ionicPlatform, $timeout, $rootScope, $http, $state, $ionicHistory, Toast) {
 
     console.log("LessonNewController loaded!");
 
@@ -36,6 +36,7 @@ angular.module("bookbuilder2")
       var createHiDPICanvas = function (w, h, ratio) {
         if (!ratio) {
           ratio = PIXEL_RATIO;
+          window.localStorage.setItem("ratio", PIXEL_RATIO);
         }
         console.log("ratio", PIXEL_RATIO);
         var can = document.getElementById("canvas");
@@ -71,14 +72,14 @@ angular.module("bookbuilder2")
 
       /*Image Loader*/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-        src: $rootScope.rootDir + "data/assets/background_image_2_blue.png"
+        src: $rootScope.rootDir + "data/assets/lesson_menu_background_image_2_blue.png"
       }));
       imageLoader.load();
 
       imageLoader.on("complete", function (r) {
 
         /*Creating Bitmap Background for Canvas*/
-        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/background_image_2_blue.png");
+        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/lesson_menu_background_image_2_blue.png");
 
         /*************** CALCULATING SCALING *********************/
         var scaleY = $scope.stage.canvas.height / background.image.height;
@@ -127,32 +128,6 @@ angular.module("bookbuilder2")
          $scope.mainContainer.addChild(mainContainerBackground);*/
 
 
-        var titleImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-          src: $rootScope.rootDir + "data/assets/lesson_background_image_2_blue.png"
-        }));
-        titleImageLoader.load();
-
-        titleImageLoader.on("complete", function (r) {
-          var titleImage = new createjs.Bitmap($rootScope.rootDir + "data/assets/lesson_background_image_2_blue.png");
-          $scope.mainContainer.addChild(titleImage);
-        });
-
-
-        var lessonImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-          src: $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLessonId + "/background_image_icon.png"
-        }));
-        lessonImageLoader.load();
-
-        lessonImageLoader.on("complete", function (r) {
-
-          var lessonImage = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLessonId + "/background_image_icon.png");
-          lessonImage.scaleX = lessonImage.scaleY = 0.85;
-          lessonImage.x = 320;
-          lessonImage.y = 170;
-          $scope.mainContainer.addChild(lessonImage);
-        });
-
-
         /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
 
         $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
@@ -174,6 +149,12 @@ angular.module("bookbuilder2")
               console.log("pressup event!");
               menuButton.gotoAndPlay("normal");
               $scope.stage.update();
+
+              $ionicHistory.nextViewOptions({
+                historyRoot: true,
+                disableBack: true
+              });
+              $state.go("groups", {}, {reload: true});
 
             });
 
@@ -252,20 +233,45 @@ angular.module("bookbuilder2")
             //FOR DEVELOPMENT
             window.localStorage.setItem("selectedLesson", JSON.stringify($rootScope.selectedLesson));
 
-            /*--------------------------------------- TITLE CREATION------------------------------------------*/
 
-            console.log("Lesson Title: ", $rootScope.selectedLesson.lessonTitle);
-            console.log("Title: ", $rootScope.selectedLesson.title);
+            var titleImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
+              src: $rootScope.rootDir + "data/assets/lesson_background_image_2_blue.png"
+            }));
+            titleImageLoader.load();
 
-            var lessonTitle = new createjs.Text($rootScope.selectedLesson.lessonTitle + " -", "33px Arial", "white");
-            lessonTitle.x = 460;
-            lessonTitle.y = 105;
-            $scope.mainContainer.addChild(lessonTitle);
+            titleImageLoader.on("complete", function (r) {
+              var titleImage = new createjs.Bitmap($rootScope.rootDir + "data/assets/lesson_background_image_2_blue.png");
+              $scope.mainContainer.addChild(titleImage);
 
-            var title = new createjs.Text($rootScope.selectedLesson.title, "33px Arial", "white");
-            title.x = 630;
-            title.y = 105;
-            $scope.mainContainer.addChild(title);
+              console.log("Lesson Title: ", $rootScope.selectedLesson.lessonTitle);
+              console.log("Title: ", $rootScope.selectedLesson.title);
+
+              var lessonTitle = new createjs.Text($rootScope.selectedLesson.lessonTitle + " -", "33px Arial", "white");
+              lessonTitle.x = 460;
+              lessonTitle.y = 105;
+              $scope.mainContainer.addChild(lessonTitle);
+
+              var title = new createjs.Text($rootScope.selectedLesson.title, "33px Arial", "white");
+              title.x = 630;
+              title.y = 105;
+              $scope.mainContainer.addChild(title);
+
+            });
+
+
+            var lessonImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
+              src: $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLessonId + "/background_image_icon.png"
+            }));
+            lessonImageLoader.load();
+
+            lessonImageLoader.on("complete", function (r) {
+
+              var lessonImage = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLessonId + "/background_image_icon.png");
+              lessonImage.scaleX = lessonImage.scaleY = 0.85;
+              lessonImage.x = 320;
+              lessonImage.y = 170;
+              $scope.mainContainer.addChild(lessonImage);
+            });
 
 
             /*-------------------------------- Populating Activities Menu -----------------------------------*/
@@ -332,12 +338,9 @@ angular.module("bookbuilder2")
                       if (activity.activityTemplate === "activities") {
                         $scope.mainActivitiesButtons[key].addEventListener("pressup", function (event) {
                           console.log("Press up event on Activities button !");
-
-                          //Calling the function that shows the activities subMenu
-                          showingActivitiesSubMenu();
                           $scope.mainActivitiesButtons[key].gotoAndPlay("normal");
                           $scope.stage.update();
-
+                          showingActivitiesSubMenu();
                         });
                       }
 
@@ -388,6 +391,11 @@ angular.module("bookbuilder2")
 
                     var activityButtonSpriteSheet = new createjs.SpriteSheet(response);
                     $scope.subActivitiesButtons[key] = new createjs.Sprite(activityButtonSpriteSheet, "normal");
+
+                    if (!activity.active) {
+                      $scope.subActivitiesButtons[key].alpha = 0.5;
+                    }
+
                     $scope.subActivitiesButtons[key].activityFolder = activity.activityFolder;
                     $scope.subActivitiesButtons[key].activityName = activity.name;
                     $scope.subActivitiesButtons[key].activityTemplate = activity.activityTemplate;
@@ -405,7 +413,15 @@ angular.module("bookbuilder2")
 
                     $scope.subActivitiesButtons[key].addEventListener("pressup", function (event) {
                       console.log("Press up event on a sub activity button!");
+
+                      $scope.subActivitiesButtons[key].gotoAndPlay("normal");
                       $scope.stage.update();
+
+                      if (!activity.active) {
+                        Toast.show("Coming soon...");
+                        return;
+                      }
+
                       $rootScope.activityFolder = $scope.subActivitiesButtons[key].activityFolder;
                       $rootScope.activityName = $scope.subActivitiesButtons[key].activityName;
 
@@ -525,5 +541,5 @@ angular.module("bookbuilder2")
 
 
       });
-    }, 500);
+    }, 1500);
   });
