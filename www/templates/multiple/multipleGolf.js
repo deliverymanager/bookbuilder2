@@ -717,15 +717,16 @@ angular.module("bookbuilder2")
                             return ;
                           }
 
-                          /*Incrementing the index of the question*/
-                          $scope.activeQuestionIndex++;
-                          console.log("Press on Skip button increments the question index: ", $scope.activeQuestionIndex);
-
                           /*Selection process in progress, disabling skip button*/
                           if ($scope.selectionInProgress){
                             console.warn("Selection in progress!");
                             return ;
                           }
+
+                          /*Incrementing the index of the question*/
+                          $scope.activeQuestionIndex++;
+                          console.log("Press on Skip button increments the question index: ", $scope.activeQuestionIndex);
+
 
                           /*First hiding the question and answers elements*/
                           createjs.Tween.get($scope.questionContainer, {loop: false})
@@ -785,9 +786,6 @@ angular.module("bookbuilder2")
 
                         /*Mouse down event*/
                         $scope.goToResultsButton.addEventListener("mousedown", function (event) {
-                          /*Active only when resultsContainer is invisible*/
-                          if (!$scope.resultsContainer.visible) {
-                          }
                         });
 
                         /*Press up event*/
@@ -820,7 +818,6 @@ angular.module("bookbuilder2")
                         generalButtonsWaterfallCallback(null);
                       })
                       .error(function (error) {
-
                         console.error("Error on getting json data for goToResults button: ", error);
                         generalButtonsWaterfallCallback(true, error);
                       });
@@ -1290,39 +1287,7 @@ angular.module("bookbuilder2")
                           resultsTotalRowQuestionsContainersBackground.alpha = 0.5;
                           $scope.resultsTotalRowQuestionsContainers[key].addChild(resultsTotalRowQuestionsContainersBackground);
 
-
-//----------
-                         /* //PreText
-                          var resultQuestionPreText = new createjs.Text(" ", "23px Arial", "black");
-                          resultQuestionPreText.x = 0;
-                          resultQuestionPreText.y = 0;
-                          resultQuestionPreText.text = key + 1 + "." + $scope.activityData.questions[key].pretext;
-                          $scope.resultsTotalRowQuestionsContainers[key].addChild(resultQuestionPreText);
-
-                          //Underline
-                          var resultQuestionUnderline = new createjs.Text(" ", "23px Arial", "black");
-                          resultQuestionUnderline.x = resultQuestionPreText.x + resultQuestionPreText.getBounds().width;
-                          resultQuestionUnderline.y = 0;
-                          resultQuestionUnderline.text = "__________";
-                          $scope.resultsTotalRowQuestionsContainers[key].addChild(resultQuestionUnderline);
-
-                          /!*Answer*!/
-                          $scope.resultsTotalRowQuestionsTexts[key] = new createjs.Text($scope.activityData.questions[key].userAnswer === "" ? "" : $scope.activityData.questions[key][$scope.activityData.questions[key].userAnswer], "23px Arial", "black");
-                          $scope.resultsTotalRowQuestionsTexts[key].textAlign = "center";
-                          $scope.resultsTotalRowQuestionsTexts[key].x = resultQuestionPreText.x + resultQuestionPreText.getBounds().width
-                            + resultQuestionUnderline.getBounds().width / 2;
-                          $scope.resultsTotalRowQuestionsTexts[key].y = 0;
-                          $scope.resultsTotalRowQuestionsTexts[key].maxWidth = $scope.resultsTotalRowQuestionsContainers[key].width;
-                          $scope.resultsTotalRowQuestionsContainers[key].addChild($scope.resultsTotalRowQuestionsTexts[key]);
-
-                          //PosText
-                          var resultQuestionPostText = new createjs.Text("", "23px Arial", "black");
-                          resultQuestionPostText.x = resultQuestionUnderline.x + resultQuestionUnderline.getBounds().width;
-                          resultQuestionPostText.y = 0;
-                          resultQuestionPostText.text = $scope.activityData.questions[key].postext;
-                          resultQuestionPostText.x = resultQuestionUnderline.x + resultQuestionUnderline.getBounds().width;
-                          $scope.resultsTotalRowQuestionsContainers[key].addChild(resultQuestionPostText);*/
-
+                          
 
                           //Question index
                           var indexNumber = new createjs.Text((key+1)+". ", "19px Arial", "black");

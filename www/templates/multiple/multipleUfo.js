@@ -355,7 +355,10 @@ angular.module("bookbuilder2")
                       $scope.answerATextContainer = new createjs.Container();
                       $scope.answerATextContainer.width = 125;
                       $scope.answerATextContainer.height = 50;
-                      $scope.answerATextContainer.x = 140;
+
+                      /*Checking the number of answers, the output is decisive for the layout*/
+                      $scope.answerATextContainer.x = $scope.activityData.questions[0].cChoice === "" ? 210 :140;
+
                       $scope.answerATextContainer.y = 420;
                       $scope.answerATextContainer.addEventListener("pressup", function (event) {
                         console.log("Press up event on A button!");
@@ -388,7 +391,10 @@ angular.module("bookbuilder2")
                       $scope.answerBTextContainer = new createjs.Container();
                       $scope.answerBTextContainer.width = 125;
                       $scope.answerBTextContainer.height = 50;
-                      $scope.answerBTextContainer.x = 380;
+
+                      /*Checking the number of answers, the output is decisive for the layout*/
+                      $scope.answerBTextContainer.x = $scope.activityData.questions[0].cChoice === "" ? 520 :380;
+
                       $scope.answerBTextContainer.y = 420;
                       $scope.answerBTextContainer.addEventListener("pressup", function (event) {
                         console.log("Press up event on B button!");
@@ -428,7 +434,12 @@ angular.module("bookbuilder2")
                           selectCow($scope.activeQuestionIndex, "cChoice", $scope.thirdCow);
                         }
                       });
-                      $scope.playContainer.addChild($scope.answerCTextContainer);
+
+
+                      /*Checking the number of answers, the output is decisive for the layout*/
+                      if($scope.activityData.questions[0].cChoice !== ""){
+                        $scope.playContainer.addChild($scope.answerCTextContainer);
+                      }
 
                       //mainContainer Background
                       /*var answerCTextContainerGraphic = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.answerCTextContainer.width, $scope.answerCTextContainer.height);
@@ -628,8 +639,8 @@ angular.module("bookbuilder2")
               /*Creation of game*/
               function (mainWaterfallCallback) {
                 /***************************** CREATION OF GAME *****************************/
-                async.waterfall([
 
+                async.waterfall([
                     //.1 creating first cow
                     function (createGameWaterfallCallback) {
 
@@ -650,7 +661,9 @@ angular.module("bookbuilder2")
                               selectCow($scope.activeQuestionIndex, "aChoice", $scope.firstCow.x);
                             }
                           });
-                          $scope.firstCow.x = 210;
+
+                          /*Checking the number of answers, the output is decisive for the layout*/
+                          $scope.firstCow.x = $scope.activityData.questions[0].cChoice === "" ? 280 : 210;
                           $scope.firstCow.y = 350;
                           $scope.firstCow.scaleX = $scope.firstCow.scaleY = 1;
                           $scope.firstCow.gotoAndPlay("normal");
@@ -686,7 +699,9 @@ angular.module("bookbuilder2")
                               selectCow($scope.activeQuestionIndex, "bChoice", $scope.secondCow.x);
                             }
                           });
-                          $scope.secondCow.x = 440;
+
+                          /*Checking the number of answers, the output is decisive for the layout*/
+                          $scope.secondCow.x = $scope.activityData.questions[0].cChoice === "" ? 580 : 440;
                           $scope.secondCow.y = 350;
                           $scope.secondCow.scaleX = $scope.secondCow.scaleY = 1;
                           $scope.secondCow.gotoAndPlay("normal");
@@ -706,6 +721,7 @@ angular.module("bookbuilder2")
                     function (createGameWaterfallCallback) {
                       $http.get($rootScope.rootDir + "data/assets/ufo_cow_left_sprite.json")
                         .success(function (response) {
+
                           console.log("Success on getting json for left cow!");
                           response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
                           var thirdCowSpriteSheet = new createjs.SpriteSheet(response);
@@ -713,7 +729,6 @@ angular.module("bookbuilder2")
 
                           /*Mouse down event*/
                           $scope.thirdCow.addEventListener("mousedown", function (event) {
-
                           });
 
                           /*Press up event*/
@@ -726,7 +741,11 @@ angular.module("bookbuilder2")
                           $scope.thirdCow.y = 360;
                           $scope.thirdCow.scaleX = $scope.thirdCow.scaleY = 1;
                           $scope.thirdCow.gotoAndPlay("normal");
-                          $scope.playContainer.addChild($scope.thirdCow);
+
+                          /*Checking the number of answers, the output is decisive for the layout*/
+                          if($scope.activityData.questions[0].cChoice !== ""){
+                            $scope.playContainer.addChild($scope.thirdCow);
+                          }
 
                           createGameWaterfallCallback(null);
 
@@ -1129,38 +1148,6 @@ angular.module("bookbuilder2")
                                 resultsTotalRowQuestionsContainersBackground.alpha = 0.5;
                                 $scope.resultsTotalRowQuestionsContainers[key].addChild(resultsTotalRowQuestionsContainersBackground);
 
-
-//----------
-                                //PreText
-                                /*var resultQuestionPreText = new createjs.Text(" ", "21px Arial", "black");
-                                resultQuestionPreText.x = 0;
-                                resultQuestionPreText.y = 0;
-                                resultQuestionPreText.text = key + 1 + "." + $scope.activityData.questions[key].pretext;
-                                $scope.resultsTotalRowQuestionsContainers[key].addChild(resultQuestionPreText);
-
-                                //Underline
-                                var resultQuestionUnderline = new createjs.Text(" ", "21px Arial", "black");
-                                resultQuestionUnderline.x = resultQuestionPreText.x + resultQuestionPreText.getBounds().width;
-                                resultQuestionUnderline.y = 0;
-                                resultQuestionUnderline.text = "__________";
-                                $scope.resultsTotalRowQuestionsContainers[key].addChild(resultQuestionUnderline);
-
-                                /!*Answer*!/
-                                $scope.resultsTotalRowQuestionsTexts[key] = new createjs.Text($scope.activityData.questions[key].userAnswer === "" ? "" : $scope.activityData.questions[key][$scope.activityData.questions[key].userAnswer], "21px Arial", "black");
-                                $scope.resultsTotalRowQuestionsTexts[key].textAlign = "center";
-                                $scope.resultsTotalRowQuestionsTexts[key].x = resultQuestionPreText.x + resultQuestionPreText.getBounds().width
-                                  + resultQuestionUnderline.getBounds().width / 2;
-                                $scope.resultsTotalRowQuestionsTexts[key].y = 0;
-                                $scope.resultsTotalRowQuestionsTexts[key].maxWidth = $scope.resultsTotalRowQuestionsContainers[key].width;
-                                $scope.resultsTotalRowQuestionsContainers[key].addChild($scope.resultsTotalRowQuestionsTexts[key]);*/
-
-                                //PosText ORIGINAL , It's commented out because of POSTEXT TESTING
-                               /* var resultQuestionPostText = new createjs.Text("", "23px Arial", "black");
-                                resultQuestionPostText.x = resultQuestionUnderline.x + resultQuestionUnderline.getBounds().width;
-                                resultQuestionPostText.y = 0;
-                                resultQuestionPostText.text = $scope.activityData.questions[key].postext;
-                                resultQuestionPostText.x = resultQuestionUnderline.x + resultQuestionUnderline.getBounds().width;
-                                $scope.resultsTotalRowQuestionsContainers[key].addChild(resultQuestionPostText);*/
 
                                 /*------------------------------------------- POSTEXT TESTING --------------------------------------*/
                                 //Question index
