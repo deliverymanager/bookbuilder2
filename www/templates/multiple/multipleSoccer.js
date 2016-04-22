@@ -242,6 +242,44 @@ angular.module("bookbuilder2")
         resultsTotalContainerBackground.alpha = 0.5;
         $scope.resultsTotalContainer.addChild(resultsTotalContainerBackground);*/
 
+
+
+        $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
+          .success(function (response) {
+
+            //Reassigning images with the rest of resource
+            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+
+            var menuButtonSpriteSheet = new createjs.SpriteSheet(response);
+            var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
+
+            menuButton.addEventListener("mousedown", function (event) {
+              console.log("Mouse down event on Menu button !");
+              menuButton.gotoAndPlay("onSelection");
+            });
+
+            menuButton.addEventListener("pressup", function (event) {
+              console.log("Press up event on Menu event!");
+              menuButton.gotoAndPlay("normal");
+              $ionicHistory.nextViewOptions({
+                historyRoot: true,
+                disableBack: true
+              });
+              $state.go("lessonNew", {}, {reload: true});
+            });
+
+            menuButton.scaleX = menuButton.scaleY = scale;
+            menuButton.x = 0;
+            menuButton.y = - menuButton.getTransformedBounds().height / 5;
+
+            $scope.mainContainer.addChild(menuButton);
+          })
+          .error(function (error) {
+            console.error("Error on getting json for results button...", error);
+          });//end of get menu button
+
+
+
         /************************************** Initializing Page **************************************/
 
         console.log("Searching in localStorage fo activity: ", activityNameInLocalStorage);
@@ -822,9 +860,6 @@ angular.module("bookbuilder2")
 
                         /*Mouse down event*/
                         $scope.goToResultsButton.addEventListener("mousedown", function (event) {
-                          /*Active only when resultsContainer is invisble*/
-                          if (!$scope.resultsContainer.visible) {
-                          }
                         });
 
                         /*Press up event*/
@@ -1054,36 +1089,6 @@ angular.module("bookbuilder2")
                     async.waterfall([
                       function (resultsButtonsWaterfallCallback) {
 
-                        /*Creating the continue button*/
-                        var continueButtonImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                          src: $rootScope.rootDir + "data/assets/soccer_results_continue.png"
-                        }));
-                        continueButtonImageLoader.load();
-
-                        continueButtonImageLoader.on("complete", function (r) {
-
-                          /*Creating Bitmap Background for continue button*/
-                          $scope.continueButton = new createjs.Bitmap($rootScope.rootDir + "data/assets/soccer_results_continue.png");
-                          $scope.continueButton.x = 40;
-                          $scope.continueButton.y = 303;
-                          $scope.resultsContainer.addChild($scope.continueButton);
-
-                          /*Mouse down event*/
-                          $scope.continueButton.addEventListener("mousedown", function (event) {
-                            $scope.activeQuestionIndex++;
-                            loadQuestion($scope.activeQuestionIndex);
-                          });
-
-                          /*Press up event*/
-                          $scope.continueButton.addEventListener("pressup", function (event) {
-                          });
-
-                          resultsButtonsWaterfallCallback(null);
-                        });//end of continueButtonImageLoader
-
-                      },
-                      function (resultsButtonsWaterfallCallback) {
-
                         /*Creating the restart button*/
                         var restartButtonImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
                           src: $rootScope.rootDir + "data/assets/soccer_results_restart.png"
@@ -1107,10 +1112,8 @@ angular.module("bookbuilder2")
                           /*Press up event*/
                           $scope.restartButton.addEventListener("pressup", function (event) {
                           });
-
                           resultsButtonsWaterfallCallback(null);
                         });//end of restartButtonImageLoader
-
                       }
                     ], function (err, result) {
                       if (!err) {
@@ -1318,16 +1321,10 @@ angular.module("bookbuilder2")
                                     $scope.resultsTotalRowAnswersTexts[key].text = "-";
                                     $scope.resultsTotalRowAnswersTexts[key].color = "black";
                                   });
-                                  $timeout(function () {
-                                    restartWaterfallCallback(null);
-                                  }, 200);
-                                },
-                                function (restartWaterfallCallback) {
 
-                                  //Hide resultsTotal container and making pageDescription and nextButton visible again
-                                  $scope.resultsTotalContainer.visible = false;
-                                  $scope.pageDescription.visible = true;
-                                  $scope.nextButton.visible = true;
+                                  //Making index 0 again...
+                                  $scope.activeQuestionIndex = 0;
+                                  loadQuestion(0);
 
                                   $timeout(function () {
                                     restartWaterfallCallback(null);
@@ -1335,20 +1332,21 @@ angular.module("bookbuilder2")
                                 }
                               ], function (err, results) {
 
-                                $scope.activeQuestionIndex = 0;
-                                loadQuestion(0);
-                                //Tween elements back
-                                /*createjs.Tween.get($scope.questionContainer, {loop: false})
-                                  .to({
-                                    x: $scope.questionContainer.x,
-                                    y: $scope.questionContainer.startingPointY
-                                  }, 700, createjs.Ease.getPowIn(2));
+                                //Hide resultsTotal container and making pageDescription and nextButton visible again
+                                $scope.resultsTotalContainer.visible = false;
+                                $scope.pageDescription.visible = true;
 
-                                createjs.Tween.get($scope.answersContainer, {loop: false})
-                                  .to({
-                                    x: $scope.answersContainer.startingPointX,
-                                    y: 130
-                                  }, 700, createjs.Ease.getPowIn(2));*/
+                                //Restarting activity so the completed property has to be false
+                                $scope.activityData.completed = false;
+
+                                //Next button playing normal animation
+                                $scope.nextButton.gotoAndPlay("normal");
+
+                                //Initializing userAnswer property again for every question
+                                _.each( $scope.activityData.questions,function(question, key, list){
+                                  $scope.activityData.questions[key].userAnswer = "";
+                                });
+
                               });
                             });//End of press up element
 
@@ -1561,6 +1559,7 @@ angular.module("bookbuilder2")
 
                           /*Click event for the option A*/
                           $scope.resultsAnswersTableContainerA[key].addEventListener("pressup", function (event) {
+
                             console.log("Click on answer A!");
                             $scope.resultsAnswersOptionsTableContainer.visible = false;
                             $scope.resultsAnswersOptionsTable.visible = false;
@@ -1639,8 +1638,12 @@ angular.module("bookbuilder2")
                             $scope.resultsAnswersOptionsTableContainer.y = $scope.resultsAnswersOptionsTable.y + 20;
 
                             /*Making the background and the resultsAnswersOptionsTableContainer visible and dynamically appear on the y of clicked answer*/
-                            $scope.resultsAnswersOptionsTable.visible = true;
-                            $scope.resultsAnswersOptionsTableContainer.visible = true;
+                            if($scope.activityData.completed){
+                              console.log("The activity has completed! Cannot select an answer...");
+                            }else{
+                              $scope.resultsAnswersOptionsTable.visible = true;
+                              $scope.resultsAnswersOptionsTableContainer.visible = true;
+                            }
 
                             /*Appearing only the choices of the selected answer, the disappearing is handled in choice's event*/
                             $scope.resultsAnswersTableContainerA[key].visible = true;
@@ -1869,16 +1872,6 @@ angular.module("bookbuilder2")
                 /* 1. Loading Question Text*/
                 console.log("Loading question for index: ", questionIndex);
 
-                /*$scope.formattedQuestionText = questionIndex+1+"."+$scope.activityData.questions[questionIndex].pretext
-                  + "__________"
-                  + ($scope.activityData.questions[questionIndex].midtext ? $scope.activityData.questions[questionIndex].midtext : "")
-                  + $scope.activityData.questions[questionIndex].postext;
-
-                $scope.questionText.text = $scope.formattedQuestionText;
-
-                console.log("Question: ", $scope.questionText.text);*/
-
-
                 //Question index
                 var indexNumber = new createjs.Text((questionIndex+1)+". ", "19px Arial", "black");
                 indexNumber.x = 10;
@@ -1936,9 +1929,6 @@ angular.module("bookbuilder2")
                     $scope.questionTextContainer.addChild(currentPostexts[0]);
                   }
                 }
-
-
-
 
                 /* 2. Loading Answers Texts*/
                 $scope.answerAText.text = $scope.activityData.questions[questionIndex].aChoice;
@@ -2095,10 +2085,6 @@ angular.module("bookbuilder2")
               $scope.playContainer.visible = false;
               $scope.resultsContainer.visible = true;
 
-              /*When resultsContainer is visible, goToResults button and skipOneAnswer button have to be disabled*/
-              $scope.skipAnswerButton.alpha = 0.5;
-              $scope.goToResultsButton.alpha = 0.5;
-
               /*/!*Saving user selection to userAnswer field*!/
               $scope.activityData.questions[questionIndex].userAnswer = userAnswer;
 
@@ -2217,7 +2203,6 @@ angular.module("bookbuilder2")
             $state.go("results", {}, {reload: true});
           }
         }
-
         /*Function for checking if there are already answered questions*/
         function updateResultsTotalQuestions(){
           _.each( $scope.activityData.questions,function(question, key, list){

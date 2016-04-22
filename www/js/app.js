@@ -110,6 +110,30 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
         templateUrl: "templates/multiple/multipleUfo.html",
         controller: "MultipleUfoController"
       })
+      .state('multipleSpray', {
+        cache: false,
+        url: "/multipleSpray",
+        templateUrl: "templates/multiple/multipleSpray.html",
+        controller: "MultipleSprayController"
+      })
+      .state('multipleBirds', {
+        cache: false,
+        url: "/multipleBirds",
+        templateUrl: "templates/multiple/multipleBirds.html",
+        controller: "MultipleBirdsController"
+      })
+      .state('multipleAnimals', {
+        cache: false,
+        url: "/multipleAnimals",
+        templateUrl: "templates/multiple/multipleAnimals.html",
+        controller: "MultipleAnimalsController"
+      })
+      .state('multipleFisherman', {
+        cache: false,
+        url: "/multipleFisherman",
+        templateUrl: "templates/multiple/multipleFisherman.html",
+        controller: "MultipleFishermanController"
+      })
       .state('draganddrop', {
         cache: false,
         url: "/draganddrop",
