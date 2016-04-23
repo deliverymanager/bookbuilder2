@@ -1,25 +1,8 @@
 angular.module("bookbuilder2")
-  .controller("LessonNewController", function ($scope, $ionicPlatform, $timeout, $rootScope, $http, $state, $ionicHistory, Toast) {
+  .controller("LessonNewController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $rootScope, $http, $state, $ionicHistory, Toast) {
 
     console.log("LessonNewController loaded!");
-
-    //START OF DEVELOPMENT SNIPPET
-    if (window.cordova && window.cordova.platformId !== "browser") {
-      $rootScope.rootDir = window.cordova.file.dataDirectory;
-    } else {
-      $rootScope.rootDir = "";
-    }
-    $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
-    $rootScope.selectedLessonId = window.localStorage.getItem("selectedLessonId");
-    $rootScope.activityFolder = window.localStorage.getItem("activityFolder");
-    $rootScope.book = JSON.parse(window.localStorage.getItem("book"));
-
-    $rootScope.backgroundView = {
-      "background": "url(" + $rootScope.rootDir + "data/assets/lesson_background_image_1_red.png) no-repeat center top",
-      "-webkit-background-size": "cover",
-      "-moz-background-size": "cover",
-      "background-size": "cover"
-    };
+    TypicalFunctions.loadVariablesFromLocalStorage();
 
     $timeout(function () {
 

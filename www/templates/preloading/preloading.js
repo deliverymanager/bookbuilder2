@@ -3,22 +3,6 @@ angular.module("bookbuilder2")
 
     console.log("PreloadingController loaded!");
 
-    $rootScope.showPopup = function () {
-      $ionicLoading.hide();
-      var errorPopUp = $ionicPopup.alert({
-        template: 'Please make sure your have a stable connection to the internet!',
-        title: 'Connectivity Error!',
-        okType: 'button-dark'
-      });
-      errorPopUp.then(function () {
-        $ionicHistory.nextViewOptions({
-          historyRoot: true,
-          disableBack: true
-        });
-        $state.go("groups", {}, {reload: true});
-      });
-    };
-
     $ionicPlatform.ready(function () {
       console.log("bookbuilder2 ready!");
 
@@ -179,13 +163,13 @@ angular.module("bookbuilder2")
                             $state.go("groups", {}, {reload: true});
                           });
                         } else {
-                          $rootScope.showPopup();
+                          TypicalFunctions.showPopup();
                         }
                       });
                     });
                   });
                 } else {
-                  $rootScope.showPopup();
+                  TypicalFunctions.showPopup();
                 }
               });
             });

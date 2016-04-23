@@ -1,17 +1,8 @@
 angular.module("bookbuilder2")
-  .controller("MultipleFishermanController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast) {
+  .controller("MultipleFishermanController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast) {
 
     console.log("MultipleFishermanController loaded!");
-    //START OF DEVELOPMENT SNIPPET
-    if (window.cordova && window.cordova.platformId !== "browser") {
-      $rootScope.rootDir = window.cordova.file.dataDirectory;
-    } else {
-      $rootScope.rootDir = "";
-    }
-    $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
-    $rootScope.activityFolder = window.localStorage.getItem("activityFolder");
-    $rootScope.activityName = window.localStorage.getItem("activityName");
-    //END OF DEVELOPMENT SNIPPET
+    TypicalFunctions.loadVariablesFromLocalStorage();
 
     /*Name of activity in localStorage*/
     var activityNameInLocalStorage = $rootScope.selectedLesson.id + "_" + $rootScope.activityFolder;
@@ -307,7 +298,7 @@ angular.module("bookbuilder2")
               /*Questions and Answers*/
               function (mainWaterfallCallback) {
                 /***************************** CREATION OF QUESTION AND ANSWERS ELEMENTS*****************************/
-                //Adding questionTextContainer and questionText
+                  //Adding questionTextContainer and questionText
                 async.waterfall([
 
                     //0.5 Creating question background
@@ -504,7 +495,7 @@ angular.module("bookbuilder2")
                             if ($scope.activityData.completed) {
                               $scope.nextButton.gotoAndPlay("normal");
                               /*Calling next function!*/
-                              next();
+                              TypicalFunctions.nextActivity();
                             }
                           });
                           $scope.nextButton.x = 730;
@@ -632,7 +623,7 @@ angular.module("bookbuilder2")
 
                           /*Press up event*/
                           $scope.firstFish.addEventListener("pressup", function (event) {
-                            if(!$scope.selectionInProgress){
+                            if (!$scope.selectionInProgress) {
                               selectFish($scope.activeQuestionIndex, "aChoice", $scope.firstFish.x);
                             }
                           });
@@ -651,7 +642,7 @@ angular.module("bookbuilder2")
                           $scope.answerATextContainer.y = 280;
                           $scope.answerATextContainer.addEventListener("pressup", function (event) {
                             console.log("Press up event on A button!");
-                            if(!$scope.selectionInProgress){
+                            if (!$scope.selectionInProgress) {
                               selectFish($scope.activeQuestionIndex, "aChoice", $scope.firstFish.x);
                             }
                           });
@@ -659,9 +650,9 @@ angular.module("bookbuilder2")
 
                           //answer A Background
                           /*var answerATextContainerGraphic = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.answerATextContainer.width, $scope.answerATextContainer.height);
-                          var answerATextContainerBackground = new createjs.Shape(answerATextContainerGraphic);
-                          answerATextContainerBackground.alpha = 0.5;
-                          $scope.answerATextContainer.addChild(answerATextContainerBackground);*/
+                           var answerATextContainerBackground = new createjs.Shape(answerATextContainerGraphic);
+                           answerATextContainerBackground.alpha = 0.5;
+                           $scope.answerATextContainer.addChild(answerATextContainerBackground);*/
 
 
                           /*Adding the Text that holds the question*/
@@ -698,7 +689,7 @@ angular.module("bookbuilder2")
                           /*Press up event*/
                           $scope.secondFish.addEventListener("pressup", function (event) {
 
-                            if(!$scope.selectionInProgress){
+                            if (!$scope.selectionInProgress) {
                               selectFish($scope.activeQuestionIndex, "bChoice", $scope.secondFish.x);
                             }
 
@@ -719,7 +710,7 @@ angular.module("bookbuilder2")
                           $scope.answerBTextContainer.addEventListener("pressup", function (event) {
                             console.log("Press up event on B button!");
 
-                            if(!$scope.selectionInProgress){
+                            if (!$scope.selectionInProgress) {
                               selectFish($scope.activeQuestionIndex, "bChoice", $scope.secondFish.x);
                             }
 
@@ -728,9 +719,9 @@ angular.module("bookbuilder2")
 
                           //answer B Background
                           /*var answerBTextContainerGraphic = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.answerBTextContainer.width, $scope.answerBTextContainer.height);
-                          var answerBTextContainerBackground = new createjs.Shape(answerBTextContainerGraphic);
-                          answerBTextContainerBackground.alpha = 0.5;
-                          $scope.answerBTextContainer.addChild(answerBTextContainerBackground);*/
+                           var answerBTextContainerBackground = new createjs.Shape(answerBTextContainerGraphic);
+                           answerBTextContainerBackground.alpha = 0.5;
+                           $scope.answerBTextContainer.addChild(answerBTextContainerBackground);*/
 
                           /*Adding the Text that holds the question*/
                           $scope.answerBText = new createjs.Text("CHOICE B", "23px Arial", "black");
@@ -766,7 +757,7 @@ angular.module("bookbuilder2")
                           /*Press up event*/
                           $scope.thirdFish.addEventListener("pressup", function (event) {
 
-                            if(!$scope.selectionInProgress){
+                            if (!$scope.selectionInProgress) {
                               selectFish($scope.activeQuestionIndex, "cChoice", $scope.thirdFish.x);
                             }
 
@@ -787,7 +778,7 @@ angular.module("bookbuilder2")
                           $scope.answerCTextContainer.addEventListener("pressup", function (event) {
                             console.log("Press up event on C button!");
 
-                            if(!$scope.selectionInProgress){
+                            if (!$scope.selectionInProgress) {
                               selectFish($scope.activeQuestionIndex, "cChoice", $scope.thirdFish);
                             }
 
@@ -796,9 +787,9 @@ angular.module("bookbuilder2")
 
                           //answer C Background
                           /*var answerCTextContainerGraphic = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.answerCTextContainer.width, $scope.answerCTextContainer.height);
-                          var answerCTextContainerBackground = new createjs.Shape(answerCTextContainerGraphic);
-                          answerCTextContainerBackground.alpha = 0.5;
-                          $scope.answerCTextContainer.addChild(answerCTextContainerBackground);*/
+                           var answerCTextContainerBackground = new createjs.Shape(answerCTextContainerGraphic);
+                           answerCTextContainerBackground.alpha = 0.5;
+                           $scope.answerCTextContainer.addChild(answerCTextContainerBackground);*/
 
                           /*Adding the Text that holds the question*/
                           $scope.answerCText = new createjs.Text("CHOICE C", "23px Arial", "black");
@@ -828,7 +819,6 @@ angular.module("bookbuilder2")
                     }
                   });
               },//end of second main waterfall function
-
 
 
               /*Creation of results frames*/
@@ -1301,7 +1291,6 @@ angular.module("bookbuilder2")
                                 $scope.resultsTotalRowAnswersContainers[key].addChild($scope.resultsTotalRowAnswersTexts[key]);
 
 
-
                                 //Adding three mini containers that will hold the answers making click selection easier
                                 //Answer Container A
                                 $scope.resultsAnswersTableContainerA[key] = new createjs.Container();
@@ -1613,13 +1602,13 @@ angular.module("bookbuilder2")
 
                                 /*Press up event*/
                                 $scope.continueButton.addEventListener("pressup", function (event) {
-                                  if($scope.activeQuestionIndex === $scope.activityData.questions.length-1){
+                                  if ($scope.activeQuestionIndex === $scope.activityData.questions.length - 1) {
 
                                     /*Going to total results !!!*/
                                     updateResultsTotalQuestions();
                                     $scope.resultsTotalContainer.visible = true;
 
-                                  }else{
+                                  } else {
                                     $scope.activeQuestionIndex++;
                                     loadQuestion($scope.activeQuestionIndex);
                                   }
@@ -1652,7 +1641,7 @@ angular.module("bookbuilder2")
                                 /*Press up event*/
                                 $scope.restartButton.addEventListener("pressup", function (event) {
                                   $scope.nextButton.gotoAndPlay("normal");
-                                  console.log("Click on restart button for question: ",$scope.activeQuestionIndex);
+                                  console.log("Click on restart button for question: ", $scope.activeQuestionIndex);
                                   $scope.activityData.questions[$scope.activeQuestionIndex].userAnswer = "";
                                   loadQuestion($scope.activeQuestionIndex);
                                 });
@@ -1856,34 +1845,6 @@ angular.module("bookbuilder2")
             });
         }//end of loadQuestion function
 
-        /*Function that handles navigation to next function*/
-        function next() {
-          console.log("Going to next activity!");
-          var index = _.findIndex($rootScope.selectedLesson.lessonMenu, {
-            "activityFolder": $rootScope.activityFolder
-          });
-          console.log("Lessons Index: ", index);
-
-          if (index < $rootScope.selectedLesson.lessonMenu.length - 1) {
-            $rootScope.activityFolder = $rootScope.selectedLesson.lessonMenu[index + 1].activityFolder;
-            $rootScope.activityName = $rootScope.selectedLesson.lessonMenu[index + 1].name;
-            window.localStorage.setItem("activityFolder", $rootScope.activityFolder);
-            window.localStorage.setItem("activityName", $rootScope.activityName);
-            console.log("Next $rootScope.activityFolder: " + $rootScope.activityFolder + " $rootScope.activityName" + $rootScope.activityName);
-            $ionicHistory.nextViewOptions({
-              historyRoot: true,
-              disableBack: true
-            });
-            $state.go($rootScope.selectedLesson.lessonMenu[index + 1].activityTemplate, {}, {reload: true});
-          } else {
-            $ionicHistory.nextViewOptions({
-              historyRoot: true,
-              disableBack: true
-            });
-            $state.go("results", {}, {reload: true});
-          }
-        }
-
         /*Function that creates the fisherman's recursive movement*/
         function fishermanFloating() {
 
@@ -1947,7 +1908,7 @@ angular.module("bookbuilder2")
                 console.log("Playing rising fish!");
 
                 /*If it's the second fish assigning new y for fixing the animation*/
-                if(userAnswer === "bChoice"){
+                if (userAnswer === "bChoice") {
                   $scope.secondFish.y = 145;
                 }
 
@@ -1957,15 +1918,15 @@ angular.module("bookbuilder2")
                 $scope.answerCText.visible = false;
 
 
-                if(userAnswer !== "aChoice"){
+                if (userAnswer !== "aChoice") {
                   $scope.firstFish.visible = false;
                 }
 
-                if(userAnswer !== "bChoice"){
+                if (userAnswer !== "bChoice") {
                   $scope.secondFish.visible = false;
                 }
 
-                if(userAnswer !== "cChoice"){
+                if (userAnswer !== "cChoice") {
                   $scope.thirdFish.visible = false;
                 }
 

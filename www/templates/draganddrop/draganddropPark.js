@@ -1,37 +1,9 @@
 angular.module("bookbuilder2")
-  .controller("DraganddropParkController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast) {
+  .controller("DraganddropParkController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast) {
 
     console.log("DraganddropParkController loaded!");
 
-    //START OF DEVELOPMENT SNIPPET
-    if (window.cordova && window.cordova.platformId !== "browser") {
-     $rootScope.rootDir = window.cordova.file.dataDirectory;
-     } else {
-     $rootScope.rootDir = "";
-     }
-     $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
-     $rootScope.activityFolder = window.localStorage.getItem("activityFolder");
-    //END OF DEVELOPMENT SNIPPET
-
-
-   /* /!************************************
-     *
-     *
-     * NOTE!!!!! for developing reason instantiating $rootScope.selectedLesson.id
-     *
-     *
-     * *!/
-
-    $rootScope.rootDir = "";
-    $rootScope.activityFolder = "vocabulary3";
-    $rootScope.selectedLesson = {
-      "title": "Lesson 1",
-      "active": true,
-      "lessonTemplate": "lesson",
-      "lessonButtonSprite": "first_menu_lesson_1_button_sprite.json",
-      "id": "lesson1"
-    };*/
-
+    TypicalFunctions.loadVariablesFromLocalStorage();
 
     /*Name of activity in localStorage*/
     var activityNameInLocalStorage = $rootScope.selectedLesson.id + "_" + $rootScope.activityFolder;
@@ -180,11 +152,11 @@ angular.module("bookbuilder2")
         $scope.stage.addChild($scope.mainContainer);
 
         //mainContainer Background
-       /* var mainContainerGraphic = new createjs.Graphics().beginFill("green").drawRect(0, 0, $scope.mainContainer.width, $scope.mainContainer.height);
-        var mainContainerBackground = new createjs.Shape(mainContainerGraphic);
-        mainContainerBackground.alpha = 0.5;
+        /* var mainContainerGraphic = new createjs.Graphics().beginFill("green").drawRect(0, 0, $scope.mainContainer.width, $scope.mainContainer.height);
+         var mainContainerBackground = new createjs.Shape(mainContainerGraphic);
+         mainContainerBackground.alpha = 0.5;
 
-        $scope.mainContainer.addChild(mainContainerBackground);*/
+         $scope.mainContainer.addChild(mainContainerBackground);*/
 
 
         /* ------------------------------------------ QUESTIONS CONTAINER ---------------------------------------------- */
@@ -196,11 +168,11 @@ angular.module("bookbuilder2")
         $scope.mainContainer.addChild($scope.questionsContainer);
 
         //mainContainer Background
-       /* var questionsContainerGraphic = new createjs.Graphics().beginFill("red").drawRect(0, 0, $scope.questionsContainer.width, $scope.questionsContainer.height);
-        var questionsContainerBackground = new createjs.Shape(questionsContainerGraphic);
-        questionsContainerBackground.alpha = 0.5;
+        /* var questionsContainerGraphic = new createjs.Graphics().beginFill("red").drawRect(0, 0, $scope.questionsContainer.width, $scope.questionsContainer.height);
+         var questionsContainerBackground = new createjs.Shape(questionsContainerGraphic);
+         questionsContainerBackground.alpha = 0.5;
 
-        $scope.questionsContainer.addChild(questionsContainerBackground);*/
+         $scope.questionsContainer.addChild(questionsContainerBackground);*/
 
         /* ------------------------------------------ ANSWERS CONTAINER ---------------------------------------------- */
         $scope.answersContainer = new createjs.Container();
@@ -513,7 +485,7 @@ angular.module("bookbuilder2")
                     postexts[0] = " ";
                   }
                   currentPostexts[0] = new createjs.Text(postexts[0], "23px Arial", "black");
-                  currentPostexts[0].x = $scope.questionRowContainers[key].x + $scope.questionRowContainers[key].width+5;
+                  currentPostexts[0].x = $scope.questionRowContainers[key].x + $scope.questionRowContainers[key].width + 5;
                   currentPostexts[0].y = $scope.questionRowContainers[key].y;
                   $scope.questionsContainer.addChild(currentPostexts[0]);
 
@@ -525,7 +497,7 @@ angular.module("bookbuilder2")
                 } else {
 
                   currentPostexts[0] = new createjs.Text(postexts[0], "23px Arial", "black");
-                  currentPostexts[0].x = $scope.questionRowContainers[key].x + $scope.questionRowContainers[key].width+5;
+                  currentPostexts[0].x = $scope.questionRowContainers[key].x + $scope.questionRowContainers[key].width + 5;
                   currentPostexts[0].y = $scope.questionRowContainers[key].y + 7;
                   $scope.questionsContainer.addChild(currentPostexts[0]);
                 }
@@ -792,7 +764,7 @@ angular.module("bookbuilder2")
                     if ($scope.activityData.completed) {
                       $scope.nextButton.gotoAndPlay("normal");
                       /*Calling next function!*/
-                      next();
+                      TypicalFunctions.nextActivity();
                     }
 
                   });
@@ -871,6 +843,7 @@ angular.module("bookbuilder2")
           $scope.checkButton.alpha = 0.5;
           $scope.activityData.completed = true;
           window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+          $scope.stage.update();
         }
 
         /* ------------------------------------------ TITLE ---------------------------------------------- */
@@ -973,7 +946,7 @@ angular.module("bookbuilder2")
 
           });//End of each
 
-          if(whereItsCalledFrom === "check"){
+          if (whereItsCalledFrom === "check") {
             placeAnswersOnRightQuestions();
           }
 
@@ -1043,36 +1016,6 @@ angular.module("bookbuilder2")
             $scope.stage.update()
           }
         }
-
-
-        /*Function that goes to the next activity*/
-        function next() {
-          console.log("next activity!");
-          var index = _.findIndex($rootScope.selectedLesson.lessonMenu, {
-            "activityFolder": $rootScope.activityFolder
-          });
-          console.log(index);
-
-          if (index < $rootScope.selectedLesson.lessonMenu.length - 1) {
-            $rootScope.activityFolder = $rootScope.selectedLesson.lessonMenu[index + 1].activityFolder;
-            $rootScope.activityName = $rootScope.selectedLesson.lessonMenu[index + 1].name;
-            window.localStorage.setItem("activityFolder", $rootScope.activityFolder);
-            window.localStorage.setItem("activityName", $rootScope.activityName);
-            console.log("Next $rootScope.activityFolder: " + $rootScope.activityFolder + " $rootScope.activityName" + $rootScope.activityName);
-            $ionicHistory.nextViewOptions({
-              historyRoot: true,
-              disableBack: true
-            });
-            $state.go($rootScope.selectedLesson.lessonMenu[index + 1].activityTemplate, {}, {reload: true});
-          } else {
-            $ionicHistory.nextViewOptions({
-              historyRoot: true,
-              disableBack: true
-            });
-            $state.go("results", {}, {reload: true});
-          }
-        }
-
 
         /*function collision(x, y) {
 

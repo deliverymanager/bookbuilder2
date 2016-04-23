@@ -127,7 +127,11 @@ angular.module("bookbuilder2")
                     historyRoot: true,
                     disableBack: true
                   });
-                  $state.go("lesson", {}, {reload: true});
+                  if ($rootScope.book.bookTemplate === "groups") {
+                    $state.go("lesson", {}, {reload: true});
+                  } else {
+                    $state.go("lessonNew", {}, {reload: true});
+                  }
                 });
 
                 menuButton.scaleX = menuButton.scaleY = scale;

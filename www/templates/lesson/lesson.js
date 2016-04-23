@@ -1,14 +1,9 @@
 angular.module("bookbuilder2")
-  .controller("LessonController", function ($scope, $ionicPlatform, $timeout, $rootScope, $http, $state, $ionicHistory) {
+  .controller("LessonController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $rootScope, $http, $state, $ionicHistory) {
 
     console.log("LessonController loaded!");
 
-    $rootScope.backgroundView = {
-      "background": "url(" + $rootScope.rootDir + "data/assets/background_image_1_purple.png) no-repeat center top",
-      "-webkit-background-size": "cover",
-      "-moz-background-size": "cover",
-      "background-size": "cover"
-    };
+    TypicalFunctions.loadVariablesFromLocalStorage();
 
     $timeout(function () {
 

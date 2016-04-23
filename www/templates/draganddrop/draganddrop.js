@@ -1,17 +1,9 @@
 angular.module("bookbuilder2")
-  .controller("DraganddropController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast) {
+  .controller("DraganddropController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast) {
 
     console.log("Draganddrop loaded!");
 
-    //START OF DEVELOPMENT SNIPPET
-    /*if (window.cordova && window.cordova.platformId !== "browser") {
-     $rootScope.rootDir = window.cordova.file.dataDirectory;
-     } else {
-     $rootScope.rootDir = "";
-     }
-     $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
-     $rootScope.activityFolder = window.localStorage.getItem("activityFolder");*/
-    //END OF DEVELOPMENT SNIPPET
+    TypicalFunctions.loadVariablesFromLocalStorage();
 
     /*Name of activity in localStorage*/
     var activityNameInLocalStorage = $rootScope.selectedLesson.id + "_" + $rootScope.activityFolder;
@@ -520,6 +512,7 @@ angular.module("bookbuilder2")
                   } else {
                     $scope.checkButton.alpha = 0.5;
                   }
+                  $scope.stage.update();
 
                   $scope.checkButton.addEventListener("mousedown", function (event) {
                     console.log("mousedown event on a button !");
@@ -574,7 +567,7 @@ angular.module("bookbuilder2")
                     if ($scope.activityData.completed) {
                       $scope.nextButton.gotoAndPlay("normal");
                       $scope.stage.update();
-                      next();
+                      TypicalFunctions.nextActivity();
                     }
 
                   });
@@ -650,6 +643,7 @@ angular.module("bookbuilder2")
           $scope.checkButton.alpha = 0.5;
           $scope.activityData.completed = true;
           window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+          $scope.stage.update();
         };
 
         /* ------------------------------------------ TITLE ---------------------------------------------- */
@@ -672,6 +666,7 @@ angular.module("bookbuilder2")
 
           $scope.checkButton.alpha = 1;
           $scope.checkButton.gotoAndPlay("normal");
+          $scope.stage.update();
 
           $scope.activityData.completed = false;
           $scope.activityData.attempts += +1;
@@ -756,36 +751,6 @@ angular.module("bookbuilder2")
           $scope.stage.update();
           window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
         }
-
-        /*Function that goes to the next activity*/
-
-        function next() {
-          console.log("next activity!");
-          var index = _.findIndex($rootScope.selectedLesson.lessonMenu, {
-            "activityFolder": $rootScope.activityFolder
-          });
-          console.log(index);
-
-          if (index < $rootScope.selectedLesson.lessonMenu.length - 1) {
-            $rootScope.activityFolder = $rootScope.selectedLesson.lessonMenu[index + 1].activityFolder;
-            $rootScope.activityName = $rootScope.selectedLesson.lessonMenu[index + 1].name;
-            window.localStorage.setItem("activityFolder", $rootScope.activityFolder);
-            window.localStorage.setItem("activityName", $rootScope.activityName);
-            console.log("Next $rootScope.activityFolder: " + $rootScope.activityFolder + " $rootScope.activityName" + $rootScope.activityName);
-            $ionicHistory.nextViewOptions({
-              historyRoot: true,
-              disableBack: true
-            });
-            $state.go($rootScope.selectedLesson.lessonMenu[index + 1].activityTemplate, {}, {reload: true});
-          } else {
-            $ionicHistory.nextViewOptions({
-              historyRoot: true,
-              disableBack: true
-            });
-            $state.go("results", {}, {reload: true});
-          }
-        }
-
 
         function collision(x, y) {
           for (var i = 0; i < $scope.activityData.questions.length; i++) {

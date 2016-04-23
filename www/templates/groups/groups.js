@@ -1,15 +1,9 @@
 angular.module("bookbuilder2")
-  .controller("GroupsController", function (Download, $ionicLoading, $scope, $ionicPlatform, $timeout, $http, _, $ionicHistory, $ionicPopup, $state, $rootScope, Toast, $cordovaFile) {
+  .controller("GroupsController", function (TypicalFunctions, Download, $ionicLoading, $scope, $ionicPlatform, $timeout, $http, _, $ionicHistory, $ionicPopup, $state, $rootScope, Toast, $cordovaFile) {
 
     console.log("GroupsController loaded!");
 
-    $rootScope.book = JSON.parse(window.localStorage.getItem("book"));
-
-    if (window.cordova && window.cordova.platformId !== "browser") {
-      $rootScope.rootDir = window.cordova.file.dataDirectory;
-    } else {
-      $rootScope.rootDir = "";
-    }
+    TypicalFunctions.loadVariablesFromLocalStorage();
 
     $timeout(function () {
 
@@ -657,7 +651,7 @@ angular.module("bookbuilder2")
           })
           .error(function (error) {
             console.log("Error on getting json data for exit button...", error);
-            $rootScope.showPopup();
+            TypicalFunctions.showPopup();
           });
 
       });
