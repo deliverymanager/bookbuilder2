@@ -153,11 +153,11 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
         controller: "DraganddropWallController"
       })
 
-      .state('draganddropPark', {
+      .state('draganddropWithPositions', {
         cache: false,
-        url: "/draganddropPark",
-        templateUrl: "templates/draganddrop/draganddropPark.html",
-        controller: "DraganddropParkController"
+        url: "/draganddropWithPositions",
+        templateUrl: "templates/draganddrop/draganddropWithPositions.html",
+        controller: "DraganddropWidthPositionsController"
       })
       .state('video', {
         cache: false,

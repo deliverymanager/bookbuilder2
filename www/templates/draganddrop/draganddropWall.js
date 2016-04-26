@@ -369,17 +369,11 @@ angular.module("bookbuilder2")
                       return;
                     }
 
-                    /*console.log("ACTIVITY DATA: ",$scope.activityData);*/
                     $scope.reSelectedAnswerIndex = _.findIndex($scope.activityData.answers, {"text": $scope.questionText[key].text});
-                    console.log("Answer index: ", $scope.reSelectedAnswerIndex);
-
-                    /*$scope.questionText[key].text = " ";*/
                     $scope.answerRowContainers[$scope.reSelectedAnswerIndex].visible = true;
                     var local = $scope.mainContainer.globalToLocal(evt.stageX + $scope.answerRowContainers[$scope.reSelectedAnswerIndex].offset.x, evt.stageY + $scope.answerRowContainers[$scope.reSelectedAnswerIndex].offset.y);
                     $scope.answerRowContainers[$scope.reSelectedAnswerIndex].x = local.x;
                     $scope.answerRowContainers[$scope.reSelectedAnswerIndex].y = local.y;
-
-                    $scope.stage.update();
                   });
 
 
@@ -395,7 +389,7 @@ angular.module("bookbuilder2")
                       $scope.sounds["drop"].play();
                     }
 
-                    var collisionDetectedQuestion = collision(evt.stageX / $scope.scale - $scope.mainContainer.x, evt.stageY / $scope.scale - $scope.mainContainer.y);
+                    var collisionDetectedQuestion = collision(evt.stageX / $scope.scale - $scope.mainContainer.x / $scope.scale, evt.stageY / $scope.scale - $scope.mainContainer.y / $scope.scale);
 
                     if (collisionDetectedQuestion !== -1) {
 
@@ -535,7 +529,6 @@ angular.module("bookbuilder2")
                     var local = $scope.mainContainer.globalToLocal(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
                     this.x = local.x;
                     this.y = local.y;
-                    $scope.stage.update();
                   });
 
                   /*Press up event*/
@@ -548,7 +541,8 @@ angular.module("bookbuilder2")
                     if (window.cordova && window.cordova.platformId !== "browser") {
                       $scope.sounds["drop"].play();
                     }
-                    var collisionDetectedQuestion = collision(evt.stageX / $scope.scale - $scope.mainContainer.x, evt.stageY / $scope.scale - $scope.mainContainer.y);
+
+                    var collisionDetectedQuestion = collision(evt.stageX / $scope.scale - $scope.mainContainer.x / $scope.scale, evt.stageY / $scope.scale - $scope.mainContainer.y / $scope.scale);
 
                     /*There is collision*/
                     if (collisionDetectedQuestion !== -1) {
