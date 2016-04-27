@@ -140,6 +140,12 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
         templateUrl: "templates/cryptoDiver/cryptoDiver.html",
         controller: "cryptoDiverController"
       })
+      .state('wizard', {
+        cache: false,
+        url: "/wizard",
+        templateUrl: "templates/wizard/wizard.html",
+        controller: "wizardController"
+      })
       .state('draganddrop', {
         cache: false,
         url: "/draganddrop",

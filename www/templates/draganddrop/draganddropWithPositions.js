@@ -309,6 +309,7 @@ angular.module("bookbuilder2")
                               }
                             });
                             check();
+
                           });
                         }
                       });

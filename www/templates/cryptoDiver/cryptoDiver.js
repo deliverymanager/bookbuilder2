@@ -397,6 +397,59 @@ angular.module("bookbuilder2")
               $scope.letterContainers[letterIndex].y = rowKey * letterContainerHeight;
               $scope.cryptoContainer.addChild($scope.letterContainers[letterIndex]);
 
+              $scope.answerRowContainers[key].on("mousedown", function (evt) {
+                if ($scope.activityData.completed) {
+                  return;
+                }
+                if (window.cordova && window.cordova.platformId !== "browser") {
+                  $scope.sounds["drag"].play();
+                }
+                var global = $scope.mainContainer.localToGlobal(this.x, this.y);
+                this.offset = {
+                  'x': global.x - evt.stageX,
+                  'y': global.y - evt.stageY
+                };
+                this.global = {
+                  'x': global.x,
+                  'y': global.y
+                };
+                _.each($scope.currentQuestions, function (question, k, list) {
+                  if (parseInt($scope.currentQuestions[k].userAnswer) === key + 1) {
+                    $scope.currentQuestions[k].userAnswer = "";
+                  }
+                });
+              });
+              $scope.answerRowContainers[key].on("pressmove", function (evt) {
+                if ($scope.activityData.completed) {
+                  return;
+                }
+                var local = $scope.mainContainer.globalToLocal(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
+                this.x = local.x;
+                this.y = local.y;
+              });
+              $scope.answerRowContainers[key].on("pressup", function (evt) {
+                console.log("Press up event while dropping the answer!");
+
+                if ($scope.activityData.completed) {
+                  return;
+                }
+                if (window.cordova && window.cordova.platformId !== "browser") {
+                  $scope.sounds["drop"].play();
+                }
+
+                var collisionDetectedQuestion = collision(evt.stageX / $scope.scale - $scope.mainContainer.x / $scope.scale, evt.stageY / $scope.scale - $scope.mainContainer.y / $scope.scale);
+
+                if (collisionDetectedQuestion !== -1) {
+                  placeAnswer(key, collisionDetectedQuestion);
+                } else {
+                  createjs.Tween.get(this, {loop: false})
+                    .to({x: this.startingPointX, y: this.startingPointY}, 200, createjs.Ease.getPowIn(2));
+                  $scope.stage.update()
+                }
+              });//end of press up event
+
+
+
               /*B. Creating the letterBackground*/
               var letterContainerGraphic = new createjs.Graphics().beginFill("azure").drawRect(0, 0, $scope.letterContainers[letterIndex].width, $scope.letterContainers[letterIndex].height);
               $scope.letterBackgrounds[letterIndex] = new createjs.Shape(letterContainerGraphic);
@@ -415,8 +468,6 @@ angular.module("bookbuilder2")
             });
           });
 
-
-
           /*** 1.5 Creating the completedActivity container shape ***/
           $scope.completedActivityContainer = new createjs.Container();
           $scope.completedActivityContainer.width = $scope.cryptoContainer.width;
@@ -424,6 +475,59 @@ angular.module("bookbuilder2")
           $scope.completedActivityContainer.x = 0;
           $scope.completedActivityContainer.y = 0;
           $scope.cryptoContainer.addChild($scope.completedActivityContainer);
+
+          $scope.answerRowContainers[key].on("mousedown", function (evt) {
+            //Check if completed
+            if ($scope.activityData.completed) {
+              return;
+            }
+            if (window.cordova && window.cordova.platformId !== "browser") {
+              $scope.sounds["drag"].play();
+            }
+            var global = $scope.mainContainer.localToGlobal(this.x, this.y);
+            this.offset = {
+              'x': global.x - evt.stageX,
+              'y': global.y - evt.stageY
+            };
+            this.global = {
+              'x': global.x,
+              'y': global.y
+            };
+            _.each($scope.currentQuestions, function (question, k, list) {
+              if (parseInt($scope.currentQuestions[k].userAnswer) === key + 1) {
+                $scope.currentQuestions[k].userAnswer = "";
+              }
+            });
+          });
+          $scope.answerRowContainers[key].on("pressmove", function (evt) {
+            if ($scope.activityData.completed) {
+              return;
+            }
+            var local = $scope.mainContainer.globalToLocal(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
+            this.x = local.x;
+            this.y = local.y;
+          });
+          $scope.answerRowContainers[key].on("pressup", function (evt) {
+            console.log("Press up event while dropping the answer!");
+
+            if ($scope.activityData.completed) {
+              return;
+            }
+            if (window.cordova && window.cordova.platformId !== "browser") {
+              $scope.sounds["drop"].play();
+            }
+
+            var collisionDetectedQuestion = collision(evt.stageX / $scope.scale - $scope.mainContainer.x / $scope.scale, evt.stageY / $scope.scale - $scope.mainContainer.y / $scope.scale);
+
+            if (collisionDetectedQuestion !== -1) {
+              placeAnswer(key, collisionDetectedQuestion);
+            } else {
+              createjs.Tween.get(this, {loop: false})
+                .to({x: this.startingPointX, y: this.startingPointY}, 200, createjs.Ease.getPowIn(2));
+              $scope.stage.update()
+            }
+          });//end of press up event
+
 
           var completedActivityGraphic = new createjs.Graphics().beginFill("lightgreen").drawRect(0, 0, $scope.completedActivityContainer.width, $scope.completedActivityContainer.height);
           var completedActivityBackground = new createjs.Shape(completedActivityGraphic);
