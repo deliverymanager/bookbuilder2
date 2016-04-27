@@ -181,6 +181,10 @@ angular.module("bookbuilder2")
             $scope.scoreText.x = backgroundPosition.x + (backgroundPosition.width / 1.3);
             $scope.scoreText.y = backgroundPosition.y + (backgroundPosition.height / 17);
             $scope.scoreText.textBaseline = "alphabetic";
+
+            $scope.activityData.score = 0;
+            window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+
             $scope.stage.addChild($scope.scoreText);
 
             /*RESTART BUTTON*/
@@ -306,6 +310,7 @@ angular.module("bookbuilder2")
                 });
 
                 menuButton.addEventListener("pressup", function (event) {
+                  createjs.Tween.removeAllTweens();
                   menuButton.gotoAndPlay("normal");
                   $scope.stage.update();
                   _.each($scope.sounds, function (sound, key, list) {
@@ -1121,6 +1126,9 @@ angular.module("bookbuilder2")
               $scope.buttonChoices[$scope.activityData.questions[$scope.activeQuestionIndex].userAnswer].gotoAndPlay("red");
             }
           }
+
+          $scope.activityData.score = rightAnswers;
+          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
 
           completedActivity();
         }

@@ -163,7 +163,7 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
         cache: false,
         url: "/draganddropWithPositions",
         templateUrl: "templates/draganddrop/draganddropWithPositions.html",
-        controller: "DraganddropWidthPositionsController"
+        controller: "DraganddropWithPositionsController"
       })
       .state('video', {
         cache: false,

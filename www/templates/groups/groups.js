@@ -5,6 +5,13 @@ angular.module("bookbuilder2")
 
     TypicalFunctions.loadVariablesFromLocalStorage();
 
+    $scope.backgroundView = {
+      "background": "url(" + $rootScope.rootDir + "data/assets/first_menu_background.png) no-repeat center top",
+      "-webkit-background-size": "cover",
+      "-moz-background-size": "cover",
+      "background-size": "cover"
+    };
+
     $timeout(function () {
 
       var PIXEL_RATIO = (function () {
@@ -65,13 +72,6 @@ angular.module("bookbuilder2")
 
       /*IMAGE LOADER COMPLETED*/
       imageLoader.on("complete", function (r) {
-
-        $scope.backgroundView = {
-          "background": "url(" + $rootScope.rootDir + "data/assets/first_menu_background.png) no-repeat center top",
-          "-webkit-background-size": "cover",
-          "-moz-background-size": "cover",
-          "background-size": "cover"
-        };
 
         console.log("Background Image Loaded...");
         /*Creating Bitmap Background for Canvas*/

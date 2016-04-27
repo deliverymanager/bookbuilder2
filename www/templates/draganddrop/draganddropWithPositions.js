@@ -1,7 +1,7 @@
 angular.module("bookbuilder2")
-  .controller("DraganddropWidthPositionsController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast) {
+  .controller("DraganddropWithPositionsController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast) {
 
-    console.log("DraganddropWidthPositionsController loaded!");
+    console.log("DraganddropWithPositionsController loaded!");
     TypicalFunctions.loadVariablesFromLocalStorage();
 
     /*Name of activity in localStorage*/
@@ -106,7 +106,7 @@ angular.module("bookbuilder2")
 
         } else {
 
-          $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/" + $rootScope.activityFolder + "/draganddropWidthPositions.json")
+          $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/" + $rootScope.activityFolder + "/draganddropWithPositions.json")
             .success(function (response) {
               $scope.activityData = response;
               $scope.activityData.attempts = 1;
@@ -344,8 +344,9 @@ angular.module("bookbuilder2")
                           $scope.restartButton.visible = false;
 
                         });
-                        $scope.restartButton.x = 450;
-                        $scope.restartButton.y = 550;
+
+                        $scope.restartButton.x = $scope.activityData.checkButtonOnMainBackgroundPositionX + 65;
+                        $scope.restartButton.y = $scope.activityData.checkButtonOnMainBackgroundPositionY + 15;
                         $scope.mainContainer.addChild($scope.restartButton);
                         $scope.restartButton.visible = false;
                         callback();
@@ -392,8 +393,8 @@ angular.module("bookbuilder2")
                           }
                         });
 
-                        $scope.checkButton.x = 385;
-                        $scope.checkButton.y = 540;
+                        $scope.checkButton.x = $scope.activityData.checkButtonOnMainBackgroundPositionX;
+                        $scope.checkButton.y = $scope.activityData.checkButtonOnMainBackgroundPositionY;
                         $scope.mainContainer.addChild($scope.checkButton);
                         callback();
                       })
@@ -432,8 +433,12 @@ angular.module("bookbuilder2")
                           }
 
                         });
-                        $scope.nextButton.x = 810;
-                        $scope.nextButton.y = 655;
+
+                        console.log("$scope.activityData.nextActivityButtonOnMainBackgroundPositionX", $scope.activityData);
+                        console.log("X", $scope.activityData.nextActivityButtonOnMainBackgroundPositionX);
+                        console.log("Y", $scope.activityData.nextActivityButtonOnMainBackgroundPositionY);
+                        $scope.nextButton.x = $scope.activityData.nextActivityButtonOnMainBackgroundPositionX;
+                        $scope.nextButton.y = $scope.activityData.nextActivityButtonOnMainBackgroundPositionY;
                         $scope.mainContainer.addChild($scope.nextButton);
                         $scope.stage.update();
                         callback();
@@ -460,6 +465,7 @@ angular.module("bookbuilder2")
                         });
 
                         menuButton.addEventListener("pressup", function (event) {
+                          createjs.Tween.removeAllTweens();
                           console.log("pressup event!");
                           menuButton.gotoAndPlay("normal");
                           $ionicHistory.nextViewOptions({
@@ -665,13 +671,15 @@ angular.module("bookbuilder2")
     function init() {
       /*Adding Score Text*/
       $scope.scoreText = new createjs.Text("Score: " + "0" + " / " + $scope.activityData.questions.length, "30px Arial", "white");
-      $scope.scoreText.x = 700;
-      $scope.scoreText.y = 20;
+      $scope.scoreText.x = $scope.activityData.scoreOnMainBackgroundPositionX;
+      $scope.scoreText.y = $scope.activityData.scoreOnMainBackgroundPositionY;
+      $scope.activityData.score = 0;
+      window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
       $scope.mainContainer.addChild($scope.scoreText);
 
       var description = new createjs.Text($scope.activityData.title + " - " + $scope.activityData.description, "25px Arial", "white");
-      description.x = 100;
-      description.y = 635;
+      description.x = $scope.activityData.titleOnMainBackgroundPositionX;
+      description.y = $scope.activityData.titleOnMainBackgroundPositionY;
       $scope.mainContainer.addChild(description);
 
       async.parallel([function (callback) {
@@ -754,10 +762,10 @@ angular.module("bookbuilder2")
           $scope.stage.update();
         });//End of each
 
-        window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
         $scope.scoreText.text = "Score: " + rightAnswers + " / " + $scope.activityData.questions.length;
+        $scope.activityData.score = rightAnswers;
+        window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
         $scope.stage.update();
-
         completedActivity();
       }
     }
@@ -766,8 +774,10 @@ angular.module("bookbuilder2")
     function placeAnswer(answerKey, questionKey) {
 
       console.log(answerKey, questionKey);
+      console.log($scope.currentQuestions[questionKey]);
       /*There is no answer*/
-      if ($scope.currentQuestions[questionKey].userAnswer === "") {
+      if (!$scope.currentQuestions[questionKey].userAnswer) {
+        console.log("Question is empty");
         $scope.currentQuestions[questionKey].userAnswer = $scope.currentAnswers[answerKey].answer;
         $scope.answerRowContainers[answerKey].x = ($scope.questionRowContainers[questionKey].x + $scope.questionsContainer.x);
         $scope.answerRowContainers[answerKey].y = ($scope.questionRowContainers[questionKey].y + $scope.questionsContainer.y);
@@ -776,8 +786,8 @@ angular.module("bookbuilder2")
         console.log($scope.answerRowContainers[answerKey].startingPointX, $scope.answerRowContainers[answerKey].startingPointY);
         createjs.Tween.get($scope.answerRowContainers[answerKey], {loop: false})
           .to({
-            x: $scope.questionRowContainers[questionKey].startingPointX + $scope.questionsContainer.x,
-            y: $scope.questionRowContainers[questionKey].startingPointY + $scope.questionsContainer.y
+            x: $scope.answerRowContainers[answerKey].startingPointX,
+            y: $scope.answerRowContainers[answerKey].startingPointY
           }, 200, createjs.Ease.getPowIn(2));
         $scope.stage.update()
       }

@@ -257,6 +257,7 @@ angular.module("bookbuilder2")
             });
 
             menuButton.addEventListener("pressup", function (event) {
+              createjs.Tween.removeAllTweens();
               console.log("Press up event on Menu event!");
               menuButton.gotoAndPlay("normal");
               $scope.stage.update();
@@ -1043,6 +1044,10 @@ angular.module("bookbuilder2")
                       $scope.scoreText.y = 580;
                       $scope.resultsTotalContainer.addChild($scope.scoreText);
 
+                      $scope.activityData.score = 0;
+                      window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+
+
                       /*Adding container in resultsTotalContainer to create a working space in background image frame*/
                       $scope.resultsTotalBackgroundContainer = new createjs.Container();
                       $scope.resultsTotalBackgroundContainer.width = 820;
@@ -1156,6 +1161,10 @@ angular.module("bookbuilder2")
                               //Updating the Score text
                               $scope.scoreText.text = "Score: " + rightQuestions + " / " + $scope.activityData.questions.length;
 
+
+                              $scope.activityData.score = rightQuestions;
+                              window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+
                             });
 
                             $scope.checkButton.x = 45;
@@ -1232,6 +1241,10 @@ angular.module("bookbuilder2")
                                 $scope.activeQuestionIndex = 0;
                                 loadQuestion(0);
                                 $scope.scoreText.text = "Score: " + "0" + " / " + $scope.activityData.questions.length;
+
+
+                                $scope.activityData.score = 0;
+                                window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
 
                               });
                             });//End of press up element

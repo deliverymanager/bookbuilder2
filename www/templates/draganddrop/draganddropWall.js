@@ -205,6 +205,7 @@ angular.module("bookbuilder2")
             });
 
             menuButton.addEventListener("pressup", function (event) {
+              createjs.Tween.removeAllTweens();
               console.log("pressup event!");
               menuButton.gotoAndPlay("normal");
               $ionicHistory.nextViewOptions({
@@ -232,6 +233,8 @@ angular.module("bookbuilder2")
           $scope.scoreText = new createjs.Text("Score: " + "0" + " / " + $scope.activityData.questions.length, "30px Arial", "white");
           $scope.scoreText.x = 140;
           $scope.scoreText.y = 550;
+          $scope.activityData.score = 0;
+          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
           $scope.mainContainer.addChild($scope.scoreText);
 
           var title = new createjs.Text($scope.activityData.title, "25px Arial", "white");
@@ -911,9 +914,11 @@ angular.module("bookbuilder2")
             placeAnswersOnRightQuestions();
           }
 
-          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
 
           $scope.scoreText.text = "Score: " + rightAnswers + " / " + $scope.activityData.questions.length;
+          $scope.activityData.score = rightAnswers;
+          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+
           $scope.stage.update();
         }
 

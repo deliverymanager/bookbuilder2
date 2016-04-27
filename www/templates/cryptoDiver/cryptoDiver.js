@@ -146,10 +146,10 @@ angular.module("bookbuilder2")
 
         //mainContainer Background
         /*var mainContainerGraphic = new createjs.Graphics().beginFill("green").drawRect(0, 0, $scope.mainContainer.width, $scope.mainContainer.height);
-        var mainContainerBackground = new createjs.Shape(mainContainerGraphic);
-        mainContainerBackground.alpha = 0.5;
+         var mainContainerBackground = new createjs.Shape(mainContainerGraphic);
+         mainContainerBackground.alpha = 0.5;
 
-        $scope.mainContainer.addChild(mainContainerBackground);*/
+         $scope.mainContainer.addChild(mainContainerBackground);*/
 
 
         /* ------------------------------------------ CRYPTO CONTAINER ---------------------------------------------- */
@@ -162,9 +162,9 @@ angular.module("bookbuilder2")
 
         //cryptoContainer Background
         /*var cryptoContainerGraphic = new createjs.Graphics().beginFill("red").drawRect(0, 0, $scope.cryptoContainer.width, $scope.cryptoContainer.height);
-        var cryptoContainerBackground = new createjs.Shape(cryptoContainerGraphic);
-        cryptoContainerBackground.alpha = 0.5;
-        $scope.cryptoContainer.addChild(cryptoContainerBackground);*/
+         var cryptoContainerBackground = new createjs.Shape(cryptoContainerGraphic);
+         cryptoContainerBackground.alpha = 0.5;
+         $scope.cryptoContainer.addChild(cryptoContainerBackground);*/
 
         /*Mouse down event*/
         $scope.cryptoContainer.addEventListener("mousedown", function (event) {
@@ -253,10 +253,10 @@ angular.module("bookbuilder2")
 
         //wordsContainer Background
         /*var wordsContainerGraphic = new createjs.Graphics().beginFill("orange").drawRect(0, 0, $scope.wordsContainer.width, $scope.wordsContainer.height);
-        var wordsContainerBackground = new createjs.Shape(wordsContainerGraphic);
-        wordsContainerBackground.alpha = 0.5;
+         var wordsContainerBackground = new createjs.Shape(wordsContainerGraphic);
+         wordsContainerBackground.alpha = 0.5;
 
-        $scope.wordsContainer.addChild(wordsContainerBackground);*/
+         $scope.wordsContainer.addChild(wordsContainerBackground);*/
 
         /* ------------------------------------------ DIVER CONTAINER ---------------------------------------------- */
         $scope.diverContainer = new createjs.Container();
@@ -268,10 +268,10 @@ angular.module("bookbuilder2")
 
         //diverContainer Background
         /*var diverContainerGraphic = new createjs.Graphics().beginFill("darkred").drawRect(0, 0, $scope.diverContainer.width, $scope.diverContainer.height);
-        var diverContainerBackground = new createjs.Shape(diverContainerGraphic);
-        diverContainerBackground.alpha = 0.5;
+         var diverContainerBackground = new createjs.Shape(diverContainerGraphic);
+         diverContainerBackground.alpha = 0.5;
 
-        $scope.diverContainer.addChild(diverContainerBackground);*/
+         $scope.diverContainer.addChild(diverContainerBackground);*/
 
         /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
 
@@ -290,6 +290,9 @@ angular.module("bookbuilder2")
             });
 
             menuButton.addEventListener("pressup", function (event) {
+
+              createjs.Tween.removeAllTweens();
+
               console.log("Press up event on Menu event!");
               menuButton.gotoAndPlay("normal");
               $ionicHistory.nextViewOptions({
@@ -319,7 +322,7 @@ angular.module("bookbuilder2")
           console.log("activityData: ", $scope.activityData);
 
           /*Adding page title and description*/
-          $scope.pageTitleAndDescription = new createjs.Text($scope.activityData.title +" - "+$scope.activityData.description, "23px Arial", "white");
+          $scope.pageTitleAndDescription = new createjs.Text($scope.activityData.title + " - " + $scope.activityData.description, "23px Arial", "white");
           $scope.pageTitleAndDescription.x = 85;
           $scope.pageTitleAndDescription.y = 623;
           $scope.mainContainer.addChild($scope.pageTitleAndDescription);
@@ -397,59 +400,6 @@ angular.module("bookbuilder2")
               $scope.letterContainers[letterIndex].y = rowKey * letterContainerHeight;
               $scope.cryptoContainer.addChild($scope.letterContainers[letterIndex]);
 
-              $scope.answerRowContainers[key].on("mousedown", function (evt) {
-                if ($scope.activityData.completed) {
-                  return;
-                }
-                if (window.cordova && window.cordova.platformId !== "browser") {
-                  $scope.sounds["drag"].play();
-                }
-                var global = $scope.mainContainer.localToGlobal(this.x, this.y);
-                this.offset = {
-                  'x': global.x - evt.stageX,
-                  'y': global.y - evt.stageY
-                };
-                this.global = {
-                  'x': global.x,
-                  'y': global.y
-                };
-                _.each($scope.currentQuestions, function (question, k, list) {
-                  if (parseInt($scope.currentQuestions[k].userAnswer) === key + 1) {
-                    $scope.currentQuestions[k].userAnswer = "";
-                  }
-                });
-              });
-              $scope.answerRowContainers[key].on("pressmove", function (evt) {
-                if ($scope.activityData.completed) {
-                  return;
-                }
-                var local = $scope.mainContainer.globalToLocal(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
-                this.x = local.x;
-                this.y = local.y;
-              });
-              $scope.answerRowContainers[key].on("pressup", function (evt) {
-                console.log("Press up event while dropping the answer!");
-
-                if ($scope.activityData.completed) {
-                  return;
-                }
-                if (window.cordova && window.cordova.platformId !== "browser") {
-                  $scope.sounds["drop"].play();
-                }
-
-                var collisionDetectedQuestion = collision(evt.stageX / $scope.scale - $scope.mainContainer.x / $scope.scale, evt.stageY / $scope.scale - $scope.mainContainer.y / $scope.scale);
-
-                if (collisionDetectedQuestion !== -1) {
-                  placeAnswer(key, collisionDetectedQuestion);
-                } else {
-                  createjs.Tween.get(this, {loop: false})
-                    .to({x: this.startingPointX, y: this.startingPointY}, 200, createjs.Ease.getPowIn(2));
-                  $scope.stage.update()
-                }
-              });//end of press up event
-
-
-
               /*B. Creating the letterBackground*/
               var letterContainerGraphic = new createjs.Graphics().beginFill("azure").drawRect(0, 0, $scope.letterContainers[letterIndex].width, $scope.letterContainers[letterIndex].height);
               $scope.letterBackgrounds[letterIndex] = new createjs.Shape(letterContainerGraphic);
@@ -468,6 +418,7 @@ angular.module("bookbuilder2")
             });
           });
 
+
           /*** 1.5 Creating the completedActivity container shape ***/
           $scope.completedActivityContainer = new createjs.Container();
           $scope.completedActivityContainer.width = $scope.cryptoContainer.width;
@@ -476,60 +427,7 @@ angular.module("bookbuilder2")
           $scope.completedActivityContainer.y = 0;
           $scope.cryptoContainer.addChild($scope.completedActivityContainer);
 
-          $scope.answerRowContainers[key].on("mousedown", function (evt) {
-            //Check if completed
-            if ($scope.activityData.completed) {
-              return;
-            }
-            if (window.cordova && window.cordova.platformId !== "browser") {
-              $scope.sounds["drag"].play();
-            }
-            var global = $scope.mainContainer.localToGlobal(this.x, this.y);
-            this.offset = {
-              'x': global.x - evt.stageX,
-              'y': global.y - evt.stageY
-            };
-            this.global = {
-              'x': global.x,
-              'y': global.y
-            };
-            _.each($scope.currentQuestions, function (question, k, list) {
-              if (parseInt($scope.currentQuestions[k].userAnswer) === key + 1) {
-                $scope.currentQuestions[k].userAnswer = "";
-              }
-            });
-          });
-          $scope.answerRowContainers[key].on("pressmove", function (evt) {
-            if ($scope.activityData.completed) {
-              return;
-            }
-            var local = $scope.mainContainer.globalToLocal(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
-            this.x = local.x;
-            this.y = local.y;
-          });
-          $scope.answerRowContainers[key].on("pressup", function (evt) {
-            console.log("Press up event while dropping the answer!");
-
-            if ($scope.activityData.completed) {
-              return;
-            }
-            if (window.cordova && window.cordova.platformId !== "browser") {
-              $scope.sounds["drop"].play();
-            }
-
-            var collisionDetectedQuestion = collision(evt.stageX / $scope.scale - $scope.mainContainer.x / $scope.scale, evt.stageY / $scope.scale - $scope.mainContainer.y / $scope.scale);
-
-            if (collisionDetectedQuestion !== -1) {
-              placeAnswer(key, collisionDetectedQuestion);
-            } else {
-              createjs.Tween.get(this, {loop: false})
-                .to({x: this.startingPointX, y: this.startingPointY}, 200, createjs.Ease.getPowIn(2));
-              $scope.stage.update()
-            }
-          });//end of press up event
-
-
-          var completedActivityGraphic = new createjs.Graphics().beginFill("lightgreen").drawRect(0, 0, $scope.completedActivityContainer.width, $scope.completedActivityContainer.height);
+          var completedActivityGraphic = new createjs.Graphics().beginFill("green").drawRect(0, 0, $scope.completedActivityContainer.width, $scope.completedActivityContainer.height);
           var completedActivityBackground = new createjs.Shape(completedActivityGraphic);
           completedActivityBackground.alpha = 1;
           $scope.completedActivityContainer.addChild(completedActivityBackground);
@@ -539,19 +437,18 @@ angular.module("bookbuilder2")
 
           //Iterating through activity's questions
           $scope.activityQuestions = {};
-          _.each($scope.activityData.questions, function(word, key, list){
+          _.each($scope.activityData.questions, function (word, key, list) {
 
             /*Adding the texts*/
-            $scope.activityQuestions[key] = new createjs.Text($scope.activityData.questions[key].englishWord+" = "+$scope.activityData.questions[key].greekWord , "30px Arial", "white");
+            $scope.activityQuestions[key] = new createjs.Text($scope.activityData.questions[key].englishWord + " = " + $scope.activityData.questions[key].greekWord, "30px Arial", "white");
             $scope.activityQuestions[key].x = $scope.cryptoContainer.width / 2;
-            $scope.activityQuestions[key].y = key === 0? completedActivityAnswerY/3 : $scope.activityQuestions[key - 1].y + completedActivityAnswerY;
+            $scope.activityQuestions[key].y = key === 0 ? completedActivityAnswerY / 3 : $scope.activityQuestions[key - 1].y + completedActivityAnswerY;
             $scope.activityQuestions[key].textAlign = "center";
             $scope.activityQuestions[key].textBaseline = "middle";
             $scope.completedActivityContainer.addChild($scope.activityQuestions[key]);
 
           });
           $scope.completedActivityContainer.visible = false;
-
 
 
           /*** 2. Creating the words list ***/
@@ -760,7 +657,7 @@ angular.module("bookbuilder2")
                     $scope.nextButton.addEventListener("mousedown", function (event) {
                       console.log("Mouse down event on a button !", $scope.activityData.completed);
                       if ($scope.activityData.completed) {
-                        $scope.nextButton.gotoAndPlay("onSelection");
+                        $scope.nextButton.gotoAndPlay("selected");
                       }
                       $scope.stage.update();
                     });
@@ -768,7 +665,7 @@ angular.module("bookbuilder2")
                       console.log("Press up event!");
 
                       if ($scope.activityData.completed) {
-                        $scope.nextButton.gotoAndPlay("normal");
+                        $scope.nextButton.gotoAndPlay("onSelection");
                         /*Calling next function!*/
                         TypicalFunctions.nextActivity();
                       }
@@ -1193,7 +1090,7 @@ angular.module("bookbuilder2")
           /*Check how many correct answers exist*/
           var completedWords = 0;
           _.each($scope.activityData.questions, function (word, key, list) {
-            if ($scope.activityData.questions[key].completedWordLetters.length > 0) {
+            if ($scope.activityData.questions[key].completedWordLetters && $scope.activityData.questions[key].completedWordLetters.length > 0) {
               completedWords++;
             }
           });
@@ -1225,39 +1122,66 @@ angular.module("bookbuilder2")
           $scope.diverBottom.visible = false;
           $scope.diverBottom.gotoAndPlay("normal");
           $scope.diverSwimming.visible = true;
-          $scope.diverSwimming.y = 85;
-          $scope.diverChain.y = -465;
           //Make completed property false
           $scope.activityData.completed = false;
+          $scope.nextButton.gotoAndPlay("normal");
           $scope.completedActivityContainer.visible = false;
 
           var completedWords = 0;
+          var diverSwimmingY = 85;
+          var diverChainY = -465;
 
           _.each($scope.activityData.questions, function (word, key, list) {
             if ($scope.activityData.questions[key].completedWordLetters && $scope.activityData.questions[key].completedWordLetters.length > 0) {
               //Updating diver and chain positions
-              $scope.diverSwimming.y += getDiverStep();
-              $scope.diverChain.y += getDiverStep();
+              diverSwimmingY += getDiverStep();
+              diverChainY += getDiverStep();
+
               completedWords++;
             }
           });
 
-          /*Re-animate diver and chain*/
-          chainFloating();
-          diverFloating();
+          async.parallel([function (callback) {
 
-          /*Resolving if the diver has reached bottom*/
-          if (completedWords === $scope.activityData.questions.length) {
-            $scope.diverSwimming.visible = false;
-            $scope.diverBottom.y = $scope.diverSwimming.y;
-            $scope.diverBottom.visible = true;
-            createjs.Tween.removeTweens($scope.diverChain);
-            createjs.Tween.removeTweens($scope.diverSwimming);
-            $scope.diverBottom.gotoAndPlay("bottom");
-            //Activity has completed
-            $scope.activityData.completed = true;
-            $scope.completedActivityContainer.visible = true;
-          }
+            createjs.Tween.get($scope.diverSwimming, {loop: false})
+              .to({
+                y: diverSwimmingY
+              }, 2000, createjs.Ease.getPowInOut(1))
+              .call(function () {
+                callback();
+              });
+
+
+          }, function (callback) {
+
+
+            createjs.Tween.get($scope.diverChain, {loop: false})
+              .to({
+                y: diverChainY
+              }, 2000, createjs.Ease.getPowInOut(1))
+              .call(function () {
+                callback();
+              });
+
+          }], function (err, result) {
+            /*Re-animate diver and chain*/
+            chainFloating();
+            diverFloating();
+
+            /*Resolving if the diver has reached bottom*/
+            if (completedWords === $scope.activityData.questions.length) {
+              $scope.diverSwimming.visible = false;
+              $scope.diverBottom.y = $scope.diverSwimming.y;
+              $scope.diverBottom.visible = true;
+              createjs.Tween.removeTweens($scope.diverChain);
+              createjs.Tween.removeTweens($scope.diverSwimming);
+              $scope.diverBottom.gotoAndPlay("bottom");
+              //Activity has completed
+              $scope.activityData.completed = true;
+              $scope.completedActivityContainer.visible = true;
+              $scope.nextButton.gotoAndPlay("onSelection");
+            }
+          });
         }
 
 

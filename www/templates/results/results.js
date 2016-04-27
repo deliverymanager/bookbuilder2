@@ -282,16 +282,16 @@ angular.module("bookbuilder2")
             $scope.vocReadContainer = new createjs.Container();
             $scope.vocReadContainer.scaleX = $scope.vocReadContainer.scaleY = scale;
             $scope.vocReadContainer.x = backgroundPosition.x + (backgroundPosition.width / 9);
-            $scope.vocReadContainer.y = backgroundPosition.y + (backgroundPosition.height / 4);
+            $scope.vocReadContainer.y = backgroundPosition.y + (backgroundPosition.height / 5.5);
             $scope.vocReadContainer.width = background.image.width / 2.7;
-            $scope.vocReadContainer.height = background.image.height / 8;
+            $scope.vocReadContainer.height = background.image.height / 4.3;
             $scope.stage.addChild($scope.vocReadContainer);
 
 
             $scope.scoreContainer = new createjs.Container();
             $scope.scoreContainer.scaleX = $scope.scoreContainer.scaleY = scale;
             $scope.scoreContainer.x = backgroundPosition.x + (backgroundPosition.width / 2);
-            $scope.scoreContainer.y = backgroundPosition.y + (backgroundPosition.height / 4);
+            $scope.scoreContainer.y = backgroundPosition.y + (backgroundPosition.height / 4.3);
             $scope.scoreContainer.width = background.image.width / 3.2;
             $scope.scoreContainer.height = background.image.height / 8;
             $scope.stage.addChild($scope.scoreContainer);
@@ -300,7 +300,7 @@ angular.module("bookbuilder2")
             $scope.activitiesContainer = new createjs.Container();
             $scope.activitiesContainer.scaleX = $scope.activitiesContainer.scaleY = scale;
             $scope.activitiesContainer.x = backgroundPosition.x + (backgroundPosition.width / 9);
-            $scope.activitiesContainer.y = backgroundPosition.y + (backgroundPosition.height / 2.5);
+            $scope.activitiesContainer.y = backgroundPosition.y + (backgroundPosition.height / 2.3);
             $scope.activitiesContainer.width = background.image.width / 1.44;
             $scope.activitiesContainer.height = background.image.height / 2.3;
             $scope.stage.addChild($scope.activitiesContainer);
@@ -353,20 +353,19 @@ angular.module("bookbuilder2")
 
           $scope.calculatedActivityScores = {};
 
-          _.each($rootScope.selectedLesson.lessonMenu, function (activity, key, list) {
+          _.each($rootScope.selectedLesson.activitiesMenu, function (activity, key, list) {
             var activityData = JSON.parse(window.localStorage.getItem($rootScope.selectedLesson.id + "_" + activity.activityFolder));
             console.log("activity", activityData);
 
             if (activityData) {
-              console.log("activity correct", calculateCorrectAnswers(activityData, activity.activityTemplate));
               $scope.calculatedActivityScores[activity.activityFolder] = {
                 "activityFolder": activity.activityFolder,
                 "title": activity.name,
                 "completed": activityData.completed ? true : false,
                 "attempts": activityData.attempts ? activityData.attempts : 0,
-                "correct": calculateCorrectAnswers(activityData, activity.activityTemplate),
+                "correct": (activityData.score ? activityData.score : 0),
                 "numberOfQuestions": activity.numberOfQuestions,
-                "percentCorrectQuestions": parseInt(calculateCorrectAnswers(activityData, activity.activityTemplate) / activityData.questions.length * 100)
+                "percentCorrectQuestions": parseInt((activityData.score ? activityData.score : 0) / activity.numberOfQuestions * 100)
               }
             } else {
               $scope.calculatedActivityScores[activity.activityFolder] = {
@@ -509,43 +508,90 @@ angular.module("bookbuilder2")
           $scope.scoreContainer.addChild(scoreText);
 
 
-          var vocText = new createjs.Text($scope.calculatedActivityScores["vocabulary"].title, "21px Arial", "white");
-          vocText.x = $scope.vocReadContainer.width / 20;
-          vocText.y = $scope.vocReadContainer.height / 14;
+          if ($scope.calculatedActivityScores["vocabulary"]) {
 
-          $scope.activityStateVoc = new createjs.Sprite($scope.activityState, $scope.calculatedActivityScores["vocabulary"].completed ? "completed" : "notCompleted");
-          $scope.activityStateVoc.x = $scope.vocReadContainer.width / 2;
-          $scope.activityStateVoc.y = vocText.y;
-          $scope.vocReadContainer.addChild($scope.activityStateVoc);
+            var vocText = new createjs.Text($scope.calculatedActivityScores["vocabulary"].title, "21px Arial", "white");
+            vocText.x = $scope.vocReadContainer.width / 20;
+            vocText.y = $scope.vocReadContainer.height / 14;
 
-          $scope.vocReadContainer.addChild(vocText);
+            $scope.activityStateVoc = new createjs.Sprite($scope.activityState, $scope.calculatedActivityScores["vocabulary"].completed ? "completed" : "notCompleted");
+            $scope.activityStateVoc.x = $scope.vocReadContainer.width / 2;
+            $scope.activityStateVoc.y = vocText.y;
+            $scope.vocReadContainer.addChild($scope.activityStateVoc);
+            $scope.vocReadContainer.addChild(vocText);
 
-          var vocAttempts = new createjs.Text(($scope.calculatedActivityScores["vocabulary"].attempts ? $scope.calculatedActivityScores["vocabulary"].attempts : 0) + " times", "25px Arial", "white");
-          vocAttempts.x = $scope.vocReadContainer.width / 1.5;
-          vocAttempts.y = vocText.y;
-          $scope.vocReadContainer.addChild(vocAttempts);
+            var vocAttempts = new createjs.Text(($scope.calculatedActivityScores["vocabulary"].attempts ? $scope.calculatedActivityScores["vocabulary"].attempts : 0) + " times", "25px Arial", "white");
+            vocAttempts.x = $scope.vocReadContainer.width / 1.5;
+            vocAttempts.y = vocText.y;
+            $scope.vocReadContainer.addChild(vocAttempts);
+          }
 
 
-          var readText = new createjs.Text($scope.calculatedActivityScores["reading"].title, "21px Arial", "white");
-          readText.x = $scope.vocReadContainer.width / 20;
-          readText.y = $scope.vocReadContainer.height / 1.9;
-          $scope.vocReadContainer.addChild(readText);
+          if ($scope.calculatedActivityScores["reading"]) {
+            var readText = new createjs.Text($scope.calculatedActivityScores["reading"].title, "21px Arial", "white");
+            readText.x = $scope.vocReadContainer.width / 20;
+            readText.y = $scope.vocReadContainer.height / 3.2;
+            $scope.vocReadContainer.addChild(readText);
 
-          $scope.activityStateRead = new createjs.Sprite($scope.activityState, $scope.calculatedActivityScores["reading"].completed ? "completed" : "notCompleted");
-          $scope.activityStateRead.x = $scope.vocReadContainer.width / 2;
-          $scope.activityStateRead.y = readText.y;
-          $scope.vocReadContainer.addChild($scope.activityStateRead);
+            $scope.activityStateRead = new createjs.Sprite($scope.activityState, $scope.calculatedActivityScores["reading"].completed ? "completed" : "notCompleted");
+            $scope.activityStateRead.x = $scope.vocReadContainer.width / 2;
+            $scope.activityStateRead.y = readText.y;
+            $scope.vocReadContainer.addChild($scope.activityStateRead);
 
-          var readAttempts = new createjs.Text(($scope.calculatedActivityScores["reading"].attempts ? $scope.calculatedActivityScores["reading"].attempts : 0) + " times", "25px Arial", "white");
-          readAttempts.x = $scope.vocReadContainer.width / 1.5;
-          readAttempts.y = readText.y;
-          $scope.vocReadContainer.addChild(readAttempts);
+            var readAttempts = new createjs.Text(($scope.calculatedActivityScores["reading"].attempts ? $scope.calculatedActivityScores["reading"].attempts : 0) + " times", "25px Arial", "white");
+            readAttempts.x = $scope.vocReadContainer.width / 1.5;
+            readAttempts.y = readText.y;
+            $scope.vocReadContainer.addChild(readAttempts);
+          }
+
+
+          if ($scope.calculatedActivityScores["song"]) {
+
+            var songText = new createjs.Text($scope.calculatedActivityScores["song"].title, "21px Arial", "white");
+            songText.x = $scope.vocReadContainer.width / 20;
+            songText.y = $scope.vocReadContainer.height / 1.8;
+            $scope.vocReadContainer.addChild(songText);
+
+            $scope.activityStateRead = new createjs.Sprite($scope.activityState, $scope.calculatedActivityScores["song"].completed ? "completed" : "notCompleted");
+            $scope.activityStateRead.x = $scope.vocReadContainer.width / 2;
+            $scope.activityStateRead.y = songText.y;
+            $scope.vocReadContainer.addChild($scope.activityStateRead);
+
+            var songAttempts = new createjs.Text(($scope.calculatedActivityScores["song"].attempts ? $scope.calculatedActivityScores["song"].attempts : 0) + " times", "25px Arial", "white");
+            songAttempts.x = $scope.vocReadContainer.width / 1.5;
+            songAttempts.y = songText.y;
+            $scope.vocReadContainer.addChild(songAttempts);
+
+
+          }
+
+
+          if ($scope.calculatedActivityScores["video"]) {
+
+            var videoText = new createjs.Text($scope.calculatedActivityScores["video"].title, "21px Arial", "white");
+            videoText.x = $scope.vocReadContainer.width / 20;
+            videoText.y = $scope.vocReadContainer.height / 1.25;
+            $scope.vocReadContainer.addChild(videoText);
+
+            $scope.activityStateRead = new createjs.Sprite($scope.activityState, $scope.calculatedActivityScores["video"].completed ? "completed" : "notCompleted");
+            $scope.activityStateRead.x = $scope.vocReadContainer.width / 2;
+            $scope.activityStateRead.y = videoText.y;
+            $scope.vocReadContainer.addChild($scope.activityStateRead);
+
+            var videoAttempts = new createjs.Text(($scope.calculatedActivityScores["video"].attempts ? $scope.calculatedActivityScores["video"].attempts : 0) + " times", "25px Arial", "white");
+            videoAttempts.x = $scope.vocReadContainer.width / 1.5;
+            videoAttempts.y = videoText.y;
+            $scope.vocReadContainer.addChild(videoAttempts);
+
+
+          }
 
 
           var stepHeight = 15;
+          console.log("$scope.calculatedActivityScores", $scope.calculatedActivityScores);
           _.each($scope.calculatedActivityScores, function (activity, key, list) {
 
-            if (key === "reading" || key === "vocabulary") {
+            if (key === "reading" || key === "vocabulary" || key === "song" || key === "video") {
               return;
             }
             var vocText = new createjs.Text(activity.title, "21px Arial", "white");
@@ -575,35 +621,10 @@ angular.module("bookbuilder2")
             vocPerCent.y = stepHeight;
             $scope.activitiesContainer.addChild(vocPerCent);
 
-            stepHeight += 50;
+            stepHeight += 30;
 
           });
         }
-
-
-        /*Calculating answers*/
-        function calculateCorrectAnswers(activityData, activityTemplate) {
-          if (activityTemplate === "draganddrop") {
-            return _.filter(activityData.questions, function (question) {
-              if (question.userAnswerLabel === question.answer) {
-                return true;
-              } else {
-                return false;
-              }
-            }).length;
-          } else if (activityTemplate === "multiple") {
-            return _.filter(activityData.questions, function (question) {
-              console.log("question.userAnswer: " + question.userAnswer + " question.answerChoice: " + question.answerChoice);
-              if (question.userAnswer === question.answerChoice) {
-                return true;
-              } else {
-                return false;
-              }
-            }).length;
-          }
-
-        }
-
 
         /*This function evokes when a lesson is downloaded for the first time*/
         function clearAllActivitiesLocalStorage() {
@@ -779,17 +800,11 @@ angular.module("bookbuilder2")
                       $ionicLoading.hide();
                     }, 3000);
                   });
-
-
                 }
               }
             }]
           });
-
-
         };
-
-
       });//end of image on complete
     }, 1500);
 //end of timeout
