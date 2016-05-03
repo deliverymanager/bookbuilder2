@@ -213,8 +213,8 @@ angular.module("bookbuilder2")
         $scope.resultsContainer = new createjs.Container();
         $scope.resultsContainer.width = 740;
         $scope.resultsContainer.height = 500;
-        $scope.resultsContainer.x = 60;
-        $scope.resultsContainer.y = 80;
+        $scope.resultsContainer.x = 90;
+        $scope.resultsContainer.y = 120;
         $scope.mainContainer.addChild($scope.resultsContainer);
 
         //mainContainer Background
@@ -350,7 +350,7 @@ angular.module("bookbuilder2")
                     $scope.questionTextContainer = new createjs.Container();
                     $scope.questionTextContainer.width = 570;
                     $scope.questionTextContainer.height = 60;
-                    $scope.questionTextContainer.x = 5;
+                    $scope.questionTextContainer.x = 20;
                     $scope.questionTextContainer.y = 35;
                     $scope.questionContainer.addChild($scope.questionTextContainer);
 
@@ -384,10 +384,9 @@ angular.module("bookbuilder2")
                   answerABackgroundImageLoader.on("complete", function (r) {
 
                     /*Creating Bitmap Background for answerHolder background image*/
-                    $scope.answerABackground = new createjs.Bitmap($rootScope.rootDir + "data/assets/soccer_a_choice.png");
+                    $scope.answerABackground = new createjs.Bitmap($rootScope.rootDir + "data/assets/golf_choice_button_blue.png");
                     $scope.answerABackground.x = 0;
                     $scope.answerABackground.y = 0;
-                    $scope.answerABackground.scaleX = $scope.answerABackground.scaleY = 0.45;
                     $scope.answerABackground.addEventListener("mousedown", function (event) {
                       if (!$scope.selectionInProgress) {
                         $scope.answerABackground.alpha = 0.5;
@@ -443,10 +442,9 @@ angular.module("bookbuilder2")
                   answerBBackgroundImageLoader.on("complete", function (r) {
 
                     /*Creating Bitmap Background for answerHolder background image*/
-                    $scope.answerBBackground = new createjs.Bitmap($rootScope.rootDir + "data/assets/soccer_b_choice.png");
+                    $scope.answerBBackground = new createjs.Bitmap($rootScope.rootDir + "data/assets/golf_choice_button_green.png");
                     $scope.answerBBackground.x = 0;
                     $scope.answerBBackground.y = $scope.answersContainer.height / 3;
-                    $scope.answerBBackground.scaleX = $scope.answerBBackground.scaleY = 0.45;
                     $scope.answerBBackground.addEventListener("mousedown", function (event) {
                       if (!$scope.selectionInProgress) {
                         $scope.answerBBackground.alpha = 0.5;
@@ -566,7 +564,7 @@ angular.module("bookbuilder2")
 
               },
 
-              /*Soccer game*/
+              /*Golf game*/
               function (initWaterfallCallback) {
 
                 var createSoccerGameParallelFunctions = [];
@@ -579,7 +577,7 @@ angular.module("bookbuilder2")
                       response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
                       var golfBallSpriteSheet = new createjs.SpriteSheet(response);
                       $scope.golfBall = new createjs.Sprite(golfBallSpriteSheet, "normal");
-
+                      /*$scope.golfBall.framerate = 100;*/
                       $scope.golfBall.x = 365;
                       $scope.golfBall.y = 385;
                       $scope.golfBall.scaleX = $scope.golfBall.scaleY = 2.2;

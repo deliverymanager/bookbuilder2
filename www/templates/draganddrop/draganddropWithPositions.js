@@ -141,7 +141,7 @@ angular.module("bookbuilder2")
               scaleY = scaleY.toFixed(2);
               var scaleX = $scope.stage.canvas.width / background.image.width;
               scaleX = scaleX.toFixed(2);
-              scale = 1;
+              $scope.scale = 1;
               if (scaleX >= scaleY) {
                 $scope.scale = scaleY;
               } else {

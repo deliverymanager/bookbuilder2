@@ -224,7 +224,7 @@ angular.module("bookbuilder2")
         $scope.resultsTotalContainer.width = $scope.mainContainer.width;
         $scope.resultsTotalContainer.height = $scope.mainContainer.height;
         $scope.resultsTotalContainer.x = 0;
-        $scope.resultsTotalContainer.y = -70;
+        $scope.resultsTotalContainer.y = 0;
         $scope.mainContainer.addChild($scope.resultsTotalContainer);
 
         //resultsContainer Background
@@ -857,6 +857,9 @@ angular.module("bookbuilder2")
 
                             //While making resultsTotalContainer visible, description and Next activity button have to hide
                             $scope.resultsTotalContainer.visible = true;
+                            $scope.pageDescription.visible = false;
+                            $scope.nextButton.x = 450;
+                            $scope.nextButton.y = 600;
                           }
                         });
 
@@ -1007,7 +1010,7 @@ angular.module("bookbuilder2")
                     $scope.resultQuestionContainer.addChild($scope.resultQuestionUnderline);
 
                     //Answer
-                    $scope.resultQuestionAnswer = new createjs.Text(" ", "25px Arial", "black");
+                    $scope.resultQuestionAnswer = new createjs.Text("", "25px Arial", "black");
                     $scope.resultQuestionAnswer.x = $scope.resultQuestionPreText.x + $scope.resultQuestionPreText.getBounds().width;
                     $scope.resultQuestionAnswer.y = 15;
                     $scope.resultQuestionAnswer.textAlign = "center";
@@ -1046,7 +1049,7 @@ angular.module("bookbuilder2")
                      $scope.resultAnswerContainer.addChild(resultAnswerContainerBackground);*/
 
                     //Creating the text element for the result answer
-                    $scope.resultAnswerText = new createjs.Text("", "20px Arial", "red");
+                    $scope.resultAnswerText = new createjs.Text("", "20px Arial", "black");
                     $scope.resultAnswerText.x = 0;
                     $scope.resultAnswerText.y = 10;
                     $scope.resultAnswerText.maxWidth = $scope.resultAnswerContainer.width;
@@ -1114,6 +1117,9 @@ angular.module("bookbuilder2")
 
                       //Making it invisible
                       $scope.resultsTotalContainer.visible = false;
+                      $scope.pageDescription.visible = true;
+                      $scope.nextButton.x = 730;
+                      $scope.nextButton.y = 640;
 
                       /*Adding each question container an initializing various data*/
                       $scope.resultsTotalRowContainers = {};
@@ -1262,6 +1268,9 @@ angular.module("bookbuilder2")
                                     $scope.resultsTotalRowAnswersTexts[key].color = "black";
                                   });
 
+                                  // Re-initializing the score again
+                                  $scope.scoreText.text = "Score: " + "0" + " / " + $scope.activityData.questions.length;
+
                                   //Making index 0 again...
                                   $scope.activeQuestionIndex = 0;
                                   loadQuestion(0);
@@ -1272,6 +1281,8 @@ angular.module("bookbuilder2")
                                 }
                               ], function (err, results) {
                                 $scope.resultsTotalContainer.visible = false;
+                                $scope.nextButton.x = 730;
+                                $scope.nextButton.y = 640;
                                 $scope.pageDescription.visible = true;
                                 $scope.activityData.completed = false;
                                 $scope.nextButton.gotoAndPlay("normal");
@@ -1623,7 +1634,7 @@ angular.module("bookbuilder2")
                      $scope.resultAnswerContainer.addChild(resultAnswerContainerBackground);*/
 
                     //Creating the text element for the result answer
-                    $scope.resultAnswerText = new createjs.Text("", "25px Arial", "red");
+                    $scope.resultAnswerText = new createjs.Text("", "25px Arial", "black");
                     $scope.resultAnswerText.textAlign = "center";
                     $scope.resultAnswerText.x = $scope.resultAnswerContainer.width / 2;
                     $scope.resultAnswerText.y = $scope.resultAnswerContainer.height / 3.3;
@@ -1668,12 +1679,17 @@ angular.module("bookbuilder2")
                               /*Going to total results !!!*/
                               updateResultsTotalQuestions();
                               $scope.resultsTotalContainer.visible = true;
+                              $scope.nextButton.x = 450;
+                              $scope.nextButton.y = 600;
+                              $scope.pageDescription.visible = false;
 
                             } else {
                               $scope.activeQuestionIndex++;
                               loadQuestion($scope.activeQuestionIndex);
                             }
                             $scope.stage.update();
+
+
                           });
 
                           resultsButtonsWaterfallCallback(null);
@@ -1998,6 +2014,9 @@ angular.module("bookbuilder2")
               $scope.playContainer.visible = false;
               $scope.resultsContainer.visible = true;
 
+              //!*Saving user selection to userAnswer field*!
+               $scope.activityData.questions[questionIndex].userAnswer = userAnswer;
+
               /*/!*Saving user selection to userAnswer field*!/
                $scope.activityData.questions[questionIndex].userAnswer = userAnswer;
 
@@ -2036,7 +2055,7 @@ angular.module("bookbuilder2")
 
 
               //Answer
-              $scope.resultQuestionAnswer = new createjs.Text($scope.activityData.questions[$scope.activeQuestionIndex][$scope.activityData.questions[$scope.activeQuestionIndex].answerChoice], "19px Arial", "green");
+              $scope.resultQuestionAnswer = new createjs.Text($scope.activityData.questions[$scope.activeQuestionIndex][userAnswer], "19px Arial", "black");
               $scope.resultQuestionAnswer.x = questionUnderline.x + questionUnderline.getBounds().width / 2;
               $scope.resultQuestionAnswer.y = questionUnderline.y;
               $scope.resultQuestionAnswer.textAlign = "center";
@@ -2076,12 +2095,7 @@ angular.module("bookbuilder2")
 
               console.log("User answered: ", userAnswer);
               $scope.resultAnswerText.text = $scope.activityData.questions[$scope.activeQuestionIndex][userAnswer];
-              //Checking if the answer is right and changes the color
-              if ($scope.activityData.questions[questionIndex].answerChoice === userAnswer) {
-                $scope.resultAnswerText.color = "green";
-              } else {
-                $scope.resultAnswerText.color = "red";
-              }
+              $scope.resultAnswerText.color = "black";
 
               //Selection process ended
               $scope.selectionInProgress = false;
@@ -2095,13 +2109,14 @@ angular.module("bookbuilder2")
         function updateResultsTotalQuestions() {
           _.each($scope.activityData.questions, function (question, key, list) {
             if ($scope.activityData.questions[key].userAnswer !== "") {
+              console.warn("The question "+$scope.activityData.questions[key]+" has an answer...");
               //The question has been answered updating question text and answer text
               $scope.resultsTotalRowQuestionsTexts[key].text = $scope.activityData.questions[key][$scope.activityData.questions[key].userAnswer];
               $scope.resultsTotalRowAnswersTexts[key].text = $scope.activityData.questions[key][$scope.activityData.questions[key].userAnswer];
             }
           });
           $scope.stage.update();
-          console.warn("Has it already answer: ", $scope.activityData.questions);
+          console.warn("Has already answer: ", $scope.activityData.questions);
         }
       });//end of image on complete
     }, 500);//end of timeout
