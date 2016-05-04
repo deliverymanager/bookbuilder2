@@ -568,6 +568,7 @@ angular.module("bookbuilder2")
                 var diverTubeImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
                   src: $rootScope.rootDir + "data/assets/diver_tube.png"
                 }));
+                  
                 diverTubeImageLoader.load();
 
                 diverTubeImageLoader.on("complete", function (r) {

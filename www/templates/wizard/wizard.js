@@ -285,9 +285,6 @@ angular.module("bookbuilder2")
                                         if (!$scope.activityData.completed) {
                                             $scope.checkButton.gotoAndPlay("onSelection");
                                         }
-
-                                        $scope.checkButton.alpha = 0.7;
-
                                         $scope.stage.update();
                                     });
 
@@ -300,8 +297,7 @@ angular.module("bookbuilder2")
                                             if (window.cordova && window.cordova.platformId !== "browser") {
                                                 $scope.sounds["check"].play();
                                             }
-                                            $scope.checkButton.alpha = 1;
-                                            updateScore();
+                                            check();
                                         }
                                     });
 
@@ -354,13 +350,6 @@ angular.module("bookbuilder2")
 
                         /*Score Text*/
                         function (initCallback) {
-
-                            /*Creating the Score Text element*/
-                            $scope.scoreText = new createjs.Text("Score: " + "0" + " / " + $scope.activityData.questions.length, "30px Arial", "white");
-                            $scope.scoreText.x = 620;
-                            $scope.scoreText.y = 575;
-                            $scope.mainContainer.addChild($scope.scoreText);
-
                             initCallback();
                         },
 
@@ -450,9 +439,80 @@ angular.module("bookbuilder2")
                                     }
 
                                     /*Checking if tits the first element to enter*/
-                                    $scope.englishWordsContainers[wordKey].y = (key === "group_2" && currentEnglishWordIndex === 5) ? $scope.englishWordsContainers[previousEnglishWordKey].y + 60 : (currentEnglishWordIndex === 0 ? 100 : $scope.englishWordsContainers[previousEnglishWordKey].y + 40);
+                                    $scope.englishWordsContainers[wordKey].y = (key === "group_2" && currentEnglishWordIndex === 5)
+                                        ? $scope.englishWordsContainers[previousEnglishWordKey].y + 60 :
+                                        (currentEnglishWordIndex === 0 ? 100 : $scope.englishWordsContainers[previousEnglishWordKey].y + 40);
+
+                                    $scope.englishWordsContainers[wordKey].startingPointX = $scope.englishWordsContainers[wordKey].x;
+                                    $scope.englishWordsContainers[wordKey].startingPointY = $scope.englishWordsContainers[wordKey].y;
+
+                                    /** ************************************************ CHECK **********************************************************/
+
+                                    /*Mouse down event*/
+                                    $scope.englishWordsContainers[wordKey].on("mousedown", function (evt) {
+                                        //Check if completed
+                                        if ($scope.activityData.completed) {
+                                            return;
+                                        }
+                                        if (window.cordova && window.cordova.platformId !== "browser") {
+                                            $scope.sounds["drag"].play();
+                                        }
+                                        var global = $scope.mainContainer.localToGlobal(this.x, this.y);
+                                        this.offset = {
+                                            'x': global.x - evt.stageX,
+                                            'y': global.y - evt.stageY
+                                        };
+                                        this.global = {
+                                            'x': global.x,
+                                            'y': global.y
+                                        };
+                                        _.each($scope.currentQuestions, function (question, k, list) {
+                                            if (parseInt($scope.currentQuestions[k].userAnswer) === key + 1) {
+                                                $scope.currentQuestions[k].userAnswer = "";
+                                            }
+                                        });
+                                    });
+
+                                    /*Press move event*/
+                                    $scope.englishWordsContainers[wordKey].on("pressmove", function (evt) {
+                                        if ($scope.activityData.completed) {
+                                            return;
+                                        }
+                                        var local = $scope.mainContainer.globalToLocal(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
+                                        this.x = local.x;
+                                        this.y = local.y;
+                                    });
+
+                                    /*Press up event*/
+                                    $scope.englishWordsContainers[wordKey].on("pressup", function (evt) {
+                                        console.log("Press up event while dropping the answer!");
+
+                                        if ($scope.activityData.completed) {
+                                            console.log("Activity has not completed...");
+                                            return;
+                                        }
+                                        if (window.cordova && window.cordova.platformId !== "browser") {
+                                            $scope.sounds["drop"].play();
+                                        }
+
+                                        var collisionDetectedQuestion = collision(evt.stageX / scale - $scope.mainContainer.x / scale, evt.stageY / scale - $scope.mainContainer.y / scale, currentEnglishWordIndex);
+
+                                        if (collisionDetectedQuestion !== -1) {
+                                            console.log(wordKey);
+                                            console.log(collisionDetectedQuestion);
+                                            swapWords(wordKey, collisionDetectedQuestion, $scope.englishWords["group_1"]);
+                                        } else {
+
+                                            /*No collision going back to start point*/
+                                            createjs.Tween.get(this, {loop: false})
+                                                .to({x: this.startingPointX, y: this.startingPointY}, 200, createjs.Ease.getPowIn(2));
+                                            $scope.stage.update()
+                                        }
+                                    });//end of press up event
 
                                     $scope.mainContainer.addChild($scope.englishWordsContainers[wordKey]);
+
+                                    /** ************************************************ CHECK **********************************************************/
 
                                     /* 2.A. Creating the letterBackground*/
                                     var englishWordsGraphic = new createjs.Graphics().beginFill("blue").drawRect(0, 0, $scope.englishWordsContainers[wordKey].width, $scope.englishWordsContainers[wordKey].height);
@@ -469,7 +529,7 @@ angular.module("bookbuilder2")
 
                                 });
 
-                                /* Deploying the greek words */
+                                /*Deploying the greek words*/
                                 _.each($scope.greekWords[key], function (word, wordKey, wordList) {
 
                                     /* 1.B. The container for the greek words*/
@@ -492,6 +552,72 @@ angular.module("bookbuilder2")
 
                                     /*Checking if its the first element to enter*/
                                     $scope.greekWordsContainers[wordKey].y = (key === "group_2" && currentGreekWordIndex === 5) ? $scope.greekWordsContainers[previousGreekWordKey].y + 60 : (currentGreekWordIndex === 0 ? 100 : $scope.greekWordsContainers[previousGreekWordKey].y + 40);
+                                    $scope.greekWordsContainers[wordKey].startingPointX = $scope.greekWordsContainers[wordKey].x;
+                                    $scope.greekWordsContainers[wordKey].startingPointY = $scope.greekWordsContainers[wordKey].y;
+
+                                    /*EVENTS*/
+                                    /*Mouse down event*/
+                                    $scope.greekWordsContainers[wordKey].on("mousedown", function (evt) {
+                                        //Check if completed
+                                        if ($scope.activityData.completed) {
+                                            return;
+                                        }
+                                        if (window.cordova && window.cordova.platformId !== "browser") {
+                                            $scope.sounds["drag"].play();
+                                        }
+                                        var global = $scope.mainContainer.localToGlobal(this.x, this.y);
+                                        this.offset = {
+                                            'x': global.x - evt.stageX,
+                                            'y': global.y - evt.stageY
+                                        };
+                                        this.global = {
+                                            'x': global.x,
+                                            'y': global.y
+                                        };
+                                        _.each($scope.currentQuestions, function (question, k, list) {
+                                            if (parseInt($scope.currentQuestions[k].userAnswer) === key + 1) {
+                                                $scope.currentQuestions[k].userAnswer = "";
+                                            }
+                                        });
+                                    });
+
+                                    /*Press move event*/
+                                    $scope.greekWordsContainers[wordKey].on("pressmove", function (evt) {
+                                        if ($scope.activityData.completed) {
+                                            return;
+                                        }
+                                        var local = $scope.mainContainer.globalToLocal(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
+                                        this.x = local.x;
+                                        this.y = local.y;
+                                    });
+
+                                    /*Press up event*/
+                                    $scope.greekWordsContainers[wordKey].on("pressup", function (evt) {
+                                        console.log("Press up event while dropping the answer!");
+
+                                        if ($scope.activityData.completed) {
+                                            console.log("Activity has not completed...");
+                                            return;
+                                        }
+                                        if (window.cordova && window.cordova.platformId !== "browser") {
+                                            $scope.sounds["drop"].play();
+                                        }
+
+                                        var collisionDetectedQuestion = collision(evt.stageX / scale - $scope.mainContainer.x / scale, evt.stageY / scale - $scope.mainContainer.y / scale, currentGreekWordIndex);
+
+                                        if (collisionDetectedQuestion !== -1) {
+                                            console.log(wordKey);
+                                            console.log(collisionDetectedQuestion);
+                                            swapWords(wordKey, collisionDetectedQuestion);
+                                        } else {
+
+                                            /*No collision going back to start point*/
+                                            createjs.Tween.get(this, {loop: false})
+                                                .to({x: this.startingPointX, y: this.startingPointY}, 200, createjs.Ease.getPowIn(2));
+                                            $scope.stage.update()
+                                        }
+                                    });//end of press up event
+
                                     $scope.mainContainer.addChild($scope.greekWordsContainers[wordKey]);
 
                                     /* 2.A. Creating the letterBackground*/
@@ -535,7 +661,6 @@ angular.module("bookbuilder2")
 
                 /******************************************* PLAYING GAME - LOADING QUESTION *****************************************/
 
-
                 /*Function that handles navigation to next activity*/
                 function next() {
                     console.log("Going to next activity!");
@@ -564,17 +689,207 @@ angular.module("bookbuilder2")
                     }
                 }
 
+                /*Function for swapping words when there is collision*/
+                function swapWords(movingWordKey, passiveWordKey) {
 
-                /*Function that updates the score*/
-                function updateScore() {
-                    /*Check how many correct answers exist*/
-                    var rightAnswers = 0;
+                    console.log("Inside swapWords, passiveWordKey: ", passiveWordKey);
+                    console.log("Inside swapWords, movingWordKey: ", movingWordKey);
 
-                    console.log($scope.activityData.questions);
+                    /*Checking if they are both english words*/
 
-                    //Updating score
-                    $scope.scoreText.text = "Score: " + rightAnswers + " / " + $scope.activityData.questions.length;
-                    $scope.stage.update();
+
+                    /*First checking if it's english or greek word and after that if it's in the same group*/
+                    if (_.has($scope.englishWords.group_1, movingWordKey) && _.has($scope.englishWords.group_1, passiveWordKey)) {
+                        console.log("They are both English, Group 1");
+                        /*Swapping positions*/
+                        createjs.Tween.get($scope.englishWordsContainers[movingWordKey], {loop: false})
+                            .to({
+                                x: $scope.englishWordsContainers[passiveWordKey].x,
+                                y: $scope.englishWordsContainers[passiveWordKey].y
+                            }, 200, createjs.Ease.getPowIn(2))
+                            .call(function () {
+                                /*Re-initializing values*/
+                                $scope.englishWordsContainers[movingWordKey].startingPointX = $scope.englishWordsContainers[movingWordKey].x;
+                                $scope.englishWordsContainers[movingWordKey].startingPointY = $scope.englishWordsContainers[movingWordKey].y;
+                            });
+
+                        createjs.Tween.get($scope.englishWordsContainers[passiveWordKey], {loop: false})
+                            .to({
+                                x: $scope.englishWordsContainers[movingWordKey].startingPointX,
+                                y: $scope.englishWordsContainers[movingWordKey].startingPointY
+                            }, 200, createjs.Ease.getPowIn(2))
+                            .call(function () {
+                                /*Re-initializing values*/
+                                $scope.englishWordsContainers[passiveWordKey].startingPointX = $scope.englishWordsContainers[passiveWordKey].x;
+                                $scope.englishWordsContainers[passiveWordKey].startingPointY = $scope.englishWordsContainers[passiveWordKey].y;
+                            });
+
+                        $scope.stage.update();
+
+                        /*Swapping indexes*/
+                        swapIndexes(movingWordKey, passiveWordKey, $scope.englishWords["group_1"]);
+
+
+                    } else if (_.has($scope.englishWords.group_2, movingWordKey) && _.has($scope.englishWords.group_2, passiveWordKey)) {
+                        console.log("They are both English, Group 2");
+                        /*Swapping positions*/
+                        createjs.Tween.get($scope.englishWordsContainers[movingWordKey], {loop: false})
+                            .to({
+                                x: $scope.englishWordsContainers[passiveWordKey].x,
+                                y: $scope.englishWordsContainers[passiveWordKey].y
+                            }, 200, createjs.Ease.getPowIn(2))
+                            .call(function () {
+                                /*Re-initializing values*/
+                                $scope.englishWordsContainers[movingWordKey].startingPointX = $scope.englishWordsContainers[movingWordKey].x;
+                                $scope.englishWordsContainers[movingWordKey].startingPointY = $scope.englishWordsContainers[movingWordKey].y;
+                            });
+
+                        createjs.Tween.get($scope.englishWordsContainers[passiveWordKey], {loop: false})
+                            .to({
+                                x: $scope.englishWordsContainers[movingWordKey].startingPointX,
+                                y: $scope.englishWordsContainers[movingWordKey].startingPointY
+                            }, 200, createjs.Ease.getPowIn(2))
+                            .call(function () {
+                                /*Re-initializing values*/
+                                $scope.englishWordsContainers[passiveWordKey].startingPointX = $scope.englishWordsContainers[passiveWordKey].x;
+                                $scope.englishWordsContainers[passiveWordKey].startingPointY = $scope.englishWordsContainers[passiveWordKey].y;
+                            });
+
+                        $scope.stage.update();
+
+                        /*Swapping indexes*/
+                        swapIndexes(movingWordKey, passiveWordKey, $scope.englishWords["group_2"]);
+
+
+                    } else if (_.has($scope.greekWords.group_1, movingWordKey) && _.has($scope.greekWords.group_1, passiveWordKey)) {
+
+                        console.log("They are both Greek, Group 1");
+                        /*Swapping positions*/
+                        createjs.Tween.get($scope.greekWordsContainers[movingWordKey], {loop: false})
+                            .to({
+                                x: $scope.greekWordsContainers[passiveWordKey].x,
+                                y: $scope.greekWordsContainers[passiveWordKey].y
+                            }, 200, createjs.Ease.getPowIn(2))
+                            .call(function () {
+                                /*Re-initializing values*/
+                                $scope.greekWordsContainers[movingWordKey].startingPointX = $scope.greekWordsContainers[movingWordKey].x;
+                                $scope.greekWordsContainers[movingWordKey].startingPointY = $scope.greekWordsContainers[movingWordKey].y;
+                            });
+
+                        createjs.Tween.get($scope.greekWordsContainers[passiveWordKey], {loop: false})
+                            .to({
+                                x: $scope.greekWordsContainers[movingWordKey].startingPointX,
+                                y: $scope.greekWordsContainers[movingWordKey].startingPointY
+                            }, 200, createjs.Ease.getPowIn(2))
+                            .call(function () {
+                                /*Re-initializing values*/
+                                $scope.greekWordsContainers[passiveWordKey].startingPointX = $scope.greekWordsContainers[passiveWordKey].x;
+                                $scope.greekWordsContainers[passiveWordKey].startingPointY = $scope.greekWordsContainers[passiveWordKey].y;
+                            });
+                        $scope.stage.update();
+
+                        /*Swapping indexes*/
+                        swapIndexes(movingWordKey, passiveWordKey, $scope.greekWords["group_1"]);
+
+
+
+                    } else if (_.has($scope.greekWords.group_2, movingWordKey) && _.has($scope.greekWords.group_2, passiveWordKey)) {
+                        console.log("They are both Greek, Group 2");
+                        /*Swapping positions*/
+                        createjs.Tween.get($scope.greekWordsContainers[movingWordKey], {loop: false})
+                            .to({
+                                x: $scope.greekWordsContainers[passiveWordKey].x,
+                                y: $scope.greekWordsContainers[passiveWordKey].y
+                            }, 200, createjs.Ease.getPowIn(2))
+                            .call(function () {
+                                /*Re-initializing values*/
+                                $scope.greekWordsContainers[movingWordKey].startingPointX = $scope.greekWordsContainers[movingWordKey].x;
+                                $scope.greekWordsContainers[movingWordKey].startingPointY = $scope.greekWordsContainers[movingWordKey].y;
+                            });
+
+                        createjs.Tween.get($scope.greekWordsContainers[passiveWordKey], {loop: false})
+                            .to({
+                                x: $scope.greekWordsContainers[movingWordKey].startingPointX,
+                                y: $scope.greekWordsContainers[movingWordKey].startingPointY
+                            }, 200, createjs.Ease.getPowIn(2))
+                            .call(function () {
+                                /*Re-initializing values*/
+                                $scope.greekWordsContainers[passiveWordKey].startingPointX = $scope.greekWordsContainers[passiveWordKey].x;
+                                $scope.greekWordsContainers[passiveWordKey].startingPointY = $scope.greekWordsContainers[passiveWordKey].y;
+                            });
+                        $scope.stage.update();
+
+                        /*Swapping indexes*/
+                        swapIndexes(movingWordKey, passiveWordKey, $scope.greekWords["group_2"]);
+
+
+
+                    } else {
+                        console.warn("It's not the same group...");
+
+                        if (_.has($scope.englishWords.group_1, movingWordKey) || _.has($scope.englishWords.group_2, movingWordKey)) {
+                            createjs.Tween.get($scope.englishWordsContainers[movingWordKey], {loop: false})
+                                .to({
+                                    x: $scope.englishWordsContainers[movingWordKey].startingPointX,
+                                    y: $scope.englishWordsContainers[movingWordKey].startingPointY
+                                }, 200, createjs.Ease.getPowIn(2));
+                        } else {
+                            createjs.Tween.get($scope.greekWordsContainers[movingWordKey], {loop: false})
+                                .to({
+                                    x: $scope.greekWordsContainers[movingWordKey].startingPointX,
+                                    y: $scope.greekWordsContainers[movingWordKey].startingPointY
+                                }, 200, createjs.Ease.getPowIn(2));
+                        }
+                        $scope.stage.update()
+                    }
+                }
+
+                /*Function that handles collision*/
+                function collision(x, y, wordIndexToRemove) {
+
+                    console.log("Collision stageX: ", x);
+                    console.log("Collision stageY: ", y);
+
+                    var englishWordsContainersKeys = _.allKeys($scope.englishWordsContainers);
+                    var greekWordsContainersKeys = _.allKeys($scope.greekWordsContainers);
+
+                    englishWordsContainersKeys.splice(wordIndexToRemove, 1);
+                    greekWordsContainersKeys.splice(wordIndexToRemove, 1);
+
+                    for (var i = 0; i < englishWordsContainersKeys.length; i++) {
+                        if (ionic.DomUtil.rectContains(
+                                x,
+                                y,
+                                $scope.englishWordsContainers[englishWordsContainersKeys[i]].x,
+                                $scope.englishWordsContainers[englishWordsContainersKeys[i]].y,
+                                $scope.englishWordsContainers[englishWordsContainersKeys[i]].x + $scope.englishWordsContainers[englishWordsContainersKeys[i]].width,
+                                $scope.englishWordsContainers[englishWordsContainersKeys[i]].y + $scope.englishWordsContainers[englishWordsContainersKeys[i]].height)) {
+                            console.log("Collision returns: ", englishWordsContainersKeys[i]);
+                            return englishWordsContainersKeys[i];
+                        }
+                    }
+
+                    for (var i = 0; i < englishWordsContainersKeys.length; i++) {
+                        if (ionic.DomUtil.rectContains(
+                                x,
+                                y,
+                                $scope.greekWordsContainers[greekWordsContainersKeys[i]].x,
+                                $scope.greekWordsContainers[greekWordsContainersKeys[i]].y,
+                                $scope.greekWordsContainers[greekWordsContainersKeys[i]].x + $scope.greekWordsContainers[greekWordsContainersKeys[i]].width,
+                                $scope.greekWordsContainers[greekWordsContainersKeys[i]].y + $scope.greekWordsContainers[greekWordsContainersKeys[i]].height)) {
+                            console.log("Collision returns: ", greekWordsContainersKeys[i]);
+                            return greekWordsContainersKeys[i];
+                        }
+                    }
+
+                    return -1;
+                }
+
+                /*Function that swaps index for the two given elements*/
+                function swapIndexes (movingWordKey, passiveWordKey, wordsArray){
+
+                    console.info("wordsArray: ",wordsArray);
+
                 }
 
             });//end of image on complete
