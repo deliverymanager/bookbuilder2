@@ -664,8 +664,7 @@ angular.module("bookbuilder2")
       async.waterfall(waterfallFunctions, function (callback) {
         generalCallback();
       });
-
-    };
+    }
 
 
     function init() {
@@ -697,9 +696,9 @@ angular.module("bookbuilder2")
         });
         check();
       });
+    }
 
-    };
-
+      
     function completedActivity() {
       console.log("Completed Activity!");
       $scope.nextButton.alpha = 1;

@@ -398,7 +398,7 @@ angular.module("bookbuilder2")
                       });
 
                       $rootScope.selectedLessonId = lesson.id;
-                      window.localStorage.setItem("selectedLessonId", $rootScope.selectedLessonId)
+                      window.localStorage.setItem("selectedLessonId", $rootScope.selectedLessonId);
 
                       if (lesson.active) {
 

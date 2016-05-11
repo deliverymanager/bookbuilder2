@@ -201,14 +201,7 @@ angular.module("bookbuilder2")
                     $scope.activityData = JSON.parse(window.localStorage.getItem(activityNameInLocalStorage));
                     console.log("activityData: ", $scope.activityData);
 
-                    /*Adding page title and description*/
-                    $scope.pageTitleAndDescription = new createjs.Text($scope.activityData.title + " - " + $scope.activityData.description, "23px Arial", "white");
-                    $scope.pageTitleAndDescription.x = 85;
-                    $scope.pageTitleAndDescription.y = 623;
-                    $scope.mainContainer.addChild($scope.pageTitleAndDescription);
-
                     init();
-                    updateScore();
 
                 } else {
 
@@ -225,15 +218,18 @@ angular.module("bookbuilder2")
                             $scope.activityData = response;
                             $scope.activityData.attempts = 1;
 
-                            /*Adding the userAnswer attribute to response object before assigning it to activityData*/
+                            /*Adding the userChoices array attribute to response object before assigning it to activityData*/
                             _.each($scope.activityData.questions, function (question, key, value) {
-                                $scope.activityData.questions[key].userAnswer = "";
+                                $scope.activityData.questions[key].userChoices = [];
+                                $scope.activityData.questions[key].questionCompleted = false;
+                                $scope.activityData.questions[key].questionIsRight = false;
                             });
 
                             init();
 
                             //Saving it to localStorage
                             window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+                            console.warn("Saving to local storage...");
                         })
                         .error(function (error) {
                             console.error("Error on getting json for the url...:", error);
@@ -247,9 +243,21 @@ angular.module("bookbuilder2")
                     console.log("Number of questions: ", $scope.activityData.questions.length);
                     console.log("Questions: ", $scope.activityData.questions);
 
+                    //Initializing general score
+                    $scope.activityData.score = 0;
+
                     //2. Building the questionWords sprites
 
                     async.waterfall([
+                            //Page description
+                            function (questionWaterfallCallback) {
+                                /*Adding page title and description*/
+                                $scope.pageTitleAndDescription = new createjs.Text($scope.activityData.title + " - " + $scope.activityData.description, "23px Arial", "white");
+                                $scope.pageTitleAndDescription.x = 85;
+                                $scope.pageTitleAndDescription.y = 623;
+                                $scope.mainContainer.addChild($scope.pageTitleAndDescription);
+                                questionWaterfallCallback(null);
+                            },
 
                             //Creating the backgrounds
                             function (questionWaterfallCallback) {
@@ -272,6 +280,57 @@ angular.module("bookbuilder2")
 
                             },
 
+                            /*Adding the score Text element*/
+                            function (questionWaterfallCallback) {
+                                $scope.scoreText = new createjs.Text("Score: " + "0" + " / " + $scope.activityData.questions.length, "30px Arial", "white");
+                                $scope.scoreText.x = 390;
+                                $scope.scoreText.y = 560;
+                                $scope.mainContainer.addChild($scope.scoreText);
+
+                                updateScore();
+
+                                questionWaterfallCallback(null);
+                            },
+
+                            /*Adding the nextActivity button*/
+                            function (questionWaterfallCallback) {
+
+                                console.warn("Adding nextActivity button");
+
+                                $http.get($rootScope.rootDir + "data/assets/next_activity_drag_and_drop_sprite.json")
+                                    .success(function (response) {
+                                        response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                                        var nextButtonSpriteSheet = new createjs.SpriteSheet(response);
+                                        $scope.nextButton = new createjs.Sprite(nextButtonSpriteSheet, "normal");
+                                        $scope.nextButton.alpha = 0.5;
+
+                                        $scope.nextButton.addEventListener("mousedown", function (event) {
+                                            console.log("Mouse down event on a button !", $scope.activityData.completed);
+                                            if ($scope.activityData.completed) {
+                                                $scope.nextButton.gotoAndPlay("selected");
+                                            }
+                                            $scope.stage.update();
+                                        });
+                                        $scope.nextButton.addEventListener("pressup", function (event) {
+                                            console.log("Press up event!");
+
+                                            if ($scope.activityData.completed) {
+                                                $scope.nextButton.gotoAndPlay("onSelection");
+                                                /*Calling next function!*/
+                                                TypicalFunctions.nextActivity();
+                                            }
+                                        });
+                                        $scope.nextButton.x = 830;
+                                        $scope.nextButton.y = 650;
+                                        $scope.mainContainer.addChild($scope.nextButton);
+                                        questionWaterfallCallback(null);
+                                    })
+                                    .error(function (error) {
+                                        console.log("Error on getting json data for check button...", error);
+                                        questionWaterfallCallback(true, error);
+                                    });
+                            },
+
                             //Creating the question texts
                             function (questionWaterfallCallback) {
 
@@ -283,110 +342,6 @@ angular.module("bookbuilder2")
 
                                 questionWaterfallCallback(null);
 
-                            },
-
-                            //Creating Help button
-                            function (questionWaterfallCallback) {
-
-                                $http.get($rootScope.rootDir + "data/assets/education_help.json")
-                                    .success(function (response) {
-
-                                        //Reassigning images with the rest of resource
-                                        response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-
-                                        var helpButtonSpriteSheet = new createjs.SpriteSheet(response);
-                                        var helpButton = new createjs.Sprite(helpButtonSpriteSheet, "normal");
-
-                                        helpButton.addEventListener("mousedown", function (event) {
-                                            console.log("Mouse down event on Help button event!");
-                                            helpButton.gotoAndPlay("onSelection");
-                                        });
-
-                                        helpButton.addEventListener("pressup", function (event) {
-                                            console.log("Press up event on Help button event!");
-                                            helpButton.gotoAndPlay("normal");
-                                        });
-
-                                        helpButton.x = 500;
-                                        helpButton.y = 110;
-
-                                        $scope.mainContainer.addChild(helpButton);
-                                        questionWaterfallCallback(null);
-
-                                    })
-                                    .error(function (error) {
-                                        console.error("Error on getting json for Help button...", error);
-                                        questionWaterfallCallback(true, error);
-                                    });
-
-                            },
-
-                            //Creating Restart button
-                            function (questionWaterfallCallback) {
-                                $http.get($rootScope.rootDir + "data/assets/education_restart.json")
-                                    .success(function (response) {
-
-                                        //Reassigning images with the rest of resource
-                                        response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-
-                                        var restartButtonSpriteSheet = new createjs.SpriteSheet(response);
-                                        var restartButton = new createjs.Sprite(restartButtonSpriteSheet, "normal");
-
-                                        restartButton.addEventListener("mousedown", function (event) {
-                                            console.log("Mouse down event on Menu event!");
-                                            restartButton.gotoAndPlay("onSelection");
-                                        });
-
-                                        restartButton.addEventListener("pressup", function (event) {
-                                            console.log("Press up event on Menu event!");
-                                            restartButton.gotoAndPlay("normal");
-                                        });
-
-                                        restartButton.x = 600;
-                                        restartButton.y = 115;
-
-                                        $scope.mainContainer.addChild(restartButton);
-                                        questionWaterfallCallback(null);
-
-                                    })
-                                    .error(function (error) {
-                                        console.error("Error on getting json for Restart button...", error);
-                                        questionWaterfallCallback(true, error);
-                                    });
-                            },
-
-                            //Creating Check button
-                            function (questionWaterfallCallback) {
-                                $http.get($rootScope.rootDir + "data/assets/education_check.json")
-                                    .success(function (response) {
-
-                                        //Reassigning images with the rest of resource
-                                        response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
-
-                                        var checkButtonSpriteSheet = new createjs.SpriteSheet(response);
-                                        var checkButton = new createjs.Sprite(checkButtonSpriteSheet, "normal");
-
-                                        checkButton.addEventListener("mousedown", function (event) {
-                                            console.log("Mouse down event on Menu event!");
-                                            checkButton.gotoAndPlay("onSelection");
-                                        });
-
-                                        checkButton.addEventListener("pressup", function (event) {
-                                            console.log("Press up event on Menu event!");
-                                            checkButton.gotoAndPlay("normal");
-                                        });
-
-                                        checkButton.x = 700;
-                                        checkButton.y = 115;
-
-                                        $scope.mainContainer.addChild(checkButton);
-                                        questionWaterfallCallback(null);
-
-                                    })
-                                    .error(function (error) {
-                                        console.error("Error on getting json for check button...", error);
-                                        questionWaterfallCallback(true, error);
-                                    });
                             },
 
                             //Loading the puzzle sprite for each letter
@@ -408,7 +363,7 @@ angular.module("bookbuilder2")
                                     });
                             },
 
-                            //Next button
+                            //Next Question button
                             function (questionWaterfallCallback) {
                                 $http.get($rootScope.rootDir + "data/assets/education_next_questions.json")
                                     .success(function (response) {
@@ -416,25 +371,24 @@ angular.module("bookbuilder2")
                                         response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
 
                                         //Exposing letter puzzle spriteSheet to $scope so it can be accessible by the next function
-                                        var nextButtonSpriteSheet = new createjs.SpriteSheet(response);
+                                        var nextQuestionButtonSpriteSheet = new createjs.SpriteSheet(response);
 
-                                        $scope.nextButton = new createjs.Sprite(nextButtonSpriteSheet, "normal");
+                                        $scope.nextQuestionButton = new createjs.Sprite(nextQuestionButtonSpriteSheet, "normal");
 
-                                        $scope.nextButton.addEventListener("mousedown", function (event) {
+                                        $scope.nextQuestionButton.addEventListener("mousedown", function (event) {
                                             console.log("Mouse down event on Menu button !");
-                                            $scope.nextButton.gotoAndPlay("onSelection");
+                                            $scope.nextQuestionButton.gotoAndPlay("onSelection");
                                         });
 
-                                        $scope.nextButton.addEventListener("pressup", function (event) {
+                                        $scope.nextQuestionButton.addEventListener("pressup", function (event) {
                                             console.log("Press up event on Menu event!");
-                                            $scope.nextButton.gotoAndPlay("normal");
+                                            $scope.nextQuestionButton.gotoAndPlay("normal");
                                             nextQuestion();
-                                            buildQuestion();
                                         });
 
-                                        $scope.nextButton.x = 840;
-                                        $scope.nextButton.y = 505;
-                                        $scope.mainContainer.addChild($scope.nextButton);
+                                        $scope.nextQuestionButton.x = 840;
+                                        $scope.nextQuestionButton.y = 505;
+                                        $scope.mainContainer.addChild($scope.nextQuestionButton);
                                         questionWaterfallCallback(null);
                                     })
                                     .error(function (error) {
@@ -464,7 +418,6 @@ angular.module("bookbuilder2")
                                             console.log("Press up event on Menu event!");
                                             $scope.previousButton.gotoAndPlay("normal");
                                             previousQuestion();
-                                            buildQuestion();
                                         });
 
                                         $scope.previousButton.x = 780;
@@ -476,59 +429,6 @@ angular.module("bookbuilder2")
                                         console.error("Error on getting json data for the previous button sprite: ", error);
                                         questionWaterfallCallback(true, error);
                                     });
-                            },
-
-                            //Building the scrambled english word arrays
-                            function (questionWaterfallCallback) {
-
-                                //Each array will be 2-dimensional and fixed sized to 16 letters
-                                //Despite being 2-dimensional.
-                                var scrambledEnglishLetterIndex = 0;
-                                //Containers for each letter
-                                $scope.scrambledEnglishLetterContainers = {};
-                                //Puzzle sprites for each letter
-                                $scope.scrambledEnglishLetterSprites = {};
-                                //Text for each letter
-                                $scope.scrambledEnglishLetterTexts = {};
-
-                                for (var i = 0; i < 3; i++) {
-                                    for (var j = 0; j < 6; j++) {
-
-                                        //Adding a sprite for the letter
-                                        $scope.scrambledEnglishLetterSprites[scrambledEnglishLetterIndex] = new createjs.Sprite($scope.letterPuzzleSpriteSheet, "normal");
-                                        $scope.scrambledEnglishLetterSprites[scrambledEnglishLetterIndex].x = 0;
-                                        $scope.scrambledEnglishLetterSprites[scrambledEnglishLetterIndex].y = 0;
-
-                                        //Creating a container for the letter
-                                        $scope.scrambledEnglishLetterContainers[scrambledEnglishLetterIndex] = new createjs.Container();
-                                        $scope.scrambledEnglishLetterContainers[scrambledEnglishLetterIndex].width = $scope.scrambledEnglishLetterSprites[scrambledEnglishLetterIndex].getBounds().width;
-                                        console.log("bounds: ",$scope.scrambledEnglishLetterSprites[0].getBounds());
-                                        $scope.scrambledEnglishLetterContainers[scrambledEnglishLetterIndex].height = $scope.scrambledEnglishLetterSprites[scrambledEnglishLetterIndex].getBounds().height;
-                                        $scope.scrambledEnglishLetterContainers[scrambledEnglishLetterIndex].x = scrambledEnglishLetterIndex === 0 ? 60
-                                            : $scope.scrambledEnglishLetterContainers[0].x + j * 53;
-                                        $scope.scrambledEnglishLetterContainers[scrambledEnglishLetterIndex].y = scrambledEnglishLetterIndex === 0 ? 300
-                                            : $scope.scrambledEnglishLetterContainers[0].y + i * 53;
-                                        $scope.mainContainer.addChild($scope.scrambledEnglishLetterContainers[scrambledEnglishLetterIndex]);
-
-
-                                        //Make it invisible
-                                        $scope.scrambledEnglishLetterContainers[scrambledEnglishLetterIndex].visible = false;
-
-                                        $scope.scrambledEnglishLetterContainers[scrambledEnglishLetterIndex].addChild($scope.scrambledEnglishLetterSprites[scrambledEnglishLetterIndex]);
-
-                                        //Finally adding text for the letter
-                                        $scope.scrambledEnglishLetterTexts[scrambledEnglishLetterIndex] = new createjs.Text("", "30px Arial", "white");
-                                        $scope.scrambledEnglishLetterTexts[scrambledEnglishLetterIndex].x = $scope.scrambledEnglishLetterContainers[scrambledEnglishLetterIndex].width/2.3;
-                                        $scope.scrambledEnglishLetterTexts[scrambledEnglishLetterIndex].y = $scope.scrambledEnglishLetterContainers[scrambledEnglishLetterIndex].height/3.5;
-                                        $scope.scrambledEnglishLetterContainers[scrambledEnglishLetterIndex].addChild($scope.scrambledEnglishLetterTexts[scrambledEnglishLetterIndex]);
-
-                                        //Incrementing Letter index after an iteration
-                                        scrambledEnglishLetterIndex++;
-
-                                    }
-                                }
-
-                                questionWaterfallCallback(null);
                             },
 
                             //Building the user answers array
@@ -565,18 +465,16 @@ angular.module("bookbuilder2")
 
                                                 //Creating a letter container
                                                 $scope.answerWordLettersContainers[i] = new createjs.Container();
-                                                $scope.answerWordLettersContainers[i].width = 30;
-                                                $scope.answerWordLettersContainers[i].height = 30;
+                                                $scope.answerWordLettersContainers[i].width = $scope.answerWordBackground.getBounds().width;
+                                                $scope.answerWordLettersContainers[i].height = $scope.answerWordBackground.getBounds().height;
                                                 $scope.answerWordLettersContainers[i].x = i === 0 ? 60
                                                     : $scope.answerWordLettersContainers[0].x + i * 53;
                                                 $scope.answerWordLettersContainers[i].y = 145;
                                                 $scope.mainContainer.addChild($scope.answerWordLettersContainers[i]);
 
 
-
                                                 //Make it invisible
                                                 $scope.answerWordLettersContainers[i].visible = false;
-
 
 
                                                 //Adding the background
@@ -587,7 +485,6 @@ angular.module("bookbuilder2")
                                                 // var answerWordLettersContainersGraphic = new createjs.Graphics().beginFill("red").drawRect(0, 0, $scope.answerWordLettersContainers[i].width, $scope.answerWordLettersContainers[i].height);
                                                 // var answerWordLettersContainersBackground = new createjs.Shape(answerWordLettersContainersGraphic);
                                                 // answerWordLettersContainersBackground.alpha = 0.5;
-                                                //
                                                 // $scope.answerWordLettersContainers[i].addChild(answerWordLettersContainersBackground);
                                             }
 
@@ -603,6 +500,344 @@ angular.module("bookbuilder2")
                                             console.log("Success on building answers array!");
                                             questionWaterfallCallback(null);
                                         }
+                                    });
+                            },
+
+                            //Building the right letters
+                            function (questionWaterfallCallback) {
+
+                                console.log("Building right letters array...");
+
+                                $scope.rightLettersSprites = {};
+                                $scope.rightLettersTexts = {};
+                                $scope.rightLettersContainers = {};
+
+                                async.waterfall([
+
+                                        //Next populating the answerWordLetters
+                                        function (rightLettersWaterfallCallback) {
+
+                                            _.each(new Array(16), function (element, key, list) {
+                                                //Adding a sprite for the right letter
+                                                $scope.rightLettersSprites[key] = new createjs.Sprite($scope.letterPuzzleSpriteSheet, "red_puzzle");
+                                                $scope.rightLettersSprites[key].x = 0;
+                                                $scope.rightLettersSprites[key].y = 0;
+
+                                                //Creating a container for the right letter
+                                                $scope.rightLettersContainers[key] = new createjs.Container();
+                                                $scope.rightLettersContainers[key].width = $scope.rightLettersSprites[key].getBounds().width;
+                                                $scope.rightLettersContainers[key].height = $scope.rightLettersSprites[key].getBounds().height;
+                                                $scope.rightLettersContainers[key].x = key === 0 ? 60
+                                                    : $scope.rightLettersContainers[0].x + key * 53;
+                                                $scope.rightLettersContainers[key].y = key === 0 ? 200
+                                                    : 200;
+
+                                                //Finally adding text for the right letter
+                                                $scope.rightLettersTexts[key] = new createjs.Text("", "30px Arial", "white");
+                                                $scope.rightLettersTexts[key].x = $scope.rightLettersContainers[key].width / 2.3;
+                                                $scope.rightLettersTexts[key].y = $scope.rightLettersContainers[key].height / 3.5;
+
+                                                $scope.rightLettersContainers[key].addChild($scope.rightLettersSprites[key]);
+                                                $scope.rightLettersContainers[key].addChild($scope.rightLettersTexts[key]);
+                                                $scope.rightLettersContainers[key].visible = false;
+                                                $scope.mainContainer.addChild($scope.rightLettersContainers[key]);
+
+                                            });
+
+                                            rightLettersWaterfallCallback(null);
+                                        }
+                                    ],
+                                    //General callback
+                                    function (error, result) {
+                                        if (error) {
+                                            console.error("There was an error on building right letters array...");
+                                            questionWaterfallCallback(true, result);
+                                        } else {
+                                            console.log("Success on building right letters array!");
+                                            questionWaterfallCallback(null);
+                                        }
+                                    });
+                            },
+
+                            //Building the scrambled english word arrays
+                            function (questionWaterfallCallback) {
+
+                                //Containers for each letter
+                                $scope.scrambledEnglishLetterContainers = {};
+                                //Puzzle sprites for each letter
+                                $scope.scrambledEnglishLetterSprites = {};
+                                //Text for each letter
+                                $scope.scrambledEnglishLetterTexts = {};
+
+                                _.each(new Array(16), function (element, key, list) {
+
+                                    //Adding a sprite for the letter
+                                    $scope.scrambledEnglishLetterSprites[key] = new createjs.Sprite($scope.letterPuzzleSpriteSheet, "normal");
+                                    $scope.scrambledEnglishLetterSprites[key].x = 0;
+                                    $scope.scrambledEnglishLetterSprites[key].y = 0;
+
+                                    //Creating a container for the letter
+                                    $scope.scrambledEnglishLetterContainers[key] = new createjs.Container();
+                                    $scope.scrambledEnglishLetterContainers[key].width = $scope.scrambledEnglishLetterSprites[key].getBounds().width;
+                                    console.log("bounds: ", $scope.scrambledEnglishLetterSprites[0].getBounds());
+                                    $scope.scrambledEnglishLetterContainers[key].height = $scope.scrambledEnglishLetterSprites[key].getBounds().height;
+                                    $scope.scrambledEnglishLetterContainers[key].x = key === 0 ? 60
+                                        : $scope.scrambledEnglishLetterContainers[0].x + key * 53;
+                                    $scope.scrambledEnglishLetterContainers[key].y = key === 0 ? 370
+                                        : 370;
+                                    $scope.scrambledEnglishLetterContainers[key].startingPointX = $scope.scrambledEnglishLetterContainers[key].x;
+                                    $scope.scrambledEnglishLetterContainers[key].startingPointY = $scope.scrambledEnglishLetterContainers[key].y;
+
+                                    /*Mouse down event*/
+                                    $scope.scrambledEnglishLetterContainers[key].on("mousedown", function (evt) {
+                                        //Check if completed
+                                        if ($scope.activityData.completed) {
+                                            console.warn("Activity completed cannot move!");
+                                            return;
+                                        }
+                                        if ($scope.activityData.questions[$scope.questionIndex].questionCompleted) {
+                                            console.warn("Current question completed cannot move!");
+                                            return;
+                                        }
+                                        if (window.cordova && window.cordova.platformId !== "browser") {
+                                            $scope.sounds["drag"].play();
+                                        }
+                                        var global = $scope.mainContainer.localToGlobal(this.x, this.y);
+                                        this.offset = {
+                                            'x': global.x - evt.stageX,
+                                            'y': global.y - evt.stageY
+                                        };
+                                        this.global = {
+                                            'x': global.x,
+                                            'y': global.y
+                                        };
+                                    });
+
+                                    /*Press move event*/
+                                    $scope.scrambledEnglishLetterContainers[key].on("pressmove", function (evt) {
+                                        //Check if completed
+                                        if ($scope.activityData.completed) {
+                                            console.warn("Activity completed cannot move!");
+                                            return;
+                                        }
+                                        if ($scope.activityData.questions[$scope.questionIndex].questionCompleted) {
+                                            console.warn("Current question completed cannot move!");
+                                            return;
+                                        }
+                                        var local = $scope.mainContainer.globalToLocal(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
+                                        this.x = local.x;
+                                        this.y = local.y;
+                                    });
+
+                                    /*Press up event*/
+                                    $scope.scrambledEnglishLetterContainers[key].on("pressup", function (evt) {
+
+                                        //Check if completed
+                                        if ($scope.activityData.completed) {
+                                            console.warn("Activity completed cannot move!");
+                                            return;
+                                        }
+                                        if ($scope.activityData.questions[$scope.questionIndex].questionCompleted) {
+                                            console.warn("Current question completed cannot move!");
+                                            return;
+                                        }
+
+                                        console.log("Press up event while dropping the letter!");
+
+                                        if (window.cordova && window.cordova.platformId !== "browser") {
+                                            $scope.sounds["drop"].play();
+                                        }
+
+                                        var collisionDetectedQuestion = collision(evt.stageX / scale - $scope.mainContainer.x / scale, evt.stageY / scale - $scope.mainContainer.y / scale);
+
+                                        if (collisionDetectedQuestion !== -1) {
+
+                                            //There is collision
+                                            console.log("There is collision! : ", collisionDetectedQuestion);
+
+                                            this.x = $scope.answerWordLettersContainers[collisionDetectedQuestion].x;
+                                            this.y = $scope.answerWordLettersContainers[collisionDetectedQuestion].y;
+
+                                            //Adding the selected word to current userChoices
+                                            $scope.activityData.questions[$scope.questionIndex].userChoices[collisionDetectedQuestion] = $scope.scrambledEnglishLetterTexts[key].text;
+                                            console.log("Updated userChoices : ", $scope.activityData.questions[$scope.questionIndex].userChoices);
+
+                                            //Saving it to localStorage
+                                            window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+                                            console.warn("Saving to local storage...");
+
+                                        } else {
+
+                                            /*No collision going back to start point*/
+                                            createjs.Tween.get(this, {loop: false})
+                                                .to({
+                                                    x: this.startingPointX,
+                                                    y: this.startingPointY
+                                                }, 200, createjs.Ease.getPowIn(2));
+
+                                            //If the user deselects a letter it has to be removed from the userChoices array
+                                        }
+                                    });//end of press up event
+
+
+                                    //Make it invisible
+                                    $scope.scrambledEnglishLetterContainers[key].visible = false;
+                                    $scope.scrambledEnglishLetterContainers[key].addChild($scope.scrambledEnglishLetterSprites[key]);
+
+                                    //Finally adding text for the letter
+                                    $scope.scrambledEnglishLetterTexts[key] = new createjs.Text("", "30px Arial", "white");
+                                    $scope.scrambledEnglishLetterTexts[key].x = $scope.scrambledEnglishLetterContainers[key].width / 2.3;
+                                    $scope.scrambledEnglishLetterTexts[key].y = $scope.scrambledEnglishLetterContainers[key].height / 3.5;
+                                    $scope.scrambledEnglishLetterContainers[key].addChild($scope.scrambledEnglishLetterTexts[key]);
+                                    $scope.mainContainer.addChild($scope.scrambledEnglishLetterContainers[key]);
+                                });
+
+                                questionWaterfallCallback(null);
+                            },
+
+                            //Creating Help button
+                            function (questionWaterfallCallback) {
+
+                                $http.get($rootScope.rootDir + "data/assets/education_help.json")
+                                    .success(function (response) {
+
+                                        //Reassigning images with the rest of resource
+                                        response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+
+                                        var helpButtonSpriteSheet = new createjs.SpriteSheet(response);
+                                        var helpButton = new createjs.Sprite(helpButtonSpriteSheet, "normal");
+
+                                        helpButton.addEventListener("mousedown", function (event) {
+                                            console.log("Mouse down event on Help button event!");
+                                            helpButton.gotoAndPlay("onSelection");
+                                        });
+
+                                        helpButton.addEventListener("pressup", function (event) {
+                                            console.log("Press up event on Help button event!");
+                                            helpButton.gotoAndPlay("normal");
+
+                                            var englishWordLettersArray = getEnglishWordLettersArray();
+
+                                            //Finding and positioning the first and the last letter
+                                            var firstLetterIndex = _.findKey($scope.scrambledEnglishLetterTexts, {"text": englishWordLettersArray[0]});
+                                            var lastLetterIndex = _.findKey($scope.scrambledEnglishLetterTexts, {"text": englishWordLettersArray[englishWordLettersArray.length - 1]});
+
+                                            console.log(firstLetterIndex);
+                                            console.log(lastLetterIndex);
+
+                                            //Positioning the found letters
+                                            createjs.Tween.get($scope.scrambledEnglishLetterContainers[firstLetterIndex], {loop: false})
+                                                .to({
+                                                    x: $scope.answerWordLettersContainers[0].x,
+                                                    y: $scope.answerWordLettersContainers[0].y
+                                                }, 200, createjs.Ease.getPowIn(2));
+
+                                            createjs.Tween.get($scope.scrambledEnglishLetterContainers[lastLetterIndex], {loop: false})
+                                                .to({
+                                                    x: $scope.answerWordLettersContainers[englishWordLettersArray.length - 1].x,
+                                                    y: $scope.answerWordLettersContainers[englishWordLettersArray.length - 1].y
+                                                }, 200, createjs.Ease.getPowIn(2));
+
+                                            $scope.stage.update();
+
+                                            //Adding the first and the last letter, auto-selected by Help button, in userChoices!
+                                            $scope.activityData.questions[$scope.questionIndex].userChoices[0] = $scope.scrambledEnglishLetterTexts[firstLetterIndex].text;
+                                            $scope.activityData.questions[$scope.questionIndex].userChoices[englishWordLettersArray.length - 1] = $scope.scrambledEnglishLetterTexts[lastLetterIndex].text;
+                                            console.log("Updated userChoices : ", $scope.activityData.questions[$scope.questionIndex].userChoices);
+
+                                            //Saving it to localStorage
+                                            console.warn("Saving to local storage...");
+                                            window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+
+                                        });
+
+                                        helpButton.x = 500;
+                                        helpButton.y = 110;
+
+                                        $scope.mainContainer.addChild(helpButton);
+                                        questionWaterfallCallback(null);
+
+                                    })
+                                    .error(function (error) {
+                                        console.error("Error on getting json for Help button...", error);
+                                        questionWaterfallCallback(true, error);
+                                    });
+
+                            },
+
+                            //Creating Restart button
+                            function (questionWaterfallCallback) {
+                                $http.get($rootScope.rootDir + "data/assets/education_restart.json")
+                                    .success(function (response) {
+
+                                        //Reassigning images with the rest of resource
+                                        response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+
+                                        var restartButtonSpriteSheet = new createjs.SpriteSheet(response);
+                                        var restartButton = new createjs.Sprite(restartButtonSpriteSheet, "normal");
+
+                                        restartButton.addEventListener("mousedown", function (event) {
+                                            console.log("Mouse down event on Restart event!");
+                                            restartButton.gotoAndPlay("onSelection");
+                                        });
+
+                                        restartButton.addEventListener("pressup", function (event) {
+                                            console.log("Press up event on Restart event!");
+                                            restartButton.gotoAndPlay("normal");
+
+                                            /** NOTE: Restarting question process is a distinct function now
+                                             * because Next question and Previous question share the same code **/
+                                            restartQuestion();
+
+                                        });
+
+                                        restartButton.x = 600;
+                                        restartButton.y = 115;
+
+                                        $scope.mainContainer.addChild(restartButton);
+                                        questionWaterfallCallback(null);
+
+                                    })
+                                    .error(function (error) {
+                                        console.error("Error on getting json for Restart button...", error);
+                                        questionWaterfallCallback(true, error);
+                                    });
+                            },
+
+                            //Creating Check button
+                            function (questionWaterfallCallback) {
+                                $http.get($rootScope.rootDir + "data/assets/education_check.json")
+                                    .success(function (response) {
+
+                                        //Reassigning images with the rest of resource
+                                        response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+
+                                        var checkButtonSpriteSheet = new createjs.SpriteSheet(response);
+                                        var checkButton = new createjs.Sprite(checkButtonSpriteSheet, "normal");
+
+                                        checkButton.addEventListener("mousedown", function (event) {
+                                            console.log("Mouse down event on Check button event!");
+                                            checkButton.gotoAndPlay("onSelection");
+                                        });
+
+                                        checkButton.addEventListener("pressup", function (event) {
+                                            console.log("Press up event on Check button event!");
+                                            checkButton.gotoAndPlay("normal");
+
+                                            checkQuestion();
+
+                                        });
+
+                                        checkButton.x = 700;
+                                        checkButton.y = 115;
+
+                                        $scope.mainContainer.addChild(checkButton);
+                                        questionWaterfallCallback(null);
+
+                                    })
+                                    .error(function (error) {
+                                        console.error("Error on getting json for check button...", error);
+                                        questionWaterfallCallback(true, error);
                                     });
                             }
                         ],
@@ -625,6 +860,7 @@ angular.module("bookbuilder2")
 
                 /*Function that build the questions according to the question step*/
                 function buildQuestion() {
+
                     console.warn("Building question for index: ", $scope.questionIndex);
                     console.log("Question word (greek): ", $scope.activityData.questions[$scope.questionIndex]);
                     console.log("English word the user has to find: ", $scope.activityData.questions[$scope.questionIndex].englishWord);
@@ -632,34 +868,131 @@ angular.module("bookbuilder2")
                     //Updating the question texts. Index that is printed along with question text has to be index + 1 to avoid 0
                     $scope.questionText.text = $scope.questionIndex + 1 + "." + $scope.activityData.questions[$scope.questionIndex].greekWord;
 
-                    //Creating the scrambled english word for the current question
-                    $scope.englishWordArray = $scope.activityData.questions[$scope.questionIndex].englishWord.split("");
+                    //If Check has pushed in other question or Restart has been pushed, eliminating any Check effect
+                    _.each($scope.scrambledEnglishLetterSprites, function (sprite, key, list) {
+                        $scope.scrambledEnglishLetterSprites[key].gotoAndPlay("normal");
+                        $scope.scrambledEnglishLetterContainers[key].visible = false;
+                    });
+                    _.each($scope.scrambledEnglishLetterContainers, function (letter, key, list) {
+                        createjs.Tween.get($scope.scrambledEnglishLetterContainers[key], {loop: false})
+                            .to({
+                                x: $scope.scrambledEnglishLetterContainers[key].startingPointX,
+                                y: $scope.scrambledEnglishLetterContainers[key].startingPointY
+                            }, 200, createjs.Ease.getPowIn(2));
+                    });
+                    _.each($scope.rightLettersTexts, function (text, key, list) {
+                        $scope.rightLettersTexts[key].text = "";
+                    });
+                    _.each($scope.rightLettersContainers, function (text, key, list) {
+                        $scope.rightLettersContainers[key].visible = false;
+                    });
+
+
+                    //------------- STARTING QUESTION BUILDING -------------
+                    $scope.englishWordArray = getEnglishWordLettersArray();
 
                     //English word letters array
                     console.log("English word: ", $scope.englishWordArray);
 
-                    //English scrambled word letters array
+                    //Building the answerWordLettersContainers
+                    _.each($scope.answerWordLettersContainers, function (letter, key, list) {
+                        $scope.answerWordLettersContainers[key].visible = false;
+                    });
+                    _.each($scope.englishWordArray, function (letter, key, list) {
+                        $scope.answerWordLettersContainers[key].visible = $scope.englishWordArray[key] !== "_";
+                    });
+
+                    //Shuffling englishWordArray...
                     $scope.englishWordArray = _.shuffle($scope.englishWordArray);
                     console.log("Scrambled english word: ", $scope.englishWordArray);
 
-                    //Building the question
-                    _.each($scope.englishWordArray, function(letter, key, list){
-                        $scope.answerWordLettersContainers[key].visible = true;
-                    });
+                    //NOTE: Scanning for gap element inside englishWordArray. If there is move it to the end!
+                    var indexOfGapElement = _.indexOf($scope.englishWordArray, "_");
+                    if (indexOfGapElement >= 0) {
+                        console.log("There is a gap element in index: ", indexOfGapElement);
+                        var gapElement = $scope.englishWordArray[indexOfGapElement];
+                        $scope.englishWordArray.splice(indexOfGapElement, 1);
+                        $scope.englishWordArray.push(gapElement);
+                    }
+
+                    console.log("After dealing with gap element: ", $scope.englishWordArray);
 
                     //Building the scrambled letters
-                    _.each($scope.englishWordArray, function(letter, key, list){
-                        $scope.scrambledEnglishLetterContainers[key].visible = true;
+                    // _.each($scope.scrambledEnglishLetterContainers, function (letter, key, list) {
+                    //     $scope.scrambledEnglishLetterContainers[key].visible = false;
+                    // });
+                    _.each($scope.englishWordArray, function (letter, key, list) {
+                        //Assigning the letters and if there is a gap it makes it invisible
+                        $scope.scrambledEnglishLetterContainers[key].visible = $scope.englishWordArray[key] !== "_";
                         $scope.scrambledEnglishLetterTexts[key].text = $scope.englishWordArray[key];
                     });
-                }
 
+
+                    $timeout(function () {
+                        //Checking if the user has completed the question
+                        if ($scope.activityData.questions[$scope.questionIndex].questionCompleted) {
+
+                            console.log("The answer has been already completed!!!");
+
+                            //1. Fill the letters
+                            _.each($scope.activityData.questions[$scope.questionIndex].userChoices, function (selectedLetter, key, list) {
+                                if ($scope.activityData.questions[$scope.questionIndex].userChoices[key] !== "" && $scope.activityData.questions[$scope.questionIndex].userChoices[key]) {
+
+                                    console.log("The chosen letter : ", $scope.activityData.questions[$scope.questionIndex].userChoices[key]);
+
+                                    var letterIndex = _.findKey($scope.scrambledEnglishLetterTexts, {"text": $scope.activityData.questions[$scope.questionIndex].userChoices[key]});
+
+                                    console.log("The index of chosen letter that found: ", letterIndex);
+
+                                    createjs.Tween.get($scope.scrambledEnglishLetterContainers[letterIndex], {loop: false})
+                                        .to({
+                                            x: $scope.answerWordLettersContainers[key].x,
+                                            y: $scope.answerWordLettersContainers[key].y
+                                        }, 200, createjs.Ease.getPowIn(2));
+                                }
+                            });
+
+                            //2. Check the automatically filled question
+                            $timeout(function () {
+                                checkQuestion();
+                            }, 300);
+
+
+                            // Checking if the user has already chosen letters
+                        } else if ($scope.activityData.questions[$scope.questionIndex].userChoices.length > 0) {
+                            console.log("There are letters already selected! ", $scope.activityData.questions[$scope.questionIndex].userChoices);
+
+                            _.each($scope.activityData.questions[$scope.questionIndex].userChoices, function (selectedLetter, key, list) {
+                                if ($scope.activityData.questions[$scope.questionIndex].userChoices[key] !== "" && $scope.activityData.questions[$scope.questionIndex].userChoices[key]) {
+
+                                    console.log("The chosen letter : ", $scope.activityData.questions[$scope.questionIndex].userChoices[key]);
+
+                                    var letterIndex = _.findKey($scope.scrambledEnglishLetterTexts, {"text": $scope.activityData.questions[$scope.questionIndex].userChoices[key]});
+
+                                    console.log("The index of chosen letter that found: ", letterIndex);
+
+                                    createjs.Tween.get($scope.scrambledEnglishLetterContainers[letterIndex], {loop: false})
+                                        .to({
+                                            x: $scope.answerWordLettersContainers[key].x,
+                                            y: $scope.answerWordLettersContainers[key].y
+                                        }, 200, createjs.Ease.getPowIn(2));
+                                }
+                            });
+                        }
+                        else {
+                            console.log("No chosen letters in userChoices!");
+                        }
+                    }, 300);
+
+
+                }//end of build function
 
 
                 //Function that increments the question step
                 function nextQuestion() {
                     if ($scope.questionIndex < $scope.activityData.questions.length - 1) {
                         $scope.questionIndex++;
+                        buildQuestion();
                     } else {
                         console.warn("Maximum question index reached!");
                     }
@@ -670,54 +1003,212 @@ angular.module("bookbuilder2")
                 function previousQuestion() {
                     if ($scope.questionIndex > 0) {
                         $scope.questionIndex--;
+                        buildQuestion();
                     } else {
                         console.warn("Minimum question index reached!");
                     }
                 }
 
 
-                /*Function that updates the score*/
-                function updateScore() {
-                    // /*Check how many correct answers exist*/
-                    // var completedWords = 0;
-                    // _.each($scope.activityData.questions, function (word, key, list) {
-                    //     if ($scope.activityData.questions[key].completedWordLetters && $scope.activityData.questions[key].completedWordLetters.length > 0) {
-                    //         completedWords++;
-                    //     }
-                    // });
-                    //
-                    // //Updating score
-                    // $scope.scoreText.text = "Score: " + completedWords + " / " + $scope.activityData.questions.length;
-                    // $scope.stage.update();
+                /*Function that handles collision*/
+                function collision(x, y) {
+
+                    console.log("Collision stageX: ", x);
+                    console.log("Collision stageY: ", y);
+
+                    var emptyAnswerWordLetterContainer = true;
+
+                    for (var i = 0; i < $scope.englishWordArray.length; i++) {
+                        if (ionic.DomUtil.rectContains(
+                                x,
+                                y,
+                                $scope.answerWordLettersContainers[i].x,
+                                $scope.answerWordLettersContainers[i].y,
+                                $scope.answerWordLettersContainers[i].x + $scope.answerWordLettersContainers[i].width,
+                                $scope.answerWordLettersContainers[i].y + $scope.answerWordLettersContainers[i].height)) {
+
+                            //Checking if there is already a letter
+                            _.each($scope.englishWordArray, function (letter, key, list) {
+                                if ($scope.scrambledEnglishLetterContainers[key].x === $scope.answerWordLettersContainers[i].x
+                                    && $scope.scrambledEnglishLetterContainers[key].y === $scope.answerWordLettersContainers[i].y) {
+                                    emptyAnswerWordLetterContainer = false;
+                                }
+                            });
+
+                            //Last check if there is already a letter in the container collision happened
+                            if (!emptyAnswerWordLetterContainer) {
+                                console.warn("There is collision but there is already a letter in this position...");
+                                return -1;
+
+                                //There is collision but the container is deactivated, probably a gap...
+                            } else if (!$scope.answerWordLettersContainers[i].visible) {
+                                console.warn("There is collision but the container is deactivated, probably a gap...");
+                                return -1;
+
+                            } else {
+                                //There is collision
+                                console.log("Collision returns: ", i);
+                                return i;
+                            }
+                        }
+                    }
+                    //No collision
+                    return -1;
                 }
 
-                /*Function that handles navigation to next activity*/
-                // function next() {
-                //     console.log("Going to next activity!");
-                //     var index = _.findIndex($rootScope.selectedLesson.lessonMenu, {
-                //         "activityFolder": $rootScope.activityFolder
-                //     });
-                //     console.log("Lessons Index: ", index);
-                //
-                //     if (index < $rootScope.selectedLesson.lessonMenu.length - 1) {
-                //         $rootScope.activityFolder = $rootScope.selectedLesson.lessonMenu[index + 1].activityFolder;
-                //         $rootScope.activityName = $rootScope.selectedLesson.lessonMenu[index + 1].name;
-                //         window.localStorage.setItem("activityFolder", $rootScope.activityFolder);
-                //         window.localStorage.setItem("activityName", $rootScope.activityName);
-                //         console.log("Next $rootScope.activityFolder: " + $rootScope.activityFolder + " $rootScope.activityName" + $rootScope.activityName);
-                //         $ionicHistory.nextViewOptions({
-                //             historyRoot: true,
-                //             disableBack: true
-                //         });
-                //         $state.go($rootScope.selectedLesson.lessonMenu[index + 1].activityTemplate, {}, {reload: true});
-                //     } else {
-                //         $ionicHistory.nextViewOptions({
-                //             historyRoot: true,
-                //             disableBack: true
-                //         });
-                //         $state.go("results", {}, {reload: true});
-                //     }
-                // }
+                /*Function that updates the score*/
+                function getEnglishWordLettersArray() {
+                    //Creating the english word letters array for the current question
+                    var lettersOfTheWord = $scope.activityData.questions[$scope.questionIndex].englishWord.split("");
+                    _.each(lettersOfTheWord, function (letter, key, list) {
+                        if (lettersOfTheWord[key] === " ") {
+                            lettersOfTheWord[key] = "_";
+                        }
+                    });
+                    return lettersOfTheWord;
+                }
+
+
+                //Function for restarting a question array
+                function restartQuestion() {
+                    //1. Re-positioning all puzzle pieces back
+
+                    _.each($scope.scrambledEnglishLetterContainers, function (letter, key, list) {
+                        createjs.Tween.get($scope.scrambledEnglishLetterContainers[key], {loop: false})
+                            .to({
+                                x: $scope.scrambledEnglishLetterContainers[key].startingPointX,
+                                y: $scope.scrambledEnglishLetterContainers[key].startingPointY
+                            }, 200, createjs.Ease.getPowIn(2));
+                        $scope.stage.update()
+                    });
+
+                    //2. Making everything invisible again
+                    _.each($scope.scrambledEnglishLetterContainers, function (letter, key, list) {
+                        $scope.scrambledEnglishLetterContainers[key].visible = false;
+                    });
+                    _.each($scope.answerWordLettersContainers, function (letter, key, list) {
+                        $scope.answerWordLettersContainers[key].visible = false;
+                    });
+                    _.each($scope.rightLettersContainers, function (letter, key, list) {
+                        $scope.rightLettersContainers[key].visible = false;
+                    });
+                    //3. Erasing any saved letters the user chose
+                    // _.each($scope.activityData.questions[$scope.questionIndex].userChoices, function (chosenLetter, key, list) {
+                    //     $scope.activityData.questions[$scope.questionIndex].userChoices[key] = "";
+                    // });
+                    $scope.activityData.questions[$scope.questionIndex].userChoices = [];
+
+                    //5. Change activityCompleted property to false
+                    $scope.activityData.questions[$scope.questionIndex].questionCompleted = false;
+                    $scope.activityData.questions[$scope.questionIndex].questionIsRight = false;
+                    $scope.activityData.completed = false;
+                    $scope.nextButton.gotoAndPlay("normal");
+
+                    //Saving it to localStorage
+                    console.warn("Saving to local storage...");
+                    window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+
+                    //7. Update score again
+                    updateScore();
+
+                    // Re-build the selected question
+                    buildQuestion($scope.questionIndex);
+                }
+
+
+                //Function for checking question
+                function checkQuestion() {
+
+                    console.log("userChoices that it will be checked: ", $scope.activityData.questions[$scope.questionIndex].userChoices);
+                    var userChoicesWord = $scope.activityData.questions[$scope.questionIndex].userChoices.join("");
+                    console.log("The userChoices word: ", userChoicesWord);
+                    console.log("The right word: ", $scope.activityData.questions[$scope.questionIndex].englishWord);
+
+                    //Checking if it's correct
+                    if (userChoicesWord === $scope.activityData.questions[$scope.questionIndex].englishWord) {
+                        //--CORRECT--
+
+                        //Make all sprites green
+                        _.each($scope.scrambledEnglishLetterSprites, function (sprite, key, list) {
+                            $scope.scrambledEnglishLetterSprites[key].gotoAndPlay("green_puzzle");
+                        });
+
+                        //Mark the question as right
+                        $scope.activityData.questions[$scope.questionIndex].questionIsRight = true;
+
+                        //Update score
+                        updateScore();
+
+                    } else {
+                        //--WRONG--, checking and indicating mistakes
+
+                        //Checking selected letters one by one, if there is an unfilled letter or a wrong letter the right letter appears beneath.
+                        var englishWordLettersArray = getEnglishWordLettersArray();
+                        _.each(englishWordLettersArray, function (chosenLetter, key, list) {
+                            if ($scope.activityData.questions[$scope.questionIndex].userChoices[key] !== englishWordLettersArray[key] && englishWordLettersArray[key] !== "_") {
+                                //For every wrong letter the right letter appears
+                                $scope.rightLettersContainers[key].visible = true;
+                                $scope.rightLettersTexts[key].text = $scope.activityData.questions[$scope.questionIndex].userChoices[key];
+                            }
+                        });
+
+                        //Moving the letters to the right position building the right word
+                        var tempScrambledEnglishLetterTexts = $scope.englishWordArray;
+                        console.warn("TEST englishWordArray: ", $scope.englishWordArray);
+                        console.warn("TEST answerWordLettersContainers", $scope.answerWordLettersContainers);
+
+                        _.each(englishWordLettersArray, function (chosenLetter, key, list) {
+                            console.warn("TEST key: ", key);
+                            var rightLetterIndex = _.indexOf(tempScrambledEnglishLetterTexts, chosenLetter);
+                            console.warn("TEST chosenLetter: ", chosenLetter);
+                            console.warn("TEST rightLetterIndex: ", rightLetterIndex);
+
+                            tempScrambledEnglishLetterTexts[rightLetterIndex] = "";
+
+                            console.warn("TEST $scope.answerWordLettersContainers[key].x: ", $scope.answerWordLettersContainers[key].x);
+                            console.warn("TEST $scope.scrambledEnglishLetterContainers[rightLetterIndex]: ", $scope.scrambledEnglishLetterContainers[rightLetterIndex]);
+
+                            createjs.Tween.get($scope.scrambledEnglishLetterContainers[rightLetterIndex], {loop: false})
+                                .to({
+                                    x: $scope.answerWordLettersContainers[key].x,
+                                    y: $scope.answerWordLettersContainers[key].y
+                                }, 200, createjs.Ease.getPowIn(2));
+                        });
+                    }
+
+                    //Mark question as completed
+                    $scope.activityData.questions[$scope.questionIndex].questionCompleted = true;
+
+                    //Saving it to localStorage
+                    window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+                    console.warn("Saving to local storage...");
+
+
+                    //Checking if all questions are completed for enabling nextActivity button
+                    if (!_.findWhere($scope.activityData.questions, {"questionCompleted": false})) {
+                        $scope.activityData.completed = true;
+                        $scope.nextButton.gotoAndPlay("onSelection");
+                        //Saving it to localStorage
+                        window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+                        console.warn("Saving to local storage...");
+                    }
+
+                }
+
+                /*Function that updates the score*/
+                function updateScore() {
+                    console.log("Updating Score!");
+                    var rightAnswers = 0;
+                    _.each($scope.activityData.questions, function (question, key, list) {
+                        if ($scope.activityData.questions[key].questionIsRight) {
+                            rightAnswers++;
+                        }
+                    });
+                    //Finally updating the text
+                    $scope.scoreText.text = "Score: " + rightAnswers + " / " + $scope.activityData.questions.length;
+                    $scope.activityData.score = rightAnswers;
+                    $scope.stage.update();
+                }
 
             });//end of image on complete
         }, 500);//end of timeout

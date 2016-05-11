@@ -146,6 +146,24 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
                 templateUrl: "templates/wizard/wizard.html",
                 controller: "wizardController"
             })
+            .state('bombs', {
+                cache: false,
+                url: "/bombs",
+                templateUrl: "templates/bombs/bombs.html",
+                controller: "bombsController"
+            })
+            .state('jars', {
+                cache: false,
+                url: "/jars",
+                templateUrl: "templates/jars/jars.html",
+                controller: "jarsController"
+            })
+            .state('chooseDucks', {
+                cache: false,
+                url: "/chooseDucks",
+                templateUrl: "templates/chooseDucks/chooseDucks.html",
+                controller: "chooseDucksController"
+            })
             .state('education', {
                 cache: false,
                 url: "/education",
