@@ -105,7 +105,8 @@ angular.module("bookbuilder2")
                 console.log("Image Loaded...");
 
                 /*Creating Bitmap Background for Canvas*/
-                var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/chooseDarts_background.png");
+                //var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/chooseDarts_background.png");
+                var background = new createjs.Bitmap($rootScope.rootDir  + "data/lessons/" + $rootScope.selectedLesson.id + "/" + $rootScope.activityFolder + "/background.png");
 
                 /**** CALCULATING SCALING ****/
                 var scaleY = $scope.stage.canvas.height / background.image.height;
