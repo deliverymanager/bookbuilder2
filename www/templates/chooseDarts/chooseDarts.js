@@ -642,6 +642,7 @@ angular.module("bookbuilder2")
                     }
 
                   });
+                    
                   $scope.nextButton.x = 730;
                   $scope.nextButton.y = 640;
                   $scope.mainContainer.addChild($scope.nextButton);
