@@ -240,7 +240,7 @@ angular.module("bookbuilder2")
                                 $scope.activityData.questions[key].userChoice = "";
                             });
 
-                            //Setting a global index indicating wich question is currently active
+                            //Setting a global index indicating which question is currently active
                             $scope.activityData.activeQuestionIndex = 0;
 
                             //Saving to localStorage
@@ -375,7 +375,6 @@ angular.module("bookbuilder2")
                                         initWaterfallCallback(true, error);
                                     });
 
-                                initWaterfallCallback(null);
                             },
 
                             //Loading the ducks indexes images and texts
@@ -517,7 +516,8 @@ angular.module("bookbuilder2")
 
                                     //Creating the questionResult text
                                     $scope.questionResultText = new createjs.Text("", "30px Arial", "black");
-                                    $scope.questionResultText.x = 60;
+                                    $scope.questionResultText.x = $scope.questionResultContainer.width / 2;
+                                    $scope.questionResultText.textAlign = "center";
                                     $scope.questionResultText.y = 140;
 
                                     //Make it invisible
@@ -564,13 +564,14 @@ angular.module("bookbuilder2")
                                         var thereIsUnansweredQuestion = _.findWhere($scope.activityData.questions, {"userChoice": ""});
 
                                         if (!thereIsUnansweredQuestion) {
-                                            console.warn("Maximum question index reached!");
+                                            console.warn("All questions answered, opening resultsTotal window! -->", $scope.activityData.questions);
                                             //Opening resultsTotalContainer
                                             openResultsTotalContainer();
                                             return;
                                         } else {
                                             console.warn("Incrementing question index inside Continue button!");
-                                            $scope.activityData.activeQuestionIndex++;
+                                            $scope.activityData.activeQuestionIndex += 1;
+                                            console.warn("Current question index: ", $scope.activityData.activeQuestionIndex);
                                             console.warn("Saving...");
                                             save();
                                             console.log("Loading question...");
@@ -683,15 +684,26 @@ angular.module("bookbuilder2")
                                     //Adding the texts for right answers and for user answers
                                     _.each($scope.activityData.questions, function (question, key, list) {
 
-                                        $scope.userAnswersTexts[key] = new createjs.Text("", "15px Arial", "black");
+                                        $scope.userAnswersTexts[key] = new createjs.Text("", "25px Arial", "black");
                                         $scope.userAnswersTexts[key].x = 10;
-                                        $scope.userAnswersTexts[key].y = key === 0 ? 30 : $scope.userAnswersTexts[key - 1].y + 70;
+                                        $scope.userAnswersTexts[key].y = key === 0 ? 45 : $scope.userAnswersTexts[key - 1].y + 37;
+                                        $scope.userAnswersTexts[key].maxWidth = $scope.userAnswersContainer.width - 10;
                                         $scope.userAnswersContainer.addChild($scope.userAnswersTexts[key]);
 
-                                        $scope.rightAnswersTexts[key] = new createjs.Text("", "15px Arial", "green");
+                                        $scope.rightAnswersTexts[key] = new createjs.Text("", "25px Arial", "green");
                                         $scope.rightAnswersTexts[key].x = 10;
-                                        $scope.rightAnswersTexts[key].y = key === 0 ? 30 : $scope.rightAnswersTexts[key - 1].y + 70;
+                                        $scope.rightAnswersTexts[key].y = key === 0 ? 45 : $scope.rightAnswersTexts[key - 1].y + 37;
+                                        $scope.rightAnswersTexts[key].maxWidth = $scope.rightAnswersContainer.width - 10;
                                         $scope.rightAnswersTexts[key].visible = false;
+
+                                        var rightAnswersContainerGraphic = new createjs.Graphics().beginFill("green").drawRect(0, 0, $scope.rightAnswersContainer.width, 40);
+                                        var rightAnswersContainerBackground = new createjs.Shape(rightAnswersContainerGraphic);
+                                        $scope.rightAnswersContainer.addChild(rightAnswersContainerBackground);
+                                        var correctAnswersTitle = new createjs.Text("Correct", "30px Arial", "white");
+                                        correctAnswersTitle.x = $scope.rightAnswersContainer.width / 2;
+                                        correctAnswersTitle.textAlign = "center";
+                                        correctAnswersTitle.y = 3;
+                                        $scope.rightAnswersContainer.addChild(correctAnswersTitle);
                                         $scope.rightAnswersContainer.addChild($scope.rightAnswersTexts[key]);
                                     });
 
@@ -721,10 +733,13 @@ angular.module("bookbuilder2")
                                             $scope.checkButton.alpha = 1;
                                             console.log("Checking the answers...");
                                             updateScore();
-                                            //nextActivity play onSelection
-                                            $scope.nextButton.gotoAndPlay("onSelection");
+
+                                            console.warn("Activity completed!");
                                             $scope.activityData.completed = true;
                                             save();
+
+                                            //nextActivity play onSelection
+                                            $scope.nextButton.gotoAndPlay("onSelection");
                                         });
 
                                         $scope.checkButton.x = 45;
@@ -761,13 +776,8 @@ angular.module("bookbuilder2")
                                             $scope.restartTotalButton.alpha = 1;
 
                                             console.warn("Restarting Activity!");
-
-                                            $scope.activityData.completed = false;
-                                            save();
-
                                             $scope.stage.update();
                                             restartActivity();
-
 
                                         });//End of press up element
 
@@ -824,9 +834,7 @@ angular.module("bookbuilder2")
                                         console.log("Error on getting json data for check button...", error);
                                         initWaterfallCallback();
                                     });
-                            },
-
-
+                            }
                         ],
 
                         //General callback
@@ -851,14 +859,59 @@ angular.module("bookbuilder2")
 
                 //Function that loads the question for the current index
                 function loadQuestion() {
+
+                    //Checking if activity completed
+                    if ($scope.activityData.completed) {
+                        console.warn("Loading question: Activity completed!");
+                        openResultsTotalContainer();
+                        //If the activity is completed it means it checked by the user
+                        updateScore();
+                        return;
+                    }
+
+                    //Checking if all questions have answer, if it's true resultsTotal opens
+                    if (_.findWhere($scope.activityData.questions, {"userChoice": ""})) {
+                        console.warn("Loading question: The are questions that need to be answered. Loading the game normally...");
+                    } else {
+                        console.warn("Loading question: All questions have answers...");
+                        openResultsTotalContainer();
+                        return;
+                    }
+
+
+                    //Checking for unanswered questions
+                    _.each($scope.activityData.questions, function (question, key, list) {
+                        if ($scope.activityData.questions[key].userChoice === "") {
+                            var unansweredDuckIndex = _.findKey($scope.ducksTexts, {"text": $scope.activityData.questions[key].englishWord});
+                            console.warn("Incomplete question with index: " + key + " Incomplete duckText: ", unansweredDuckIndex);
+                            $scope.ducksTexts[unansweredDuckIndex].visible = true;
+                            $scope.ducksSprites[unansweredDuckIndex].visible = true;
+                            $scope.ducksSprites[unansweredDuckIndex].y = $scope.ducksSprites[unansweredDuckIndex].startingPointY;
+                            $scope.ducksSprites[unansweredDuckIndex].gotoAndPlay("normal");
+
+                        }
+                    });
+
+
                     //Checking if there are already answered questions
                     _.each($scope.activityData.questions, function (question, key, list) {
                         if ($scope.activityData.questions[key].userChoice !== "") {
                             var selectedDuckIndex = _.findKey($scope.ducksTexts, {"text": $scope.activityData.questions[key].userChoice});
+                            console.warn("Filled question index: " + key + " -Filled duckText index: " + selectedDuckIndex);
                             $scope.ducksTexts[selectedDuckIndex].visible = false;
                             $scope.ducksSprites[selectedDuckIndex].visible = false;
                         }
+                        // }else{
+                        //     var unansweredDuckIndex = _.findKey($scope.ducksTexts, {"text": $scope.activityData.questions[key].englishWord});
+                        //     console.warn("Incomplete question with index: "+ key + " Incomplete duckText: ", unansweredDuckIndex);
+                        //     $scope.ducksTexts[unansweredDuckIndex].visible = true;
+                        //     $scope.ducksSprites[unansweredDuckIndex].gotoAndPlay("normal");
+                        //     $scope.ducksSprites[unansweredDuckIndex].visible = true;
+                        // }
+
                     });
+
+                    $scope.stage.update();
 
                     //Load the next question
                     $scope.greekWordText.text = $scope.activityData.questions[$scope.activityData.activeQuestionIndex].greekWord;
@@ -911,7 +964,7 @@ angular.module("bookbuilder2")
                         .to({
                             x: -1670,
                             y: $scope.internalContainer.y
-                        }, 8000, createjs.Ease.getPowInOut(1));
+                        }, -(-1670 - ($scope.internalContainer.x)) * 4, createjs.Ease.getPowInOut(1));
 
                 }
 
@@ -924,12 +977,20 @@ angular.module("bookbuilder2")
                         .to({
                             x: -150,
                             y: $scope.internalContainer.y
-                        }, 8000, createjs.Ease.getPowInOut(1));
+                        }, -(($scope.internalContainer.x) + 150 ) * 4, createjs.Ease.getPowInOut(1));
                 }
 
 
                 //Function for checking activity
                 function selectDuck(key) {
+
+                    if ($scope.selectionInProgress) {
+                        console.warn("Selection in progress!");
+                        return;
+                    }
+
+                    $scope.selectionInProgress = true;
+
                     console.log("Selecting the duck with key: ", key);
                     //Stopping the internalContainer Tween
                     createjs.Tween.removeAllTweens($scope.internalContainer);
@@ -937,21 +998,23 @@ angular.module("bookbuilder2")
 
                     //Saving the user selection
                     $scope.activityData.questions[$scope.activityData.activeQuestionIndex].userChoice = $scope.ducksTexts[key].text;
+                    console.log("Save answer: ", $scope.activityData.questions[$scope.activityData.activeQuestionIndex].userChoice);
                     save();
+
+                    $scope.ducksTexts[key].visible = false;
 
                     //Play the selection animation
                     $timeout(function () {
-                        $scope.ducksTexts[key].visible = false;
                         $scope.ducksSprites[key].gotoAndPlay("selected");
                         createjs.Tween.get($scope.ducksSprites[key], {loop: false})
                             .to({
                                 x: $scope.ducksSprites[key].x,
-                                y: -60
+                                y: -200
                             }, 1000, createjs.Ease.getPowInOut(2)).call(
                             function () {
                                 $scope.ducksSprites[key].visible = false;
-
                                 //Opening the question results window
+                                console.warn("Questions in activityData -->", $scope.activityData.questions);
                                 openQuestionResults();
                             }
                         );
@@ -979,6 +1042,9 @@ angular.module("bookbuilder2")
                     console.log("Closing questionResults!");
                     $scope.questionResultContainer.visible = false;
                     $scope.questionResultText.text = "";
+
+                    //Initializing selectionInProgress again
+                    $scope.selectionInProgress = false;
                 }
 
 
@@ -986,8 +1052,8 @@ angular.module("bookbuilder2")
                 function openResultsTotalContainer() {
                     $scope.resultsTotalContainer.visible = true;
                     //Populating with user choices
-                    _.each($scope.activityData.questions,function(question, key, list){
-                        $scope.userAnswersTexts[key].text = key+1 + ". "+ $scope.activityData.questions[key].greekWord + " = " + $scope.activityData.questions[key].userChoice;
+                    _.each($scope.activityData.questions, function (question, key, list) {
+                        $scope.userAnswersTexts[key].text = key + 1 + ". " + $scope.activityData.questions[key].greekWord + " = " + $scope.activityData.questions[key].userChoice;
                     })
 
                 }
@@ -995,8 +1061,9 @@ angular.module("bookbuilder2")
                 //Function used for closing resultsTotalContainer
                 function closeResultsTotalContainer() {
                     $scope.resultsTotalContainer.visible = false;
+                    closeQuestionResults();
                     //Erasing all texts from resultsTotalContainer
-                    _.each($scope.activityData.questions, function(question, key, list){
+                    _.each($scope.activityData.questions, function (question, key, list) {
                         $scope.userAnswersTexts[key].text = "";
                         $scope.userAnswersTexts[key].color = "black";
                         $scope.rightAnswersTexts[key].text = "";
@@ -1008,13 +1075,16 @@ angular.module("bookbuilder2")
                 function restartActivity() {
                     console.log("Restarting activity...");
                     //Erasing all answers
-                    _.each($scope.activityData.questions, function (word, key, l) {
+                    _.each($scope.activityData.questions, function (word, key, list) {
                         $scope.activityData.questions[key].userChoice = "";
                     });
 
                     //Make index 0 again
+                    $scope.activityData.completed = false;
                     $scope.activityData.activeQuestionIndex = 0;
                     save();
+
+                    console.warn("Questions in activityData -->", $scope.activityData.questions);
                     closeResultsTotalContainer();
                     loadQuestion();
                 }
@@ -1030,7 +1100,7 @@ angular.module("bookbuilder2")
 
                         $scope.userAnswersTexts[key].text = $scope.activityData.questions[key].greekWord + " = " + $scope.activityData.questions[key].userChoice;
                         $scope.rightAnswersTexts[key].text = $scope.activityData.questions[key].englishWord;
-                        if ($scope.activityData.questions[key].userChoice = $scope.activityData.questions[key].englishWord) {
+                        if ($scope.activityData.questions[key].userChoice === $scope.activityData.questions[key].englishWord) {
                             rightAnswers++;
                             $scope.userAnswersTexts[key].color = "green";
                         } else {
