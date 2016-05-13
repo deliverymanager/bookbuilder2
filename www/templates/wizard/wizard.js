@@ -201,7 +201,7 @@ angular.module("bookbuilder2")
                     /*Adding page title and description*/
                     $scope.pageTitleAndDescription = new createjs.Text($scope.activityData.title + " - " + $scope.activityData.description, "23px Arial", "white");
                     $scope.pageTitleAndDescription.x = 85;
-                    $scope.pageTitleAndDescription.y = 623;
+                    $scope.pageTitleAndDescription.y = 631;
                     $scope.mainContainer.addChild($scope.pageTitleAndDescription);
 
                     init();

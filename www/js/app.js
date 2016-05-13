@@ -176,6 +176,12 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
                 templateUrl: "templates/education/education.html",
                 controller: "educationController"
             })
+            .state('correctIncorrect', {
+                cache: false,
+                url: "/correctIncorrect",
+                templateUrl: "templates/correctIncorrect/correctIncorrect.html",
+                controller: "correctIncorrectController"
+            })
             .state('draganddrop', {
                 cache: false,
                 url: "/draganddrop",
