@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-  .controller("PreloadingController", function (_, $scope, $timeout, Download, $interval, $ionicHistory, $ionicPlatform, $ionicPopup, $rootScope, $http, $state, $ionicLoading, $cordovaFile) {
+  .controller("PreloadingController", function (_, $scope, $timeout, TypicalFunctions, Download, $interval, $ionicHistory, $ionicPlatform, $ionicPopup, $rootScope, $http, $state, $ionicLoading, $cordovaFile) {
 
     console.log("PreloadingController loaded!");
 

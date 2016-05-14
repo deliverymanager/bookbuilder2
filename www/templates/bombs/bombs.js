@@ -50,9 +50,7 @@ angular.module("bookbuilder2")
       $scope.stage.enableMouseOver(0);
       $scope.stage.mouseMoveOutside = false;
 
-      createjs.Ticker.framerate = 20;
       var handleTick = function () {
-        $scope.$apply();
         $scope.stage.update();
       };
       createjs.Ticker.addEventListener("tick", handleTick);

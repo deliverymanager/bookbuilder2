@@ -44,9 +44,8 @@ angular.module("bookbuilder2")
       $scope.stage.enableMouseOver(0);
       $scope.stage.mouseMoveOutside = false;
 
-      createjs.Ticker.framerate = 20;
+      createjs.Ticker.framerate = 10;
       var handleTick = function () {
-        $scope.$apply();
         $scope.stage.update();
       };
       createjs.Ticker.addEventListener("tick", handleTick);
@@ -57,7 +56,7 @@ angular.module("bookbuilder2")
         ionic.Platform.exitApp();
       });
       $ionicPlatform.on('resume', function () {
-        createjs.Ticker.framerate = 20;
+        createjs.Ticker.framerate = 10;
       });
 
       $scope.savedGroupButtonsArray = {};

@@ -39,7 +39,6 @@ angular.module("bookbuilder2")
 
       createjs.Ticker.framerate = 20;
       var handleTick = function () {
-        $scope.$apply();
         $scope.stage.update();
       };
       createjs.Ticker.addEventListener("tick", handleTick);
