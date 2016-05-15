@@ -108,11 +108,16 @@ angular.module("bookbuilder2")
                                 });
                               }, 8000, 0, true);
 
+
                               $ionicHistory.nextViewOptions({
                                 historyRoot: true,
                                 disableBack: true
                               });
-                              $state.go("groups", {}, {reload: true});
+                              if (window.localStorage.getItem("currentView")) {
+                                $state.go(window.localStorage.getItem("currentView"), {}, {reload: true});
+                              } else {
+                                $state.go("groups", {}, {reload: true});
+                              }
 
                             } else {
                               console.warn("WE ARE IN PRODUCTION CHANNEL!!!", deployChannel);

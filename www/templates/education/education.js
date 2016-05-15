@@ -66,7 +66,7 @@ angular.module("bookbuilder2")
 
       $scope.sounds = {};
       if (window.cordova && window.cordova.platformId !== "browser") {
-        _.each(["select", "check"], function (sound, key, list) {
+        _.each(["drag", "drop"], function (sound, key, list) {
           if (ionic.Platform.isIOS() && window.cordova) {
             console.log("Else iOS");
             resolveLocalFileSystemURL($rootScope.rootDir + "data/assets/" + sound + ".mp3", function (entry) {
