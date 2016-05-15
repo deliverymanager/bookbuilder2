@@ -27,6 +27,9 @@ angular.module("bookbuilder2")
         loadVariablesFromLocalStorage: function () {
           var self = this;
 
+          window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
+          console.warn($ionicHistory.currentView().stateName);
+
           if (window.cordova && window.cordova.platformId !== "browser") {
             $rootScope.rootDir = window.cordova.file.dataDirectory;
           } else {
@@ -37,6 +40,10 @@ angular.module("bookbuilder2")
           $rootScope.selectedLessonId = window.localStorage.getItem("selectedLessonId");
           $rootScope.activityFolder = window.localStorage.getItem("activityFolder");
           $rootScope.activityName = window.localStorage.getItem("activityName");
+
+          $rootScope.scale = window.localStorage.getItem("scale");
+          $rootScope.book = JSON.parse(window.localStorage.getItem("book"));
+          $rootScope.ratio = window.localStorage.getItem("ratio");
 
           if (window.cordova && window.cordova.platformId !== "browser") {
             $rootScope.rootDir = window.cordova.file.dataDirectory;

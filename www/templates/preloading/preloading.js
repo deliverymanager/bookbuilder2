@@ -107,12 +107,12 @@ angular.module("bookbuilder2")
                                   }
                                 });
                               }, 8000, 0, true);
-
-
+                              
                               $ionicHistory.nextViewOptions({
                                 historyRoot: true,
                                 disableBack: true
                               });
+
                               if (window.localStorage.getItem("currentView")) {
                                 $state.go(window.localStorage.getItem("currentView"), {}, {reload: true});
                               } else {

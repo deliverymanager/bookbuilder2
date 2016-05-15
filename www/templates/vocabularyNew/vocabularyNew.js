@@ -1,18 +1,9 @@
 angular.module("bookbuilder2")
-  .controller("VocabularyNewController", function ($scope, $ionicLoading, $interval, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory) {
+  .controller("VocabularyNewController", function ($scope, TypicalFunctions, $ionicLoading, $interval, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory) {
 
     console.log("VocabularyNewController loaded!");
 
-    //START OF DEVELOPMENT SNIPPET
-    if (window.cordova && window.cordova.platformId !== "browser") {
-      $rootScope.rootDir = window.cordova.file.dataDirectory;
-    } else {
-      $rootScope.rootDir = "";
-    }
-    $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
-    $rootScope.activityFolder = window.localStorage.getItem("activityFolder");
-    $rootScope.activityName = window.localStorage.getItem("activityName");
-    //END OF DEVELOPMENT SNIPPET
+    TypicalFunctions.loadVariablesFromLocalStorage();
 
     $timeout(function () {
 

@@ -1,18 +1,8 @@
 angular.module('bookbuilder2')
-  .controller("VideoController", function ($scope, $ionicLoading, $state, $timeout, $rootScope, $interval, _, $sce, $ionicPlatform, $http, $ionicHistory) {
+  .controller("VideoController", function (TypicalFunctions, $scope, $ionicLoading, $state, $timeout, $rootScope, $interval, _, $sce, $ionicPlatform, $http, $ionicHistory) {
 
-      if (window.cordova && window.cordova.platformId !== "browser") {
-        $rootScope.rootDir = window.cordova.file.dataDirectory;
-      } else {
-        $rootScope.rootDir = "";
-      }
-      $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
-      $rootScope.selectedLessonId = window.localStorage.getItem("selectedLessonId");
-      $rootScope.activityTemplate = window.localStorage.getItem("activityTemplate");
-      $rootScope.activityFolder = window.localStorage.getItem("activityFolder");
-      $rootScope.scale = window.localStorage.getItem("scale");
-      $rootScope.book = JSON.parse(window.localStorage.getItem("book"));
-      $rootScope.ratio = window.localStorage.getItem("ratio");
+
+      TypicalFunctions.loadVariablesFromLocalStorage();
 
       var activityNameInLocalStorage = $rootScope.selectedLesson.id + "_" + $rootScope.activityFolder;
 

@@ -1,19 +1,9 @@
 angular.module("bookbuilder2")
-  .controller("ResultsController", function (Email, $ionicLoading, $scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast, $ionicPopup) {
+  .controller("ResultsController", function (Email, TypicalFunctions, $ionicLoading, $scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast, $ionicPopup) {
 
     console.log("ResultsController loaded!");
 
-    //START OF DEVELOPMENT SNIPPET
-    if (window.cordova && window.cordova.platformId !== "browser") {
-      $rootScope.rootDir = window.cordova.file.dataDirectory;
-    } else {
-      $rootScope.rootDir = "";
-    }
-    $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
-    $rootScope.activityFolder = window.localStorage.getItem("activityFolder");
-    $rootScope.book = JSON.parse(window.localStorage.getItem("book"));
-
-    //END OF DEVELOPMENT SNIPPET
+    TypicalFunctions.loadVariablesFromLocalStorage();
 
 
     $timeout(function () {
