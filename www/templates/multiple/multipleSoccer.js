@@ -248,13 +248,17 @@ angular.module("bookbuilder2")
             });
 
             menuButton.addEventListener("pressup", function (event) {
-              createjs.Tween.removeAllTweens();
               console.log("Press up event on Menu event!");
               menuButton.gotoAndPlay("normal");
               $ionicHistory.nextViewOptions({
                 historyRoot: true,
                 disableBack: true
               });
+              $ionicHistory.clearCache();
+              createjs.Tween.removeAllTweens();
+              $scope.stage.removeAllEventListeners();
+              $scope.stage.removeAllChildren();
+
               $state.go("lessonNew", {}, {reload: true});
             });
 
@@ -2014,7 +2018,7 @@ angular.module("bookbuilder2")
               $scope.resultsContainer.visible = true;
 
               //!*Saving user selection to userAnswer field*!
-               $scope.activityData.questions[questionIndex].userAnswer = userAnswer;
+              $scope.activityData.questions[questionIndex].userAnswer = userAnswer;
 
               /*/!*Saving user selection to userAnswer field*!/
                $scope.activityData.questions[questionIndex].userAnswer = userAnswer;
@@ -2108,7 +2112,7 @@ angular.module("bookbuilder2")
         function updateResultsTotalQuestions() {
           _.each($scope.activityData.questions, function (question, key, list) {
             if ($scope.activityData.questions[key].userAnswer !== "") {
-              console.warn("The question "+$scope.activityData.questions[key]+" has an answer...");
+              console.warn("The question " + $scope.activityData.questions[key] + " has an answer...");
               //The question has been answered updating question text and answer text
               $scope.resultsTotalRowQuestionsTexts[key].text = $scope.activityData.questions[key][$scope.activityData.questions[key].userAnswer];
               $scope.resultsTotalRowAnswersTexts[key].text = $scope.activityData.questions[key][$scope.activityData.questions[key].userAnswer];

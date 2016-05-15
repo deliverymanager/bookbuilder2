@@ -67,6 +67,7 @@ angular.module("bookbuilder2")
             async.parallelLimit(seriesFunctions, 5, function (err, response) {
               console.log("Downloading FINISHED!!!");
               if (err) {
+                console.warn(err);
                 return callback(false);
               } else {
                 return callback(true);

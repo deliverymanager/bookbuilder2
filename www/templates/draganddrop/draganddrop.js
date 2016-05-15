@@ -129,17 +129,22 @@ angular.module("bookbuilder2")
             });
 
             menuButton.addEventListener("pressup", function (event) {
-              createjs.Tween.removeAllTweens();
               menuButton.gotoAndPlay("normal");
               $scope.stage.update();
               _.each($scope.sounds, function (sound, key, list) {
                 $scope.sounds[key].stop();
                 $scope.sounds[key].release();
               });
+
               $ionicHistory.nextViewOptions({
                 historyRoot: true,
                 disableBack: true
               });
+
+              $ionicHistory.clearCache();
+              createjs.Tween.removeAllTweens();
+              $scope.stage.removeAllEventListeners();
+              $scope.stage.removeAllChildren();
               $state.go("lesson", {}, {reload: true});
             });
 

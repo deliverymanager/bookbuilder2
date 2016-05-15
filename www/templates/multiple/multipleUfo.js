@@ -244,13 +244,17 @@ angular.module("bookbuilder2")
 
             menuButton.addEventListener("pressup", function (event) {
               console.log("Press up event on Menu event!");
-              createjs.Tween.removeAllTweens();
               menuButton.gotoAndPlay("normal");
               $scope.stage.update();
               $ionicHistory.nextViewOptions({
                 historyRoot: true,
                 disableBack: true
               });
+
+              $ionicHistory.clearCache();
+              createjs.Tween.removeAllTweens();
+              $scope.stage.removeAllEventListeners();
+              $scope.stage.removeAllChildren();
               $state.go("lessonNew", {}, {reload: true});
             });
 

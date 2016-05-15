@@ -207,10 +207,18 @@ angular.module("bookbuilder2")
               createjs.Tween.removeAllTweens();
               console.log("pressup event!");
               menuButton.gotoAndPlay("normal");
+              $scope.stage.update();
+
               $ionicHistory.nextViewOptions({
                 historyRoot: true,
                 disableBack: true
               });
+
+
+              $ionicHistory.clearCache();
+              createjs.Tween.removeAllTweens();
+              $scope.stage.removeAllEventListeners();
+              $scope.stage.removeAllChildren();
               $state.go("lessonNew", {}, {reload: true});
             });
 
