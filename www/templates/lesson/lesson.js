@@ -277,6 +277,10 @@ angular.module("bookbuilder2")
                     historyRoot: true,
                     disableBack: true
                   });
+                  $ionicHistory.clearCache();
+                  createjs.Tween.removeAllTweens();
+                  $scope.stage.removeAllEventListeners();
+                  $scope.stage.removeAllChildren();
                   $state.go(activityButton.activityTemplate, {}, {reload: true});
                 });
 
@@ -324,6 +328,10 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
+              $ionicHistory.clearCache();
+              createjs.Tween.removeAllTweens();
+              $scope.stage.removeAllEventListeners();
+              $scope.stage.removeAllChildren();
               $state.go("vocabulary", {}, {reload: true});
             });
             $scope.stage.addChild(vocabularyButton);
@@ -355,6 +363,10 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
+              $ionicHistory.clearCache();
+              createjs.Tween.removeAllTweens();
+              $scope.stage.removeAllEventListeners();
+              $scope.stage.removeAllChildren();
               $state.go("reading");
             });
             $scope.stage.addChild(readingButton);
@@ -389,6 +401,10 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
+              $ionicHistory.clearCache();
+              createjs.Tween.removeAllTweens();
+              $scope.stage.removeAllEventListeners();
+              $scope.stage.removeAllChildren();
               $state.go("results", {}, {reload: true});
             });
           })
@@ -419,6 +435,12 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
+
+              $ionicHistory.clearCache();
+              createjs.Tween.removeAllTweens();
+              $scope.stage.removeAllEventListeners();
+              $scope.stage.removeAllChildren();
+
               console.log("bitmapLoaders", bitmapLoaders);
               _.each(bitmapLoaders, function (image, key, list) {
                 console.log(key);

@@ -121,6 +121,11 @@ angular.module("bookbuilder2")
                 $scope.sounds[key].release();
               });
               $scope.sounds = {};
+
+              $ionicHistory.clearCache();
+              createjs.Tween.removeAllTweens();
+              $scope.stage.removeAllEventListeners();
+              $scope.stage.removeAllChildren();
               $ionicHistory.nextViewOptions({
                 historyRoot: true,
                 disableBack: true

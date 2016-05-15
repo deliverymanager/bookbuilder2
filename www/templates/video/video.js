@@ -56,6 +56,7 @@ angular.module('bookbuilder2')
           historyRoot: true,
           disableBack: true
         });
+        $ionicHistory.clearCache();
         $state.go("lessonNew", {}, {reload: true});
       }
 

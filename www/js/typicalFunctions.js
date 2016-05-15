@@ -16,6 +16,11 @@ angular.module("bookbuilder2")
               historyRoot: true,
               disableBack: true
             });
+            $ionicHistory.clearCache();
+            createjs.Tween.removeAllTweens();
+            $scope.stage.removeAllEventListeners();
+            $scope.stage.removeAllChildren();
+
             $state.go("groups", {}, {reload: true});
           });
         },
@@ -63,12 +68,14 @@ angular.module("bookbuilder2")
               historyRoot: true,
               disableBack: true
             });
+            $ionicHistory.clearCache();
             $state.go($rootScope.selectedLesson.activitiesMenu[index + 1].activityTemplate, {}, {reload: true});
           } else {
             $ionicHistory.nextViewOptions({
               historyRoot: true,
               disableBack: true
             });
+            $ionicHistory.clearCache();
             $state.go("results", {}, {reload: true});
           }
         }

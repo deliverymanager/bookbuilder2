@@ -167,6 +167,12 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
+
+              $ionicHistory.clearCache();
+              createjs.Tween.removeAllTweens();
+              $scope.stage.removeAllEventListeners();
+              $scope.stage.removeAllChildren();
+
               $state.go("lesson", {}, {reload: true});
             });
 

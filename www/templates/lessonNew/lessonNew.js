@@ -136,6 +136,12 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
+
+              $ionicHistory.clearCache();
+              createjs.Tween.removeAllTweens();
+              $scope.stage.removeAllEventListeners();
+              $scope.stage.removeAllChildren();
+
               $state.go("groups", {}, {reload: true});
 
             });
@@ -189,6 +195,10 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
+              $ionicHistory.clearCache();
+              createjs.Tween.removeAllTweens();
+              $scope.stage.removeAllEventListeners();
+              $scope.stage.removeAllChildren();
               $state.go("results", {}, {reload: true});
             });
           })
@@ -311,6 +321,10 @@ angular.module("bookbuilder2")
                             historyRoot: true,
                             disableBack: true
                           });
+                          $ionicHistory.clearCache();
+                          createjs.Tween.removeAllTweens();
+                          $scope.stage.removeAllEventListeners();
+                          $scope.stage.removeAllChildren();
                           $state.go($scope.mainActivitiesButtons[key].activityTemplate, {}, {reload: true});
                         });
                       }
@@ -416,6 +430,10 @@ angular.module("bookbuilder2")
                         historyRoot: true,
                         disableBack: true
                       });
+                      $ionicHistory.clearCache();
+                      createjs.Tween.removeAllTweens();
+                      $scope.stage.removeAllEventListeners();
+                      $scope.stage.removeAllChildren();
                       $state.go($scope.subActivitiesButtons[key].activityTemplate, {}, {reload: true});
                     });
 
