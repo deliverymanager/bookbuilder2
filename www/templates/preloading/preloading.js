@@ -74,7 +74,7 @@ angular.module("bookbuilder2")
                                       template: "DEVELOPER UPDATE ..."
                                     });
 
-                                    $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data")
+                                    $cordovaFile.removeRecursively(window.cordova.file.dataDirectory + "data/", "book")
                                       .then(function (success) {
 
                                         console.log("assets directory deleted!", success);
@@ -107,17 +107,13 @@ angular.module("bookbuilder2")
                                   }
                                 });
                               }, 8000, 0, true);
-                              
+
                               $ionicHistory.nextViewOptions({
                                 historyRoot: true,
                                 disableBack: true
                               });
 
-                              if (window.localStorage.getItem("currentView")) {
-                                $state.go(window.localStorage.getItem("currentView"), {}, {reload: true});
-                              } else {
-                                $state.go("groups", {}, {reload: true});
-                              }
+                              $state.go("groups", {}, {reload: true});
 
                             } else {
                               console.warn("WE ARE IN PRODUCTION CHANNEL!!!", deployChannel);

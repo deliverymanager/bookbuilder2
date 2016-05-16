@@ -84,7 +84,7 @@ angular.module("bookbuilder2")
       }
       /*Image Loader*/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-        src: $rootScope.rootDir + "data/assets/chooseDarts_background.png"
+        src: $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/" + $rootScope.activityFolder + "/background.png"
       }));
 
       imageLoader.load();
