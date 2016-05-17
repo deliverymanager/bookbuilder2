@@ -1,7 +1,7 @@
 angular.module("bookbuilder2")
-  .controller("MultipleBirdsController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast) {
+  .controller("MultipleAnimalsController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast) {
 
-    console.log("MultipleBirdsController loaded!");
+    console.log("MultipleAnimalsController loaded!");
     TypicalFunctions.loadVariablesFromLocalStorage();
 
     /*Name of activity in localStorage*/
