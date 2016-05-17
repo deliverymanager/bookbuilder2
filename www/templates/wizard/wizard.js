@@ -225,7 +225,7 @@ angular.module("bookbuilder2")
           /*Adding page title and description*/
           $scope.pageTitleAndDescription = new createjs.Text($scope.activityData.title + " - " + $scope.activityData.description, "23px Arial", "white");
           $scope.pageTitleAndDescription.x = 85;
-          $scope.pageTitleAndDescription.y = 623;
+          $scope.pageTitleAndDescription.y = 630;
           $scope.mainContainer.addChild($scope.pageTitleAndDescription);
 
           $scope.activityData.score = 0;
@@ -402,6 +402,36 @@ angular.module("bookbuilder2")
                   console.log("Error on getting json data for check button...", error);
                   initCallback();
                 });
+            },
+
+            function(initCallback){
+
+              console.log("Add lines...");
+
+              /*Image Loader*/
+              var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
+                src: $rootScope.rootDir + "data/assets/wizard_connecting_line.png"
+              }));
+
+              imageLoader.load();
+
+              /*IMAGE LOADER COMPLETED*/
+              imageLoader.on("complete", function (r) {
+
+                var connectingLines = {};
+
+                _.each($scope.activityData.questions, function(line, key, list){
+
+                  connectingLines[key] = new createjs.Bitmap($rootScope.rootDir + "data/assets/wizard_connecting_line.png");
+                  connectingLines[key].x = 212;
+                  connectingLines[key].y = key === 0 ? 111 : key===5? connectingLines[key-1].y + 60 : connectingLines[key-1].y + 40;
+                  $scope.mainContainer.addChild(connectingLines[key]);
+
+                });
+
+                initCallback(null);
+              });
+
             },
 
             /*Getting the sprite of checkbox*/

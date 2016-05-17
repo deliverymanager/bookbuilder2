@@ -403,7 +403,7 @@ angular.module("bookbuilder2")
             $scope.questionsContainer.addChild($scope.questionNumber);
 
             $scope.questionsTextContainer = new createjs.Container();
-            $scope.questionsTextContainer.x = $scope.questionsContainer.width / 7;
+            $scope.questionsTextContainer.x = $scope.questionsContainer.width / 6;
             $scope.questionsTextContainer.y = $scope.questionsContainer.height / 5;
             $scope.questionsTextContainer.regX = $scope.questionsTextContainer.width / 2;
             $scope.questionsTextContainer.regY = $scope.questionsTextContainer.height / 2;
@@ -857,8 +857,7 @@ angular.module("bookbuilder2")
               text = " ";
             }
             currentPretexts[l] = new createjs.Text(text, "25px Arial", "black");
-            currentPretexts[l].x = 15;
-            currentPretexts[l].y = textHeight * l + 20;
+            currentPretexts[l].y = textHeight * l;
             $scope.questionsTextContainer.addChild(currentPretexts[l]);
           });
 
@@ -912,16 +911,16 @@ angular.module("bookbuilder2")
                 }
                 currentPostexts[0] = new createjs.Text(postexts[0], "25px Arial", "black");
                 currentPostexts[0].x = secondGapUnderlinedText.x + secondGapUnderlinedText.getBounds().width;
-                currentPostexts[0].y = secondGapUnderlinedText.y;
+                currentPostexts[0].y = secondGapUnderlinedText.y + 7;
                 $scope.questionsTextContainer.addChild(currentPostexts[0]);
 
                 currentPostexts[1] = new createjs.Text(postexts[1], "25px Arial", "black");
-                currentPostexts[1].y = currentPostexts[0].y + currentPostexts[0].getBounds().height;
+                currentPostexts[1].y = currentPostexts[0].y + currentPostexts[0].getBounds().height + 5;
                 $scope.questionsTextContainer.addChild(currentPostexts[1]);
               } else {
                 currentPostexts[0] = new createjs.Text(postexts[0], "25px Arial", "black");
                 currentPostexts[0].x = secondGapUnderlinedText.x + secondGapUnderlinedText.getBounds().width;
-                currentPostexts[0].y = secondGapUnderlinedText.y;
+                currentPostexts[0].y = secondGapUnderlinedText.y + 7;
                 $scope.questionsTextContainer.addChild(currentPostexts[0]);
               }
 
@@ -940,7 +939,7 @@ angular.module("bookbuilder2")
                 }
                 currentPostexts[0] = new createjs.Text(postexts[0], "25px Arial", "black");
                 currentPostexts[0].x = firstGapUnderlinedText.x + firstGapUnderlinedText.getBounds().width;
-                currentPostexts[0].y = firstGapUnderlinedText.y;
+                currentPostexts[0].y = firstGapUnderlinedText.y + 7;
                 $scope.questionsTextContainer.addChild(currentPostexts[0]);
 
                 currentPostexts[1] = new createjs.Text(postexts[1], "25px Arial", "black");
@@ -949,7 +948,7 @@ angular.module("bookbuilder2")
               } else {
                 currentPostexts[0] = new createjs.Text(postexts[0], "25px Arial", "black");
                 currentPostexts[0].x = firstGapUnderlinedText.x + firstGapUnderlinedText.getBounds().width;
-                currentPostexts[0].y = firstGapUnderlinedText.y;
+                currentPostexts[0].y = firstGapUnderlinedText.y + 7;
                 $scope.questionsTextContainer.addChild(currentPostexts[0]);
               }
             }
