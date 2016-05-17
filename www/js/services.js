@@ -76,6 +76,25 @@ angular.module("bookbuilder2")
           } else {
             return callback(true);
           }
+        }, checkDirOrCreate: function (path, directory, callback) {
+
+          $cordovaFile.checkDir(path, directory)
+            .then(function (success) {
+              console.log("Directory exists!");
+
+              callback(null);
+            }, function (error) {
+              console.log(error);
+
+              $cordovaFile.createDir(path, directory, true)
+                .then(function (success) {
+                  callback(null);
+                }, function (error) {
+                  console.log(error);
+                  callback(false);
+                });
+            });
+
         }
       };
     }
