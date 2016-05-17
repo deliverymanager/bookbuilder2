@@ -151,11 +151,10 @@ angular.module("bookbuilder2")
         $scope.mainContainer.addChild($scope.topContainer);
 
         //mainContainer Background
-        var topContainerGraphic = new createjs.Graphics().beginFill("red").drawRect(0, 0, $scope.topContainer.width, $scope.topContainer.height);
-        var topContainerBackground = new createjs.Shape(topContainerGraphic);
-        topContainerBackground.alpha = 0.5;
-
-        $scope.topContainer.addChild(topContainerBackground);
+        // var topContainerGraphic = new createjs.Graphics().beginFill("red").drawRect(0, 0, $scope.topContainer.width, $scope.topContainer.height);
+        // var topContainerBackground = new createjs.Shape(topContainerGraphic);
+        // topContainerBackground.alpha = 0.5;
+        // $scope.topContainer.addChild(topContainerBackground);
 
 
         /* ------------------------------------------ PLAY CONTAINER ---------------------------------------------- */
@@ -167,11 +166,11 @@ angular.module("bookbuilder2")
         $scope.mainContainer.addChild($scope.playContainer);
 
         //playContainer Background
-        var playContainerGraphic = new createjs.Graphics().beginFill("blue").drawRect(0, 0, $scope.playContainer.width, $scope.playContainer.height);
-        var playContainerBackground = new createjs.Shape(playContainerGraphic);
-        playContainerBackground.alpha = 0.5;
-
-        $scope.playContainer.addChild(playContainerBackground);
+        // var playContainerGraphic = new createjs.Graphics().beginFill("blue").drawRect(0, 0, $scope.playContainer.width, $scope.playContainer.height);
+        // var playContainerBackground = new createjs.Shape(playContainerGraphic);
+        // playContainerBackground.alpha = 0.5;
+        //
+        // $scope.playContainer.addChild(playContainerBackground);
 
 
         /* ------------------------------------------ RESULTS CONTAINER ---------------------------------------------- */
@@ -242,7 +241,7 @@ angular.module("bookbuilder2")
               $state.go("lessonNew", {}, {reload: true});
             });
 
-            menuButton.scaleX = menuButton.scaleY = scale;
+            // menuButton.scaleX = menuButton.scaleY = scale;
             menuButton.x = 0;
             menuButton.y = -menuButton.getTransformedBounds().height / 5;
 
@@ -332,11 +331,10 @@ angular.module("bookbuilder2")
                         $scope.topContainer.addChild($scope.questionContainer);
 
                         //mainContainer Background
-                        var questionContainerGraphic = new createjs.Graphics().beginFill("orange").drawRect(0, 0, $scope.questionContainer.width, $scope.questionContainer.height);
-                        var questionContainerBackground = new createjs.Shape(questionContainerGraphic);
-                        questionContainerBackground.alpha = 0.5;
-
-                        $scope.questionContainer.addChild(questionContainerBackground);
+                        // var questionContainerGraphic = new createjs.Graphics().beginFill("orange").drawRect(0, 0, $scope.questionContainer.width, $scope.questionContainer.height);
+                        // var questionContainerBackground = new createjs.Shape(questionContainerGraphic);
+                        // questionContainerBackground.alpha = 0.5;
+                        // $scope.questionContainer.addChild(questionContainerBackground);
 
                         questionsAndAnswersCallback(null);
                       });
@@ -549,10 +547,10 @@ angular.module("bookbuilder2")
                           $scope.fishermanContainer.y = 90;
                           $scope.playContainer.addChild($scope.fishermanContainer);
 
-                          var fishermanContainerGraphic = new createjs.Graphics().beginFill("blue").drawRect(0, 0, $scope.fishermanContainer.width, $scope.fishermanContainer.height);
-                          var fishermanContainerBackground = new createjs.Shape(fishermanContainerGraphic);
-                          fishermanContainerBackground.alpha = 0.5;
-                          $scope.fishermanContainer.addChild(fishermanContainerBackground);
+                          // var fishermanContainerGraphic = new createjs.Graphics().beginFill("blue").drawRect(0, 0, $scope.fishermanContainer.width, $scope.fishermanContainer.height);
+                          // var fishermanContainerBackground = new createjs.Shape(fishermanContainerGraphic);
+                          // fishermanContainerBackground.alpha = 0.5;
+                          // $scope.fishermanContainer.addChild(fishermanContainerBackground);
 
                           /*Creating the fisherman*/
                           $scope.fisherman = new createjs.Sprite(fishermanSpriteSheet, "floating");
@@ -899,11 +897,11 @@ angular.module("bookbuilder2")
                            $scope.resultAnswerContainer.addChild(resultAnswerContainerBackground);*/
 
                           //Creating the text element for the result answer
-                          $scope.resultAnswerText = new createjs.Text("", "20px Arial", "red");
-                          $scope.resultAnswerText.x = 0;
-                          $scope.resultAnswerText.y = 10;
-                          $scope.resultAnswerText.maxWidth = $scope.resultAnswerContainer.width;
-                          $scope.resultAnswerContainer.addChild($scope.resultAnswerText);
+                          // $scope.resultAnswerText = new createjs.Text("", "20px Arial", "red");
+                          // $scope.resultAnswerText.x = 0;
+                          // $scope.resultAnswerText.y = 10;
+                          // $scope.resultAnswerText.maxWidth = $scope.resultAnswerContainer.width;
+                          // $scope.resultAnswerContainer.addChild($scope.resultAnswerText);
 
                           resultWaterfallCallback(null);
                         },

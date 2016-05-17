@@ -120,7 +120,7 @@ angular.module("bookbuilder2")
         var backgroundPosition = background.getTransformedBounds();
 
         $scope.activeQuestionIndex = 0;
-        var noChoice = " _________________ ";
+        var noChoice = " ______________ ";
 
         async.waterfall([function (callback) {
 
@@ -464,7 +464,7 @@ angular.module("bookbuilder2")
             $scope.buttonContainers["onlyCChoice"].visible = false;
             $scope.answersContainer.addChild($scope.buttonContainers["onlyCChoice"]);
 
-            $http.get($rootScope.rootDir + "data/assets/birds_choice_button_sprite.json")
+            $http.get($rootScope.rootDir + "data/assets/multiple_choice_choice_button_sprite.json")
               .success(function (response) {
 
                 response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
@@ -474,25 +474,25 @@ angular.module("bookbuilder2")
                 $scope.buttonChoices = {};
                 $scope.buttonChoicesText = {};
 
-                $scope.buttonChoices["aChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "white");
+                $scope.buttonChoices["aChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "black");
                 $scope.buttonChoices["aChoice"].regX = $scope.buttonChoices["aChoice"].getBounds().width / 2;
                 $scope.buttonChoices["aChoice"].regY = $scope.buttonChoices["aChoice"].getBounds().height / 2;
                 $scope.buttonChoices["aChoice"].x = $scope.buttonContainers["aChoice"].width / 2;
                 $scope.buttonChoices["aChoice"].y = $scope.buttonContainers["aChoice"].height / 2;
                 $scope.buttonContainers["aChoice"].addChild($scope.buttonChoices["aChoice"]);
 
-                var answerAButtonLetter = new createjs.Text("a.", "31px Arial", "white");
+                var answerAButtonLetter = new createjs.Text("a.", "31px Arial", "black");
                 answerAButtonLetter.regX = answerAButtonLetter.getBounds().width / 2;
                 answerAButtonLetter.regY = answerAButtonLetter.getBounds().height / 2;
-                answerAButtonLetter.x = $scope.buttonContainers["aChoice"].width / 2.35;
-                answerAButtonLetter.y = $scope.buttonContainers["aChoice"].height / 1.7;
+                answerAButtonLetter.x = $scope.buttonContainers["aChoice"].width / 11;
+                answerAButtonLetter.y = $scope.buttonContainers["aChoice"].height / 2.1;
                 answerAButtonLetter.maxWidth = $scope.buttonContainers["aChoice"].width * 0.9;
                 $scope.buttonContainers["aChoice"].addChild(answerAButtonLetter);
 
-                $scope.buttonChoicesText["aChoice"] = new createjs.Text("Answer A", "25px Arial", "white");
+                $scope.buttonChoicesText["aChoice"] = new createjs.Text("Answer A", "25px Arial", "black");
                 $scope.buttonChoicesText["aChoice"].regY = $scope.buttonChoicesText["aChoice"].getBounds().height / 2;
-                $scope.buttonChoicesText["aChoice"].x = $scope.buttonContainers["aChoice"].width / 1.55;
-                $scope.buttonChoicesText["aChoice"].y = $scope.buttonContainers["aChoice"].height / 1.6;
+                $scope.buttonChoicesText["aChoice"].x = $scope.buttonContainers["aChoice"].width / 1.9;
+                $scope.buttonChoicesText["aChoice"].y = $scope.buttonContainers["aChoice"].height / 2.1;
                 $scope.buttonChoicesText["aChoice"].textAlign = "center";
                 $scope.buttonContainers["aChoice"].addChild($scope.buttonChoicesText["aChoice"]);
 
@@ -508,25 +508,25 @@ angular.module("bookbuilder2")
                 });
 
 
-                $scope.buttonChoices["bChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "white");
+                $scope.buttonChoices["bChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "black");
                 $scope.buttonChoices["bChoice"].regX = $scope.buttonChoices["bChoice"].getBounds().width / 2;
                 $scope.buttonChoices["bChoice"].regY = $scope.buttonChoices["bChoice"].getBounds().height / 2;
                 $scope.buttonChoices["bChoice"].x = $scope.buttonContainers["bChoice"].width / 2;
                 $scope.buttonChoices["bChoice"].y = $scope.buttonContainers["bChoice"].height / 2;
                 $scope.buttonContainers["bChoice"].addChild($scope.buttonChoices["bChoice"]);
 
-                var answerBButtonLetter = new createjs.Text("b.", "31px Arial", "white");
+                var answerBButtonLetter = new createjs.Text("b.", "31px Arial", "black");
                 answerBButtonLetter.regX = answerBButtonLetter.getBounds().width / 2;
                 answerBButtonLetter.regY = answerBButtonLetter.getBounds().height / 2;
-                answerBButtonLetter.x = $scope.buttonContainers["bChoice"].width / 2.35;
-                answerBButtonLetter.y = $scope.buttonContainers["bChoice"].height / 1.7;
+                answerBButtonLetter.x = $scope.buttonContainers["bChoice"].width / 11;
+                answerBButtonLetter.y = $scope.buttonContainers["bChoice"].height / 2.1;
                 answerBButtonLetter.maxWidth = $scope.buttonContainers["bChoice"].width * 0.9;
                 $scope.buttonContainers["bChoice"].addChild(answerBButtonLetter);
 
-                $scope.buttonChoicesText["bChoice"] = new createjs.Text("Answer B", "25px Arial", "white");
+                $scope.buttonChoicesText["bChoice"] = new createjs.Text("Answer B", "25px Arial", "black");
                 $scope.buttonChoicesText["bChoice"].regY = $scope.buttonChoicesText["bChoice"].getBounds().height / 2;
-                $scope.buttonChoicesText["bChoice"].x = $scope.buttonContainers["bChoice"].width / 1.55;
-                $scope.buttonChoicesText["bChoice"].y = $scope.buttonContainers["bChoice"].height / 1.6;
+                $scope.buttonChoicesText["bChoice"].x = $scope.buttonContainers["bChoice"].width / 1.9;
+                $scope.buttonChoicesText["bChoice"].y = $scope.buttonContainers["bChoice"].height / 2.1;
                 $scope.buttonChoicesText["bChoice"].textAlign = "center";
                 $scope.buttonContainers["bChoice"].addChild($scope.buttonChoicesText["bChoice"]);
 
@@ -541,7 +541,7 @@ angular.module("bookbuilder2")
                   }
                 });
 
-                $scope.buttonChoices["cChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "white");
+                $scope.buttonChoices["cChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "black");
                 $scope.buttonChoices["cChoice"].regX = $scope.buttonChoices["cChoice"].getBounds().width / 2;
                 $scope.buttonChoices["cChoice"].regY = $scope.buttonChoices["cChoice"].getBounds().height / 2;
                 $scope.buttonChoices["cChoice"].x = $scope.buttonContainers["cChoice"].width / 2;
@@ -549,18 +549,18 @@ angular.module("bookbuilder2")
                 $scope.buttonContainers["cChoice"].addChild($scope.buttonChoices["cChoice"]);
 
 
-                var answerCButtonLetter = new createjs.Text("c.", "31px Arial", "white");
+                var answerCButtonLetter = new createjs.Text("c.", "31px Arial", "black");
                 answerCButtonLetter.regX = answerCButtonLetter.getBounds().width / 2;
                 answerCButtonLetter.regY = answerCButtonLetter.getBounds().height / 2;
-                answerCButtonLetter.x = $scope.buttonContainers["cChoice"].width / 9;
-                answerCButtonLetter.y = $scope.buttonContainers["cChoice"].height / 9;
+                answerCButtonLetter.x = $scope.buttonContainers["cChoice"].width / 11;
+                answerCButtonLetter.y = $scope.buttonContainers["cChoice"].height / 2.1;
                 answerCButtonLetter.maxWidth = $scope.buttonContainers["cChoice"].width * 0.9;
                 $scope.buttonContainers["cChoice"].addChild(answerCButtonLetter);
 
-                $scope.buttonChoicesText["cChoice"] = new createjs.Text("Answer C", "25px Arial", "white");
+                $scope.buttonChoicesText["cChoice"] = new createjs.Text("Answer C", "25px Arial", "black");
                 $scope.buttonChoicesText["cChoice"].regY = $scope.buttonChoicesText["cChoice"].getBounds().height / 2;
-                $scope.buttonChoicesText["cChoice"].x = $scope.buttonContainers["cChoice"].width / 2;
-                $scope.buttonChoicesText["cChoice"].y = $scope.buttonContainers["cChoice"].height / 6.5;
+                $scope.buttonChoicesText["cChoice"].x = $scope.buttonContainers["cChoice"].width / 1.9;
+                $scope.buttonChoicesText["cChoice"].y = $scope.buttonContainers["cChoice"].height / 2.1;
                 $scope.buttonChoicesText["cChoice"].textAlign = "center";
                 $scope.buttonContainers["cChoice"].addChild($scope.buttonChoicesText["cChoice"]);
 
@@ -576,25 +576,25 @@ angular.module("bookbuilder2")
                 });
 
 
-                $scope.buttonChoices["dChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "white");
+                $scope.buttonChoices["dChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "black");
                 $scope.buttonChoices["dChoice"].regX = $scope.buttonChoices["dChoice"].getBounds().width / 2;
                 $scope.buttonChoices["dChoice"].regY = $scope.buttonChoices["dChoice"].getBounds().height / 2;
                 $scope.buttonChoices["dChoice"].x = $scope.buttonContainers["dChoice"].width / 2;
                 $scope.buttonChoices["dChoice"].y = $scope.buttonContainers["dChoice"].height / 2;
                 $scope.buttonContainers["dChoice"].addChild($scope.buttonChoices["dChoice"]);
 
-                var answerDButtonLetter = new createjs.Text("d.", "31px Arial", "white");
+                var answerDButtonLetter = new createjs.Text("d.", "31px Arial", "black");
                 answerDButtonLetter.regX = answerDButtonLetter.getBounds().width / 2;
                 answerDButtonLetter.regY = answerDButtonLetter.getBounds().height / 2;
-                answerDButtonLetter.x = $scope.buttonContainers["dChoice"].width / 6.5;
-                answerDButtonLetter.y = $scope.buttonContainers["dChoice"].height / 2.3;
+                answerDButtonLetter.x = $scope.buttonContainers["dChoice"].width / 11;
+                answerDButtonLetter.y = $scope.buttonContainers["dChoice"].height / 2.1;
                 answerDButtonLetter.maxWidth = $scope.buttonContainers["dChoice"].width * 0.9;
                 $scope.buttonContainers["dChoice"].addChild(answerDButtonLetter);
 
-                $scope.buttonChoicesText["dChoice"] = new createjs.Text("Answer D", "25px Arial", "white");
+                $scope.buttonChoicesText["dChoice"] = new createjs.Text("Answer D", "25px Arial", "black ");
                 $scope.buttonChoicesText["dChoice"].regY = $scope.buttonChoicesText["dChoice"].getBounds().height / 2;
-                $scope.buttonChoicesText["dChoice"].x = $scope.buttonContainers["dChoice"].width / 2;
-                $scope.buttonChoicesText["dChoice"].y = $scope.buttonContainers["dChoice"].height / 2.3;
+                $scope.buttonChoicesText["dChoice"].x = $scope.buttonContainers["dChoice"].width / 1.9;
+                $scope.buttonChoicesText["dChoice"].y = $scope.buttonContainers["dChoice"].height / 2.1;
                 $scope.buttonChoicesText["dChoice"].textAlign = "center";
                 $scope.buttonContainers["dChoice"].addChild($scope.buttonChoicesText["dChoice"]);
 
@@ -609,26 +609,26 @@ angular.module("bookbuilder2")
                 });
 
 
-                $scope.buttonChoices["onlyCChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "white");
+                $scope.buttonChoices["onlyCChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "black");
                 $scope.buttonChoices["onlyCChoice"].regX = $scope.buttonChoices["onlyCChoice"].getBounds().width / 2;
                 $scope.buttonChoices["onlyCChoice"].regY = $scope.buttonChoices["onlyCChoice"].getBounds().height / 2;
                 $scope.buttonChoices["onlyCChoice"].x = $scope.buttonContainers["onlyCChoice"].width / 2;
                 $scope.buttonChoices["onlyCChoice"].y = $scope.buttonContainers["onlyCChoice"].height / 2;
                 $scope.buttonContainers["onlyCChoice"].addChild($scope.buttonChoices["onlyCChoice"]);
 
-                var answerOnlyCButtonLetter = new createjs.Text("c.", "31px Arial", "white");
+                var answerOnlyCButtonLetter = new createjs.Text("c.", "31px Arial", "black");
                 answerOnlyCButtonLetter.regX = answerOnlyCButtonLetter.getBounds().width / 2;
                 answerOnlyCButtonLetter.regY = answerOnlyCButtonLetter.getBounds().height / 2;
-                answerOnlyCButtonLetter.x = $scope.buttonContainers["onlyCChoice"].width / 2.15;
-                answerOnlyCButtonLetter.y = $scope.buttonContainers["onlyCChoice"].height / 1.65;
+                answerOnlyCButtonLetter.x = $scope.buttonContainers["onlyCChoice"].width / 3.4;
+                answerOnlyCButtonLetter.y = $scope.buttonContainers["onlyCChoice"].height / 2.1;
                 answerOnlyCButtonLetter.maxWidth = $scope.buttonContainers["onlyCChoice"].width * 0.9;
                 $scope.buttonContainers["onlyCChoice"].addChild(answerOnlyCButtonLetter);
 
 
-                $scope.buttonChoicesText["onlyCChoice"] = new createjs.Text("Answer C", "25px Arial", "white");
+                $scope.buttonChoicesText["onlyCChoice"] = new createjs.Text("Answer C", "25px Arial", "black");
                 $scope.buttonChoicesText["onlyCChoice"].regY = $scope.buttonChoicesText["onlyCChoice"].getBounds().height / 2;
-                $scope.buttonChoicesText["onlyCChoice"].x = $scope.buttonContainers["onlyCChoice"].width / 1.75;
-                $scope.buttonChoicesText["onlyCChoice"].y = $scope.buttonContainers["onlyCChoice"].height / 1.6;
+                $scope.buttonChoicesText["onlyCChoice"].x = $scope.buttonContainers["onlyCChoice"].width / 1.9;
+                $scope.buttonChoicesText["onlyCChoice"].y = $scope.buttonContainers["onlyCChoice"].height / 2.1;
                 $scope.buttonChoicesText["onlyCChoice"].textAlign = "center";
                 $scope.buttonContainers["onlyCChoice"].addChild($scope.buttonChoicesText["onlyCChoice"]);
 
@@ -819,7 +819,7 @@ angular.module("bookbuilder2")
 
           _.each($scope.buttonChoices, function (c, k, l) {
             $scope.buttonChoices[k].gotoAndPlay("white");
-            $scope.buttonChoicesText[k].color = "white";
+            $scope.buttonChoicesText[k].color = "black";
             $scope.buttonContainers[k].visible = false;
           });
 
@@ -1065,6 +1065,10 @@ angular.module("bookbuilder2")
           });
           $scope.yellowBarContainers[0].scaleX = $scope.yellowBarContainers[0].scaleY = 1.4;
           window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+
+          //Making score text 0 again
+          $scope.scoreText.text = "Score: " + 0 + " / " + $scope.activityData.questions.length;
+
           loadQuestion(0);
         }
 
