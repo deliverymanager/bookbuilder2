@@ -433,7 +433,6 @@ angular.module("bookbuilder2")
               });
 
             },
-
             /*Getting the sprite of checkbox*/
             function (initCallback) {
               $http.get($rootScope.rootDir + "data/assets/wizard_tick_wrong_bubble_sprite.json")
