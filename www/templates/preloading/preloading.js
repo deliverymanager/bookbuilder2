@@ -88,7 +88,7 @@ angular.module("bookbuilder2")
                                           template: "DEVELOPER UPDATE ..."
                                         });
 
-                                        $cordovaFile.removeRecursively(window.cordova.file.dataDirectory + "data/", "book")
+                                        $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data")
                                           .then(function (success) {
 
                                             console.log("assets directory deleted!", success);

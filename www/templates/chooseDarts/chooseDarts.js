@@ -306,7 +306,8 @@ angular.module("bookbuilder2")
                   var upButtonSpriteSheet = new createjs.SpriteSheet(response);
 
                   $scope.upButton = new createjs.Sprite(upButtonSpriteSheet, "normal");
-                  $scope.upButton.x = 250;
+                  $scope.upButton.scaleX = $scope.upButton.scaleY = 2
+                  $scope.upButton.x = 242;
                   $scope.upButton.y = 10;
 
                   /*Mouse down event*/
@@ -343,7 +344,8 @@ angular.module("bookbuilder2")
                   var downButtonSpriteSheet = new createjs.SpriteSheet(response);
 
                   $scope.downButton = new createjs.Sprite(downButtonSpriteSheet, "normal");
-                  $scope.downButton.x = 278;
+                  $scope.downButton.scaleX = $scope.downButton.scaleY = 2
+                  $scope.downButton.x = 298;
                   $scope.downButton.y = 557;
 
                   /*Mouse down event*/

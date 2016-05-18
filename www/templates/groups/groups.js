@@ -438,9 +438,14 @@ angular.module("bookbuilder2")
                               downloadLessonAssets(lesson, function (response) {
                                 if (response) {
                                   //Clearing Lesson after downloading for the first time!
+
                                   _.each(lesson.lessonMenu, function (activity, key, list) {
                                     window.localStorage.removeItem(lesson.id + "_" + activity.activityFolder);
                                   });
+                                  _.each(lesson.activitiesMenu, function (activity, key, list) {
+                                    window.localStorage.removeItem(lesson.id + "_" + activity.activityFolder);
+                                  });
+
                                   $ionicHistory.nextViewOptions({
                                     historyRoot: true,
                                     disableBack: true
@@ -603,7 +608,7 @@ angular.module("bookbuilder2")
           createjs.Tween.removeAllTweens();
           $scope.stage.removeAllEventListeners();
           $scope.stage.removeAllChildren();
-          
+
           if ($rootScope.book.bookTemplate === "groups") {
             $state.go("lesson", {}, {reload: true});
           } else {
