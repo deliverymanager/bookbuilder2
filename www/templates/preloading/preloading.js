@@ -263,7 +263,7 @@ angular.module("bookbuilder2")
 
 
       } else {
-        $rootScope.rootDir = "";
+        $rootScope.rootDir = "http://" + "enGrEnglish1" + ".s3-website-eu-west-1.amazonaws.com/";
         /*$state.go("groups");*/
         $ionicHistory.nextViewOptions({
           historyRoot: true,

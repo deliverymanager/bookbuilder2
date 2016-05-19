@@ -438,27 +438,34 @@ angular.module("bookbuilder2")
                               downloadLessonAssets(lesson, function (response) {
                                 if (response) {
                                   //Clearing Lesson after downloading for the first time!
+                                  $http.get($rootScope.rootDir + 'data/lessons/' + $rootScope.selectedLessonId + "/lesson.json")
+                                    .success(function (response) {
+                                      _.each(response.lessonMenu, function (activity, key, list) {
+                                        window.localStorage.removeItem(lesson.id + "_" + activity.activityFolder);
+                                      });
+                                      _.each(response.activitiesMenu, function (activity, key, list) {
+                                        window.localStorage.removeItem(lesson.id + "_" + activity.activityFolder);
+                                      });
 
-                                  _.each(lesson.lessonMenu, function (activity, key, list) {
-                                    window.localStorage.removeItem(lesson.id + "_" + activity.activityFolder);
-                                  });
-                                  _.each(lesson.activitiesMenu, function (activity, key, list) {
-                                    window.localStorage.removeItem(lesson.id + "_" + activity.activityFolder);
-                                  });
+                                      $ionicHistory.nextViewOptions({
+                                        historyRoot: true,
+                                        disableBack: true
+                                      });
+                                      $ionicHistory.clearCache();
+                                      createjs.Tween.removeAllTweens();
+                                      $scope.stage.removeAllEventListeners();
+                                      $scope.stage.removeAllChildren();
+                                      if ($rootScope.book.bookTemplate === "groups") {
+                                        $state.go("lesson", {}, {reload: true});
+                                      } else {
+                                        $state.go("lessonNew", {}, {reload: true});
+                                      }
 
-                                  $ionicHistory.nextViewOptions({
-                                    historyRoot: true,
-                                    disableBack: true
-                                  });
-                                  $ionicHistory.clearCache();
-                                  createjs.Tween.removeAllTweens();
-                                  $scope.stage.removeAllEventListeners();
-                                  $scope.stage.removeAllChildren();
-                                  if ($rootScope.book.bookTemplate === "groups") {
-                                    $state.go("lesson", {}, {reload: true});
-                                  } else {
-                                    $state.go("lessonNew", {}, {reload: true});
-                                  }
+                                    })
+                                    .error(function (error) {
+                                      console.error("Error on getting json for the selected lesson...", error);
+                                      showDownloadingError(lesson);
+                                    });
                                 } else {
                                   showDownloadingError(lesson);
                                 }

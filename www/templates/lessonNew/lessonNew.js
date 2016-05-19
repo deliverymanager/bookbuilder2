@@ -210,10 +210,8 @@ angular.module("bookbuilder2")
         /*********************************************** GETTING JSON FOR THE SELECTED LESSON ***********************************************/
           //Getting the right lesson json
         console.log($rootScope.selectedLessonId);
-        var lessonResourceUrl = $rootScope.rootDir + 'data/lessons/' + $rootScope.selectedLessonId + "/lesson.json";
-        console.log("URL for selected lesson's json: ", lessonResourceUrl);
 
-        $http.get(lessonResourceUrl)
+        $http.get($rootScope.rootDir + 'data/lessons/' + $rootScope.selectedLessonId + "/lesson.json")
           .success(function (response) {
             console.log("Success on getting json for the selected lesson! ---> ", response);
 
