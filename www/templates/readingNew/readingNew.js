@@ -284,6 +284,7 @@ angular.module("bookbuilder2")
 
           _.each($scope.activityData.slides, function (slide, key, list) {
 
+            console.log("loading slide", slide);
             parallelFunctions.push(function (parallelCallback) {
 
               var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({

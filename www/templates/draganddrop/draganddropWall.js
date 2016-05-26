@@ -295,10 +295,6 @@ angular.module("bookbuilder2")
                   $scope.questionTextBackgroundsContainers[key].height = $scope.questionTextBackground.image.height;
                   $scope.questionTextBackgroundsContainers[key].width = $scope.questionsContainer.width;
                   $scope.questionTextBackgroundsContainers[key].y = key * 81;
-                  /*var questionTextBackgroundsContainersGraphics = new createjs.Graphics().beginFill("black").drawRect(0, 0, $scope.questionTextBackgroundsContainers[key].width, $scope.questionTextBackgroundsContainers[key].height);
-                   var questionTextBackgroundsContainersBackground = new createjs.Shape(questionTextBackgroundsContainersGraphics);
-                   questionTextBackgroundsContainersBackground.alpha = 0.5;
-                   $scope.questionTextBackgroundsContainers[key].addChild(questionTextBackgroundsContainersBackground);*/
                   $scope.questionTextBackgroundsContainers[key].addChild($scope.questionTextBackground);
 
 
@@ -331,7 +327,7 @@ angular.module("bookbuilder2")
                   $scope.questionText[key] = new createjs.Text("", "20px Arial", "white");
                   $scope.questionText[key].x = $scope.questionRowContainers[key].width / 2;
                   $scope.questionText[key].y = $scope.questionRowContainers[key].height / 3;
-                  $scope.questionText[key].maxWidth = $scope.questionRowContainers[key].width;
+                  $scope.questionText[key].maxWidth = $scope.questionRowContainers[key].width - 20;
                   $scope.questionText[key].textAlign = "center";
                   $scope.questionText[key].startingPointX = $scope.questionImages[key].x;
                   $scope.questionText[key].startingPointY = $scope.questionImages[key].y;

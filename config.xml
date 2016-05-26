@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="gr.dwhite.enGrEnglish1" version="3.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>I Like English 1</name>
+<widget id="gr.dwhite.enGrEnglish2" version="3.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>I Like English 2</name>
   <description>
-    I Like English 1
+    I Like English 2
   </description>
   <author email="apps@dwhite.gr" href="http://dwhite.gr">
     www.dwhite.gr

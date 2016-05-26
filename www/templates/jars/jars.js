@@ -192,18 +192,6 @@ angular.module("bookbuilder2")
           $scope.activityData = JSON.parse(window.localStorage.getItem(activityNameInLocalStorage));
           console.log("Getting activityData from local storage: ", $scope.activityData);
 
-          /*Adding page title and description*/
-          $scope.pageTitle = new createjs.Text($scope.activityData.title, "18px Arial", "white");
-          $scope.pageTitle.x = 85;
-          $scope.pageTitle.y = 610;
-          $scope.mainContainer.addChild($scope.pageTitle);
-
-          /*Adding page title and description*/
-          $scope.pageDescription = new createjs.Text($scope.activityData.description, "18px Arial", "white");
-          $scope.pageDescription.x = 120;
-          $scope.pageDescription.y = 630;
-          $scope.mainContainer.addChild($scope.pageDescription);
-
           console.log("Word's groups: ", $scope.activityData.wordsGroups);
           console.warn("Starting init()...");
           init();
@@ -248,6 +236,18 @@ angular.module("bookbuilder2")
 
         /*Function init() that initializes everything*/
         function init() {
+
+          /*Adding page title and description*/
+          $scope.pageTitle = new createjs.Text($scope.activityData.title, "18px Arial", "white");
+          $scope.pageTitle.x = 85;
+          $scope.pageTitle.y = 610;
+          $scope.mainContainer.addChild($scope.pageTitle);
+
+          /*Adding page title and description*/
+          $scope.pageDescription = new createjs.Text($scope.activityData.description, "18px Arial", "white");
+          $scope.pageDescription.x = 120;
+          $scope.pageDescription.y = 630;
+          $scope.mainContainer.addChild($scope.pageDescription);
 
           //INITIALIZATIONS
           $scope.wordsContainers = {};
@@ -377,35 +377,39 @@ angular.module("bookbuilder2")
             function (initWaterfallCallback) {
 
               //Creating text for the first jar
-              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 0})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[0], "40px Arial", "white");
+              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 0})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[0], "30px Arial", "white");
               $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 0})].x = $scope.jars[_.findKey($scope.jars, {"jarIndex": 0})].x + 80;
               $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 0})].y = $scope.jars[_.findKey($scope.jars, {"jarIndex": 0})].y + 10;
               $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 0})].textAlign = "center";
+              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 0})].maxWidth = 120;
               $scope.mainContainer.addChild($scope.jarsText[_.findKey($scope.jars, {"jarIndex": 0})]);
 
               //Creating text for the second jar
-              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[1], "40px Arial", "white");
+              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[1], "30px Arial", "white");
               $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})].x = $scope.jars[_.findKey($scope.jars, {"jarIndex": 1})].x + 80;
               $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})].y = $scope.jars[_.findKey($scope.jars, {"jarIndex": 1})].y + 10;
               $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})].textAlign = "center";
+              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})].maxWidth = 120;
               $scope.mainContainer.addChild($scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})]);
 
               if (_.keys($scope.activityData.wordsGroups).length === 3) {
 
                 //Creating text for the third jar
-                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[2], "40px Arial", "white");
+                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[2], "30px Arial", "white");
                 $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})].x = $scope.jars[_.findKey($scope.jars, {"jarIndex": 2})].x + 80;
                 $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})].y = $scope.jars[_.findKey($scope.jars, {"jarIndex": 2})].y + 10;
                 $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})].textAlign = "center";
+                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})].maxWidth = 120;
                 $scope.mainContainer.addChild($scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})]);
 
               } else if (_.keys($scope.activityData.wordsGroups).length === 4) {
 
                 //Creating text for the fourth jar
-                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[3], "40px Arial", "white");
+                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[3], "30px Arial", "white");
                 $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].x = $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].x + 80;
                 $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].y = $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].y + 10;
                 $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].textAlign = "center";
+                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].maxWidth = 120;
                 $scope.mainContainer.addChild($scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})]);
               }
               initWaterfallCallback(null);
@@ -605,9 +609,6 @@ angular.module("bookbuilder2")
                     return;
                   }
 
-                  if (window.cordova && window.cordova.platformId !== "browser") {
-                    $scope.sounds["drag"].play();
-                  }
                   var global = $scope.mainContainer.localToGlobal(this.x, this.y);
 
                   this.offset = {
@@ -638,10 +639,6 @@ angular.module("bookbuilder2")
                   if ($scope.activityData.completed) {
                     console.warn("Activity completed cannot move!");
                     return;
-                  }
-
-                  if (window.cordova && window.cordova.platformId !== "browser") {
-                    $scope.sounds["drop"].play();
                   }
 
                   var collisionDetectedQuestion = collision(evt.stageX / scale - $scope.mainContainer.x / scale, evt.stageY / scale - $scope.mainContainer.y / scale);

@@ -29,7 +29,7 @@ angular.module("bookbuilder2")
           if (window.cordova && window.cordova.platformId !== "browser") {
             $rootScope.rootDir = window.cordova.file.dataDirectory;
           } else {
-            $rootScope.rootDir = "http://" + "enGrEnglish1" + ".s3-website-eu-west-1.amazonaws.com/";
+            $rootScope.rootDir = "http://" + "enGrEnglish2" + ".s3-website-eu-west-1.amazonaws.com/";
           }
           $rootScope.book = JSON.parse(window.localStorage.getItem("book"));
           $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
@@ -40,7 +40,7 @@ angular.module("bookbuilder2")
           $rootScope.scale = window.localStorage.getItem("scale");
           $rootScope.book = JSON.parse(window.localStorage.getItem("book"));
           $rootScope.ratio = window.localStorage.getItem("ratio");
-          
+
           $rootScope.backgroundView = {
             "background": "url(" + $rootScope.rootDir + "data/assets/lesson_background_image.png) no-repeat center top",
             "-webkit-background-size": "cover",

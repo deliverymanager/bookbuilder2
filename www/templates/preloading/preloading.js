@@ -21,8 +21,10 @@ angular.module("bookbuilder2")
             var TempGroup = name.split(".");
 
             window.cordova.getAppVersion.getVersionNumber(function (versionNumber) {
-              console.log(versionNumber);
-              if (window.localStorage.getItem("versionNumber")) {
+              console.log("config.xml", versionNumber);
+              var savedVersionNumber = window.localStorage.getItem("versionNumber");
+              if (savedVersionNumber && (savedVersionNumber.split(".")[0] + "_" + savedVersionNumber.split(".")[1] ) === (versionNumber.split(".")[0] + "_" + versionNumber.split(".")[1])) {
+                console.log("savedVersionNumber", savedVersionNumber);
                 $rootScope.versionNumber = window.localStorage.getItem("versionNumber");
               } else {
                 window.localStorage.setItem("versionNumber", versionNumber);
@@ -263,7 +265,7 @@ angular.module("bookbuilder2")
 
 
       } else {
-        $rootScope.rootDir = "http://" + "enGrEnglish1" + ".s3-website-eu-west-1.amazonaws.com/";
+        $rootScope.rootDir = "http://" + "enGrEnglish2" + ".s3-website-eu-west-1.amazonaws.com/";
         /*$state.go("groups");*/
         $ionicHistory.nextViewOptions({
           historyRoot: true,
