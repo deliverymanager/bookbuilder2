@@ -1,9 +1,49 @@
 angular.module("bookbuilder2")
-  .controller("ReadingController", function ($scope, $interval, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory) {
+  .controller("ReadingController", function ($scope, $interval, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory) {
 
     console.log("ReadingController loaded!");
 
-    $timeout(function () {
+    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
+    $scope.rootDir = window.localStorage.getItem("rootDir");
+    $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+    $scope.activityFolder = window.localStorage.getItem("activityFolder");
+
+    $scope.backgroundView = {
+      "background": "url(" + $scope.rootDir + "data/assets/lesson_background_image.png) no-repeat center top",
+      "-webkit-background-size": "cover",
+      "-moz-background-size": "cover",
+      "background-size": "cover"
+    };
+
+
+    $ionicPlatform.on('pause', function () {
+      console.log('pause');
+      createjs.Ticker.framerate = 0;
+      ionic.Platform.exitApp();
+    });
+    $ionicPlatform.on('resume', function () {
+      createjs.Ticker.framerate = 10;
+    });
+
+    $scope.$on('$destroy', function () {
+      createjs.Ticker.removeEventListener("tick", handleTick);
+      createjs.Tween.removeAllTweens();
+      $timeout.cancel(timeout);
+      $ionicHistory.clearHistory();
+      $ionicHistory.clearCache();
+      $scope.stage.removeAllEventListeners();
+      $scope.stage.removeAllChildren();
+      $scope.stage = null;
+    });
+
+    var handleTick = function () {
+      if ($scope.stage) {
+        $scope.stage.update();
+      }
+    };
+
+
+    var timeout = $timeout(function () {
 
       var PIXEL_RATIO = (function () {
         var ctx = document.getElementById("canvas").getContext("2d"),
@@ -36,28 +76,16 @@ angular.module("bookbuilder2")
       $scope.stage.mouseMoveOutside = false;
 
       createjs.Ticker.framerate = 20;
-      var handleTick = function () {
-        $scope.stage.update();
-      };
       createjs.Ticker.addEventListener("tick", handleTick);
-
-      $ionicPlatform.on('pause', function () {
-        console.log('pause');
-        createjs.Ticker.framerate = 0;
-        ionic.Platform.exitApp();
-      });
-      $ionicPlatform.on('resume', function () {
-        createjs.Ticker.framerate = 20;
-      });
 
       /*Image Loader*/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-        src: $rootScope.rootDir + "data/assets/reading_background_image_blue.png"
+        src: $scope.rootDir + "data/assets/reading_background_image_blue.png"
       }));
       imageLoader.load();
 
       $scope.currentPage = 1;
-      var activityNameInLocalStorage = $rootScope.selectedLesson.id + "_reading";
+      var activityNameInLocalStorage = $scope.selectedLesson.id + "_reading";
 
       /*IMAGE LOADER COMPLETED*/
       imageLoader.on("complete", function (r) {
@@ -65,25 +93,25 @@ angular.module("bookbuilder2")
         console.log("Image Loaded...");
 
         /*Creating Bitmap Background for Canvas*/
-        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/reading_background_image_blue.png");
+        var background = new createjs.Bitmap($scope.rootDir + "data/assets/reading_background_image_blue.png");
 
         /**** CALCULATING SCALING ****/
         var scaleY = $scope.stage.canvas.height / background.image.height;
         scaleY = scaleY.toFixed(2);
         var scaleX = $scope.stage.canvas.width / background.image.width;
         scaleX = scaleX.toFixed(2);
-        var scale = 1;
+        $scope.scale = 1;
         if (scaleX >= scaleY) {
-          scale = scaleY;
+          $scope.scale = scaleY;
         } else {
-          scale = scaleX;
+          $scope.scale = scaleX;
         }
-        console.log("GENERAL SCALING FACTOR", scale);
+        console.log("GENERAL SCALING FACTOR", $scope.scale);
         //IN ORDER TO FIND THE CORRECT COORDINATES FIRST WE NEED TO ENTER THE EXACT SAME DIMENSIONS IN THE EMULATOR OF THE BACKGROUND IMAGE
 
 
-        background.scaleX = scale;
-        background.scaleY = scale;
+        background.scaleX = $scope.scale;
+        background.scaleY = $scope.scale;
         background.regX = background.image.width / 2;
         background.regY = background.image.height / 2;
         background.x = $scope.stage.canvas.width / 2;
@@ -91,13 +119,13 @@ angular.module("bookbuilder2")
         $scope.stage.addChild(background);
         var backgroundPosition = background.getTransformedBounds();
 
-        $http.get($rootScope.rootDir + "data/assets/reading_play_button_sprite.json")
+        $http.get($scope.rootDir + "data/assets/reading_play_button_sprite.json")
           .success(function (response) {
 
             $scope.playing = false;
 
             //Reassigning images with the rest of resource
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+            response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
             var buttonPlaySpriteSheet = new createjs.SpriteSheet(response);
             $scope.playButton = new createjs.Sprite(buttonPlaySpriteSheet, "playNormal");
 
@@ -131,7 +159,7 @@ angular.module("bookbuilder2")
               $scope.stage.update();
             });
 
-            $scope.playButton.scaleX = $scope.playButton.scaleY = scale;
+            $scope.playButton.scaleX = $scope.playButton.scaleY = $scope.scale;
             $scope.playButton.x = backgroundPosition.x + (backgroundPosition.width / 1.13);
             $scope.playButton.y = backgroundPosition.y + (backgroundPosition.height / 1.09);
             $scope.stage.addChild($scope.playButton);
@@ -141,11 +169,11 @@ angular.module("bookbuilder2")
           });//end of get menu button
 
 
-        $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
+        $http.get($scope.rootDir + "data/assets/head_menu_button_sprite.json")
           .success(function (response) {
 
             //Reassigning images with the rest of resource
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+            response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
 
             var menuButtonSpriteSheet = new createjs.SpriteSheet(response);
             var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
@@ -167,16 +195,10 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
-
-              $ionicHistory.clearCache();
-              createjs.Tween.removeAllTweens();
-              $scope.stage.removeAllEventListeners();
-              $scope.stage.removeAllChildren();
-
               $state.go("lesson", {}, {reload: true});
             });
 
-            menuButton.scaleX = menuButton.scaleY = scale;
+            menuButton.scaleX = menuButton.scaleY = $scope.scale;
             menuButton.x = 0;
             menuButton.y = -menuButton.getTransformedBounds().height / 5;
             $scope.stage.addChild(menuButton);
@@ -187,11 +209,11 @@ angular.module("bookbuilder2")
 
 
         var init = function () {
-          console.log("Title: ", $rootScope.selectedLesson.title);
-          var title = new createjs.Text($rootScope.selectedLesson.title, "27px Arial", "white");
+          console.log("Title: ", $scope.selectedLesson.title);
+          var title = new createjs.Text($scope.selectedLesson.title, "27px Arial", "white");
 
-          /*background.scaleX = background.scaleY = scale;*/
-          title.scaleX = title.scaleY = scale;
+          /*background.scaleX = background.scaleY = $scope.scale;*/
+          title.scaleX = title.scaleY = $scope.scale;
           title.x = backgroundPosition.x + (backgroundPosition.width / 10);
           title.y = backgroundPosition.y + (backgroundPosition.height / 17);
           title.textBaseline = "alphabetic";
@@ -203,15 +225,15 @@ angular.module("bookbuilder2")
           _.each($scope.activityData.CuePoint, function (page, key, list) {
 
             $scope.pageImageLoader["reading_book_" + (key + 1)] = new createjs.ImageLoader(new createjs.LoadItem().set({
-              src: $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/reading/reading_book_" + (key + 1) + ".png"
+              src: $scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/reading/reading_book_" + (key + 1) + ".png"
             }));
 
             $scope.pageImageLoader["reading_book_" + (key + 1)].load();
 
             $scope.pageImageLoader["reading_book_" + (key + 1)].on("complete", function (r) {
-              $scope.pages["reading_book_" + (key + 1)] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/reading/reading_book_" + (key + 1) + ".png");
+              $scope.pages["reading_book_" + (key + 1)] = new createjs.Bitmap($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/reading/reading_book_" + (key + 1) + ".png");
 
-              $scope.pages["reading_book_" + (key + 1)].scaleX = $scope.pages["reading_book_" + (key + 1)].scaleY = scale;
+              $scope.pages["reading_book_" + (key + 1)].scaleX = $scope.pages["reading_book_" + (key + 1)].scaleY = $scope.scale;
               $scope.pages["reading_book_" + (key + 1)].x = backgroundPosition.x + (backgroundPosition.width / 7);
               $scope.pages["reading_book_" + (key + 1)].y = backgroundPosition.y + (backgroundPosition.height / 6.5);
 
@@ -225,7 +247,7 @@ angular.module("bookbuilder2")
           });
 
 
-          var assetPath = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/reading/";
+          var assetPath = $scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/reading/";
           if (ionic.Platform.isIOS() && window.cordova) {
             resolveLocalFileSystemURL(assetPath + "reading.mp3", function (entry) {
               console.log(entry);
@@ -275,7 +297,7 @@ angular.module("bookbuilder2")
 
         } else {
 
-          $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/reading/reading.json")
+          $http.get($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/reading/reading.json")
             .success(function (readingJson) {
 
               $scope.activityData = readingJson;

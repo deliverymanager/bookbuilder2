@@ -2,13 +2,52 @@ angular.module("bookbuilder2")
   .controller("MultipleSprayController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast) {
 
     console.log("MultipleSprayController loaded!");
-    TypicalFunctions.loadVariablesFromLocalStorage();
+    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
+    $scope.rootDir = window.localStorage.getItem("rootDir");
+    $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+    $scope.activityFolder = window.localStorage.getItem("activityFolder");
+    $scope.activityName = window.localStorage.getItem("activityName");
+
+    $scope.backgroundView = {
+      "background": "url(" + $scope.rootDir + "data/assets/lesson_background_image.png) no-repeat center top",
+      "-webkit-background-size": "cover",
+      "-moz-background-size": "cover",
+      "background-size": "cover"
+    };
+
+
+    $ionicPlatform.on('pause', function () {
+      console.log('pause');
+      createjs.Ticker.framerate = 0;
+      ionic.Platform.exitApp();
+    });
+    $ionicPlatform.on('resume', function () {
+      createjs.Ticker.framerate = 10;
+    });
+
+    $scope.$on('$destroy', function () {
+      createjs.Ticker.removeEventListener("tick", handleTick);
+      createjs.Tween.removeAllTweens();
+      $timeout.cancel(timeout);
+      $ionicHistory.clearHistory();
+      $ionicHistory.clearCache();
+      $scope.stage.removeAllEventListeners();
+      $scope.stage.removeAllChildren();
+      $scope.stage = null;
+    });
+
+    var handleTick = function () {
+      if ($scope.stage) {
+        $scope.stage.update();
+      }
+    };
+
 
     /*Name of activity in localStorage*/
-    var activityNameInLocalStorage = $rootScope.selectedLesson.id + "_" + $rootScope.activityFolder;
+    var activityNameInLocalStorage = $scope.selectedLesson.id + "_" + $scope.activityFolder;
     console.log("Name of activity in localStorage: ", activityNameInLocalStorage);
 
-    $timeout(function () {
+    var timeout = $timeout(function () {
 
       var PIXEL_RATIO = (function () {
         var ctx = document.getElementById("canvas").getContext("2d"),
@@ -41,50 +80,11 @@ angular.module("bookbuilder2")
       $scope.stage.mouseMoveOutside = false;
 
       createjs.Ticker.framerate = 20;
-      var handleTick = function () {
-        $scope.stage.update();
-      };
       createjs.Ticker.addEventListener("tick", handleTick);
 
-      $ionicPlatform.on('pause', function () {
-        console.log('pause');
-        createjs.Ticker.framerate = 0;
-        ionic.Platform.exitApp();
-      });
-      $ionicPlatform.on('resume', function () {
-        createjs.Ticker.framerate = 20;
-      });
-
-      $scope.sounds = {};
-      if (window.cordova && window.cordova.platformId !== "browser") {
-        _.each(["select", "check"], function (sound, key, list) {
-          if (ionic.Platform.isIOS() && window.cordova) {
-            console.log("Else iOS");
-            resolveLocalFileSystemURL($rootScope.rootDir + "data/assets/" + sound + ".mp3", function (entry) {
-              $scope.sounds[sound] = new Media(entry.toInternalURL(), function () {
-                console.log("Sound success");
-              }, function (err) {
-                console.log("Sound error", err);
-              }, function (status) {
-                console.log("Sound status", status);
-              });
-            });
-          } else {
-            console.log("Else Android");
-            $scope.sounds[sound] = new Media($rootScope.rootDir + "data/assets/" + sound + ".mp3", function () {
-              console.log("Sound success");
-            }, function (err) {
-              console.log("Sound error", err);
-            }, function (status) {
-              console.log("Sound status", status);
-            });
-          }
-        });
-
-      }
       /*Image Loader*/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-        src: $rootScope.rootDir + "data/assets/spray_background_image.png"
+        src: $scope.rootDir + "data/assets/spray_background_image.png"
       }));
 
       imageLoader.load();
@@ -95,23 +95,23 @@ angular.module("bookbuilder2")
         console.log("Image Loaded...");
 
         /*Creating Bitmap Background for Canvas*/
-        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/spray_background_image.png");
+        var background = new createjs.Bitmap($scope.rootDir + "data/assets/spray_background_image.png");
 
         /**** CALCULATING SCALING ****/
         var scaleY = $scope.stage.canvas.height / background.image.height;
         scaleY = scaleY.toFixed(2);
         var scaleX = $scope.stage.canvas.width / background.image.width;
         scaleX = scaleX.toFixed(2);
-        var scale = 1;
+        $scope.scale = 1;
         if (scaleX >= scaleY) {
-          scale = scaleY;
+          $scope.scale = scaleY;
         } else {
-          scale = scaleX;
+          $scope.scale = scaleX;
         }
-        console.log("GENERAL SCALING FACTOR", scale);
+        console.log("GENERAL SCALING FACTOR", $scope.scale);
 
-        background.scaleX = scale;
-        background.scaleY = scale;
+        background.scaleX = $scope.scale;
+        background.scaleY = $scope.scale;
         background.regX = background.image.width / 2;
         background.regY = background.image.height / 2;
         background.x = $scope.stage.canvas.width / 2;
@@ -131,7 +131,7 @@ angular.module("bookbuilder2")
 
               loadingBitmaps.push(function (seriesCallback) {
                 var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                  src: $rootScope.rootDir + "data/assets/" + file
+                  src: $scope.rootDir + "data/assets/" + file
                 }));
 
                 imageLoader.load();
@@ -156,7 +156,7 @@ angular.module("bookbuilder2")
               console.log("$scope.activityData from local Storage: ", $scope.activityData);
               callback();
             } else {
-              $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/" + $rootScope.activityFolder + "/multiple.json")
+              $http.get($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/" + $scope.activityFolder + "/multiple.json")
                 .success(function (response) {
                   /*Adding the userAnswer attribute to response object before assigning it to $scope.activityData*/
                   _.each(response.questions, function (question, key, value) {
@@ -176,7 +176,7 @@ angular.module("bookbuilder2")
           }, function (callback) {
 
             $scope.scoreText = new createjs.Text("Score: " + "0" + " / " + $scope.activityData.questions.length, "27px Arial", "white");
-            $scope.scoreText.scaleX = $scope.scoreText.scaleY = scale;
+            $scope.scoreText.scaleX = $scope.scoreText.scaleY = $scope.scale;
             $scope.scoreText.x = backgroundPosition.x + (backgroundPosition.width / 1.3);
             $scope.scoreText.y = backgroundPosition.y + (backgroundPosition.height / 22.5);
             $scope.scoreText.textBaseline = "alphabetic";
@@ -186,9 +186,9 @@ angular.module("bookbuilder2")
             $scope.stage.addChild($scope.scoreText);
 
             /*RESTART BUTTON*/
-            $http.get($rootScope.rootDir + "data/assets/restart_button_drag_and_drop_sprite.json")
+            $http.get($scope.rootDir + "data/assets/restart_button_drag_and_drop_sprite.json")
               .success(function (response) {
-                response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                 var returnButtonSpriteSheet = new createjs.SpriteSheet(response);
                 var returnButton = new createjs.Sprite(returnButtonSpriteSheet, "normal");
                 returnButton.addEventListener("mousedown", function (event) {
@@ -203,7 +203,7 @@ angular.module("bookbuilder2")
                   $scope.stage.update();
                   restart();
                 });
-                returnButton.scaleX = returnButton.scaleY = scale;
+                returnButton.scaleX = returnButton.scaleY = $scope.scale;
                 returnButton.x = backgroundPosition.x + (backgroundPosition.width / 2);
                 returnButton.y = backgroundPosition.y + (backgroundPosition.height / 1.070);
                 $scope.stage.addChild(returnButton);
@@ -217,9 +217,9 @@ angular.module("bookbuilder2")
 
             console.log("Waterfall loading next button");
 
-            $http.get($rootScope.rootDir + "data/assets/next_activity_drag_and_drop_sprite.json")
+            $http.get($scope.rootDir + "data/assets/next_activity_drag_and_drop_sprite.json")
               .success(function (response) {
-                response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                 var nextButtonSpriteSheet = new createjs.SpriteSheet(response);
                 $scope.nextButton = new createjs.Sprite(nextButtonSpriteSheet, "normal");
                 $scope.nextButton.alpha = 0.5;
@@ -235,10 +235,10 @@ angular.module("bookbuilder2")
                   if ($scope.activityData.completed) {
                     $scope.nextButton.gotoAndPlay("normal");
                     $scope.stage.update();
-                    TypicalFunctions.nextActivity();
+                    TypicalFunctions.nextActivity($scope.selectedLesson, $scope.activityFolder);
                   }
                 });
-                $scope.nextButton.scaleX = $scope.nextButton.scaleY = scale;
+                $scope.nextButton.scaleX = $scope.nextButton.scaleY = $scope.scale;
                 $scope.nextButton.x = backgroundPosition.x + (backgroundPosition.width / 1.18);
                 $scope.nextButton.y = backgroundPosition.y + (backgroundPosition.height / 1.05);
                 $scope.stage.addChild($scope.nextButton);
@@ -253,9 +253,9 @@ angular.module("bookbuilder2")
             /*CHECK BUTTON*/
             console.log("Waterfall loading check button");
 
-            $http.get($rootScope.rootDir + "data/assets/check_answers_drag_and_drop_sprite.json")
+            $http.get($scope.rootDir + "data/assets/check_answers_drag_and_drop_sprite.json")
               .success(function (response) {
-                response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                 var checkButtonSpriteSheet = new createjs.SpriteSheet(response);
                 $scope.checkButton = new createjs.Sprite(checkButtonSpriteSheet, "normal");
                 if (!$scope.activityData.completed) {
@@ -276,13 +276,10 @@ angular.module("bookbuilder2")
                   if (!$scope.activityData.completed) {
                     $scope.checkButton.gotoAndPlay("normal");
                     $scope.stage.update();
-                    if (window.cordova && window.cordova.platformId !== "browser") {
-                      $scope.sounds["check"].play();
-                    }
                     check();
                   }
                 });
-                $scope.checkButton.scaleX = $scope.checkButton.scaleY = scale;
+                $scope.checkButton.scaleX = $scope.checkButton.scaleY = $scope.scale;
                 $scope.checkButton.x = backgroundPosition.x + (backgroundPosition.width / 1.7);
                 $scope.checkButton.y = backgroundPosition.y + (backgroundPosition.height / 1.095);
                 $scope.stage.addChild($scope.checkButton);
@@ -295,10 +292,10 @@ angular.module("bookbuilder2")
               });
           }, function (callback) {
 
-            $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
+            $http.get($scope.rootDir + "data/assets/head_menu_button_sprite.json")
               .success(function (response) {
 
-                response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                 var menuButtonSpriteSheet = new createjs.SpriteSheet(response);
                 var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
 
@@ -310,23 +307,15 @@ angular.module("bookbuilder2")
                 menuButton.addEventListener("pressup", function (event) {
                   menuButton.gotoAndPlay("normal");
                   $scope.stage.update();
-                  _.each($scope.sounds, function (sound, key, list) {
-                    $scope.sounds[key].stop();
-                    $scope.sounds[key].release();
-                  });
                   $ionicHistory.nextViewOptions({
                     historyRoot: true,
                     disableBack: true
                   });
 
-                  $ionicHistory.clearCache();
-                  createjs.Tween.removeAllTweens();
-                  $scope.stage.removeAllEventListeners();
-                  $scope.stage.removeAllChildren();
                   $state.go("lessonNew", {}, {reload: true});
                 });
 
-                menuButton.scaleX = menuButton.scaleY = scale;
+                menuButton.scaleX = menuButton.scaleY = $scope.scale;
                 menuButton.x = 0;
                 menuButton.y = -menuButton.getTransformedBounds().height / 5;
 
@@ -343,7 +332,7 @@ angular.module("bookbuilder2")
             console.log("Waterfall loading title");
 
             var title = new createjs.Text($scope.activityData.title, "24px Arial", "white");
-            title.scaleX = title.scaleY = scale;
+            title.scaleX = title.scaleY = $scope.scale;
             title.x = backgroundPosition.x + (backgroundPosition.width / 8);
             title.y = backgroundPosition.y + (backgroundPosition.height / 23);
             title.textBaseline = "alphabetic";
@@ -354,9 +343,9 @@ angular.module("bookbuilder2")
 
             console.log("Waterfall loading activity name");
 
-            var lessonTitle = new createjs.Text($rootScope.activityName, "24px Arial", "white");
-            lessonTitle.scaleX = lessonTitle.scaleY = scale;
-            lessonTitle.x = backgroundPosition.x + (backgroundPosition.width /5.9);
+            var lessonTitle = new createjs.Text($scope.activityName, "24px Arial", "white");
+            lessonTitle.scaleX = lessonTitle.scaleY = $scope.scale;
+            lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 5.9);
             lessonTitle.y = backgroundPosition.y + (backgroundPosition.height / 1.055);
             lessonTitle.textBaseline = "alphabetic";
             lessonTitle.textAlign = "center";
@@ -368,7 +357,7 @@ angular.module("bookbuilder2")
             console.log("Waterfall loading description");
 
             var descriptionText = new createjs.Text($scope.activityData.description, "18px Arial", "white");
-            descriptionText.scaleX = descriptionText.scaleY = scale;
+            descriptionText.scaleX = descriptionText.scaleY = $scope.scale;
             descriptionText.x = backgroundPosition.x + (backgroundPosition.width / 11.5);
             descriptionText.y = backgroundPosition.y + (backgroundPosition.height / 1.025);
             descriptionText.textBaseline = "alphabetic";
@@ -381,12 +370,12 @@ angular.module("bookbuilder2")
             $scope.questionsContainer = new createjs.Container();
             $scope.questionsContainer.width = background.image.width / 1.1;
             $scope.questionsContainer.height = background.image.height / 3;
-            $scope.questionsContainer.scaleX = $scope.questionsContainer.scaleY = scale;
+            $scope.questionsContainer.scaleX = $scope.questionsContainer.scaleY = $scope.scale;
             $scope.questionsContainer.x = backgroundPosition.x + (backgroundPosition.height / 22);
             $scope.questionsContainer.y = -1500;
             $scope.stage.addChild($scope.questionsContainer);
 
-            var questionBackground = new createjs.Bitmap($rootScope.rootDir + "data/assets/spray_choice_text_bubble.png");
+            var questionBackground = new createjs.Bitmap($scope.rootDir + "data/assets/spray_choice_text_bubble.png");
             //questionBackground.regY = questionBackground.image.height / 2;
             //questionBackground.regX = questionBackground.image.width / 2;
             questionBackground.x = 40;
@@ -416,7 +405,7 @@ angular.module("bookbuilder2")
             $scope.answersContainer = new createjs.Container();
             $scope.answersContainer.width = background.image.width / 1.1;
             $scope.answersContainer.height = background.image.height / 3.2;
-            $scope.answersContainer.scaleX = $scope.answersContainer.scaleY = scale;
+            $scope.answersContainer.scaleX = $scope.answersContainer.scaleY = $scope.scale;
             $scope.answersContainer.x = backgroundPosition.x + (backgroundPosition.width / 22);
             $scope.answersContainer.y = +1500;
             $scope.stage.addChild($scope.answersContainer);
@@ -462,10 +451,10 @@ angular.module("bookbuilder2")
             $scope.buttonContainers["onlyCChoice"].visible = false;
             $scope.answersContainer.addChild($scope.buttonContainers["onlyCChoice"]);
 
-            $http.get($rootScope.rootDir + "data/assets/spray_choice_button_sprite.json")
+            $http.get($scope.rootDir + "data/assets/spray_choice_button_sprite.json")
               .success(function (response) {
 
-                response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
 
                 var answerButtonSpriteSheet = new createjs.SpriteSheet(response);
 
@@ -498,9 +487,6 @@ angular.module("bookbuilder2")
                 $scope.buttonChoices["aChoice"].addEventListener("pressup", function (event) {
                   console.log("answerAButton fires pressup event!");
                   if (!$scope.activityData.completed) {
-                    if (window.cordova && window.cordova.platformId !== "browser") {
-                      $scope.sounds["select"].play();
-                    }
                     selectChoice("aChoice");
                   }
                 });
@@ -532,9 +518,6 @@ angular.module("bookbuilder2")
                   console.log("answerBButton fires pressup event!");
                   if (!$scope.activityData.completed) {
 
-                    if (window.cordova && window.cordova.platformId !== "browser") {
-                      $scope.sounds["select"].play();
-                    }
                     selectChoice("bChoice");
                   }
                 });
@@ -566,9 +549,6 @@ angular.module("bookbuilder2")
                 $scope.buttonChoices["cChoice"].addEventListener("pressup", function (event) {
                   console.log("answerCButton fires pressup event!");
                   if (!$scope.activityData.completed) {
-                    if (window.cordova && window.cordova.platformId !== "browser") {
-                      $scope.sounds["select"].play();
-                    }
                     selectChoice("cChoice");
                   }
                 });
@@ -599,9 +579,6 @@ angular.module("bookbuilder2")
                 $scope.buttonChoices["dChoice"].addEventListener("pressup", function (event) {
                   console.log("answerDButton fires pressup event!");
                   if (!$scope.activityData.completed) {
-                    if (window.cordova && window.cordova.platformId !== "browser") {
-                      $scope.sounds["select"].play();
-                    }
                     selectChoice("dChoice");
                   }
                 });
@@ -634,9 +611,6 @@ angular.module("bookbuilder2")
                 $scope.buttonChoices["onlyCChoice"].addEventListener("pressup", function (event) {
                   console.log("answerOnlyCContainer fires pressup event!");
                   if (!$scope.activityData.completed) {
-                    if (window.cordova && window.cordova.platformId !== "browser") {
-                      $scope.sounds["select"].play();
-                    }
                     selectChoice("onlyCChoice");
                   }
                 });
@@ -648,12 +622,12 @@ angular.module("bookbuilder2")
             $scope.navigatorContainer = new createjs.Container();
             $scope.navigatorContainer.width = background.image.width / 1.1;
             $scope.navigatorContainer.height = background.image.height / 8;
-            $scope.navigatorContainer.scaleX = $scope.navigatorContainer.scaleY = scale;
+            $scope.navigatorContainer.scaleX = $scope.navigatorContainer.scaleY = $scope.scale;
             $scope.navigatorContainer.x = backgroundPosition.x + (backgroundPosition.width / 22);
             $scope.navigatorContainer.y = backgroundPosition.y + (backgroundPosition.height / 1.28);
             $scope.stage.addChild($scope.navigatorContainer);
 
-            var yellowBar = new createjs.Bitmap($rootScope.rootDir + "data/assets/lesson_yellow_line.png");
+            var yellowBar = new createjs.Bitmap($scope.rootDir + "data/assets/lesson_yellow_line.png");
             yellowBar.scaleX = 1.15;
             //yellowBar.regX = yellowBar.image.width / 2;
             //yellowBar.regY = yellowBar.image.height / 2;
@@ -662,10 +636,10 @@ angular.module("bookbuilder2")
             $scope.navigatorContainer.addChild(yellowBar);
 
             /*Yellow bar button Sprite Button*/
-            $http.get($rootScope.rootDir + "data/assets/yellow_line_big_bubble.json")
+            $http.get($scope.rootDir + "data/assets/yellow_line_big_bubble.json")
               .success(function (response) {
 
-                response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                 var yellowBarButtonSpriteSheet = new createjs.SpriteSheet(response);
 
                 $scope.yellowBarContainers = {};
@@ -704,7 +678,7 @@ angular.module("bookbuilder2")
 
                       createjs.Tween.get($scope.answersContainer, {loop: false})
                         .to({
-                          y: +1000 * scale
+                          y: +1000 * $scope.scale
                         }, 300, createjs.Ease.getPowIn(2)).call(function () {
                         parallelCallback();
                       });
@@ -713,7 +687,7 @@ angular.module("bookbuilder2")
 
                       createjs.Tween.get($scope.questionsContainer, {loop: false})
                         .to({
-                          y: -1000 * scale
+                          y: -1000 * $scope.scale
                         }, 300, createjs.Ease.getPowIn(2)).call(function () {
                         parallelCallback();
                       });
@@ -847,12 +821,13 @@ angular.module("bookbuilder2")
           console.log("pretexts", pretexts.length);
           var currentPretexts = {};
           var textHeight = 40;
+          var initialMarginLeft = 25;
           _.each(pretexts, function (text, l, li) {
             if (!text) {
               text = " ";
             }
             currentPretexts[l] = new createjs.Text(text, "25px Arial", "black");
-            currentPretexts[l].x = 25;
+            currentPretexts[l].x = initialMarginLeft;
             currentPretexts[l].y = textHeight * l + 27;
             $scope.questionsTextContainer.addChild(currentPretexts[l]);
           });
@@ -879,7 +854,8 @@ angular.module("bookbuilder2")
                 text = " ";
               }
               currentMidtexts[l] = new createjs.Text(text, "25px Arial", "black");
-              currentMidtexts[l].y = pretexts.length * textHeight + textHeight * l;
+              currentMidtexts[l].x = initialMarginLeft;
+              currentMidtexts[l].y = pretexts.length * textHeight + textHeight * l + 15;
               console.log("currentMidtexts[l].y ", currentMidtexts[l].y);
               $scope.questionsTextContainer.addChild(currentMidtexts[l]);
             });
@@ -911,6 +887,7 @@ angular.module("bookbuilder2")
                 $scope.questionsTextContainer.addChild(currentPostexts[0]);
 
                 currentPostexts[1] = new createjs.Text(postexts[1], "25px Arial", "black");
+                currentPostexts[1].x = initialMarginLeft;
                 currentPostexts[1].y = currentPostexts[0].y + currentPostexts[0].getBounds().height;
                 $scope.questionsTextContainer.addChild(currentPostexts[1]);
               } else {
@@ -939,6 +916,7 @@ angular.module("bookbuilder2")
                 $scope.questionsTextContainer.addChild(currentPostexts[0]);
 
                 currentPostexts[1] = new createjs.Text(postexts[1], "25px Arial", "black");
+                currentPostexts[1].x = initialMarginLeft;
                 currentPostexts[1].y = currentPostexts[0].y + currentPostexts[0].getBounds().height;
                 $scope.questionsTextContainer.addChild(currentPostexts[1]);
               } else {

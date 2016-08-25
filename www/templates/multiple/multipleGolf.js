@@ -1,14 +1,52 @@
 angular.module("bookbuilder2")
-  .controller("MultipleGolfController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast) {
+  .controller("MultipleGolfController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory, Toast) {
 
     console.log("MultipleGolfController loaded!");
-    TypicalFunctions.loadVariablesFromLocalStorage();
+    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
+    $scope.rootDir = window.localStorage.getItem("rootDir");
+    $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+    $scope.activityFolder = window.localStorage.getItem("activityFolder");
+    $scope.activityName = window.localStorage.getItem("activityName");
+
+    $scope.backgroundView = {
+      "background": "url(" + $scope.rootDir + "data/assets/lesson_background_image.png) no-repeat center top",
+      "-webkit-background-size": "cover",
+      "-moz-background-size": "cover",
+      "background-size": "cover"
+    };
+
+
+    $ionicPlatform.on('pause', function () {
+      console.log('pause');
+      createjs.Ticker.framerate = 0;
+      ionic.Platform.exitApp();
+    });
+    $ionicPlatform.on('resume', function () {
+      createjs.Ticker.framerate = 10;
+    });
+
+    $scope.$on('$destroy', function () {
+      createjs.Ticker.removeEventListener("tick", handleTick);
+      createjs.Tween.removeAllTweens();
+      $timeout.cancel(timeout);
+      $ionicHistory.clearHistory();
+      $ionicHistory.clearCache();
+      $scope.stage.removeAllEventListeners();
+      $scope.stage.removeAllChildren();
+      $scope.stage = null;
+    });
+
+    var handleTick = function () {
+      if ($scope.stage) {
+        $scope.stage.update();
+      }
+    };
 
     /*Name of activity in localStorage*/
-    var activityNameInLocalStorage = $rootScope.selectedLesson.id + "_" + $rootScope.activityFolder;
+    var activityNameInLocalStorage = $scope.selectedLesson.id + "_" + $scope.activityFolder;
     console.log("Name of activity in localStorage: ", activityNameInLocalStorage);
 
-    $timeout(function () {
+    var timeout = $timeout(function () {
 
       var PIXEL_RATIO = (function () {
         var ctx = document.getElementById("canvas").getContext("2d"),
@@ -41,50 +79,11 @@ angular.module("bookbuilder2")
       $scope.stage.mouseMoveOutside = false;
 
       createjs.Ticker.framerate = 20;
-      var handleTick = function () {
-        $scope.stage.update();
-      };
       createjs.Ticker.addEventListener("tick", handleTick);
 
-      $ionicPlatform.on('pause', function () {
-        console.log('pause');
-        createjs.Ticker.framerate = 0;
-        ionic.Platform.exitApp();
-      });
-      $ionicPlatform.on('resume', function () {
-        createjs.Ticker.framerate = 20;
-      });
-
-      $scope.sounds = {};
-      if (window.cordova && window.cordova.platformId !== "browser") {
-        _.each(["select", "check"], function (sound, key, list) {
-          if (ionic.Platform.isIOS() && window.cordova) {
-            console.log("Else iOS");
-            resolveLocalFileSystemURL($rootScope.rootDir + "data/assets/" + sound + ".mp3", function (entry) {
-              $scope.sounds[sound] = new Media(entry.toInternalURL(), function () {
-                console.log("Sound success");
-              }, function (err) {
-                console.log("Sound error", err);
-              }, function (status) {
-                console.log("Sound status", status);
-              });
-            });
-          } else {
-            console.log("Else Android");
-            $scope.sounds[sound] = new Media($rootScope.rootDir + "data/assets/" + sound + ".mp3", function () {
-              console.log("Sound success");
-            }, function (err) {
-              console.log("Sound error", err);
-            }, function (status) {
-              console.log("Sound status", status);
-            });
-          }
-        });
-
-      }
       /*Image Loader*/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-        src: $rootScope.rootDir + "data/assets/golf_background_image.png"
+        src: $scope.rootDir + "data/assets/golf_background_image.png"
       }));
 
       imageLoader.load();
@@ -95,23 +94,23 @@ angular.module("bookbuilder2")
         console.log("Image Loaded...");
 
         /*Creating Bitmap Background for Canvas*/
-        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/golf_background_image.png");
+        var background = new createjs.Bitmap($scope.rootDir + "data/assets/golf_background_image.png");
 
         /**** CALCULATING SCALING ****/
         var scaleY = $scope.stage.canvas.height / background.image.height;
         scaleY = scaleY.toFixed(2);
         var scaleX = $scope.stage.canvas.width / background.image.width;
         scaleX = scaleX.toFixed(2);
-        var scale = 1;
+        $scope.scale = 1;
         if (scaleX >= scaleY) {
-          scale = scaleY;
+          $scope.scale = scaleY;
         } else {
-          scale = scaleX;
+          $scope.scale = scaleX;
         }
-        console.log("GENERAL SCALING FACTOR: ", scale);
+        console.log("GENERAL SCALING FACTOR: ", $scope.scale);
 
-        background.scaleX = scale;
-        background.scaleY = scale;
+        background.scaleX = $scope.scale;
+        background.scaleY = $scope.scale;
         background.regX = background.image.width / 2;
         background.regY = background.image.height / 2;
         background.x = $scope.stage.canvas.width / 2;
@@ -129,7 +128,7 @@ angular.module("bookbuilder2")
         $scope.mainContainer = new createjs.Container();
         $scope.mainContainer.width = background.image.width;
         $scope.mainContainer.height = background.image.height;
-        $scope.mainContainer.scaleX = $scope.mainContainer.scaleY = scale;
+        $scope.mainContainer.scaleX = $scope.mainContainer.scaleY = $scope.scale;
         $scope.mainContainer.x = backgroundPosition.x;
         $scope.mainContainer.y = backgroundPosition.y;
         $scope.stage.addChild($scope.mainContainer);
@@ -240,11 +239,11 @@ angular.module("bookbuilder2")
          $scope.resultsTotalContainer.addChild(resultsTotalContainerBackground);*/
 
 
-        $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
+        $http.get($scope.rootDir + "data/assets/head_menu_button_sprite.json")
           .success(function (response) {
 
             //Reassigning images with the rest of resource
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+            response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
 
             var menuButtonSpriteSheet = new createjs.SpriteSheet(response);
             var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
@@ -263,16 +262,10 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
-
-              $ionicHistory.clearCache();
-              createjs.Tween.removeAllTweens();
-              $scope.stage.removeAllEventListeners();
-              $scope.stage.removeAllChildren();
-
               $state.go("lessonNew", {}, {reload: true});
             });
 
-            menuButton.scaleX = menuButton.scaleY = scale;
+            menuButton.scaleX = menuButton.scaleY = $scope.scale;
             menuButton.x = 0;
             menuButton.y = -menuButton.getTransformedBounds().height / 5;
 
@@ -296,10 +289,10 @@ angular.module("bookbuilder2")
 
           console.log("There is no activity...Getting the json through get");
 
-          console.log("selectedLesson.id: ", $rootScope.selectedLesson.id);
-          console.log("activityFolder: ", $rootScope.activityFolder);
+          console.log("selectedLesson.id: ", $scope.selectedLesson.id);
+          console.log("activityFolder: ", $scope.activityFolder);
 
-          $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/" + $rootScope.activityFolder + "/multiple.json")
+          $http.get($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/" + $scope.activityFolder + "/multiple.json")
             .success(function (response) {
               console.log("Success on getting json for the url. The response object is: ", response);
 
@@ -337,14 +330,14 @@ angular.module("bookbuilder2")
 
                   /*Creating the questionTextBackground bitmap*/
                   var questionTextBackgroundImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                    src: $rootScope.rootDir + "data/assets/question_bubble_image.png"
+                    src: $scope.rootDir + "data/assets/question_bubble_image.png"
                   }));
                   questionTextBackgroundImageLoader.load();
 
                   questionTextBackgroundImageLoader.on("complete", function (r) {
 
                     /*Creating Bitmap Background for answerHolder background image*/
-                    $scope.questionBackground = new createjs.Bitmap($rootScope.rootDir + "data/assets/question_bubble_image.png");
+                    $scope.questionBackground = new createjs.Bitmap($scope.rootDir + "data/assets/question_bubble_image.png");
                     $scope.questionBackground.x = 0;
                     $scope.questionBackground.y = 0;
                     $scope.questionBackground.scaleX = $scope.questionBackground.scaleY = 0.75;
@@ -381,14 +374,14 @@ angular.module("bookbuilder2")
                 questionsAndAnswersParallelFunctions.push(function (questionsAndAnswersCallback) {
                   /*Creating the questionTextBackground bitmap*/
                   var answerABackgroundImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                    src: $rootScope.rootDir + "data/assets/soccer_a_choice.png"
+                    src: $scope.rootDir + "data/assets/soccer_a_choice.png"
                   }));
                   answerABackgroundImageLoader.load();
 
                   answerABackgroundImageLoader.on("complete", function (r) {
 
                     /*Creating Bitmap Background for answerHolder background image*/
-                    $scope.answerABackground = new createjs.Bitmap($rootScope.rootDir + "data/assets/golf_choice_button_blue.png");
+                    $scope.answerABackground = new createjs.Bitmap($scope.rootDir + "data/assets/golf_choice_button_blue.png");
                     $scope.answerABackground.x = 0;
                     $scope.answerABackground.y = 0;
                     $scope.answerABackground.addEventListener("mousedown", function (event) {
@@ -439,14 +432,14 @@ angular.module("bookbuilder2")
                 questionsAndAnswersParallelFunctions.push(function (questionsAndAnswersCallback) {
                   /*Creating the questionTextBackground bitmap*/
                   var answerBBackgroundImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                    src: $rootScope.rootDir + "data/assets/soccer_b_choice.png"
+                    src: $scope.rootDir + "data/assets/soccer_b_choice.png"
                   }));
                   answerBBackgroundImageLoader.load();
 
                   answerBBackgroundImageLoader.on("complete", function (r) {
 
                     /*Creating Bitmap Background for answerHolder background image*/
-                    $scope.answerBBackground = new createjs.Bitmap($rootScope.rootDir + "data/assets/golf_choice_button_green.png");
+                    $scope.answerBBackground = new createjs.Bitmap($scope.rootDir + "data/assets/golf_choice_button_green.png");
                     $scope.answerBBackground.x = 0;
                     $scope.answerBBackground.y = $scope.answersContainer.height / 3;
                     $scope.answerBBackground.addEventListener("mousedown", function (event) {
@@ -499,14 +492,14 @@ angular.module("bookbuilder2")
                   questionsAndAnswersParallelFunctions.push(function (questionsAndAnswersCallback) {
                     /*Creating the questionTextBackground bitmap*/
                     var answerCBackgroundImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                      src: $rootScope.rootDir + "data/assets/soccer_c_choice.png"
+                      src: $scope.rootDir + "data/assets/soccer_c_choice.png"
                     }));
                     answerCBackgroundImageLoader.load();
 
                     answerCBackgroundImageLoader.on("complete", function (r) {
 
                       /*Creating Bitmap Background for answerHolder background image*/
-                      $scope.answerCBackground = new createjs.Bitmap($rootScope.rootDir + "data/assets/soccer_c_choice.png");
+                      $scope.answerCBackground = new createjs.Bitmap($scope.rootDir + "data/assets/soccer_c_choice.png");
                       $scope.answerCBackground.x = 0;
                       $scope.answerCBackground.y = $scope.answersContainer.height / 1.5;
                       $scope.answerCBackground.scaleX = $scope.answerCBackground.scaleY = 0.45;
@@ -575,10 +568,10 @@ angular.module("bookbuilder2")
 
                 //parallel function for getting the soccer ball
                 createSoccerGameParallelFunctions.push(function (parallelCallback) {
-                  $http.get($rootScope.rootDir + "data/assets/golf_ball.json")
+                  $http.get($scope.rootDir + "data/assets/golf_ball.json")
                     .success(function (response) {
                       console.log("Success on getting json for soccer ball!");
-                      response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                      response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                       var golfBallSpriteSheet = new createjs.SpriteSheet(response);
                       $scope.golfBall = new createjs.Sprite(golfBallSpriteSheet, "normal");
                       /*$scope.golfBall.framerate = 100;*/
@@ -600,10 +593,10 @@ angular.module("bookbuilder2")
 
                 //parallel function for getting the golf player
                 createSoccerGameParallelFunctions.push(function (parallelCallback) {
-                  $http.get($rootScope.rootDir + "data/assets/golf_boy_striking_sprite.json")
+                  $http.get($scope.rootDir + "data/assets/golf_boy_striking_sprite.json")
                     .success(function (response) {
                       console.log("Success on getting json for soccer player!");
-                      response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                      response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                       var golfPlayerSpriteSheet = new createjs.SpriteSheet(response);
                       $scope.golfPlayer = new createjs.Sprite(golfPlayerSpriteSheet, "normal");
                       $scope.golfPlayer.x = 320;
@@ -621,10 +614,10 @@ angular.module("bookbuilder2")
 
                 //parallel function for getting ball splash
                 createSoccerGameParallelFunctions.push(function (parallelCallback) {
-                  $http.get($rootScope.rootDir + "data/assets/golf_ball_splash.json")
+                  $http.get($scope.rootDir + "data/assets/golf_ball_splash.json")
                     .success(function (response) {
                       console.log("Success on getting json for ball splash!");
-                      response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                      response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                       var ballSplashSpriteSheet = new createjs.SpriteSheet(response);
                       $scope.ballSplash = new createjs.Sprite(ballSplashSpriteSheet, "normal");
 
@@ -676,10 +669,10 @@ angular.module("bookbuilder2")
 
                   /*Adding Skip Button*/
                   function (generalButtonsWaterfallCallback) {
-                    $http.get($rootScope.rootDir + "data/assets/skip_one_answer_button_sprite.json")
+                    $http.get($scope.rootDir + "data/assets/skip_one_answer_button_sprite.json")
                       .success(function (response) {
                         console.log("Success on getting json for skipAnswer button!");
-                        response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                        response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
 
                         var skipAnswerSpriteSheet = new createjs.SpriteSheet(response);
                         $scope.skipAnswerButton = new createjs.Sprite(skipAnswerSpriteSheet, "normal");
@@ -771,10 +764,10 @@ angular.module("bookbuilder2")
 
                   /*Adding GoToResults Button*/
                   function (generalButtonsWaterfallCallback) {
-                    $http.get($rootScope.rootDir + "data/assets/go_to_results_button_sprite.json")
+                    $http.get($scope.rootDir + "data/assets/go_to_results_button_sprite.json")
                       .success(function (response) {
                         console.log("Success on getting json for goToResults button!");
-                        response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                        response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
 
                         var goToResultsSpriteSheet = new createjs.SpriteSheet(response);
                         $scope.goToResultsButton = new createjs.Sprite(goToResultsSpriteSheet, "normal");
@@ -828,9 +821,9 @@ angular.module("bookbuilder2")
                   /*Adding Next Activity button*/
                   function (generalButtonsWaterfallCallback) {
 
-                    $http.get($rootScope.rootDir + "data/assets/next_activity_drag_and_drop_sprite.json")
+                    $http.get($scope.rootDir + "data/assets/next_activity_drag_and_drop_sprite.json")
                       .success(function (response) {
-                        response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                        response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                         var nextButtonSpriteSheet = new createjs.SpriteSheet(response);
                         $scope.nextButton = new createjs.Sprite(nextButtonSpriteSheet, "normal");
                         $scope.nextButton.alpha = 0.5;
@@ -848,7 +841,7 @@ angular.module("bookbuilder2")
                             $scope.nextButton.alpha = 1;
                             $scope.nextButton.gotoAndPlay("normal");
                             $scope.stage.update();
-                            TypicalFunctions.nextActivity();
+                            TypicalFunctions.nextActivity($scope.selectedLesson, $scope.activityFolder);
                           }
                         });
                         $scope.nextButton.x = 730;
@@ -889,14 +882,14 @@ angular.module("bookbuilder2")
                     console.log("Adding results background...");
                     /*Creating the questionTextBackground bitmap*/
                     var resultsBackgroundImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                      src: $rootScope.rootDir + "data/assets/soccer_results_table_image.png"
+                      src: $scope.rootDir + "data/assets/soccer_results_table_image.png"
                     }));
                     resultsBackgroundImageLoader.load();
 
                     resultsBackgroundImageLoader.on("complete", function (r) {
 
                       /*Creating Bitmap Background for answerHolder background image*/
-                      $scope.resultsBackground = new createjs.Bitmap($rootScope.rootDir + "data/assets/soccer_results_table_image.png");
+                      $scope.resultsBackground = new createjs.Bitmap($scope.rootDir + "data/assets/soccer_results_table_image.png");
                       $scope.resultsBackground.x = 0;
                       $scope.resultsBackground.y = 0;
                       $scope.resultsContainer.addChild($scope.resultsBackground);
@@ -1028,14 +1021,14 @@ angular.module("bookbuilder2")
                     console.log("Adding results background...");
                     /*Creating the questionTextBackground bitmap*/
                     var resultsTotalBackgroundImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                      src: $rootScope.rootDir + "data/assets/results_table_image.png"
+                      src: $scope.rootDir + "data/assets/results_table_image.png"
                     }));
                     resultsTotalBackgroundImageLoader.load();
 
                     resultsTotalBackgroundImageLoader.on("complete", function (r) {
 
                       /*Creating Bitmap Background for answerHolder background image*/
-                      $scope.resultsTotalBackground = new createjs.Bitmap($rootScope.rootDir + "data/assets/results_table_image.png");
+                      $scope.resultsTotalBackground = new createjs.Bitmap($scope.rootDir + "data/assets/results_table_image.png");
                       $scope.resultsTotalBackground.x = 10;
                       $scope.resultsTotalBackground.y = 0;
                       $scope.resultsTotalContainer.addChild($scope.resultsTotalBackground);
@@ -1083,14 +1076,14 @@ angular.module("bookbuilder2")
 
                       //Creating the little answersTable
                       var resultsAnswersOptionsTableImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                        src: $rootScope.rootDir + "data/assets/soccer_results_answers.png"
+                        src: $scope.rootDir + "data/assets/soccer_results_answers.png"
                       }));
                       resultsAnswersOptionsTableImageLoader.load();
 
                       resultsAnswersOptionsTableImageLoader.on("complete", function (r) {
 
                         /*Creating Bitmap for results*/
-                        $scope.resultsAnswersOptionsTable = new createjs.Bitmap($rootScope.rootDir + "data/assets/soccer_results_answers.png");
+                        $scope.resultsAnswersOptionsTable = new createjs.Bitmap($scope.rootDir + "data/assets/soccer_results_answers.png");
                         $scope.resultsAnswersOptionsTable.x = 640;
                         $scope.resultsAnswersOptionsTable.y = -10;
                         $scope.resultsAnswersOptionsTable.visible = false;
@@ -1115,10 +1108,10 @@ angular.module("bookbuilder2")
                         /*Creating the page's restart and check buttons*/
 
                         /*Check Button*/
-                        $http.get($rootScope.rootDir + "data/assets/check_answers_drag_and_drop_sprite.json")
+                        $http.get($scope.rootDir + "data/assets/check_answers_drag_and_drop_sprite.json")
                           .success(function (response) {
                             console.log("Success on getting json for check button!");
-                            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                            response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                             var checkButtonSpriteSheet = new createjs.SpriteSheet(response);
                             $scope.checkButton = new createjs.Sprite(checkButtonSpriteSheet, "normal");
 
@@ -1181,10 +1174,10 @@ angular.module("bookbuilder2")
 
 
                         /*Restart Button for totalResults frame !!!*/
-                        $http.get($rootScope.rootDir + "data/assets/restart_button_drag_and_drop_sprite.json")
+                        $http.get($scope.rootDir + "data/assets/restart_button_drag_and_drop_sprite.json")
                           .success(function (response) {
                             console.log("Success on getting json for restartTotal button!");
-                            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                            response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                             var restartTotalButtonSpriteSheet = new createjs.SpriteSheet(response);
                             $scope.restartTotalButton = new createjs.Sprite(restartTotalButtonSpriteSheet, "normal");
 
@@ -1671,14 +1664,14 @@ angular.module("bookbuilder2")
 
                         /*Creating the continue button*/
                         var continueButtonImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                          src: $rootScope.rootDir + "data/assets/soccer_results_continue.png"
+                          src: $scope.rootDir + "data/assets/soccer_results_continue.png"
                         }));
                         continueButtonImageLoader.load();
 
                         continueButtonImageLoader.on("complete", function (r) {
 
                           /*Creating Bitmap Background for continue button*/
-                          $scope.continueButton = new createjs.Bitmap($rootScope.rootDir + "data/assets/soccer_results_continue.png");
+                          $scope.continueButton = new createjs.Bitmap($scope.rootDir + "data/assets/soccer_results_continue.png");
                           $scope.continueButton.x = 40;
                           $scope.continueButton.y = 303;
                           $scope.resultsContainer.addChild($scope.continueButton);
@@ -1706,14 +1699,14 @@ angular.module("bookbuilder2")
 
                         /*Creating the restart button*/
                         var restartButtonImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                          src: $rootScope.rootDir + "data/assets/soccer_results_restart.png"
+                          src: $scope.rootDir + "data/assets/soccer_results_restart.png"
                         }));
                         restartButtonImageLoader.load();
 
                         restartButtonImageLoader.on("complete", function (r) {
 
                           /*Creating Bitmap Background for restart button*/
-                          $scope.restartButton = new createjs.Bitmap($rootScope.rootDir + "data/assets/soccer_results_restart.png");
+                          $scope.restartButton = new createjs.Bitmap($scope.rootDir + "data/assets/soccer_results_restart.png");
                           $scope.restartButton.x = 385;
                           $scope.restartButton.y = 303;
                           $scope.resultsContainer.addChild($scope.restartButton);

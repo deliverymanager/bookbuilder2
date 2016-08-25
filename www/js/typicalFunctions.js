@@ -3,8 +3,6 @@ angular.module("bookbuilder2")
     function TypicalFunctions($rootScope, $cordovaFile, $ionicLoading, $ionicPopup, $state, Download, Toast, $timeout, $http, _, $ionicHistory) {
       return {
         showPopup: function () {
-          var self = this;
-
           $ionicLoading.hide();
           var errorPopUp = $ionicPopup.alert({
             template: 'Please make sure your have a stable connection to the internet!',
@@ -16,63 +14,29 @@ angular.module("bookbuilder2")
               historyRoot: true,
               disableBack: true
             });
+            $ionicHistory.clearHistory();
             $ionicHistory.clearCache();
             $state.go("groups", {}, {reload: true});
           });
         },
-        loadVariablesFromLocalStorage: function () {
-          var self = this;
-
-          window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
-          console.warn($ionicHistory.currentView().stateName);
-
-          if (window.cordova && window.cordova.platformId !== "browser") {
-            $rootScope.rootDir = window.cordova.file.dataDirectory;
-          } else {
-            $rootScope.rootDir = "http://" + "enGrEnglish2" + ".s3-website-eu-west-1.amazonaws.com/";
-          }
-          $rootScope.book = JSON.parse(window.localStorage.getItem("book"));
-          $rootScope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
-          $rootScope.selectedLessonId = window.localStorage.getItem("selectedLessonId");
-          $rootScope.activityFolder = window.localStorage.getItem("activityFolder");
-          $rootScope.activityName = window.localStorage.getItem("activityName");
-
-          $rootScope.scale = window.localStorage.getItem("scale");
-          $rootScope.book = JSON.parse(window.localStorage.getItem("book"));
-          $rootScope.ratio = window.localStorage.getItem("ratio");
-
-          $rootScope.backgroundView = {
-            "background": "url(" + $rootScope.rootDir + "data/assets/lesson_background_image.png) no-repeat center top",
-            "-webkit-background-size": "cover",
-            "-moz-background-size": "cover",
-            "background-size": "cover"
-          };
-
-          $ionicLoading.hide();
-        },
-        nextActivity: function () {
-          var self = this;
-          var index = _.findIndex($rootScope.selectedLesson.activitiesMenu, {
-            "activityFolder": $rootScope.activityFolder
+        nextActivity: function (selectedLesson, activityFolder) {
+          var index = _.findIndex(selectedLesson.activitiesMenu, {
+            "activityFolder": activityFolder
           });
 
-          if (index < $rootScope.selectedLesson.activitiesMenu.length - 1) {
-            $rootScope.activityFolder = $rootScope.selectedLesson.activitiesMenu[index + 1].activityFolder;
-            $rootScope.activityName = $rootScope.selectedLesson.activitiesMenu[index + 1].name;
-            window.localStorage.setItem("activityFolder", $rootScope.activityFolder);
-            window.localStorage.setItem("activityName", $rootScope.activityName);
+          if (index < selectedLesson.activitiesMenu.length - 1) {
+            window.localStorage.setItem("activityFolder", selectedLesson.activitiesMenu[index + 1].activityFolder);
+            window.localStorage.setItem("activityName", selectedLesson.activitiesMenu[index + 1].name);
             $ionicHistory.nextViewOptions({
               historyRoot: true,
               disableBack: true
             });
-            $ionicHistory.clearCache();
-            $state.go($rootScope.selectedLesson.activitiesMenu[index + 1].activityTemplate, {}, {reload: true});
+            $state.go(selectedLesson.activitiesMenu[index + 1].activityTemplate, {}, {reload: true});
           } else {
             $ionicHistory.nextViewOptions({
               historyRoot: true,
               disableBack: true
             });
-            $ionicHistory.clearCache();
             $state.go("results", {}, {reload: true});
           }
         }

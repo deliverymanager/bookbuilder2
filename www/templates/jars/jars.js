@@ -1,15 +1,52 @@
 angular.module("bookbuilder2")
-  .controller("jarsController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, TypicalFunctions) {
+  .controller("jarsController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory, TypicalFunctions) {
 
     console.log("jarsController loaded!");
 
-    TypicalFunctions.loadVariablesFromLocalStorage();
+    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
+    $scope.rootDir = window.localStorage.getItem("rootDir");
+    $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+    $scope.activityFolder = window.localStorage.getItem("activityFolder");
+    $scope.activityName = window.localStorage.getItem("activityName");
+
+    $scope.backgroundView = {
+      "background": "url(" + $scope.rootDir + "data/assets/lesson_background_image.png) no-repeat center top",
+      "-webkit-background-size": "cover",
+      "-moz-background-size": "cover",
+      "background-size": "cover"
+    };
+
+    $ionicPlatform.on('pause', function () {
+      console.log('pause');
+      createjs.Ticker.framerate = 0;
+      ionic.Platform.exitApp();
+    });
+    $ionicPlatform.on('resume', function () {
+      createjs.Ticker.framerate = 10;
+    });
+
+    $scope.$on('$destroy', function () {
+      createjs.Ticker.removeEventListener("tick", handleTick);
+      createjs.Tween.removeAllTweens();
+      $timeout.cancel(timeout);
+      $ionicHistory.clearHistory();
+      $ionicHistory.clearCache();
+      $scope.stage.removeAllEventListeners();
+      $scope.stage.removeAllChildren();
+      $scope.stage = null;
+    });
+
+    var handleTick = function () {
+      if ($scope.stage) {
+        $scope.stage.update();
+      }
+    };
 
     /*Name of activity in localStorage*/
-    var activityNameInLocalStorage = $rootScope.selectedLesson.id + "_" + $rootScope.activityFolder;
+    var activityNameInLocalStorage = $scope.selectedLesson.id + "_" + $scope.activityFolder;
     console.log("Name of activity in localStorage: ", activityNameInLocalStorage);
 
-    $timeout(function () {
+    var timeout = $timeout(function () {
 
       var PIXEL_RATIO = (function () {
         var ctx = document.getElementById("canvas").getContext("2d"),
@@ -42,49 +79,11 @@ angular.module("bookbuilder2")
       $scope.stage.mouseMoveOutside = false;
 
       createjs.Ticker.framerate = 20;
-      var handleTick = function () {
-        $scope.stage.update();
-      };
       createjs.Ticker.addEventListener("tick", handleTick);
 
-      $ionicPlatform.on('pause', function () {
-        console.log('pause');
-        createjs.Ticker.framerate = 0;
-        ionic.Platform.exitApp();
-      });
-      $ionicPlatform.on('resume', function () {
-        createjs.Ticker.framerate = 20;
-      });
-
-      $scope.sounds = {};
-      if (window.cordova && window.cordova.platformId !== "browser") {
-        _.each(["select", "check"], function (sound, key, list) {
-          if (ionic.Platform.isIOS() && window.cordova) {
-            console.log("Else iOS");
-            resolveLocalFileSystemURL($rootScope.rootDir + "data/assets/" + sound + ".mp3", function (entry) {
-              $scope.sounds[sound] = new Media(entry.toInternalURL(), function () {
-                console.log("Sound success");
-              }, function (err) {
-                console.log("Sound error", err);
-              }, function (status) {
-                console.log("Sound status", status);
-              });
-            });
-          } else {
-            console.log("Else Android");
-            $scope.sounds[sound] = new Media($rootScope.rootDir + "data/assets/" + sound + ".mp3", function () {
-              console.log("Sound success");
-            }, function (err) {
-              console.log("Sound error", err);
-            }, function (status) {
-              console.log("Sound status", status);
-            });
-          }
-        });
-      }
       /*Image Loader*/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-        src: $rootScope.rootDir + "data/assets/jars_background.png"
+        src: $scope.rootDir + "data/assets/jars_background.png"
       }));
 
       imageLoader.load();
@@ -95,7 +94,7 @@ angular.module("bookbuilder2")
         console.log("Image Loaded...");
 
         /*Creating Bitmap Background for Canvas*/
-        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/jars_background.png");
+        var background = new createjs.Bitmap($scope.rootDir + "data/assets/jars_background.png");
 
         /**** CALCULATING SCALING ****/
         var scaleY = $scope.stage.canvas.height / background.image.height;
@@ -139,11 +138,11 @@ angular.module("bookbuilder2")
 
         /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
 
-        $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
+        $http.get($scope.rootDir + "data/assets/head_menu_button_sprite.json")
           .success(function (response) {
 
             //Reassigning images with the rest of resource
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+            response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
 
             var menuButtonSpriteSheet = new createjs.SpriteSheet(response);
             var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
@@ -161,13 +160,6 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
-
-              /*Removing all tween before navigating back*/
-              $ionicHistory.clearCache();
-              createjs.Tween.removeAllTweens();
-              $scope.stage.removeAllEventListeners();
-              $scope.stage.removeAllChildren();
-
               $state.go("lessonNew", {}, {reload: true});
             });
 
@@ -200,10 +192,10 @@ angular.module("bookbuilder2")
 
           /*Getting the activityData from http.get request*/
           console.warn("There is no activity in local storage...Getting the json through $http.get()");
-          console.log("selectedLesson.id: ", $rootScope.selectedLesson.id);
-          console.log("activityFolder: ", $rootScope.activityFolder);
+          console.log("selectedLesson.id: ", $scope.selectedLesson.id);
+          console.log("activityFolder: ", $scope.activityFolder);
 
-          $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/" + $rootScope.activityFolder + "/jars.json")
+          $http.get($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/" + $scope.activityFolder + "/jars.json")
             .success(function (response) {
               console.log("Success on getting json for the url. The response object is: ", response);
               //Assigning configured response to activityData
@@ -264,10 +256,10 @@ angular.module("bookbuilder2")
           async.waterfall([
             //Getting the candySprite for the words
             function (initWaterfallCallback) {
-              $http.get($rootScope.rootDir + "data/assets/jars_sprite.json")
+              $http.get($scope.rootDir + "data/assets/jars_sprite.json")
                 .success(function (response) {
                   console.log("Success on getting json for check button!");
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   $scope.wordsSpriteSheet = new createjs.SpriteSheet(response);
                   initWaterfallCallback(null);
 
@@ -280,7 +272,7 @@ angular.module("bookbuilder2")
             //Getting the first jar background
             function (initWaterfallCallback) {
               var firstJarImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                src: $rootScope.rootDir + "data/assets/jars_jar1.png"
+                src: $scope.rootDir + "data/assets/jars_jar1.png"
               }));
               firstJarImageLoader.load();
 
@@ -293,7 +285,7 @@ angular.module("bookbuilder2")
             //Getting the second jar background
             function (initWaterfallCallback) {
               var secondJarImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                src: $rootScope.rootDir + "data/assets/jars_jar2.png"
+                src: $scope.rootDir + "data/assets/jars_jar2.png"
               }));
               secondJarImageLoader.load();
 
@@ -305,7 +297,7 @@ angular.module("bookbuilder2")
             //Getting the third jar background
             function (initWaterfallCallback) {
               var thirdJarImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                src: $rootScope.rootDir + "data/assets/jars_jar3.png"
+                src: $scope.rootDir + "data/assets/jars_jar3.png"
               }));
               thirdJarImageLoader.load();
 
@@ -317,7 +309,7 @@ angular.module("bookbuilder2")
             //Getting the fourth jar background
             function (initWaterfallCallback) {
               var fourthJarImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                src: $rootScope.rootDir + "data/assets/jars_jar4.png"
+                src: $scope.rootDir + "data/assets/jars_jar4.png"
               }));
               fourthJarImageLoader.load();
 
@@ -334,7 +326,7 @@ angular.module("bookbuilder2")
 
                 //Building the image name for the jar
                 var imageName = "data/assets/jars_jar" + (jarIndex + 1) + ".png";
-                $scope.jars[key] = new createjs.Bitmap($rootScope.rootDir + imageName);
+                $scope.jars[key] = new createjs.Bitmap($scope.rootDir + imageName);
                 $scope.jars[key].x = jarIndex === 0 ? 80 : jarIndex === 1 ? 260 : jarIndex === 2 ? 440 : 620;
                 $scope.jars[key].y = 230;
                 $scope.jars[key].scaleX = $scope.jars[key].scaleY = 0.8;
@@ -418,7 +410,7 @@ angular.module("bookbuilder2")
             //Getting placeholder image
             function (initWaterfallCallback) {
               var wordPlaceholderImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                src: $rootScope.rootDir + "data/assets/jars_placeholder.png"
+                src: $scope.rootDir + "data/assets/jars_placeholder.png"
               }));
               wordPlaceholderImageLoader.load();
 
@@ -436,7 +428,7 @@ angular.module("bookbuilder2")
 
                   console.log("Group Key is: ", groupKey);
                   console.log("Index of placeholder: ", key);
-                  $scope.wordsPlaceholders[groupKey][key] = new createjs.Bitmap($rootScope.rootDir + "data/assets/jars_placeholder.png");
+                  $scope.wordsPlaceholders[groupKey][key] = new createjs.Bitmap($scope.rootDir + "data/assets/jars_placeholder.png");
                   $scope.wordsPlaceholders[groupKey][key].x = $scope.jars[groupKey].x + 20;
                   $scope.wordsPlaceholders[groupKey][key].y = key === 0 ? $scope.jars[groupKey].y + 90 : $scope.wordsPlaceholders[groupKey][key - 1].y + 37;
                   $scope.mainContainer.addChild($scope.wordsPlaceholders[groupKey][key]);
@@ -462,10 +454,10 @@ angular.module("bookbuilder2")
             },
             //Adding Check answers button
             function (initWaterfallCallback) {
-              $http.get($rootScope.rootDir + "data/assets/check_answers_drag_and_drop_sprite.json")
+              $http.get($scope.rootDir + "data/assets/check_answers_drag_and_drop_sprite.json")
                 .success(function (response) {
                   console.log("Success on getting json for check button!");
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var checkButtonSpriteSheet = new createjs.SpriteSheet(response);
                   $scope.checkButton = new createjs.Sprite(checkButtonSpriteSheet, "normal");
 
@@ -497,10 +489,10 @@ angular.module("bookbuilder2")
             },
             //Adding Restart button
             function (initWaterfallCallback) {
-              $http.get($rootScope.rootDir + "data/assets/restart_button_drag_and_drop_sprite.json")
+              $http.get($scope.rootDir + "data/assets/restart_button_drag_and_drop_sprite.json")
                 .success(function (response) {
                   console.log("Success on getting json for restart button!");
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var restartTotalButtonSpriteSheet = new createjs.SpriteSheet(response);
                   $scope.restartTotalButton = new createjs.Sprite(restartTotalButtonSpriteSheet, "normal");
 
@@ -535,9 +527,9 @@ angular.module("bookbuilder2")
             //Adding NextActivity button
             function (initWaterfallCallback) {
               /*NEXT BUTTON*/
-              $http.get($rootScope.rootDir + "data/assets/next_activity_drag_and_drop_sprite.json")
+              $http.get($scope.rootDir + "data/assets/next_activity_drag_and_drop_sprite.json")
                 .success(function (response) {
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var nextButtonSpriteSheet = new createjs.SpriteSheet(response);
                   $scope.nextButton = new createjs.Sprite(nextButtonSpriteSheet, "normal");
                   $scope.nextButton.alpha = 0.5;
@@ -558,7 +550,7 @@ angular.module("bookbuilder2")
                     if ($scope.activityData.completed) {
                       $scope.nextButton.gotoAndPlay("normal");
                       /*Calling next function!*/
-                      TypicalFunctions.nextActivity();
+                      TypicalFunctions.nextActivity($scope.selectedLesson, $scope.activityFolder);
                     }
 
                   });

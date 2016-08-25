@@ -1,11 +1,48 @@
 angular.module("bookbuilder2")
-  .controller("VocabularyController", function (TypicalFunctions, $scope, $ionicLoading, $interval, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory) {
+  .controller("VocabularyController", function ($scope, $ionicLoading, $interval, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory) {
 
     console.log("VocabularyController loaded!");
 
-    TypicalFunctions.loadVariablesFromLocalStorage();
+    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
+    $scope.rootDir = window.localStorage.getItem("rootDir");
+    $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+    $scope.activityFolder = window.localStorage.getItem("activityFolder");
 
-    $timeout(function () {
+    $scope.backgroundView = {
+      "background": "url(" + $scope.rootDir + "data/assets/lesson_background_image.png) no-repeat center top",
+      "-webkit-background-size": "cover",
+      "-moz-background-size": "cover",
+      "background-size": "cover"
+    };
+
+
+    $ionicPlatform.on('pause', function () {
+      console.log('pause');
+      createjs.Ticker.framerate = 0;
+      ionic.Platform.exitApp();
+    });
+    $ionicPlatform.on('resume', function () {
+      createjs.Ticker.framerate = 10;
+    });
+
+    $scope.$on('$destroy', function () {
+      createjs.Ticker.removeEventListener("tick", handleTick);
+      createjs.Tween.removeAllTweens();
+      $timeout.cancel(timeout);
+      $ionicHistory.clearHistory();
+      $ionicHistory.clearCache();
+      $scope.stage.removeAllEventListeners();
+      $scope.stage.removeAllChildren();
+      $scope.stage = null;
+    });
+
+    var handleTick = function () {
+      if ($scope.stage) {
+        $scope.stage.update();
+      }
+    };
+
+    var timeout = $timeout(function () {
 
       var PIXEL_RATIO = (function () {
         var ctx = document.getElementById("canvas").getContext("2d"),
@@ -38,32 +75,19 @@ angular.module("bookbuilder2")
       $scope.stage.mouseMoveOutside = false;
 
       createjs.Ticker.framerate = 20;
-      var handleTick = function () {
-        $scope.stage.update();
-      };
       createjs.Ticker.addEventListener("tick", handleTick);
-
-      $ionicPlatform.on('pause', function () {
-        console.log('pause');
-        createjs.Ticker.framerate = 0;
-        ionic.Platform.exitApp();
-      });
-      $ionicPlatform.on('resume', function () {
-        createjs.Ticker.framerate = 20;
-      });
-
-      var activityNameInLocalStorage = $rootScope.selectedLesson.id + "_vocabulary";
+      var activityNameInLocalStorage = $scope.selectedLesson.id + "_vocabulary";
 
       /*Image Loader*/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-        src: $rootScope.rootDir + "data/assets/background_image_for_lesson_activities_blue.png"
+        src: $scope.rootDir + "data/assets/background_image_for_lesson_activities_blue.png"
       }));
       imageLoader.load();
 
       /*IMAGE LOADER COMPLETED*/
       imageLoader.on("complete", function (r) {
 
-        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/background_image_for_lesson_activities_blue.png");
+        var background = new createjs.Bitmap($scope.rootDir + "data/assets/background_image_for_lesson_activities_blue.png");
         var scaleY = $scope.stage.canvas.height / background.image.height;
         scaleY = scaleY.toFixed(2);
         var scaleX = $scope.stage.canvas.width / background.image.width;
@@ -90,11 +114,11 @@ angular.module("bookbuilder2")
         /*var backgroundPositionOriginal = background.getBounds();*/
 
         /**** MENU BUTTON ****/
-        $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
+        $http.get($scope.rootDir + "data/assets/head_menu_button_sprite.json")
           .success(function (response) {
 
             //Reassigning images with the rest of resource
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+            response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
             var menuButtonSpriteSheet = new createjs.SpriteSheet(response);
             var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
 
@@ -117,11 +141,6 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
-              $ionicHistory.clearCache();
-              createjs.Tween.removeAllTweens();
-              $scope.stage.removeAllEventListeners();
-              $scope.stage.removeAllChildren();
-
               $state.go("lesson", {}, {reload: true});
             });
 
@@ -140,7 +159,7 @@ angular.module("bookbuilder2")
                 waterfallCall();
               } else {
 
-                $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/vocabulary.json")
+                $http.get($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/vocabulary/vocabulary.json")
                   .success(function (response) {
 
                     $scope.activityData = response;
@@ -156,12 +175,12 @@ angular.module("bookbuilder2")
             }, function (waterfallCall) {
 
               /*BIG PAUSE BUTTON*/
-              $http.get($rootScope.rootDir + "data/assets/vocabulary_pause_button_sprite.json")
+              $http.get($scope.rootDir + "data/assets/vocabulary_pause_button_sprite.json")
                 .success(function (response) {
                   console.log("Success on getting json for the big pause button");
 
                   //Reassigning images with the rest of resource
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var bigPauseButtonSpriteSheet = new createjs.SpriteSheet(response);
                   $scope.bigPauseButton = new createjs.Sprite(bigPauseButtonSpriteSheet, "normal");
 
@@ -197,12 +216,12 @@ angular.module("bookbuilder2")
             }, function (waterfallCall) {
 
               /*BIG STOP BUTTON*/
-              $http.get($rootScope.rootDir + "data/assets/vocabulary_stop_button_sprite.json")
+              $http.get($scope.rootDir + "data/assets/vocabulary_stop_button_sprite.json")
                 .success(function (response) {
                   console.log("Success on getting json for the big pause button");
 
                   //Reassigning images with the rest of resource
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var bigStopButtonSpriteSheet = new createjs.SpriteSheet(response);
                   $scope.bigStopButton = new createjs.Sprite(bigStopButtonSpriteSheet, "normal");
 
@@ -241,12 +260,12 @@ angular.module("bookbuilder2")
             }, function (waterfallCall) {
 
               /*BIG PLAY BUTTON*/
-              $http.get($rootScope.rootDir + "data/assets/vocabulary_play_big_button_sprite.json")
+              $http.get($scope.rootDir + "data/assets/vocabulary_play_big_button_sprite.json")
                 .success(function (response) {
                   console.log("Success on getting json for the big play button");
 
                   //Reassigning images with the rest of resource
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var bigPlayButtonSpriteSheet = new createjs.SpriteSheet(response);
                   $scope.bigPlayButton = new createjs.Sprite(bigPlayButtonSpriteSheet, "normal");
 
@@ -295,11 +314,11 @@ angular.module("bookbuilder2")
             }, function (waterfallCall) {
 
               /* WORDS BUTTON */
-              $http.get($rootScope.rootDir + "data/assets/vocabulary_words_button_sprite.json")
+              $http.get($scope.rootDir + "data/assets/vocabulary_words_button_sprite.json")
                 .success(function (response) {
 
                   //Reassigning images with the rest of resource
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var wordsButtonSpriteSheet = new createjs.SpriteSheet(response);
                   $scope.wordsButton = new createjs.Sprite(wordsButtonSpriteSheet, "normal");
 
@@ -336,11 +355,11 @@ angular.module("bookbuilder2")
 
 
               /* PHRASES BUTTON */
-              $http.get($rootScope.rootDir + "data/assets/vocabulary_phrases_button_sprite.json")
+              $http.get($scope.rootDir + "data/assets/vocabulary_phrases_button_sprite.json")
                 .success(function (response) {
 
                   //Reassigning images with the rest of resource
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var phrasesButtonSpriteSheet = new createjs.SpriteSheet(response);
                   $scope.phrasesButton = new createjs.Sprite(phrasesButtonSpriteSheet, "normal");
 
@@ -374,11 +393,11 @@ angular.module("bookbuilder2")
             }, function (waterfallCall) {
 
               /* DERIVATIVES BUTTON */
-              $http.get($rootScope.rootDir + "data/assets/vocabulary_derivatives_button_sprite.json")
+              $http.get($scope.rootDir + "data/assets/vocabulary_derivatives_button_sprite.json")
                 .success(function (response) {
 
                   //Reassigning images with the rest of resource
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var derivativesButtonSpriteSheet = new createjs.SpriteSheet(response);
                   $scope.derivativesButton = new createjs.Sprite(derivativesButtonSpriteSheet, "normal");
 
@@ -413,11 +432,11 @@ angular.module("bookbuilder2")
 
             }, function (waterfallCall) {
               /* BIG ENGLISH BUTTON */
-              $http.get($rootScope.rootDir + "data/assets/vocabulary_english_big_button_sprite.json")
+              $http.get($scope.rootDir + "data/assets/vocabulary_english_big_button_sprite.json")
                 .success(function (response) {
 
                   //Reassigning images with the rest of resource
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var englishBigButtonSpriteSheet = new createjs.SpriteSheet(response);
                   var englishBigButton = new createjs.Sprite(englishBigButtonSpriteSheet, "normal");
 
@@ -475,11 +494,11 @@ angular.module("bookbuilder2")
 
 
               /* BIG GREEK BUTTON */
-              $http.get($rootScope.rootDir + "data/assets/vocabulary_greek_big_button_sprite.json")
+              $http.get($scope.rootDir + "data/assets/vocabulary_greek_big_button_sprite.json")
                 .success(function (response) {
 
                   //Reassigning images with the rest of resource
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var greekBigButtonSpriteSheet = new createjs.SpriteSheet(response);
                   var greekBigButton = new createjs.Sprite(greekBigButtonSpriteSheet, "normal");
 
@@ -531,7 +550,7 @@ angular.module("bookbuilder2")
                 });//end of get greek butt§on
             }], function (err, result) {
               $scope.sounds = {};
-              var assetPath = $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/";
+              var assetPath = $scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/vocabulary/";
               console.log("$scope.activityData: ", $scope.activityData);
 
               var waterFallFunctions = [];
@@ -580,7 +599,7 @@ angular.module("bookbuilder2")
 
                       loadingBitmaps.push(function (seriesCallback) {
                         var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                          src: $rootScope.rootDir + "data/assets/" + file
+                          src: $scope.rootDir + "data/assets/" + file
                         }));
 
                         imageLoader.load();
@@ -599,7 +618,7 @@ angular.module("bookbuilder2")
 
                         loadingBitmaps.push(function (seriesCallback) {
                           var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                            src: $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + word.name + ".png"
+                            src: $scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/vocabulary/" + word.name + ".png"
                           }));
 
                           imageLoader.load();
@@ -621,7 +640,7 @@ angular.module("bookbuilder2")
 
                         loadingBitmaps.push(function (seriesCallback) {
                           var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                            src: $rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + word.name + "_gr.png"
+                            src: $scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/vocabulary/" + word.name + "_gr.png"
                           }));
 
                           imageLoader.load();
@@ -641,7 +660,7 @@ angular.module("bookbuilder2")
                     $scope.currentScroll = 10;
                     async.parallelLimit(loadingBitmaps, 10, function (err, response) {
 
-                      $scope.scrollDown = new createjs.Bitmap($rootScope.rootDir + "data/assets/vocabulary_scroll_down.png");
+                      $scope.scrollDown = new createjs.Bitmap($scope.rootDir + "data/assets/vocabulary_scroll_down.png");
                       $scope.scrollDown.scaleX = $scope.scrollDown.scaleY = scale * 0.2;
                       $scope.scrollDown.x = backgroundPosition.x + backgroundPosition.width / 1.1;
                       $scope.scrollDown.y = backgroundPosition.y + (backgroundPosition.height / 1.3);
@@ -671,7 +690,7 @@ angular.module("bookbuilder2")
                         $scope.stage.update();
                       });
 
-                      $scope.scrollUp = new createjs.Bitmap($rootScope.rootDir + "data/assets/vocabulary_scroll_up.png");
+                      $scope.scrollUp = new createjs.Bitmap($scope.rootDir + "data/assets/vocabulary_scroll_up.png");
                       $scope.scrollUp.scaleX = $scope.scrollUp.scaleY = scale * 0.2;
                       $scope.scrollUp.x = backgroundPosition.x + backgroundPosition.width / 1.1;
                       $scope.scrollUp.y = backgroundPosition.y + (backgroundPosition.height / 7);
@@ -707,10 +726,10 @@ angular.module("bookbuilder2")
                   }, function (buttonsSpriteSheetCallback) {
 
                     /*English Button*/
-                    $http.get($rootScope.rootDir + "data/assets/vocabulary_english_big_button_sprite.json")
+                    $http.get($scope.rootDir + "data/assets/vocabulary_english_big_button_sprite.json")
                       .success(function (response) {
                         console.log("vocabulary_english_big_button_sprite");
-                        response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                        response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                         $scope.enSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
 
                         buttonsSpriteSheetCallback();
@@ -722,10 +741,10 @@ angular.module("bookbuilder2")
                   function (buttonsSpriteSheetCallback) {
 
                     /*Greek Button*/
-                    $http.get($rootScope.rootDir + "data/assets/vocabulary_greek_big_button_sprite.json")
+                    $http.get($scope.rootDir + "data/assets/vocabulary_greek_big_button_sprite.json")
                       .success(function (response) {
                         console.log("Success on getting json data for greek button!");
-                        response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                        response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                         $scope.grSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
                         buttonsSpriteSheetCallback();
                       })
@@ -736,9 +755,9 @@ angular.module("bookbuilder2")
                   function (buttonsSpriteSheetCallback) {
 
                     /*Play Button*/
-                    $http.get($rootScope.rootDir + "data/assets/vocabulary_play_big_button_sprite.json")
+                    $http.get($scope.rootDir + "data/assets/vocabulary_play_big_button_sprite.json")
                       .success(function (response) {
-                        response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                        response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                         $scope.playSmallButtonSpriteSheet = new createjs.SpriteSheet(response);
 
                         buttonsSpriteSheetCallback();
@@ -760,7 +779,7 @@ angular.module("bookbuilder2")
                 title.textBaseline = "alphabetic";
                 $scope.stage.addChild(title);
 
-                var lessonTitle = new createjs.Text($rootScope.selectedLesson.lessonTitle, "27px Arial", "white");
+                var lessonTitle = new createjs.Text($scope.selectedLesson.lessonTitle, "27px Arial", "white");
                 lessonTitle.scaleX = lessonTitle.scaleY = scale;
                 lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 5);
                 lessonTitle.y = backgroundPosition.y + (backgroundPosition.height / 15);
@@ -1355,7 +1374,7 @@ angular.module("bookbuilder2")
 
           /*Iterating and populating the container*/
           _.each(wordsArray, function (word, key, list) {
-            $scope.englishWordsBitmaps[word.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + word.name + ".png");
+            $scope.englishWordsBitmaps[word.name] = new createjs.Bitmap($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/vocabulary/" + word.name + ".png");
             $timeout(function () {
               $scope.englishWordsBitmaps[word.name].x = 0;
               $scope.englishWordsBitmaps[word.name].regY = $scope.englishWordsBitmaps[word.name].image.height / 2;
@@ -1379,7 +1398,7 @@ angular.module("bookbuilder2")
           var scaleImage = 1.5;
           $scope.greekWordsBitmaps = {};
           _.each(wordsArray, function (word, key, list) {
-            $scope.greekWordsBitmaps[word.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + word.name + "_gr.png");
+            $scope.greekWordsBitmaps[word.name] = new createjs.Bitmap($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/vocabulary/" + word.name + "_gr.png");
             $timeout(function () {
               $scope.greekWordsBitmaps[word.name].x = 0;
               console.log("$scope.greekWordsBitmaps[word.name].image.height", $scope.greekWordsBitmaps[word.name].image.height);
@@ -1497,7 +1516,7 @@ angular.module("bookbuilder2")
           var scaleImage = 1.5;
           $scope.englishDerivativesBitmaps = {};
           _.each(wordsArray, function (derivative, key, list) {
-            $scope.englishDerivativesBitmaps[derivative.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + derivative.name + ".png");
+            $scope.englishDerivativesBitmaps[derivative.name] = new createjs.Bitmap($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/vocabulary/" + derivative.name + ".png");
             $timeout(function () {
 
               $scope.englishDerivativesBitmaps[derivative.name].regY = $scope.englishDerivativesBitmaps[derivative.name].image.height / 2;
@@ -1523,7 +1542,7 @@ angular.module("bookbuilder2")
           $scope.greekDerivativesBitmaps = {};
           /*Iterating and populating the container*/
           _.each(wordsArray, function (derivative, key, list) {
-            $scope.greekDerivativesBitmaps[derivative.name] = new createjs.Bitmap($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/vocabulary/" + derivative.name + "_gr.png");
+            $scope.greekDerivativesBitmaps[derivative.name] = new createjs.Bitmap($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/vocabulary/" + derivative.name + "_gr.png");
             $timeout(function () {
 
               $scope.greekDerivativesBitmaps[derivative.name].regY = $scope.greekDerivativesBitmaps[derivative.name].image.height / 2;

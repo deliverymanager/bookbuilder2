@@ -1,18 +1,52 @@
 angular.module("bookbuilder2")
-  .controller("GroupsController", function (TypicalFunctions, Download, $ionicLoading, $scope, $ionicPlatform, $timeout, $http, _, $ionicHistory, $ionicPopup, $state, $rootScope, Toast, $cordovaFile) {
+  .controller("GroupsController", function (TypicalFunctions, Download, $ionicLoading, $scope, $ionicPlatform, $timeout, $http, _, $ionicHistory, $ionicPopup, $state, Toast, $cordovaFile) {
 
     console.log("GroupsController loaded!");
+    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
+    console.warn($ionicHistory.currentView().stateName);
 
-    TypicalFunctions.loadVariablesFromLocalStorage();
+    $scope.rootDir = window.localStorage.getItem("rootDir");
+    $scope.book = JSON.parse(window.localStorage.getItem("book"));
+    $scope.cdnUrl = window.localStorage.getItem("cdnUrl");
 
     $scope.backgroundView = {
-      "background": "url(" + $rootScope.rootDir + "data/assets/first_menu_background.png) no-repeat center top",
+      "background": "url(" + $scope.rootDir + "data/assets/first_menu_background.png) no-repeat center top",
       "-webkit-background-size": "cover",
       "-moz-background-size": "cover",
       "background-size": "cover"
     };
 
-    $timeout(function () {
+
+    $ionicPlatform.on('pause', function () {
+      console.log('pause');
+      createjs.Ticker.framerate = 0;
+      ionic.Platform.exitApp();
+    });
+    $ionicPlatform.on('resume', function () {
+      createjs.Ticker.framerate = 10;
+    });
+
+    $scope.$on('$destroy', function () {
+      createjs.Ticker.removeEventListener("tick", handleTick);
+      createjs.Tween.removeAllTweens();
+      $timeout.cancel(timeout);
+      $ionicHistory.clearHistory();
+      $ionicHistory.clearCache();
+      $scope.stage.removeAllEventListeners();
+      $scope.stage.removeAllChildren();
+      $scope.stage = null;
+    });
+
+    var handleTick = function () {
+      if ($scope.stage) {
+        $scope.stage.update();
+      }
+    };
+
+    var timeout = $timeout(function () {
+
+      var settings = new Ionic.IO.Settings();
+      $scope.developerMode = settings.get('dev_push');
 
       var PIXEL_RATIO = (function () {
         var ctx = document.getElementById("canvas").getContext("2d"),
@@ -45,25 +79,14 @@ angular.module("bookbuilder2")
       $scope.stage.mouseMoveOutside = false;
 
       createjs.Ticker.framerate = 10;
-      var handleTick = function () {
-        $scope.stage.update();
-      };
       createjs.Ticker.addEventListener("tick", handleTick);
 
-      $ionicPlatform.on('pause', function () {
-        console.log('pause');
-        createjs.Ticker.framerate = 0;
-        ionic.Platform.exitApp();
-      });
-      $ionicPlatform.on('resume', function () {
-        createjs.Ticker.framerate = 10;
-      });
 
       $scope.savedGroupButtonsArray = {};
       $scope.savedLessonButtonsArray = {};
 
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-        src: $rootScope.rootDir + "data/assets/first_menu_background_b1.png"
+        src: $scope.rootDir + "data/assets/first_menu_background_b1.png"
       }));
 
       imageLoader.load();
@@ -74,7 +97,7 @@ angular.module("bookbuilder2")
 
         console.log("Background Image Loaded...");
         /*Creating Bitmap Background for Canvas*/
-        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/first_menu_background_b1.png");
+        var background = new createjs.Bitmap($scope.rootDir + "data/assets/first_menu_background_b1.png");
 
         $timeout(function () {
           /**** CALCULATING SCALING ****/
@@ -112,16 +135,16 @@ angular.module("bookbuilder2")
 
           /* -------------------------------- POPULATING LEFT SIDE GROUP MENU -------------------------------- */
           //This groups.json is loaded within the application and not from the server!
-          $http.get($rootScope.rootDir + "data/book/groups.json")
+          $http.get($scope.rootDir + "data/book/groups.json")
             .success(function (response) {
 
 
-              $rootScope.book = response;
-              window.localStorage.setItem("book", JSON.stringify($rootScope.book));
+              $scope.book = response;
+              window.localStorage.setItem("book", JSON.stringify($scope.book));
 
 
               $scope.spaceBetweenGroups = 55;
-              if ($rootScope.book.bookTemplate === "groups") {
+              if ($scope.book.bookTemplate === "groups") {
                 $scope.leftMarginGroupButtons = 165;
                 $scope.downloadDeleteIconY = 500;
                 $scope.exitButtonY = 615;
@@ -131,10 +154,10 @@ angular.module("bookbuilder2")
                 $scope.exitButtonY = 595;
               }
 
-              $http.get($rootScope.rootDir + "data/assets/first_menu_exit_button_sprite.json")
+              $http.get($scope.rootDir + "data/assets/first_menu_exit_button_sprite.json")
                 .success(function (response) {
                   //Reassigning images with the rest of resource
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var exitButtonSpriteSheet = new createjs.SpriteSheet(response);
                   var exitButton = new createjs.Sprite(exitButtonSpriteSheet, "normal");
                   exitButton.visible = ionic.Platform.isAndroid();
@@ -160,13 +183,13 @@ angular.module("bookbuilder2")
                 });
 
               var downloadIconLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                src: $rootScope.rootDir + "data/assets/downloadIcon.png"
+                src: $scope.rootDir + "data/assets/downloadIcon.png"
               }));
               downloadIconLoader.load();
 
               downloadIconLoader.on("complete", function (r) {
 
-                $scope.downloadIcon = new createjs.Bitmap($rootScope.rootDir + "data/assets/downloadIcon.png");
+                $scope.downloadIcon = new createjs.Bitmap($scope.rootDir + "data/assets/downloadIcon.png");
                 $scope.downloadIcon.visible = false;
 
                 $scope.downloadIcon.addEventListener("mousedown", function (event) {
@@ -181,13 +204,13 @@ angular.module("bookbuilder2")
                   $scope.stage.update();
 
                   var confirmPopup = $ionicPopup.confirm({
-                    title: 'Download ' + _.findWhere($rootScope.book.lessonGroups, {"groupId": $rootScope.selectedGroupId}).groupTitle,
-                    template: 'Do you want to download the contents of ' + _.findWhere($rootScope.book.lessonGroups, {"groupId": $rootScope.selectedGroupId}).groupTitle + "?"
+                    title: 'Download ' + _.findWhere($scope.book.lessonGroups, {"groupId": $scope.selectedGroupId}).groupTitle,
+                    template: 'Do you want to download the contents of ' + _.findWhere($scope.book.lessonGroups, {"groupId": $scope.selectedGroupId}).groupTitle + "?"
                   });
                   confirmPopup.then(function (res) {
                     if (res) {
-                      downloadLessonGroup($rootScope.selectedGroupId, function () {
-                        checkIfLessonGroupIsDownloaded($rootScope.selectedGroupId, function () {
+                      downloadLessonGroup($scope.selectedGroupId, function () {
+                        checkIfLessonGroupIsDownloaded($scope.selectedGroupId, function () {
                           confirmPopup.close();
                           Toast.show("Lessons Downloaded!");
                         });
@@ -202,13 +225,13 @@ angular.module("bookbuilder2")
               });
 
               var deleteIconLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                src: $rootScope.rootDir + "data/assets/deleteIcon.png"
+                src: $scope.rootDir + "data/assets/deleteIcon.png"
               }));
               deleteIconLoader.load();
 
               deleteIconLoader.on("complete", function (r) {
 
-                $scope.deleteIcon = new createjs.Bitmap($rootScope.rootDir + "data/assets/deleteIcon.png");
+                $scope.deleteIcon = new createjs.Bitmap($scope.rootDir + "data/assets/deleteIcon.png");
                 $scope.deleteIcon.visible = false;
 
                 $scope.deleteIcon.addEventListener("mousedown", function (event) {
@@ -223,13 +246,13 @@ angular.module("bookbuilder2")
                   $scope.stage.update();
 
                   var confirmPopup = $ionicPopup.confirm({
-                    title: 'Delete ' + _.findWhere($rootScope.book.lessonGroups, {"groupId": $rootScope.selectedGroupId}).groupTitle,
-                    template: 'Do you want to delete the contents of ' + _.findWhere($rootScope.book.lessonGroups, {"groupId": $rootScope.selectedGroupId}).groupTitle + "?"
+                    title: 'Delete ' + _.findWhere($scope.book.lessonGroups, {"groupId": $scope.selectedGroupId}).groupTitle,
+                    template: 'Do you want to delete the contents of ' + _.findWhere($scope.book.lessonGroups, {"groupId": $scope.selectedGroupId}).groupTitle + "?"
                   });
                   confirmPopup.then(function (res) {
                     if (res) {
-                      deleteLessonGroup($rootScope.selectedGroupId, function () {
-                        checkIfLessonGroupIsDownloaded($rootScope.selectedGroupId, function () {
+                      deleteLessonGroup($scope.selectedGroupId, function () {
+                        checkIfLessonGroupIsDownloaded($scope.selectedGroupId, function () {
                           confirmPopup.close();
                           Toast.show("Lessons Deleted!");
                         });
@@ -259,14 +282,14 @@ angular.module("bookbuilder2")
 
                 waterFallFunctions.push(function (waterfallCallback) {
 
-                  var spriteUrl = $rootScope.rootDir + "data/assets/" + lessonGroup.groupButtonSprite;
+                  var spriteUrl = $scope.rootDir + "data/assets/" + lessonGroup.groupButtonSprite;
                   console.log("spriteUrl: ", spriteUrl);
 
                   //Getting the element
                   $http.get(spriteUrl)
                     .success(function (response) {
                       //Reassigning images with the rest of resource
-                      response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                      response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                       var groupButtonSpriteSheet = new createjs.SpriteSheet(response);
 
                       $scope.savedGroupButtonsArray[lessonGroup.groupId] = new createjs.Sprite(groupButtonSpriteSheet, "normal");
@@ -281,7 +304,7 @@ angular.module("bookbuilder2")
                         console.log("pressup event on a group button !");
                         $scope.savedGroupButtonsArray[lessonGroup.groupId].gotoAndPlay("selected");
 
-                        $rootScope.selectedGroupId = lessonGroup.groupId;
+                        $scope.selectedGroupId = lessonGroup.groupId;
 
                         _.each($scope.savedGroupButtonsArray, function (button, key, list) {
                           if (key !== lessonGroup.groupId) {
@@ -308,7 +331,7 @@ angular.module("bookbuilder2")
 
                       $scope.savedGroupButtonsArray[lessonGroup.groupId].lessons = lessonGroup.lessons;
                       $scope.savedGroupButtonsArray[lessonGroup.groupId].groupId = lessonGroup.groupId;
-                      $scope.savedGroupButtonsArray[lessonGroup.groupId].y = ($scope.groupsMenuContainer.height - $rootScope.book.lessonGroups.length * 50) / 2 + (key * $scope.spaceBetweenGroups);
+                      $scope.savedGroupButtonsArray[lessonGroup.groupId].y = ($scope.groupsMenuContainer.height - $scope.book.lessonGroups.length * 50) / 2 + (key * $scope.spaceBetweenGroups);
                       $scope.savedGroupButtonsArray[lessonGroup.groupId].x = -1500;
                       $scope.groupsMenuContainer.addChild($scope.savedGroupButtonsArray[lessonGroup.groupId]);
 
@@ -361,7 +384,7 @@ angular.module("bookbuilder2")
 
               waterFallFunctions.push(function (waterfallCallback) {
 
-                var spriteResourceUrl = $rootScope.rootDir + "data/assets/" + lesson.lessonButtonSprite;
+                var spriteResourceUrl = $scope.rootDir + "data/assets/" + lesson.lessonButtonSprite;
 
                 console.log("Sprite resource URL for lesson button: ", spriteResourceUrl);
 
@@ -370,7 +393,7 @@ angular.module("bookbuilder2")
 
                     console.log("Success on getting Lesson Button Sprite!");
                     //Reassigning images with the rest of resource
-                    response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                    response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
 
                     var lessonButtonSpriteSheet = new createjs.SpriteSheet(response);
 
@@ -396,8 +419,8 @@ angular.module("bookbuilder2")
                         }
                       });
 
-                      $rootScope.selectedLessonId = lesson.id;
-                      window.localStorage.setItem("selectedLessonId", $rootScope.selectedLessonId);
+                      $scope.selectedLessonId = lesson.id;
+                      window.localStorage.setItem("selectedLessonId", $scope.selectedLessonId);
 
                       if (lesson.active) {
 
@@ -411,12 +434,7 @@ angular.module("bookbuilder2")
                                 disableBack: true
                               });
 
-                              $ionicHistory.clearCache();
-                              createjs.Tween.removeAllTweens();
-                              $scope.stage.removeAllEventListeners();
-                              $scope.stage.removeAllChildren();
-
-                              if ($rootScope.book.bookTemplate === "groups") {
+                              if ($scope.book.bookTemplate === "groups") {
                                 $state.go("lesson", {}, {reload: true});
                               } else {
                                 $state.go("lessonNew", {}, {reload: true});
@@ -438,7 +456,7 @@ angular.module("bookbuilder2")
                               downloadLessonAssets(lesson, function (response) {
                                 if (response) {
                                   //Clearing Lesson after downloading for the first time!
-                                  $http.get($rootScope.rootDir + 'data/lessons/' + $rootScope.selectedLessonId + "/lesson.json")
+                                  $http.get($scope.rootDir + 'data/lessons/' + $scope.selectedLessonId + "/lesson.json")
                                     .success(function (response) {
                                       _.each(response.lessonMenu, function (activity, key, list) {
                                         window.localStorage.removeItem(lesson.id + "_" + activity.activityFolder);
@@ -451,16 +469,12 @@ angular.module("bookbuilder2")
                                         historyRoot: true,
                                         disableBack: true
                                       });
-                                      $ionicHistory.clearCache();
-                                      createjs.Tween.removeAllTweens();
-                                      $scope.stage.removeAllEventListeners();
-                                      $scope.stage.removeAllChildren();
-                                      if ($rootScope.book.bookTemplate === "groups") {
+
+                                      if ($scope.book.bookTemplate === "groups") {
                                         $state.go("lesson", {}, {reload: true});
                                       } else {
                                         $state.go("lessonNew", {}, {reload: true});
                                       }
-
                                     })
                                     .error(function (error) {
                                       console.error("Error on getting json for the selected lesson...", error);
@@ -497,7 +511,7 @@ angular.module("bookbuilder2")
             });
 
             async.waterfall(waterFallFunctions, function (err, res) {
-              checkIfLessonGroupIsDownloaded($rootScope.selectedGroupId, function () {
+              checkIfLessonGroupIsDownloaded($scope.selectedGroupId, function () {
                 $scope.downloadIcon.visible = true;
                 $scope.deleteIcon.visible = true;
                 $scope.stage.update();
@@ -515,7 +529,7 @@ angular.module("bookbuilder2")
       console.log("Checking if lesson groups is downloaded", groupId);
 
       var waterFallFunctions = [];
-      _.each(_.findWhere($rootScope.book.lessonGroups, {"groupId": groupId}).lessons, function (lesson, key, list) {
+      _.each(_.findWhere($scope.book.lessonGroups, {"groupId": groupId}).lessons, function (lesson, key, list) {
         waterFallFunctions.push(function (waterFallCallback) {
           checkIfLessonIsDownloaded(lesson, function (res) {
             console.log("Lesson Check " + lesson.id, res);
@@ -540,15 +554,15 @@ angular.module("bookbuilder2")
     };
 
     var checkIfLessonIsDownloaded = function (lesson, callback) {
-      $cordovaFile.checkDir($rootScope.rootDir + "data/lessons/", lesson.id)
+      $cordovaFile.checkDir($scope.rootDir + "data/lessons/", lesson.id)
         .then(function (success) {
-          $http.get($rootScope.rootDir + "data/lessons/" + lesson.id + "/lessonassets.json")
+          $http.get($scope.rootDir + "data/lessons/" + lesson.id + "/lessonassets.json")
             .success(function (activities) {
               var parallelFunctions = [];
               _.each(activities, function (activityAssets, key, list) {
                 _.each(activityAssets, function (file, k, l) {
                   parallelFunctions.push(function (parallelCallback) {
-                    $cordovaFile.checkFile($rootScope.rootDir + "data/lessons/" + lesson.id + "/" + key + "/", file)
+                    $cordovaFile.checkFile($scope.rootDir + "data/lessons/" + lesson.id + "/" + key + "/", file)
                       .then(function (success) {
                         parallelCallback(null);
                       }, function (error) {
@@ -591,16 +605,12 @@ angular.module("bookbuilder2")
                 disableBack: true
               });
 
-              $ionicHistory.clearCache();
-              createjs.Tween.removeAllTweens();
-              $scope.stage.removeAllEventListeners();
-              $scope.stage.removeAllChildren();
-
-              if ($rootScope.book.bookTemplate === "groups") {
+              if ($scope.book.bookTemplate === "groups") {
                 $state.go("lesson", {}, {reload: true});
               } else {
                 $state.go("lessonNew", {}, {reload: true});
               }
+
             } else {
               showDownloadingError(lesson);
             }
@@ -611,12 +621,7 @@ angular.module("bookbuilder2")
             disableBack: true
           });
 
-          $ionicHistory.clearCache();
-          createjs.Tween.removeAllTweens();
-          $scope.stage.removeAllEventListeners();
-          $scope.stage.removeAllChildren();
-
-          if ($rootScope.book.bookTemplate === "groups") {
+          if ($scope.book.bookTemplate === "groups") {
             $state.go("lesson", {}, {reload: true});
           } else {
             $state.go("lessonNew", {}, {reload: true});
@@ -626,21 +631,21 @@ angular.module("bookbuilder2")
     };
 
     var downloadLessonAssets = function (lesson, callback) {
-      $rootScope.totalFilesLessonAssets = 2;
-      $rootScope.downloadingLessonAsset = 0;
+      $scope.totalFilesLessonAssets = 2;
+      $scope.downloadingLessonAsset = 0;
       var lessonSpecificFiles = ["lesson.json", "lessonassets.json"];
 
-      if ($rootScope.book.bookTemplate === "groupsNew") {
+      if ($scope.book.bookTemplate === "groupsNew") {
         lessonSpecificFiles.push("background_image_icon.png");
-        $rootScope.totalFilesLessonAssets++;
+        $scope.totalFilesLessonAssets++;
       }
 
       $ionicLoading.show();
 
-      Download.assets(lessonSpecificFiles, $rootScope.cdnUrl, "data/lessons", lesson.id, function (response) {
+      Download.assets(lessonSpecificFiles, $scope.rootDir, $scope.cdnUrl, "data/lessons", lesson.id, function (response) {
         console.log(lesson.id + " downloaded basic lesson file lesson.json and lessonassets.json ", response);
 
-        $http.get($rootScope.rootDir + "data/lessons/" + lesson.id + "/lessonassets.json")
+        $http.get($scope.rootDir + "data/lessons/" + lesson.id + "/lessonassets.json")
           .success(function (response) {
 
             var waterFallFunctions = [];
@@ -650,10 +655,10 @@ angular.module("bookbuilder2")
 
               waterFallFunctions.push(function (waterfallCallback) {
 
-                Download.assets(arrayOfStrings, $rootScope.cdnUrl, "data/lessons/" + lesson.id, key, function (response) {
-                  $rootScope.downloadingLessonAsset++;
+                Download.assets(arrayOfStrings, $scope.rootDir, $scope.cdnUrl, "data/lessons/" + lesson.id, key, function (response) {
+                  $scope.downloadingLessonAsset++;
                   $ionicLoading.show({
-                    template: lesson.title + " - " + ($rootScope.downloadingLessonAsset && $rootScope.totalFilesLessonAssets ? (($rootScope.downloadingLessonAsset / $rootScope.totalFilesLessonAssets) * 100).toFixed() : 0) + "%"
+                    template: lesson.title + " - " + ($scope.downloadingLessonAsset && $scope.totalFilesLessonAssets ? (($scope.downloadingLessonAsset / $scope.totalFilesLessonAssets) * 100).toFixed() : 0) + "%"
                   });
                   if (response) {
                     waterfallCallback(null);
@@ -664,11 +669,11 @@ angular.module("bookbuilder2")
               });
             });
 
-            $rootScope.totalFilesLessonAssets = waterFallFunctions.length;
-            console.log("TOTAL LESSON ASSETS", $rootScope.totalFilesLessonAssets);
+            $scope.totalFilesLessonAssets = waterFallFunctions.length;
+            console.log("TOTAL LESSON ASSETS", $scope.totalFilesLessonAssets);
 
             $ionicLoading.show({
-              template: "Downloading " + ($rootScope.downloadingLessonAsset && $rootScope.totalFilesLessonAssets ? (($rootScope.downloadingLessonAsset / $rootScope.totalFilesLessonAssets) * 100).toFixed() : 0) + "%"
+              template: "Downloading " + ($scope.downloadingLessonAsset && $scope.totalFilesLessonAssets ? (($scope.downloadingLessonAsset / $scope.totalFilesLessonAssets) * 100).toFixed() : 0) + "%"
             });
 
             async.waterfall(waterFallFunctions, function (err, response) {
@@ -692,7 +697,7 @@ angular.module("bookbuilder2")
 
     var downloadLessonGroup = function (groupId, callback) {
       var waterFallFunctions = [];
-      _.each(_.findWhere($rootScope.book.lessonGroups, {"groupId": groupId}).lessons, function (lesson, key, list) {
+      _.each(_.findWhere($scope.book.lessonGroups, {"groupId": groupId}).lessons, function (lesson, key, list) {
         if (lesson.active) {
           waterFallFunctions.push(function (waterFallCallback) {
             downloadLessonAssets(lesson, function () {
@@ -710,11 +715,11 @@ angular.module("bookbuilder2")
 
       var waterFallFunctions = [];
 
-      _.each(_.findWhere($rootScope.book.lessonGroups, {"groupId": groupId}).lessons, function (lesson, key, list) {
+      _.each(_.findWhere($scope.book.lessonGroups, {"groupId": groupId}).lessons, function (lesson, key, list) {
 
         waterFallFunctions.push(function (waterFallCallback) {
 
-          var lessonResourceUrl = $rootScope.rootDir + 'data/lessons/' + lesson.id + "/lesson.json";
+          var lessonResourceUrl = $scope.rootDir + 'data/lessons/' + lesson.id + "/lesson.json";
 
           $http.get(lessonResourceUrl).success(function (response) {
 

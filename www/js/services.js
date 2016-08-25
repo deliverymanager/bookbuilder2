@@ -21,15 +21,15 @@ angular.module("bookbuilder2")
   .factory("Download",
     function DownloadFactory(_, $cordovaFile, $rootScope, $cordovaFileTransfer) {
       return {
-        assets: function (assetsArray, cdnUrl, prefolder, folder, callback) {
+        assets: function (assetsArray, rootDir, cdnUrl, prefolder, folder, callback) {
 
           var checkFileAndDownload = function (prefolder, folder, file, cdnUrl, callback) {
 
-            $cordovaFile.checkFile($rootScope.rootDir + prefolder + "/" + folder + "/", file)
+            $cordovaFile.checkFile(rootDir + prefolder + "/" + folder + "/", file)
               .then(function (success) {
                 callback(true);
               }, function (error) {
-                $cordovaFileTransfer.download(cdnUrl + prefolder + "/" + folder + "/" + file, $rootScope.rootDir + prefolder + "/" + folder + "/" + file, {}, true)
+                $cordovaFileTransfer.download(cdnUrl + prefolder + "/" + folder + "/" + file, rootDir + prefolder + "/" + folder + "/" + file, {}, true)
                   .then(function (result) {
                     callback(true);
                   }, function (error) {
@@ -99,7 +99,7 @@ angular.module("bookbuilder2")
       };
     }
   )
-  .factory('Toast', function ($rootScope, $timeout, $ionicLoading) {
+  .factory('Toast', function ($ionicLoading) {
     return {
       show: function (message, duration, position) {
         message = message || "There was a problem...";

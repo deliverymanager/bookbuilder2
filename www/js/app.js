@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-transitions', 'ngCordova', 'ngSanitize', 'com.2fdevs.videogular', 'com.2fdevs.videogular.plugins.controls', 'com.2fdevs.videogular.plugins.overlayplay', 'com.2fdevs.videogular.plugins.poster'])
+angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ngCordova', 'ngSanitize', 'com.2fdevs.videogular', 'com.2fdevs.videogular.plugins.controls', 'com.2fdevs.videogular.plugins.overlayplay', 'com.2fdevs.videogular.plugins.poster'])
 
   .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -23,18 +23,10 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ionic-native-tra
     });
   })
 
-  .config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider, $ionicNativeTransitionsProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
     /*Disabling transition animation*/
     $ionicConfigProvider.views.transition('none');
-
-    $ionicNativeTransitionsProvider.setDefaultTransition({
-      type: 'fade'
-    });
-
-    $ionicNativeTransitionsProvider.setDefaultBackTransition({
-      type: 'fade'
-    });
 
     $ionicConfigProvider.views.swipeBackEnabled(false);
 

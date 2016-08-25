@@ -6,16 +6,23 @@ angular.module("bookbuilder2")
     $ionicPlatform.ready(function () {
       console.log("bookbuilder2 ready!");
 
+      $scope.$on('$destroy', function () {
+        $timeout.cancel(timeout);
+        $ionicHistory.clearHistory();
+        $ionicHistory.clearCache();
+      });
+
       if (window.cordova && window.cordova.platformId !== "browser") {
 
         window.plugins.insomnia.keepAwake();
         console.log("hide SplashScreen");
         navigator.splashscreen.hide();
 
-        $rootScope.rootDir = window.cordova.file.dataDirectory;
-        console.log($rootScope.rootDir);
+        $scope.rootDir = window.cordova.file.dataDirectory;
+        window.localStorage.setItem("rootDir", $scope.rootDir);
+        console.log($scope.rootDir);
 
-        $timeout(function () {
+        var timeout = $timeout(function () {
           window.cordova.getAppVersion.getPackageName(function (name) {
             console.log(name);
             var TempGroup = name.split(".");
@@ -25,45 +32,50 @@ angular.module("bookbuilder2")
               var savedVersionNumber = window.localStorage.getItem("versionNumber");
               if (savedVersionNumber && (savedVersionNumber.split(".")[0] + "_" + savedVersionNumber.split(".")[1] ) === (versionNumber.split(".")[0] + "_" + versionNumber.split(".")[1])) {
                 console.log("savedVersionNumber", savedVersionNumber);
-                $rootScope.versionNumber = window.localStorage.getItem("versionNumber");
+                $scope.versionNumber = window.localStorage.getItem("versionNumber");
               } else {
                 window.localStorage.setItem("versionNumber", versionNumber);
-                $rootScope.versionNumber = versionNumber;
+                $scope.versionNumber = versionNumber;
               }
 
-              $rootScope.cdnUrl = "http://" + TempGroup[2] + ".s3-website-eu-west-1.amazonaws.com/";
-              $rootScope.totalFiles = 100;
+              if (TempGroup[2] === "enGrLikeEnglishB1") {
+                $scope.cdnUrl = "http://" + TempGroup[2] + "-" + (versionNumber.split(".")[0] + "-" + versionNumber.split(".")[1]) + ".s3-website-eu-west-1.amazonaws.com/";
+              } else {
+                $scope.cdnUrl = "http://" + TempGroup[2] + ".s3-website-eu-west-1.amazonaws.com/";
+              }
+              window.localStorage.setItem("cdnUrl", $scope.cdnUrl);
+              $scope.totalFiles = 100;
               $rootScope.downloading = 0;
 
 
-              Download.checkDirOrCreate($rootScope.rootDir, "data", function (error) {
+              Download.checkDirOrCreate($scope.rootDir, "data", function (error) {
 
                 if (error) {
                   console.log("Error checkDirOrCreate data directory");
                 }
 
-                Download.checkDirOrCreate($rootScope.rootDir + "data", "book", function (error) {
+                Download.checkDirOrCreate($scope.rootDir + "data", "book", function (error) {
 
                   if (error) {
                     console.log("Error checkDirOrCreate json directory");
                   }
 
 
-                  Download.assets(["assets.json", "groups.json"], $rootScope.cdnUrl, "data", "book", function (response) {
+                  Download.assets(["assets.json", "groups.json"], $scope.rootDir, $scope.cdnUrl, "data", "book", function (response) {
                     console.log("response assets.json groups.json", response);
                     if (response) {
 
-                      $http.get($rootScope.rootDir + "data/book/groups.json").success(function (book) {
+                      $http.get($scope.rootDir + "data/book/groups.json").success(function (book) {
 
-                        $rootScope.book = book;
-                        window.localStorage.setItem("book", JSON.stringify($rootScope.book));
+                        $scope.book = book;
+                        window.localStorage.setItem("book", JSON.stringify($scope.book));
 
-                        $http.get($rootScope.rootDir + "data/book/assets.json").success(function (assets) {
+                        $http.get($scope.rootDir + "data/book/assets.json").success(function (assets) {
 
-                          $rootScope.totalFiles = 2 + assets.length;
+                          $scope.totalFiles = 2 + assets.length;
                           $rootScope.downloading = 2;
 
-                          Download.assets(assets, $rootScope.cdnUrl, "data", "assets", function (response) {
+                          Download.assets(assets, $scope.rootDir, $scope.cdnUrl, "data", "assets", function (response) {
                             console.log("response", response);
                             if (response) {
 
@@ -72,10 +84,10 @@ angular.module("bookbuilder2")
                                 var deployChannel = "v" + versionNumber.split(".")[0] + "_" + versionNumber.split(".")[1] + "_0";
                                 console.log("deploy Channel", deployChannel);
                                 var settings = new Ionic.IO.Settings();
-                                $rootScope.developerMode = settings.get('dev_push');
+                                $scope.developerMode = settings.get('dev_push');
 
-                                console.log("DEVELOPER MODE ", $rootScope.developerMode);
-                                if ($rootScope.developerMode) {
+                                console.log("DEVELOPER MODE ", $scope.developerMode);
+                                if ($scope.developerMode) {
 
                                   console.warn("WE ARE IN DEVELOPER CHANNEL!!!");
 
@@ -172,7 +184,7 @@ angular.module("bookbuilder2")
 
                                                 window.localStorage.setItem("versionNumber", metadata.version);
                                                 if (window.localStorage.getItem("versionNumber")) {
-                                                  $rootScope.versionNumber = window.localStorage.getItem("versionNumber");
+                                                  $scope.versionNumber = window.localStorage.getItem("versionNumber");
                                                 }
 
                                                 $ionicLoading.show({
@@ -265,7 +277,9 @@ angular.module("bookbuilder2")
 
 
       } else {
-        $rootScope.rootDir = "http://" + "enGrEnglish2" + ".s3-website-eu-west-1.amazonaws.com/";
+
+        $scope.rootDir = "https://s3-eu-west-1.amazonaws.com/engrenglish2/";
+        window.localStorage.setItem("rootDir", $scope.rootDir);
         /*$state.go("groups");*/
         $ionicHistory.nextViewOptions({
           historyRoot: true,

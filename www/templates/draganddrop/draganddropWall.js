@@ -1,14 +1,51 @@
 angular.module("bookbuilder2")
-  .controller("DraganddropWallController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast) {
+  .controller("DraganddropWallController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory, Toast) {
 
     console.log("DraganddropWallController loaded!");
-    TypicalFunctions.loadVariablesFromLocalStorage();
+    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
+    $scope.rootDir = window.localStorage.getItem("rootDir");
+    $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+    $scope.activityFolder = window.localStorage.getItem("activityFolder");
+    $scope.activityName = window.localStorage.getItem("activityName");
+
+    $scope.backgroundView = {
+      "background": "url(" + $scope.rootDir + "data/assets/lesson_background_image.png) no-repeat center top",
+      "-webkit-background-size": "cover",
+      "-moz-background-size": "cover",
+      "background-size": "cover"
+    };
+
+    $ionicPlatform.on('pause', function () {
+      console.log('pause');
+      createjs.Ticker.framerate = 0;
+      ionic.Platform.exitApp();
+    });
+    $ionicPlatform.on('resume', function () {
+      createjs.Ticker.framerate = 10;
+    });
+
+    $scope.$on('$destroy', function () {
+      createjs.Ticker.removeEventListener("tick", handleTick);
+      createjs.Tween.removeAllTweens();
+      $timeout.cancel(timeout);
+      $ionicHistory.clearHistory();
+      $ionicHistory.clearCache();
+      $scope.stage.removeAllEventListeners();
+      $scope.stage.removeAllChildren();
+      $scope.stage = null;
+    });
+
+    var handleTick = function () {
+      if ($scope.stage) {
+        $scope.stage.update();
+      }
+    };
 
     /*Name of activity in localStorage*/
-    var activityNameInLocalStorage = $rootScope.selectedLesson.id + "_" + $rootScope.activityFolder;
+    var activityNameInLocalStorage = $scope.selectedLesson.id + "_" + $scope.activityFolder;
     console.log("Name of activity in localStorage: ", activityNameInLocalStorage);
 
-    $timeout(function () {
+    var timeout = $timeout(function () {
       var PIXEL_RATIO = (function () {
         var ctx = document.getElementById("canvas").getContext("2d"),
           dpr = window.devicePixelRatio || 1,
@@ -40,67 +77,11 @@ angular.module("bookbuilder2")
       $scope.stage.mouseMoveOutside = false;
 
       createjs.Ticker.framerate = 20;
-      var handleTick = function () {
-        $scope.stage.update();
-      };
       createjs.Ticker.addEventListener("tick", handleTick);
-
-      //EVENTS THAT SHOULD BE USED TO CONTROL THE APP
-      $scope.$on('$destroy', function () {
-        console.log('destroy');
-        createjs.Ticker.framerate = 0;
-
-        _.each($scope.sounds, function (sound, key, list) {
-          $scope.sounds[key].stop();
-          $scope.sounds[key].release();
-        });
-
-      });
-
-      $ionicPlatform.on('pause', function () {
-        console.log('pause');
-        createjs.Ticker.framerate = 0;
-      });
-
-      $ionicPlatform.on('resume', function () {
-        console.log('resume');
-        $timeout(function () {
-          createjs.Ticker.framerate = 20;
-        }, 2000);
-      });
-
-      $scope.sounds = {};
-      if (window.cordova && window.cordova.platformId !== "browser") {
-        _.each(["drag", "drop", "check"], function (sound, key, list) {
-          if (ionic.Platform.isIOS() && window.cordova) {
-            console.log("Else iOS");
-            resolveLocalFileSystemURL($rootScope.rootDir + "data/assets/" + sound + ".mp3", function (entry) {
-              $scope.sounds[sound] = new Media(entry.toInternalURL(), function () {
-                console.log("Sound success");
-              }, function (err) {
-                console.log("Sound error", err);
-              }, function (status) {
-                console.log("Sound status", status);
-              });
-            });
-          } else {
-            console.log("Else Android");
-            $scope.sounds[sound] = new Media($rootScope.rootDir + "data/assets/" + sound + ".mp3", function () {
-              console.log("Sound success");
-            }, function (err) {
-              console.log("Sound error", err);
-            }, function (status) {
-              console.log("Sound status", status);
-            });
-          }
-        });
-
-      }
-
 
       /****************************** Image Loader ******************************/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-        src: $rootScope.rootDir + "data/assets/drag_and_drop_wall_background_2.png"
+        src: $scope.rootDir + "data/assets/drag_and_drop_wall_background_2.png"
       }));
       imageLoader.load();
 
@@ -110,14 +91,14 @@ angular.module("bookbuilder2")
         console.log("Image Loaded...");
 
         /*Creating Bitmap Background for Canvas*/
-        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/drag_and_drop_wall_background_2.png");
+        var background = new createjs.Bitmap($scope.rootDir + "data/assets/drag_and_drop_wall_background_2.png");
 
         /**** CALCULATING SCALING ****/
         var scaleY = $scope.stage.canvas.height / background.image.height;
         scaleY = scaleY.toFixed(2);
         var scaleX = $scope.stage.canvas.width / background.image.width;
         scaleX = scaleX.toFixed(2);
-        scale = 1;
+        $scope.scale = 1;
         if (scaleX >= scaleY) {
           $scope.scale = scaleY;
         } else {
@@ -187,11 +168,11 @@ angular.module("bookbuilder2")
 
         /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
 
-        $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
+        $http.get($scope.rootDir + "data/assets/head_menu_button_sprite.json")
           .success(function (response) {
 
             //Reassigning images with the rest of resource
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+            response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
 
             var menuButtonSpriteSheet = new createjs.SpriteSheet(response);
             var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
@@ -212,12 +193,6 @@ angular.module("bookbuilder2")
                 historyRoot: true,
                 disableBack: true
               });
-
-
-              $ionicHistory.clearCache();
-              createjs.Tween.removeAllTweens();
-              $scope.stage.removeAllEventListeners();
-              $scope.stage.removeAllChildren();
               $state.go("lessonNew", {}, {reload: true});
             });
 
@@ -273,7 +248,7 @@ angular.module("bookbuilder2")
               /*Creating the row container*/
               /*Creating the question bitmap*/
               var questionImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                src: $rootScope.rootDir + "data/assets/drag_and_drop_wall_answer_holder.png"
+                src: $scope.rootDir + "data/assets/drag_and_drop_wall_answer_holder.png"
               }));
               questionImageLoader.load();
 
@@ -281,14 +256,14 @@ angular.module("bookbuilder2")
 
                 /*Creating the questionTextBackground bitmap*/
                 var questionTextBackgroundImageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-                  src: $rootScope.rootDir + "data/assets/drag_and_drop_wall_question_background.png"
+                  src: $scope.rootDir + "data/assets/drag_and_drop_wall_question_background.png"
                 }));
                 questionTextBackgroundImageLoader.load();
 
                 questionTextBackgroundImageLoader.on("complete", function (r) {
 
 
-                  $scope.questionTextBackground = new createjs.Bitmap($rootScope.rootDir + "data/assets/drag_and_drop_wall_question_background.png");
+                  $scope.questionTextBackground = new createjs.Bitmap($scope.rootDir + "data/assets/drag_and_drop_wall_question_background.png");
                   $scope.questionTextBackground.x = -5;
                   $scope.questionTextBackground.y = -5;
                   $scope.questionTextBackgroundsContainers[key] = new createjs.Container();
@@ -301,11 +276,12 @@ angular.module("bookbuilder2")
                   $scope.currentPretexts[key] = new createjs.Text(question.pretext, "17px Arial", "white");
                   $scope.currentPretexts[key].x = 0;
                   $scope.currentPretexts[key].y = $scope.questionTextBackgroundsContainers[key].height / 3;
+                  $scope.currentPretexts[key].maxWidth = 270;
                   $scope.questionTextBackgroundsContainers[key].addChild($scope.currentPretexts[key]);
                   $scope.questionsContainer.addChild($scope.questionTextBackgroundsContainers[key]);
 
                   /*Creating Bitmap Background for answerHolder background image*/
-                  $scope.questionImages[key] = new createjs.Bitmap($rootScope.rootDir + "data/assets/drag_and_drop_wall_answer_holder.png");
+                  $scope.questionImages[key] = new createjs.Bitmap($scope.rootDir + "data/assets/drag_and_drop_wall_answer_holder.png");
                   $scope.questionImages[key].x = 0;
                   $scope.questionImages[key].y = -3;
 
@@ -327,7 +303,7 @@ angular.module("bookbuilder2")
                   $scope.questionText[key] = new createjs.Text("", "20px Arial", "white");
                   $scope.questionText[key].x = $scope.questionRowContainers[key].width / 2;
                   $scope.questionText[key].y = $scope.questionRowContainers[key].height / 3;
-                  $scope.questionText[key].maxWidth = $scope.questionRowContainers[key].width - 20;
+                  $scope.questionText[key].maxWidth = $scope.questionRowContainers[key].width;
                   $scope.questionText[key].textAlign = "center";
                   $scope.questionText[key].startingPointX = $scope.questionImages[key].x;
                   $scope.questionText[key].startingPointY = $scope.questionImages[key].y;
@@ -342,10 +318,6 @@ angular.module("bookbuilder2")
                     if ($scope.activityData.completed) {
                       console.log("On mouse down event ---> $scope.activityData.completed is true so the function aborts...");
                       return;
-                    }
-
-                    if (window.cordova && window.cordova.platformId !== "browser") {
-                      $scope.sounds["drag"].play();
                     }
 
                     var global = $scope.mainContainer.localToGlobal(this.x, this.y);
@@ -389,11 +361,6 @@ angular.module("bookbuilder2")
                     if ($scope.activityData.completed) {
                       return;
                     }
-
-                    if (window.cordova && window.cordova.platformId !== "browser") {
-                      $scope.sounds["drop"].play();
-                    }
-
                     var collisionDetectedQuestion = collision(evt.stageX / $scope.scale - $scope.mainContainer.x / $scope.scale, evt.stageY / $scope.scale - $scope.mainContainer.y / $scope.scale);
 
                     if (collisionDetectedQuestion !== -1) {
@@ -458,10 +425,10 @@ angular.module("bookbuilder2")
 
           /*Creating the spriteSheet for answer  *UNIQUE TO draganddropWall template* */
 
-          $http.get($rootScope.rootDir + "data/assets/drag_and_drop_wall_answer_sprite.json")
+          $http.get($scope.rootDir + "data/assets/drag_and_drop_wall_answer_sprite.json")
             .success(function (response) {
               //Reassigning images with the rest of resource
-              response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+              response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
               var answerPieceSpriteSheet = new createjs.SpriteSheet(response);
 
 
@@ -488,10 +455,6 @@ angular.module("bookbuilder2")
                     //Check if completed
                     if ($scope.activityData.completed) {
                       return;
-                    }
-
-                    if (window.cordova && window.cordova.platformId !== "browser") {
-                      $scope.sounds["drag"].play();
                     }
 
                     var global = $scope.mainContainer.localToGlobal(this.x, this.y);
@@ -543,10 +506,6 @@ angular.module("bookbuilder2")
                     if ($scope.activityData.completed) {
                       return;
                     }
-                    if (window.cordova && window.cordova.platformId !== "browser") {
-                      $scope.sounds["drop"].play();
-                    }
-
                     var collisionDetectedQuestion = collision(evt.stageX / $scope.scale - $scope.mainContainer.x / $scope.scale, evt.stageY / $scope.scale - $scope.mainContainer.y / $scope.scale);
 
                     /*There is collision*/
@@ -603,6 +562,7 @@ angular.module("bookbuilder2")
                   $scope.answerRowContainers[key].answerText.x = $scope.answerPieces[key].width / 2;
                   $scope.answerRowContainers[key].answerText.y = $scope.answerPieces[key].height / 2 - 7;
                   $scope.answerRowContainers[key].answerText.textAlign = "center";
+                  $scope.answerRowContainers[key].answerText.maxWidth = $scope.answerPieces[key].width;
                   $scope.answerRowContainers[key].addChild($scope.answerRowContainers[key].answerText);
 
                   waterfallCallback();
@@ -626,10 +586,10 @@ angular.module("bookbuilder2")
 
             async.parallel([function (callback) {
               /*RESTART BUTTON*/
-              $http.get($rootScope.rootDir + "data/assets/restart_button_drag_and_drop_sprite.json")
+              $http.get($scope.rootDir + "data/assets/restart_button_drag_and_drop_sprite.json")
                 .success(function (response) {
                   //Reassigning images with the rest of resource
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var restartButtonSpriteSheet = new createjs.SpriteSheet(response);
                   $scope.restartButton = new createjs.Sprite(restartButtonSpriteSheet, "normal");
 
@@ -666,9 +626,9 @@ angular.module("bookbuilder2")
             }, function (callback) {
 
               /*CHECK BUTTON*/
-              $http.get($rootScope.rootDir + "data/assets/check_answers_drag_and_drop_sprite.json")
+              $http.get($scope.rootDir + "data/assets/check_answers_drag_and_drop_sprite.json")
                 .success(function (response) {
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var checkButtonSpriteSheet = new createjs.SpriteSheet(response);
                   $scope.checkButton = new createjs.Sprite(checkButtonSpriteSheet, "normal");
 
@@ -693,9 +653,6 @@ angular.module("bookbuilder2")
 
                     if (!$scope.activityData.completed) {
                       $scope.checkButton.gotoAndPlay("normal");
-                      if (window.cordova && window.cordova.platformId !== "browser") {
-                        $scope.sounds["check"].play();
-                      }
                       check();
                     }
                   });
@@ -713,9 +670,9 @@ angular.module("bookbuilder2")
             }, function (callback) {
 
               /*NEXT BUTTON*/
-              $http.get($rootScope.rootDir + "data/assets/next_activity_drag_and_drop_sprite.json")
+              $http.get($scope.rootDir + "data/assets/next_activity_drag_and_drop_sprite.json")
                 .success(function (response) {
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var nextButtonSpriteSheet = new createjs.SpriteSheet(response);
                   $scope.nextButton = new createjs.Sprite(nextButtonSpriteSheet, "normal");
                   $scope.nextButton.alpha = 0.5;
@@ -736,7 +693,7 @@ angular.module("bookbuilder2")
                     if ($scope.activityData.completed) {
                       $scope.nextButton.gotoAndPlay("normal");
                       /*Calling next function!*/
-                      TypicalFunctions.nextActivity();
+                      TypicalFunctions.nextActivity($scope.selectedLesson, $scope.activityFolder);
                     }
 
                   });
@@ -786,10 +743,10 @@ angular.module("bookbuilder2")
           console.log("There is no activity...Getting the json through get");
 
 
-          console.log("$rootScope.selectedLesson.id: ", $rootScope.selectedLesson.id);
-          console.log("$rootScope.activityFolder: ", $rootScope.activityFolder);
+          console.log("$scope.selectedLesson.id: ", $scope.selectedLesson.id);
+          console.log("$scope.activityFolder: ", $scope.activityFolder);
 
-          $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/" + $rootScope.activityFolder + "/draganddropWall.json")
+          $http.get($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/" + $scope.activityFolder + "/draganddropWall.json")
             .success(function (response) {
               console.log("Success on getting json for the url. The response object is: ", response);
 

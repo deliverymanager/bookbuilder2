@@ -1,15 +1,58 @@
 angular.module("bookbuilder2")
-  .controller("DraganddropController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $rootScope, $ionicHistory, Toast) {
+  .controller("DraganddropController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory, Toast) {
 
     console.log("Draganddrop loaded!");
 
-    TypicalFunctions.loadVariablesFromLocalStorage();
+    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
+    $scope.rootDir = window.localStorage.getItem("rootDir");
+    $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+    $scope.activityFolder = window.localStorage.getItem("activityFolder");
+    $scope.activityName = window.localStorage.getItem("activityName");
+
+    $scope.backgroundView = {
+      "background": "url(" + $scope.rootDir + "data/assets/lesson_background_image.png) no-repeat center top",
+      "-webkit-background-size": "cover",
+      "-moz-background-size": "cover",
+      "background-size": "cover"
+    };
+
+    $ionicPlatform.on('pause', function () {
+      console.log('pause');
+      createjs.Ticker.framerate = 0;
+      ionic.Platform.exitApp();
+    });
+    $ionicPlatform.on('resume', function () {
+      createjs.Ticker.framerate = 10;
+    });
+
+    $scope.$on('$destroy', function () {
+      createjs.Ticker.removeEventListener("tick", handleTick);
+      createjs.Tween.removeAllTweens();
+      $timeout.cancel(timeout);
+      $ionicHistory.clearHistory();
+      $ionicHistory.clearCache();
+      $scope.stage.removeAllEventListeners();
+      $scope.stage.removeAllChildren();
+      $scope.stage = null;
+
+    /*  _.each($scope.sounds, function (sound, key, list) {
+        $scope.sounds[key].stop();
+        $scope.sounds[key].release();
+      });*/
+    });
+
+    var handleTick = function () {
+      if ($scope.stage) {
+        $scope.stage.update();
+      }
+    };
+
 
     /*Name of activity in localStorage*/
-    var activityNameInLocalStorage = $rootScope.selectedLesson.id + "_" + $rootScope.activityFolder;
+    var activityNameInLocalStorage = $scope.selectedLesson.id + "_" + $scope.activityFolder;
     console.log("Name of activity in localStorage: ", activityNameInLocalStorage);
 
-    $timeout(function () {
+    var timeout = $timeout(function () {
       var PIXEL_RATIO = (function () {
         var ctx = document.getElementById("canvas").getContext("2d"),
           dpr = window.devicePixelRatio || 1,
@@ -41,25 +84,12 @@ angular.module("bookbuilder2")
       $scope.stage.mouseMoveOutside = false;
 
       createjs.Ticker.framerate = 20;
-      var handleTick = function () {
-        $scope.stage.update();
-      };
       createjs.Ticker.addEventListener("tick", handleTick);
-
-      $ionicPlatform.on('pause', function () {
-        console.log('pause');
-        createjs.Ticker.framerate = 0;
-        ionic.Platform.exitApp();
-      });
-      $ionicPlatform.on('resume', function () {
-        createjs.Ticker.framerate = 20;
-      });
-
-      $scope.sounds = {};
+      /*$scope.sounds = {};
       if (window.cordova && window.cordova.platformId !== "browser") {
         _.each(["drag", "drop", "check"], function (sound, key, list) {
           if (ionic.Platform.isIOS() && window.cordova) {
-            resolveLocalFileSystemURL($rootScope.rootDir + "data/assets/" + sound + ".mp3", function (entry) {
+            resolveLocalFileSystemURL($scope.rootDir + "data/assets/" + sound + ".mp3", function (entry) {
               $scope.sounds[sound] = new Media(entry.toInternalURL(), function () {
                 console.log("Sound success");
               }, function (err) {
@@ -70,7 +100,7 @@ angular.module("bookbuilder2")
             });
           } else {
             console.log("Else Android");
-            $scope.sounds[sound] = new Media($rootScope.rootDir + "data/assets/" + sound + ".mp3", function () {
+            $scope.sounds[sound] = new Media($scope.rootDir + "data/assets/" + sound + ".mp3", function () {
               console.log("Sound success");
             }, function (err) {
               console.log("Sound error", err);
@@ -80,20 +110,20 @@ angular.module("bookbuilder2")
           }
         });
 
-      }
+      }*/
 
       var userChoice = " _________________________________ ";
 
       /****************************** Image Loader ******************************/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
-        src: $rootScope.rootDir + "data/assets/background_image_for_draganddrop_blue.png"
+        src: $scope.rootDir + "data/assets/background_image_for_draganddrop_blue.png"
       }));
       imageLoader.load();
 
       /*IMAGE LOADER COMPLETED*/
       imageLoader.on("complete", function (r) {
 
-        var background = new createjs.Bitmap($rootScope.rootDir + "data/assets/background_image_for_draganddrop_blue.png");
+        var background = new createjs.Bitmap($scope.rootDir + "data/assets/background_image_for_draganddrop_blue.png");
         var scaleY = $scope.stage.canvas.height / background.image.height;
         scaleY = scaleY.toFixed(2);
         var scaleX = $scope.stage.canvas.width / background.image.width;
@@ -114,11 +144,11 @@ angular.module("bookbuilder2")
         $scope.stage.addChild(background);
         var backgroundPosition = background.getTransformedBounds();
 
-        $http.get($rootScope.rootDir + "data/assets/head_menu_button_sprite.json")
+        $http.get($scope.rootDir + "data/assets/head_menu_button_sprite.json")
           .success(function (response) {
 
             //Reassigning images with the rest of resource
-            response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+            response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
 
             var menuButtonSpriteSheet = new createjs.SpriteSheet(response);
             var menuButton = new createjs.Sprite(menuButtonSpriteSheet, "normal");
@@ -131,20 +161,11 @@ angular.module("bookbuilder2")
             menuButton.addEventListener("pressup", function (event) {
               menuButton.gotoAndPlay("normal");
               $scope.stage.update();
-              _.each($scope.sounds, function (sound, key, list) {
-                $scope.sounds[key].stop();
-                $scope.sounds[key].release();
-              });
 
               $ionicHistory.nextViewOptions({
                 historyRoot: true,
                 disableBack: true
               });
-
-              $ionicHistory.clearCache();
-              createjs.Tween.removeAllTweens();
-              $scope.stage.removeAllEventListeners();
-              $scope.stage.removeAllChildren();
               $state.go("lesson", {}, {reload: true});
             });
 
@@ -270,10 +291,10 @@ angular.module("bookbuilder2")
                 if ($scope.activityData.completed) {
                   return;
                 }
-
+/*
                 if (window.cordova && window.cordova.platformId !== "browser") {
                   $scope.sounds["drag"].play();
-                }
+                }*/
 
                 var global = $scope.stage.localToGlobal(this.x, this.y);
                 this.offset = {
@@ -310,10 +331,10 @@ angular.module("bookbuilder2")
                 if ($scope.activityData.completed) {
                   return;
                 }
-
+/*
                 if (window.cordova && window.cordova.platformId !== "browser") {
                   $scope.sounds["drop"].play();
-                }
+                }*/
 
                 var collisionDetectedQuestion = collision(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
 
@@ -398,10 +419,12 @@ angular.module("bookbuilder2")
                 if ($scope.activityData.completed) {
                   return;
                 }
+/*
 
                 if (window.cordova && window.cordova.platformId !== "browser") {
                   $scope.sounds["drag"].play();
                 }
+*/
 
                 var global = $scope.stage.localToGlobal(this.x, this.y);
                 this.offset = {
@@ -433,9 +456,9 @@ angular.module("bookbuilder2")
                 if ($scope.activityData.completed) {
                   return;
                 }
-                if (window.cordova && window.cordova.platformId !== "browser") {
+          /*      if (window.cordova && window.cordova.platformId !== "browser") {
                   $scope.sounds["drop"].play();
-                }
+                }*/
                 var collisionDetectedQuestion = collision(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
 
                 if (collisionDetectedQuestion !== -1) {
@@ -460,7 +483,7 @@ angular.module("bookbuilder2")
 
             /* ------------------------------------------ Lesson Title ---------------------------------------------- */
 
-            var lessonTitle = new createjs.Text($rootScope.selectedLesson.lessonTitle, "27px Arial", "yellow");
+            var lessonTitle = new createjs.Text($scope.selectedLesson.lessonTitle, "27px Arial", "yellow");
 
             /*background.scaleX = background.scaleY = scale;*/
             lessonTitle.scaleX = lessonTitle.scaleY = scale;
@@ -474,10 +497,10 @@ angular.module("bookbuilder2")
 
             async.parallel([function (callback) {
               /*RESTART BUTTON*/
-              $http.get($rootScope.rootDir + "data/assets/lesson_restart_button_sprite.json")
+              $http.get($scope.rootDir + "data/assets/lesson_restart_button_sprite.json")
                 .success(function (response) {
                   //Reassigning images with the rest of resource
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var returnButtonSpriteSheet = new createjs.SpriteSheet(response);
                   var returnButton = new createjs.Sprite(returnButtonSpriteSheet, "normal");
 
@@ -508,9 +531,9 @@ angular.module("bookbuilder2")
                 });
             }, function (callback) {
               /*CHECK BUTTON*/
-              $http.get($rootScope.rootDir + "data/assets/lesson_check_button_sprite.json")
+              $http.get($scope.rootDir + "data/assets/lesson_check_button_sprite.json")
                 .success(function (response) {
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var checkButtonSpriteSheet = new createjs.SpriteSheet(response);
                   $scope.checkButton = new createjs.Sprite(checkButtonSpriteSheet, "normal");
 
@@ -533,9 +556,9 @@ angular.module("bookbuilder2")
 
                     if (!$scope.activityData.completed) {
                       $scope.checkButton.gotoAndPlay("normal");
-                      if (window.cordova && window.cordova.platformId !== "browser") {
+                      /*if (window.cordova && window.cordova.platformId !== "browser") {
                         $scope.sounds["check"].play();
-                      }
+                      }*/
                       $scope.stage.update();
                       check();
                     }
@@ -553,9 +576,9 @@ angular.module("bookbuilder2")
                 });
             }, function (callback) {
               /*NEXT BUTTON*/
-              $http.get($rootScope.rootDir + "data/assets/lesson_next_button_sprite.json")
+              $http.get($scope.rootDir + "data/assets/lesson_next_button_sprite.json")
                 .success(function (response) {
-                  response.images[0] = $rootScope.rootDir + "data/assets/" + response.images[0];
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var nextButtonSpriteSheet = new createjs.SpriteSheet(response);
                   $scope.nextButton = new createjs.Sprite(nextButtonSpriteSheet, "normal");
                   $scope.nextButton.alpha = 0.5;
@@ -574,7 +597,7 @@ angular.module("bookbuilder2")
                     if ($scope.activityData.completed) {
                       $scope.nextButton.gotoAndPlay("normal");
                       $scope.stage.update();
-                      TypicalFunctions.nextActivity();
+                      TypicalFunctions.nextActivity($scope.selectedLesson, $scope.activityFolder);
                     }
 
                   });
@@ -621,7 +644,7 @@ angular.module("bookbuilder2")
           init();
 
         } else {
-          $http.get($rootScope.rootDir + "data/lessons/" + $rootScope.selectedLesson.id + "/" + $rootScope.activityFolder + "/draganddrop.json")
+          $http.get($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/" + $scope.activityFolder + "/draganddrop.json")
             .success(function (response) {
               console.log("Success on getting json for the url. The response object is: ", response);
 
@@ -655,7 +678,7 @@ angular.module("bookbuilder2")
 
         /* ------------------------------------------ TITLE ---------------------------------------------- */
 
-        var title = new createjs.Text($rootScope.activityName, "27px Arial", "white");
+        var title = new createjs.Text($scope.activityName, "27px Arial", "white");
 
         /*background.scaleX = background.scaleY = scale;*/
         title.scaleX = title.scaleY = scale;
