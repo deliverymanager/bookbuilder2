@@ -1,8 +1,7 @@
 angular.module("bookbuilder2")
-  .controller("LessonNewController", function (_, $scope, $ionicPlatform, $timeout, $http, $state, $ionicHistory, Toast) {
+  .controller("LessonNewController", function (_, $scope, $ionicPlatform, $timeout, $http, $rootScope,Toast) {
 
     console.log("LessonNewController loaded!");
-    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLessonId = window.localStorage.getItem("selectedLessonId");
 
@@ -25,8 +24,6 @@ angular.module("bookbuilder2")
     $scope.$on('$destroy', function () {
       createjs.Ticker.removeEventListener("tick", handleTick);
       $timeout.cancel(timeout);
-      $ionicHistory.clearHistory();
-      $ionicHistory.clearCache();
       createjs.Tween.removeAllTweens();
       $scope.stage.removeAllEventListeners();
       $scope.stage.removeAllChildren();
@@ -154,12 +151,7 @@ angular.module("bookbuilder2")
               console.log("pressup event!");
               menuButton.gotoAndPlay("normal");
               $scope.stage.update();
-
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-              $state.go("groups", {}, {reload: true});
+              $rootScope.navigate("groups");
             });
 
             menuButton.scaleX = menuButton.scaleY = $scope.scale;
@@ -207,11 +199,7 @@ angular.module("bookbuilder2")
               console.log("pressup event!");
               resultsButton.gotoAndPlay("normal");
               $scope.stage.update();
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-              $state.go("results", {}, {reload: true});
+              $rootScope.navigate("results");
             });
           })
           .error(function (error) {
@@ -317,13 +305,8 @@ angular.module("bookbuilder2")
                           window.localStorage.setItem("activityTemplate", $scope.activityTemplate);
                           window.localStorage.setItem("activityName", $scope.activityName);
 
-                          console.log($scope.selectedLessonId);
-                          console.log($scope.activityFolder);
-                          $ionicHistory.nextViewOptions({
-                            historyRoot: true,
-                            disableBack: true
-                          });
-                          $state.go($scope.mainActivitiesButtons[key].activityTemplate, {}, {reload: true});
+                          $rootScope.navigate($scope.mainActivitiesButtons[key].activityTemplate);
+
                         });
                       }
 
@@ -421,14 +404,7 @@ angular.module("bookbuilder2")
 
                       window.localStorage.setItem("activityFolder", $scope.activityFolder);
                       window.localStorage.setItem("activityName", $scope.activityName);
-
-                      console.log($scope.selectedLessonId);
-                      console.log($scope.activityFolder);
-                      $ionicHistory.nextViewOptions({
-                        historyRoot: true,
-                        disableBack: true
-                      });
-                      $state.go($scope.subActivitiesButtons[key].activityTemplate, {}, {reload: true});
+                      $rootScope.navigate($scope.subActivitiesButtons[key].activityTemplate);
                     });
 
                     $scope.activitiesMenuContainer.addChild($scope.subActivitiesButtons[key]);

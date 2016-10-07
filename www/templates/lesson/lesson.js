@@ -1,9 +1,7 @@
 angular.module("bookbuilder2")
-  .controller("LessonController", function ($scope, $ionicPlatform, $timeout, $http, $state, $ionicHistory) {
+  .controller("LessonController", function ($scope, $ionicPlatform, $timeout,$rootScope, $http) {
 
     console.log("LessonController loaded!");
-
-    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
     $scope.selectedLessonId = window.localStorage.getItem("selectedLessonId");
@@ -31,8 +29,6 @@ angular.module("bookbuilder2")
       createjs.Ticker.removeEventListener("tick", handleTick);
       createjs.Tween.removeAllTweens();
       $timeout.cancel(timeout);
-      $ionicHistory.clearHistory();
-      $ionicHistory.clearCache();
       $scope.stage.removeAllEventListeners();
       $scope.stage.removeAllChildren();
       $scope.stage = null;
@@ -59,6 +55,7 @@ angular.module("bookbuilder2")
       var createHiDPICanvas = function (w, h, ratio) {
         if (!ratio) {
           ratio = PIXEL_RATIO;
+          window.localStorage.setItem("ratio", PIXEL_RATIO);
         }
         console.log("ratio", PIXEL_RATIO);
         var can = document.getElementById("canvas");
@@ -114,6 +111,7 @@ angular.module("bookbuilder2")
         }
         $scope.background.scaleX = $scope.scale;
         $scope.background.scaleY = $scope.scale;
+        window.localStorage.setItem("scale", $scope.scale);
         $scope.background.regX = $scope.background.image.width / 2;
         $scope.background.regY = $scope.background.image.height / 2;
         $scope.background.x = $scope.stage.canvas.width / 2;
@@ -189,6 +187,24 @@ angular.module("bookbuilder2")
 
       }, function (waterfallCallback) {
 
+        if (bitmapLoaders["menu_video_bubble_button_sprite"] && bitmapLoaders["menu_video_bubble_button_sprite"].loaded) {
+          waterfallCallback();
+        } else {
+          bitmapLoaders["menu_video_bubble_button_sprite"] = new createjs.ImageLoader(new createjs.LoadItem().set({
+            src: $scope.rootDir + "data/assets/menu_video_bubble_button_sprite.png"
+          }));
+
+          bitmapLoaders["menu_video_bubble_button_sprite"].load();
+
+          bitmapLoaders["menu_video_bubble_button_sprite"].on("complete", function (r) {
+            $timeout(function () {
+              waterfallCallback();
+            });
+          });
+        }
+
+      }, function (waterfallCallback) {
+
         if (bitmapLoaders["lesson_results_button_sprite"] && bitmapLoaders["lesson_results_button_sprite"].loaded) {
           waterfallCallback();
         } else {
@@ -211,6 +227,11 @@ angular.module("bookbuilder2")
           .success(function (response) {
             $scope.selectedLesson = response;
             window.localStorage.setItem("selectedLesson", JSON.stringify($scope.selectedLesson));
+
+            $scope.videoExists = _.findWhere($scope.selectedLesson.lessonMenu, {
+              activityFolder: "video"
+            });
+
             var lessonTitle = new createjs.Text(response.lessonTitle, "33px Arial", "white");
             lessonTitle.scaleX = lessonTitle.scaleY = $scope.scale;
             lessonTitle.x = $scope.backgroundPosition.x + ($scope.backgroundPosition.width / 10);
@@ -300,11 +321,7 @@ angular.module("bookbuilder2")
 
                   console.log($scope.selectedLessonId);
                   console.log($scope.activityFolder);
-                  $ionicHistory.nextViewOptions({
-                    historyRoot: true,
-                    disableBack: true
-                  });
-                  $state.go(activityButton.activityTemplate, {}, {reload: true});
+                  $rootScope.navigate(activityButton.activityTemplate);
                 });
 
                 $scope.activitiesMenuContainer.addChild(activityButton);
@@ -335,9 +352,9 @@ angular.module("bookbuilder2")
             response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
             var vocabularyButtonSpriteSheet = new createjs.SpriteSheet(response);
             var vocabularyButton = new createjs.Sprite(vocabularyButtonSpriteSheet, "normal");
-            vocabularyButton.scaleX = vocabularyButton.scaleY = $scope.scale;
-            vocabularyButton.x = $scope.backgroundPosition.x + ($scope.backgroundPosition.width / 2.8);
-            vocabularyButton.y = $scope.backgroundPosition.y + ($scope.backgroundPosition.height / 5);
+            vocabularyButton.scaleX = vocabularyButton.scaleY = $scope.scale * ($scope.videoExists ? 0.75 : 1);
+            vocabularyButton.x = $scope.backgroundPosition.x + ($scope.backgroundPosition.width / ($scope.videoExists ? 2.6 : 2.8));
+            vocabularyButton.y = $scope.backgroundPosition.y + ($scope.backgroundPosition.height / ($scope.videoExists ? 7 : 5));
             vocabularyButton.addEventListener("mousedown", function (event) {
               console.log("mousedown event on a lesson button!");
               vocabularyButton.gotoAndPlay("onSelection");
@@ -347,11 +364,7 @@ angular.module("bookbuilder2")
               vocabularyButton.gotoAndPlay("normal");
               $scope.stage.update();
               console.log($scope.selectedLessonId);
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-              $state.go("vocabulary", {}, {reload: true});
+              $rootScope.navigate("vocabulary");
             });
             $scope.stage.addChild(vocabularyButton);
           })
@@ -365,9 +378,9 @@ angular.module("bookbuilder2")
             response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
             var readingButtonSpriteSheet = new createjs.SpriteSheet(response);
             var readingButton = new createjs.Sprite(readingButtonSpriteSheet, "normal");
-            readingButton.scaleX = readingButton.scaleY = $scope.scale;
-            readingButton.x = $scope.backgroundPosition.x + ($scope.backgroundPosition.width / 2.8);
-            readingButton.y = $scope.backgroundPosition.y + ($scope.backgroundPosition.height / 2);
+            readingButton.scaleX = readingButton.scaleY = $scope.scale * ($scope.videoExists ? 0.75 : 1);
+            readingButton.x = $scope.backgroundPosition.x + ($scope.backgroundPosition.width / ($scope.videoExists ? 3 : 2.8));
+            readingButton.y = $scope.backgroundPosition.y + ($scope.backgroundPosition.height / ($scope.videoExists ? 2.7 : 2));
 
             readingButton.addEventListener("mousedown", function (event) {
               console.log("mousedown event on a lesson button!");
@@ -378,17 +391,48 @@ angular.module("bookbuilder2")
               readingButton.gotoAndPlay("normal");
               $scope.stage.update();
               console.log($scope.selectedLessonId);
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-              $state.go("reading");
+              $rootScope.navigate("reading");
             });
             $scope.stage.addChild(readingButton);
           })
           .error(function (error) {
             console.error("Error on getting json for reading button...", error);
           });
+
+
+        if ($scope.videoExists) {
+
+          /*-----------------------------------------VIDEO BUTTON----------------------------------------*/
+          $http.get($scope.rootDir + "data/assets/menu_video_bubble_button_sprite.json")
+            .success(function (response) {
+              response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
+              var videoButtonSpriteSheet = new createjs.SpriteSheet(response);
+              var videoButton = new createjs.Sprite(videoButtonSpriteSheet, "normal");
+              videoButton.scaleX = videoButton.scaleY = $scope.scale * 0.75;
+              videoButton.x = $scope.backgroundPosition.x + ($scope.backgroundPosition.width / 2.3);
+              videoButton.y = $scope.backgroundPosition.y + ($scope.backgroundPosition.height / 1.7);
+
+              videoButton.addEventListener("mousedown", function (event) {
+                console.log("mousedown event on a lesson button!");
+                videoButton.gotoAndPlay("onSelection");
+                $scope.stage.update();
+              });
+              videoButton.addEventListener("pressup", function (event) {
+                videoButton.gotoAndPlay("normal");
+                $scope.stage.update();
+                window.localStorage.setItem("activityFolder", "video");
+                console.log($scope.selectedLessonId);
+                console.log($scope.activityFolder);
+                $rootScope.navigate("video");
+              });
+              $scope.stage.addChild(videoButton);
+            })
+            .error(function (error) {
+              console.error("Error on getting json for reading button...", error);
+            });
+
+
+        }
 
 
         /*-----------------------------------------RESULTS BUTTON----------------------------------------*/
@@ -404,19 +448,13 @@ angular.module("bookbuilder2")
             $scope.stage.addChild(resultsButton);
 
             resultsButton.addEventListener("mousedown", function (event) {
-              console.log("mousedown event on a button !");
               resultsButton.gotoAndPlay("onSelection");
               $scope.stage.update();
             });
             resultsButton.addEventListener("pressup", function (event) {
-              console.log("pressup event!");
               resultsButton.gotoAndPlay("normal");
               $scope.stage.update();
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-              $state.go("results", {}, {reload: true});
+              $rootScope.navigate("results");
             });
           })
           .error(function (error) {
@@ -442,11 +480,7 @@ angular.module("bookbuilder2")
               console.log("pressup event!");
               menuButton.gotoAndPlay("normal");
               $scope.stage.update();
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-              $state.go("groups");
+              $rootScope.navigate("groups");
             });
 
             menuButton.scaleX = menuButton.scaleY = $scope.scale;

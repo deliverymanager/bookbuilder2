@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="gr.dwhite.enGrLikeEnglishB1" version="3.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="gr.dwhite.enGrLikeEnglishB1" version="0.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>I Like English B1</name>
-  <description>
-    I Like English B1
-  </description>
+  <description>I like Junior B1 by www.supercourse.com</description>
   <author email="apps@dwhite.gr" href="http://dwhite.gr">
     www.dwhite.gr
   </author>
@@ -22,7 +20,6 @@
   <preference name="SplashShowOnlyFirstTime" value="false"/>
   <preference name="SplashScreenDelay" value="3000"/>
   <preference name="CrosswalkAnimatable" value="true"/>
-  <preference name="xwalkVersion" value="17+"/>
   <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect"/>
   <preference name="xwalkMode" value="embedded"/>
   <preference name="xwalkMultipleApk" value="true"/>
@@ -81,6 +78,16 @@
     <icon src="resources/ios/icon/icon-small.png" width="29" height="29"/>
     <icon src="resources/ios/icon/icon-small@2x.png" width="58" height="58"/>
     <icon src="resources/ios/icon/icon-small@3x.png" width="87" height="87"/>
+  </platform>
+  <platform name="browser">
+    <hook src="hooks/scripts/remove_unwanted_plugins_from_browser.js" type="before_prepare"/>
+  </platform>
+  <platform name="ios">
+    <hook src="hooks/scripts/add_plugins.js" type="before_prepare"/>
+  </platform>
+  <platform name="android">
+    <hook src="hooks/scripts/add_plugins.js" type="before_prepare"/>
+    <hook src="hooks/scripts/ionic_upload.js" type="after_build"/>
   </platform>
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
 </widget>

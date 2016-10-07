@@ -1,16 +1,51 @@
 angular.module("bookbuilder2")
-  .controller("PreloadingController", function (_, $scope, $timeout, TypicalFunctions, Download, $interval, $ionicHistory, $ionicPlatform, $ionicPopup, $rootScope, $http, $state, $ionicLoading, $cordovaFile) {
+  .controller("PreloadingController", function (_, $ionicDeploy, $cordovaFileTransfer, $scope, $timeout, $interval, $ionicHistory, $ionicPlatform, $ionicPopup, $rootScope, $http, $state, $ionicLoading, $cordovaFile) {
 
     console.log("PreloadingController loaded!");
 
+
+    $rootScope.showPopup = function () {
+      $ionicLoading.hide();
+      var errorPopUp = $ionicPopup.alert({
+        template: 'Please make sure your have a stable connection to the internet!',
+        title: 'Connectivity Error!',
+        okType: 'button-dark'
+      });
+      errorPopUp.then(function () {
+        $rootScope.navigate("groups");
+      });
+    };
+
+
+    $rootScope.navigate = function (state) {
+      $ionicHistory.clearHistory();
+      $ionicHistory.clearCache().then(function (response) {
+        $ionicHistory.nextViewOptions({
+          disableAnimate: true,
+          disableBack: true,
+          historyRoot: true
+        });
+        $state.go(state);
+      });
+    };
+
+    $rootScope.nextActivity = function (selectedLesson, activityFolder) {
+      var index = _.findIndex(selectedLesson.activitiesMenu, {
+        "activityFolder": activityFolder
+      });
+
+      if (index < selectedLesson.activitiesMenu.length - 1) {
+        window.localStorage.setItem("activityFolder", selectedLesson.activitiesMenu[index + 1].activityFolder);
+        window.localStorage.setItem("activityName", selectedLesson.activitiesMenu[index + 1].name);
+        $rootScope.navigate(selectedLesson.activitiesMenu[index + 1].activityTemplate);
+      } else {
+        $rootScope.navigate("results");
+      }
+    };
+
+
     $ionicPlatform.ready(function () {
       console.log("bookbuilder2 ready!");
-
-      $scope.$on('$destroy', function () {
-        $timeout.cancel(timeout);
-        $ionicHistory.clearHistory();
-        $ionicHistory.clearCache();
-      });
 
       if (window.cordova && window.cordova.platformId !== "browser") {
 
@@ -22,7 +57,7 @@ angular.module("bookbuilder2")
         window.localStorage.setItem("rootDir", $scope.rootDir);
         console.log($scope.rootDir);
 
-        var timeout = $timeout(function () {
+        $timeout(function () {
           window.cordova.getAppVersion.getPackageName(function (name) {
             console.log(name);
             var TempGroup = name.split(".");
@@ -32,14 +67,14 @@ angular.module("bookbuilder2")
               var savedVersionNumber = window.localStorage.getItem("versionNumber");
               if (savedVersionNumber && (savedVersionNumber.split(".")[0] + "_" + savedVersionNumber.split(".")[1] ) === (versionNumber.split(".")[0] + "_" + versionNumber.split(".")[1])) {
                 console.log("savedVersionNumber", savedVersionNumber);
-                $scope.versionNumber = window.localStorage.getItem("versionNumber");
+                $rootScope.versionNumber = window.localStorage.getItem("versionNumber");
               } else {
                 window.localStorage.setItem("versionNumber", versionNumber);
-                $scope.versionNumber = versionNumber;
+                $rootScope.versionNumber = versionNumber;
               }
 
               if (TempGroup[2] === "enGrLikeEnglishB1") {
-                $scope.cdnUrl = "http://" + TempGroup[2] + "-" + (versionNumber.split(".")[0] + "-" + versionNumber.split(".")[1]) + ".s3-website-eu-west-1.amazonaws.com/";
+                $scope.cdnUrl = "http://engrlikeenglishb1-3-0.s3-website-eu-west-1.amazonaws.com/";
               } else {
                 $scope.cdnUrl = "http://" + TempGroup[2] + ".s3-website-eu-west-1.amazonaws.com/";
               }
@@ -48,20 +83,20 @@ angular.module("bookbuilder2")
               $rootScope.downloading = 0;
 
 
-              Download.checkDirOrCreate($scope.rootDir, "data", function (error) {
+              $rootScope.checkDirOrCreate($scope.rootDir, "data", function (error) {
 
                 if (error) {
                   console.log("Error checkDirOrCreate data directory");
                 }
 
-                Download.checkDirOrCreate($scope.rootDir + "data", "book", function (error) {
+                $rootScope.checkDirOrCreate($scope.rootDir + "data", "book", function (error) {
 
                   if (error) {
                     console.log("Error checkDirOrCreate json directory");
                   }
 
 
-                  Download.assets(["assets.json", "groups.json"], $scope.rootDir, $scope.cdnUrl, "data", "book", function (response) {
+                  $rootScope.assets(["assets.json", "groups.json"], $scope.rootDir, $scope.cdnUrl, "data", "book", function (response) {
                     console.log("response assets.json groups.json", response);
                     if (response) {
 
@@ -75,196 +110,20 @@ angular.module("bookbuilder2")
                           $scope.totalFiles = 2 + assets.length;
                           $rootScope.downloading = 2;
 
-                          Download.assets(assets, $scope.rootDir, $scope.cdnUrl, "data", "assets", function (response) {
-                            console.log("response", response);
+                          $rootScope.assets(assets, $scope.rootDir, $scope.cdnUrl, "data", "assets", function (response) {
+
                             if (response) {
 
-                              if (window.cordova && window.cordova.platformId !== "browser") {
-                                $scope.deploy = new Ionic.Deploy();
-                                var deployChannel = "v" + versionNumber.split(".")[0] + "_" + versionNumber.split(".")[1] + "_0";
-                                console.log("deploy Channel", deployChannel);
-                                var settings = new Ionic.IO.Settings();
-                                $scope.developerMode = settings.get('dev_push');
-
-                                console.log("DEVELOPER MODE ", $scope.developerMode);
-                                if ($scope.developerMode) {
-
-                                  console.warn("WE ARE IN DEVELOPER CHANNEL!!!");
-
-                                  $scope.deploy.setChannel("dev");
-
-                                  $scope.checkDeployInterval = $interval(function () {
-                                    $scope.deploy.check().then(function (hasUpdate) {
-                                      if (hasUpdate) {
-                                        $interval.cancel($scope.checkDeployInterval);
-
-                                        $ionicLoading.show({
-                                          template: "DEVELOPER UPDATE ..."
-                                        });
-
-                                        $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data")
-                                          .then(function (success) {
-
-                                            console.log("assets directory deleted!", success);
-                                            $scope.deploy.update().then(function (res) {
-                                              console.log('Ionic Deploy: Update Success! ', res);
-
-                                            }, function (err) {
-                                              console.log('Ionic Deploy: Update error! ', err);
-                                              $ionicLoading.hide();
-                                              $ionicHistory.nextViewOptions({
-                                                historyRoot: true,
-                                                disableBack: true
-                                              });
-                                              $state.go("groups", {}, {reload: true});
-                                            }, function (prog) {
-                                              console.log('Ionic Deploy: Progress... ', prog);
-                                              $ionicLoading.show({
-                                                template: "DEVELOPER UPDATE " + parseInt(prog) + "%"
-                                              });
-                                            });
-                                          }, function (error) {
-                                            console.log(error);
-                                            $ionicHistory.nextViewOptions({
-                                              historyRoot: true,
-                                              disableBack: true
-                                            });
-                                            $state.go("groups", {}, {reload: true});
-                                          });
-
-                                      }
-                                    });
-                                  }, 8000, 0, true);
-
-                                  $ionicHistory.nextViewOptions({
-                                    historyRoot: true,
-                                    disableBack: true
-                                  });
-
-                                  $state.go("groups", {}, {reload: true});
-
-                                } else {
-                                  console.warn("WE ARE IN PRODUCTION CHANNEL!!!", deployChannel);
-
-                                  $scope.deploy.setChannel(deployChannel);
-
-                                  $scope.deploy.check().then(function (hasUpdate) {
-                                    if (hasUpdate) {
-
-
-                                      $scope.deploy.getMetadata().then(function (metadata) {
-                                        // metadata will be a JSON object
-                                        console.log(metadata);
-                                        if (!metadata || !metadata.version) {
-                                          metadata = {
-                                            version: ""
-                                          }
-                                        }
-
-                                        $scope.popupRegisterVar = $ionicPopup.show({
-                                          "template": 'Download and install the new version ' + metadata.version + '?',
-                                          'title': 'Update Available',
-                                          "scope": $scope,
-                                          "buttons": [
-                                            {
-                                              "text": 'NO',
-                                              "type": "button-dark button-outline",
-                                              "onTap": function (e) {
-                                                $ionicHistory.nextViewOptions({
-                                                  historyRoot: true,
-                                                  disableBack: true
-                                                });
-                                                $state.go("groups", {}, {reload: true});
-                                              }
-                                            },
-                                            {
-                                              "text": 'YES',
-                                              "type": "button-dark",
-                                              "onTap": function (e) {
-
-                                                window.localStorage.setItem("versionNumber", metadata.version);
-                                                if (window.localStorage.getItem("versionNumber")) {
-                                                  $scope.versionNumber = window.localStorage.getItem("versionNumber");
-                                                }
-
-                                                $ionicLoading.show({
-                                                  template: "APP UPDATE ..."
-                                                });
-
-                                                $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data")
-                                                  .then(function (success) {
-
-                                                    console.log("assets directory deleted!", success);
-                                                    $scope.deploy.update().then(function (res) {
-                                                      console.log('Ionic Deploy: Update Success! ', res);
-
-                                                    }, function (err) {
-                                                      console.log('Ionic Deploy: Update error! ', err);
-                                                      $ionicLoading.hide();
-                                                      $ionicHistory.nextViewOptions({
-                                                        historyRoot: true,
-                                                        disableBack: true
-                                                      });
-                                                      $state.go("groups", {}, {reload: true});
-                                                    }, function (prog) {
-                                                      console.log('Ionic Deploy: Progress... ', prog);
-                                                      $ionicLoading.show({
-                                                        template: "APP UPDATE " + parseInt(prog) + "%"
-                                                      });
-                                                    });
-                                                  }, function (error) {
-                                                    console.log(error);
-                                                    $ionicHistory.nextViewOptions({
-                                                      historyRoot: true,
-                                                      disableBack: true
-                                                    });
-                                                    $state.go("groups", {}, {reload: true});
-                                                  });
-                                              }
-                                            }
-                                          ]
-                                        });
-                                      }, function (response) {
-                                        console.log("callback meta 1 ", response);
-                                        $ionicHistory.nextViewOptions({
-                                          historyRoot: true,
-                                          disableBack: true
-                                        });
-                                        $state.go("groups", {}, {reload: true});
-                                      }, function (response) {
-                                        console.log("callback meta 2", response);
-                                        $ionicHistory.nextViewOptions({
-                                          historyRoot: true,
-                                          disableBack: true
-                                        });
-                                        $state.go("groups", {}, {reload: true});
-                                      });
-
-                                    } else {
-                                      $ionicHistory.nextViewOptions({
-                                        historyRoot: true,
-                                        disableBack: true
-                                      });
-                                      $state.go("groups", {}, {reload: true});
-                                    }
-                                  });
-                                }
-                              } else {
-                                $ionicHistory.nextViewOptions({
-                                  historyRoot: true,
-                                  disableBack: true
-                                });
-                                $state.go("groups", {}, {reload: true});
-                              }
+                              checkDeployAndUpdate();
 
                             } else {
-                              TypicalFunctions.showPopup();
+                              $rootScope.showPopup();
                             }
                           });
                         });
                       });
                     } else {
-                      TypicalFunctions.showPopup();
+                      $rootScope.showPopup();
                     }
                   });
                 });
@@ -278,15 +137,217 @@ angular.module("bookbuilder2")
 
       } else {
 
-        $scope.rootDir = "https://s3-eu-west-1.amazonaws.com/engrenglish2/";
+        $scope.rootDir = "https://s3-eu-west-1.amazonaws.com/engrlikeenglishb1-3-0/";
         window.localStorage.setItem("rootDir", $scope.rootDir);
-        /*$state.go("groups");*/
-        $ionicHistory.nextViewOptions({
-          historyRoot: true,
-          disableBack: true
-        });
-        $state.go("groups", {}, {reload: true});
+        $rootScope.navigate("groups");
       }
     });
 
+
+    $rootScope.assets = function (assetsArray, rootDir, cdnUrl, prefolder, folder, callback) {
+
+      var checkFileAndDownload = function (prefolder, folder, file, cdnUrl, callback) {
+
+        $cordovaFile.checkFile(rootDir + prefolder + "/" + folder + "/", file)
+          .then(function (success) {
+            callback(true);
+          }, function (error) {
+            $cordovaFileTransfer.download(cdnUrl + prefolder + "/" + folder + "/" + file, rootDir + prefolder + "/" + folder + "/" + file, {}, true)
+              .then(function (result) {
+                callback(true);
+              }, function (error) {
+                console.log(error);
+                callback(false);
+              }, function (progress) {
+                //console.log(progress);
+              });
+          });
+      };
+
+
+      if (window.cordova && window.cordova.platformId !== "browser") {
+
+        var seriesFunctions = [];
+
+        _.each(assetsArray, function (fileName, key, list) {
+
+          seriesFunctions.push(function (seriesCallback) {
+
+            checkFileAndDownload(prefolder, folder, fileName, cdnUrl, function (callbackResponse) {
+
+              console.log(fileName);
+              $rootScope.downloading++;
+
+              if (callbackResponse) {
+                seriesCallback(null);
+              } else {
+                seriesCallback(true);
+              }
+            });
+          });
+        });
+
+        async.parallelLimit(seriesFunctions, 5, function (err, response) {
+          console.log("Downloading FINISHED!!!");
+          if (err) {
+            console.warn(err);
+            return callback(false);
+          } else {
+            return callback(true);
+          }
+        });
+      } else {
+        return callback(true);
+      }
+    };
+
+    $rootScope.checkDirOrCreate = function (path, directory, callback) {
+
+      $cordovaFile.checkDir(path, directory)
+        .then(function (success) {
+          console.log("Directory exists!");
+
+          callback(null);
+        }, function (error) {
+          console.log(error);
+
+          $cordovaFile.createDir(path, directory, true)
+            .then(function (success) {
+              callback(null);
+            }, function (error) {
+              console.log(error);
+              callback(false);
+            });
+        });
+    };
+
+
+    var checkDeployAndUpdate = function () {
+
+      var deployChannel = "v" + $rootScope.versionNumber.split(".")[0] + "_" + $rootScope.versionNumber.split(".")[1] + "_0";
+      if (deployChannel === "v0_0_0") {
+        $rootScope.developerMode = true;
+      } else {
+        $rootScope.developerMode = false;
+      }
+
+      if ($rootScope.developerMode) {
+        $ionicDeploy.channel = "dev";
+
+        $scope.checkDeployInterval = $interval(function () {
+          $ionicDeploy.check().then(function (hasUpdate) {
+            if (hasUpdate) {
+              $interval.cancel($scope.checkDeployInterval);
+
+              $ionicLoading.show({
+                template: "DEVELOPER UPDATE ..."
+              });
+
+              $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data")
+                .then(function (success) {
+
+                  installIonicUpdate();
+
+                }, function (error) {
+                  console.log(error);
+                  $rootScope.navigate("groups");
+                });
+            }
+          });
+        }, 8000, 0, true);
+
+        $rootScope.navigate("groups");
+
+      } else {
+
+        $ionicDeploy.channel = deployChannel;
+        $ionicDeploy.check().then(function (hasUpdate) {
+
+          if (hasUpdate) {
+
+            $ionicDeploy.getMetadata().then(function (metadata) {
+              if (!metadata || !metadata.version) {
+                metadata = {
+                  version: ""
+                }
+              }
+
+              $scope.popupRegisterVar = $ionicPopup.show({
+                "template": 'Download and install the new version ' + metadata.version + '?',
+                'title': 'Update Available',
+                "scope": $scope,
+                "buttons": [
+                  {
+                    "text": 'NO',
+                    "type": "button-dark button-outline",
+                    "onTap": function (e) {
+                      $rootScope.navigate("groups");
+                    }
+                  },
+                  {
+                    "text": 'YES',
+                    "type": "button-dark",
+                    "onTap": function (e) {
+
+                      window.localStorage.setItem("versionNumber", metadata.version);
+                      if (window.localStorage.getItem("versionNumber")) {
+                        $rootScope.versionNumber = window.localStorage.getItem("versionNumber");
+                      }
+
+                      $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data")
+                        .then(function (success) {
+
+                          $ionicLoading.show({
+                            template: "APP UPDATE ..."
+                          });
+
+                          installIonicUpdate();
+
+                        }, function (error) {
+                          console.log(error);
+                          $rootScope.navigate("groups");
+                        });
+                    }
+                  }
+                ]
+              });
+            }, function (response) {
+              console.log("callback meta 1 ", response);
+              $rootScope.navigate("groups");
+            }, function (response) {
+              console.log("callback meta 2", response);
+              $rootScope.navigate("groups");
+            });
+
+          } else {
+            $rootScope.navigate("groups");
+          }
+        });
+      }
+    };
+
+    var installIonicUpdate = function () {
+
+      $ionicDeploy.download().then(function () {
+
+        $ionicLoading.show({
+          template: "INSTALLING APP UPDATE ..."
+        });
+
+        $ionicDeploy.extract().then(function () {
+          $ionicLoading.show({
+            template: "RESTARTING APP ..."
+          });
+
+          //This is very important so that the new json files will be used instead of the ones saved in localstorage!!!!
+          window.localStorage.clear();
+
+          $ionicHistory.clearHistory();
+          $ionicHistory.clearCache().then(function (response) {
+            $ionicDeploy.load();
+          });
+        });
+      });
+
+    };
   });

@@ -1,9 +1,8 @@
 angular.module("bookbuilder2")
-  .controller("DraganddropController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory, Toast) {
+  .controller("DraganddropController", function ($scope, $ionicPlatform, $rootScope, $timeout, $http, _, Toast) {
 
     console.log("Draganddrop loaded!");
 
-    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
     $scope.activityFolder = window.localStorage.getItem("activityFolder");
@@ -29,16 +28,9 @@ angular.module("bookbuilder2")
       createjs.Ticker.removeEventListener("tick", handleTick);
       createjs.Tween.removeAllTweens();
       $timeout.cancel(timeout);
-      $ionicHistory.clearHistory();
-      $ionicHistory.clearCache();
       $scope.stage.removeAllEventListeners();
       $scope.stage.removeAllChildren();
       $scope.stage = null;
-
-    /*  _.each($scope.sounds, function (sound, key, list) {
-        $scope.sounds[key].stop();
-        $scope.sounds[key].release();
-      });*/
     });
 
     var handleTick = function () {
@@ -86,31 +78,31 @@ angular.module("bookbuilder2")
       createjs.Ticker.framerate = 20;
       createjs.Ticker.addEventListener("tick", handleTick);
       /*$scope.sounds = {};
-      if (window.cordova && window.cordova.platformId !== "browser") {
-        _.each(["drag", "drop", "check"], function (sound, key, list) {
-          if (ionic.Platform.isIOS() && window.cordova) {
-            resolveLocalFileSystemURL($scope.rootDir + "data/assets/" + sound + ".mp3", function (entry) {
-              $scope.sounds[sound] = new Media(entry.toInternalURL(), function () {
-                console.log("Sound success");
-              }, function (err) {
-                console.log("Sound error", err);
-              }, function (status) {
-                console.log("Sound status", status);
-              });
-            });
-          } else {
-            console.log("Else Android");
-            $scope.sounds[sound] = new Media($scope.rootDir + "data/assets/" + sound + ".mp3", function () {
-              console.log("Sound success");
-            }, function (err) {
-              console.log("Sound error", err);
-            }, function (status) {
-              console.log("Sound status", status);
-            });
-          }
-        });
+       if (window.cordova && window.cordova.platformId !== "browser") {
+       _.each(["drag", "drop", "check"], function (sound, key, list) {
+       if (ionic.Platform.isIOS() && window.cordova) {
+       resolveLocalFileSystemURL($scope.rootDir + "data/assets/" + sound + ".mp3", function (entry) {
+       $scope.sounds[sound] = new Media(entry.toInternalURL(), function () {
+       console.log("Sound success");
+       }, function (err) {
+       console.log("Sound error", err);
+       }, function (status) {
+       console.log("Sound status", status);
+       });
+       });
+       } else {
+       console.log("Else Android");
+       $scope.sounds[sound] = new Media($scope.rootDir + "data/assets/" + sound + ".mp3", function () {
+       console.log("Sound success");
+       }, function (err) {
+       console.log("Sound error", err);
+       }, function (status) {
+       console.log("Sound status", status);
+       });
+       }
+       });
 
-      }*/
+       }*/
 
       var userChoice = " _________________________________ ";
 
@@ -161,12 +153,7 @@ angular.module("bookbuilder2")
             menuButton.addEventListener("pressup", function (event) {
               menuButton.gotoAndPlay("normal");
               $scope.stage.update();
-
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-              $state.go("lesson", {}, {reload: true});
+              $rootScope.nextActivity("lessonNew");
             });
 
             menuButton.scaleX = menuButton.scaleY = scale;
@@ -291,10 +278,10 @@ angular.module("bookbuilder2")
                 if ($scope.activityData.completed) {
                   return;
                 }
-/*
-                if (window.cordova && window.cordova.platformId !== "browser") {
-                  $scope.sounds["drag"].play();
-                }*/
+                /*
+                 if (window.cordova && window.cordova.platformId !== "browser") {
+                 $scope.sounds["drag"].play();
+                 }*/
 
                 var global = $scope.stage.localToGlobal(this.x, this.y);
                 this.offset = {
@@ -331,10 +318,10 @@ angular.module("bookbuilder2")
                 if ($scope.activityData.completed) {
                   return;
                 }
-/*
-                if (window.cordova && window.cordova.platformId !== "browser") {
-                  $scope.sounds["drop"].play();
-                }*/
+                /*
+                 if (window.cordova && window.cordova.platformId !== "browser") {
+                 $scope.sounds["drop"].play();
+                 }*/
 
                 var collisionDetectedQuestion = collision(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
 
@@ -419,12 +406,12 @@ angular.module("bookbuilder2")
                 if ($scope.activityData.completed) {
                   return;
                 }
-/*
+                /*
 
-                if (window.cordova && window.cordova.platformId !== "browser") {
-                  $scope.sounds["drag"].play();
-                }
-*/
+                 if (window.cordova && window.cordova.platformId !== "browser") {
+                 $scope.sounds["drag"].play();
+                 }
+                 */
 
                 var global = $scope.stage.localToGlobal(this.x, this.y);
                 this.offset = {
@@ -456,9 +443,9 @@ angular.module("bookbuilder2")
                 if ($scope.activityData.completed) {
                   return;
                 }
-          /*      if (window.cordova && window.cordova.platformId !== "browser") {
-                  $scope.sounds["drop"].play();
-                }*/
+                /*      if (window.cordova && window.cordova.platformId !== "browser") {
+                 $scope.sounds["drop"].play();
+                 }*/
                 var collisionDetectedQuestion = collision(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
 
                 if (collisionDetectedQuestion !== -1) {
@@ -557,8 +544,8 @@ angular.module("bookbuilder2")
                     if (!$scope.activityData.completed) {
                       $scope.checkButton.gotoAndPlay("normal");
                       /*if (window.cordova && window.cordova.platformId !== "browser") {
-                        $scope.sounds["check"].play();
-                      }*/
+                       $scope.sounds["check"].play();
+                       }*/
                       $scope.stage.update();
                       check();
                     }
@@ -597,7 +584,7 @@ angular.module("bookbuilder2")
                     if ($scope.activityData.completed) {
                       $scope.nextButton.gotoAndPlay("normal");
                       $scope.stage.update();
-                      TypicalFunctions.nextActivity($scope.selectedLesson, $scope.activityFolder);
+                      $rootScope.nextActivity($scope.selectedLesson, $scope.activityFolder);
                     }
 
                   });
@@ -667,15 +654,6 @@ angular.module("bookbuilder2")
         }
 
 
-        function completedActivity() {
-          console.log("Completed Activity!");
-          $scope.nextButton.alpha = 1;
-          $scope.checkButton.alpha = 0.5;
-          $scope.activityData.completed = true;
-          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
-          $scope.stage.update();
-        };
-
         /* ------------------------------------------ TITLE ---------------------------------------------- */
 
         var title = new createjs.Text($scope.activityName, "27px Arial", "white");
@@ -729,7 +707,12 @@ angular.module("bookbuilder2")
             return;
           } else {
             score();
-            completedActivity();
+            console.log("Completed Activity!");
+            $scope.nextButton.alpha = 1;
+            $scope.checkButton.alpha = 0.5;
+            $scope.activityData.completed = true;
+            window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+            $scope.stage.update();
           }
         };
 

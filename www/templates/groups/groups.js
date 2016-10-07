@@ -1,9 +1,7 @@
 angular.module("bookbuilder2")
-  .controller("GroupsController", function (TypicalFunctions, Download, $ionicLoading, $scope, $ionicPlatform, $timeout, $http, _, $ionicHistory, $ionicPopup, $state, Toast, $cordovaFile) {
+  .controller("GroupsController", function ($ionicLoading, $scope, $rootScope, $ionicPlatform, $timeout, $http, _, $ionicPopup, Toast, $cordovaFile) {
 
     console.log("GroupsController loaded!");
-    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
-    console.warn($ionicHistory.currentView().stateName);
 
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.book = JSON.parse(window.localStorage.getItem("book"));
@@ -30,8 +28,6 @@ angular.module("bookbuilder2")
       createjs.Ticker.removeEventListener("tick", handleTick);
       createjs.Tween.removeAllTweens();
       $timeout.cancel(timeout);
-      $ionicHistory.clearHistory();
-      $ionicHistory.clearCache();
       $scope.stage.removeAllEventListeners();
       $scope.stage.removeAllChildren();
       $scope.stage = null;
@@ -44,9 +40,6 @@ angular.module("bookbuilder2")
     };
 
     var timeout = $timeout(function () {
-
-      var settings = new Ionic.IO.Settings();
-      $scope.developerMode = settings.get('dev_push');
 
       var PIXEL_RATIO = (function () {
         var ctx = document.getElementById("canvas").getContext("2d"),
@@ -429,15 +422,10 @@ angular.module("bookbuilder2")
                           downloadLessonAssets(lesson, function (response) {
                             if (response) {
                               console.log("Success on downloading Lesson");
-                              $ionicHistory.nextViewOptions({
-                                historyRoot: true,
-                                disableBack: true
-                              });
-
                               if ($scope.book.bookTemplate === "groups") {
-                                $state.go("lesson", {}, {reload: true});
+                                $rootScope.navigate("lesson");
                               } else {
-                                $state.go("lessonNew", {}, {reload: true});
+                                $rootScope.navigate("lessonNew");
                               }
                             } else {
                               console.log("Error on downloading Lesson");
@@ -465,15 +453,10 @@ angular.module("bookbuilder2")
                                         window.localStorage.removeItem(lesson.id + "_" + activity.activityFolder);
                                       });
 
-                                      $ionicHistory.nextViewOptions({
-                                        historyRoot: true,
-                                        disableBack: true
-                                      });
-
                                       if ($scope.book.bookTemplate === "groups") {
-                                        $state.go("lesson", {}, {reload: true});
+                                        $rootScope.navigate("lesson");
                                       } else {
-                                        $state.go("lessonNew", {}, {reload: true});
+                                        $rootScope.navigate("lessonNew");
                                       }
                                     })
                                     .error(function (error) {
@@ -600,15 +583,10 @@ angular.module("bookbuilder2")
         if (res) {
           downloadLessonAssets(lesson, function (response) {
             if (response) {
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-
               if ($scope.book.bookTemplate === "groups") {
-                $state.go("lesson", {}, {reload: true});
+                $rootScope.navigate("lesson");
               } else {
-                $state.go("lessonNew", {}, {reload: true});
+                $rootScope.navigate("lessonNew");
               }
 
             } else {
@@ -616,33 +594,23 @@ angular.module("bookbuilder2")
             }
           });
         } else {
-          $ionicHistory.nextViewOptions({
-            historyRoot: true,
-            disableBack: true
-          });
-
           if ($scope.book.bookTemplate === "groups") {
-            $state.go("lesson", {}, {reload: true});
+            $rootScope.navigate("lesson");
           } else {
-            $state.go("lessonNew", {}, {reload: true});
+            $rootScope.navigate("lessonNew");
           }
         }
       });
     };
 
     var downloadLessonAssets = function (lesson, callback) {
-      $scope.totalFilesLessonAssets = 2;
+      $scope.totalFilesLessonAssets = 3;
       $scope.downloadingLessonAsset = 0;
-      var lessonSpecificFiles = ["lesson.json", "lessonassets.json"];
-
-      if ($scope.book.bookTemplate === "groupsNew") {
-        lessonSpecificFiles.push("background_image_icon.png");
-        $scope.totalFilesLessonAssets++;
-      }
+      var lessonSpecificFiles = ["lesson.json", "lessonassets.json", "background_image_icon.png"];
 
       $ionicLoading.show();
 
-      Download.assets(lessonSpecificFiles, $scope.rootDir, $scope.cdnUrl, "data/lessons", lesson.id, function (response) {
+      $rootScope.assets(lessonSpecificFiles, $scope.rootDir, $scope.cdnUrl, "data/lessons", lesson.id, function (response) {
         console.log(lesson.id + " downloaded basic lesson file lesson.json and lessonassets.json ", response);
 
         $http.get($scope.rootDir + "data/lessons/" + lesson.id + "/lessonassets.json")
@@ -655,7 +623,7 @@ angular.module("bookbuilder2")
 
               waterFallFunctions.push(function (waterfallCallback) {
 
-                Download.assets(arrayOfStrings, $scope.rootDir, $scope.cdnUrl, "data/lessons/" + lesson.id, key, function (response) {
+                $rootScope.assets(arrayOfStrings, $scope.rootDir, $scope.cdnUrl, "data/lessons/" + lesson.id, key, function (response) {
                   $scope.downloadingLessonAsset++;
                   $ionicLoading.show({
                     template: lesson.title + " - " + ($scope.downloadingLessonAsset && $scope.totalFilesLessonAssets ? (($scope.downloadingLessonAsset / $scope.totalFilesLessonAssets) * 100).toFixed() : 0) + "%"
@@ -689,7 +657,7 @@ angular.module("bookbuilder2")
           })
           .error(function (error) {
             console.log("Error on getting json data for exit button...", error);
-            TypicalFunctions.showPopup();
+            $rootElement.showPopup();
           });
 
       });

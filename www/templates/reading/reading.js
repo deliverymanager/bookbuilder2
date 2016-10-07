@@ -1,12 +1,9 @@
 angular.module("bookbuilder2")
-  .controller("ReadingController", function ($scope, $interval, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory) {
+  .controller("ReadingController", function ($scope, $interval, $ionicPlatform, $rootScope, $timeout, $http, _) {
 
     console.log("ReadingController loaded!");
-
-    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
-    $scope.activityFolder = window.localStorage.getItem("activityFolder");
 
     $scope.backgroundView = {
       "background": "url(" + $scope.rootDir + "data/assets/lesson_background_image.png) no-repeat center top",
@@ -29,8 +26,6 @@ angular.module("bookbuilder2")
       createjs.Ticker.removeEventListener("tick", handleTick);
       createjs.Tween.removeAllTweens();
       $timeout.cancel(timeout);
-      $ionicHistory.clearHistory();
-      $ionicHistory.clearCache();
       $scope.stage.removeAllEventListeners();
       $scope.stage.removeAllChildren();
       $scope.stage = null;
@@ -191,11 +186,7 @@ angular.module("bookbuilder2")
               $scope.sound.stop();
               $scope.sound.release();
               $interval.cancel($scope.playSoundIntervalPromise);
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-              $state.go("lesson", {}, {reload: true});
+              $rootScope.navigate("lesson");
             });
 
             menuButton.scaleX = menuButton.scaleY = $scope.scale;
@@ -311,13 +302,6 @@ angular.module("bookbuilder2")
 
         }
 
-        var completedActivity = function () {
-          console.log("completed activity!");
-          $scope.activityData.completed = true;
-          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
-        };
-
-
         var checkCurrentTimePage = function (currentTime) {
           var cue = _.find($scope.activityData.CuePoint, function (cue) {
             return parseInt(cue.Time) < currentTime * 1000 && $scope.currentPage + 1 === parseInt(cue.Name);
@@ -326,7 +310,9 @@ angular.module("bookbuilder2")
           if ($scope.currentPage === $scope.activityData.CuePoint.length) {
             $scope.playButton.gotoAndPlay("playNormal");
             $scope.stage.update();
-            completedActivity();
+            console.log("completed activity!");
+            $scope.activityData.completed = true;
+            window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
           }
 
           if (!cue || $scope.currentPage === parseInt(cue.Name)) {

@@ -5,9 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ngCordova', 'ngSanitize', 'com.2fdevs.videogular', 'com.2fdevs.videogular.plugins.controls', 'com.2fdevs.videogular.plugins.overlayplay', 'com.2fdevs.videogular.plugins.poster'])
+angular.module('bookbuilder2', ['ionic', 'ionic.cloud', 'ngCordova', 'ngSanitize', 'com.2fdevs.videogular', 'com.2fdevs.videogular.plugins.controls', 'com.2fdevs.videogular.plugins.overlayplay', 'com.2fdevs.videogular.plugins.poster'])
 
-  .run(function ($ionicPlatform) {
+  .run(function ($ionicPlatform, $timeout) {
     $ionicPlatform.ready(function () {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -16,19 +16,30 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ngCordova', 'ngS
         cordova.plugins.Keyboard.disableScroll(true);
 
       }
-      if (window.StatusBar) {
-        // org.apache.cordova.statusbar required
-        StatusBar.styleDefault();
-      }
+      $timeout(function () {
+        if (window.StatusBar) {
+          // org.apache.cordova.statusbar required
+          StatusBar.hide();
+          console.warn("Status bar is visible", StatusBar.isVisible);
+        }
+      });
     });
   })
 
-  .config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider, $ionicCloudProvider) {
 
     /*Disabling transition animation*/
     $ionicConfigProvider.views.transition('none');
 
     $ionicConfigProvider.views.swipeBackEnabled(false);
+
+    $ionicConfigProvider.views.maxCache(0);
+
+    $ionicCloudProvider.init({
+      "core": {
+        "app_id": "f906f0bc"
+      }
+    });
 
     $stateProvider
       .state('preloading', {
@@ -73,11 +84,11 @@ angular.module('bookbuilder2', ['ionic', 'ionic.service.core', 'ngCordova', 'ngS
         templateUrl: "templates/reading/reading.html",
         controller: "ReadingController"
       }).state('readingNew', {
-      cache: false,
-      url: "/readingNew",
-      templateUrl: "templates/readingNew/readingNew.html",
-      controller: "ReadingNewController"
-    })
+        cache: false,
+        url: "/readingNew",
+        templateUrl: "templates/readingNew/readingNew.html",
+        controller: "ReadingNewController"
+      })
       .state('multiple', {
         cache: false,
         url: "/multiple",

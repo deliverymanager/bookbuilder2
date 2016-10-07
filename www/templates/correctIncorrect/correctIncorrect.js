@@ -1,9 +1,7 @@
 angular.module("bookbuilder2")
-  .controller("correctIncorrectController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory, TypicalFunctions) {
+  .controller("correctIncorrectController", function ($scope, $ionicPlatform, $rootScope,$timeout, $http, _) {
 
     console.log("correctIncorrectController loaded!");
-
-    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
     $scope.activityFolder = window.localStorage.getItem("activityFolder");
@@ -29,8 +27,6 @@ angular.module("bookbuilder2")
       createjs.Ticker.removeEventListener("tick", handleTick);
       createjs.Tween.removeAllTweens();
       $timeout.cancel(timeout);
-      $ionicHistory.clearHistory();
-      $ionicHistory.clearCache();
       $scope.stage.removeAllEventListeners();
       $scope.stage.removeAllChildren();
       $scope.stage = null;
@@ -148,12 +144,7 @@ angular.module("bookbuilder2")
             menuButton.on("pressup", function (event) {
               console.log("Press up event on Menu event!");
               menuButton.gotoAndPlay("normal");
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-
-              $state.go("lessonNew", {}, {reload: true});
+              $rootScope.nextActivity("lessonNew");
             });
 
             menuButton.scaleX = menuButton.scaleY = $scope.scale;
@@ -510,7 +501,7 @@ angular.module("bookbuilder2")
                     if ($scope.activityData.completed) {
                       $scope.nextButton.gotoAndPlay("normal");
                       /*Calling next function!*/
-                      TypicalFunctions.nextActivity($scope.selectedLesson, $scope.activityFolder);
+                      $rootScope.nextActivity($scope.selectedLesson, $scope.activityFolder);
                     }
 
                   });

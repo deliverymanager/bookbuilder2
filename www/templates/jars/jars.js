@@ -1,9 +1,7 @@
 angular.module("bookbuilder2")
-  .controller("jarsController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory, TypicalFunctions) {
+  .controller("jarsController", function ($scope, $ionicPlatform, $timeout,$rootScope, $http, _) {
 
     console.log("jarsController loaded!");
-
-    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
     $scope.activityFolder = window.localStorage.getItem("activityFolder");
@@ -29,8 +27,6 @@ angular.module("bookbuilder2")
       createjs.Ticker.removeEventListener("tick", handleTick);
       createjs.Tween.removeAllTweens();
       $timeout.cancel(timeout);
-      $ionicHistory.clearHistory();
-      $ionicHistory.clearCache();
       $scope.stage.removeAllEventListeners();
       $scope.stage.removeAllChildren();
       $scope.stage = null;
@@ -156,11 +152,7 @@ angular.module("bookbuilder2")
               console.log("Press up event on Menu event!");
               menuButton.gotoAndPlay("normal");
               $scope.stage.update();
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-              $state.go("lessonNew", {}, {reload: true});
+              $rootScope.navigate("lessonNew");
             });
 
             menuButton.scaleX = menuButton.scaleY = scale;
@@ -550,7 +542,7 @@ angular.module("bookbuilder2")
                     if ($scope.activityData.completed) {
                       $scope.nextButton.gotoAndPlay("normal");
                       /*Calling next function!*/
-                      TypicalFunctions.nextActivity($scope.selectedLesson, $scope.activityFolder);
+                      $rootScope.nextActivity($scope.selectedLesson, $scope.activityFolder);
                     }
 
                   });

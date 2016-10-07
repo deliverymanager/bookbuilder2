@@ -1,8 +1,7 @@
 angular.module("bookbuilder2")
-  .controller("MultipleGolfController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory, Toast) {
+  .controller("MultipleGolfController", function ($scope,$rootScope, $ionicPlatform, $timeout, $http, _, Toast) {
 
     console.log("MultipleGolfController loaded!");
-    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
     $scope.activityFolder = window.localStorage.getItem("activityFolder");
@@ -29,8 +28,6 @@ angular.module("bookbuilder2")
       createjs.Ticker.removeEventListener("tick", handleTick);
       createjs.Tween.removeAllTweens();
       $timeout.cancel(timeout);
-      $ionicHistory.clearHistory();
-      $ionicHistory.clearCache();
       $scope.stage.removeAllEventListeners();
       $scope.stage.removeAllChildren();
       $scope.stage = null;
@@ -258,11 +255,7 @@ angular.module("bookbuilder2")
               console.log("Press up event on Menu event!");
               menuButton.gotoAndPlay("normal");
               $scope.stage.update();
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-              $state.go("lessonNew", {}, {reload: true});
+              $rootScope.navigate("lessonNew");
             });
 
             menuButton.scaleX = menuButton.scaleY = $scope.scale;
@@ -841,7 +834,7 @@ angular.module("bookbuilder2")
                             $scope.nextButton.alpha = 1;
                             $scope.nextButton.gotoAndPlay("normal");
                             $scope.stage.update();
-                            TypicalFunctions.nextActivity($scope.selectedLesson, $scope.activityFolder);
+                            $rootScope.nextActivity($scope.selectedLesson, $scope.activityFolder);
                           }
                         });
                         $scope.nextButton.x = 730;

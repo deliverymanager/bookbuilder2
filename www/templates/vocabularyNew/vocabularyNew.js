@@ -1,9 +1,7 @@
 angular.module("bookbuilder2")
-  .controller("VocabularyNewController", function ($scope, $ionicLoading, $interval, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory) {
+  .controller("VocabularyNewController", function ($scope, $ionicLoading, $rootScope, $interval, $ionicPlatform, $timeout, $http, _) {
 
     console.log("VocabularyNewController loaded!");
-
-    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
 
@@ -28,8 +26,6 @@ angular.module("bookbuilder2")
       createjs.Ticker.removeEventListener("tick", handleTick);
       createjs.Tween.removeAllTweens();
       $timeout.cancel(timeout);
-      $ionicHistory.clearHistory();
-      $ionicHistory.clearCache();
       $scope.stage.removeAllEventListeners();
       $scope.stage.removeAllChildren();
       $scope.stage = null;
@@ -136,11 +132,7 @@ angular.module("bookbuilder2")
                 $scope.sounds[key].release();
               });
               $scope.sounds = {};
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-              $state.go("lessonNew", {}, {reload: true});
+              $rootScope.navigate("lessonNew");
             });
 
             menuButton.scaleX = menuButton.scaleY = $scope.scale;
@@ -1101,11 +1093,6 @@ angular.module("bookbuilder2")
         }//End of loadGreekWords function
 
 
-        function completedActivity() {
-          $scope.activityData.completed = true;
-          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
-        };
-
         function checkIfAllSoundsWerePlayed() {
           var completed = true;
 
@@ -1120,7 +1107,8 @@ angular.module("bookbuilder2")
           });
 
           if (completed) {
-            completedActivity();
+            $scope.activityData.completed = true;
+            window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
           } else {
             console.log("Not completed activity!");
           }

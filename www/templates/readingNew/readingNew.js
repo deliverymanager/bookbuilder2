@@ -1,9 +1,7 @@
 angular.module("bookbuilder2")
-  .controller("ReadingNewController", function ($scope, $interval, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory) {
+  .controller("ReadingNewController", function ($scope, $interval, $rootScope, $ionicPlatform, $timeout, $http, _) {
 
     console.log("ReadingNewController loaded!");
-
-    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
     $scope.activityFolder = window.localStorage.getItem("activityFolder");
@@ -29,8 +27,6 @@ angular.module("bookbuilder2")
       createjs.Ticker.removeEventListener("tick", handleTick);
       createjs.Tween.removeAllTweens();
       $timeout.cancel(timeout);
-      $ionicHistory.clearHistory();
-      $ionicHistory.clearCache();
       $scope.stage.removeAllEventListeners();
       $scope.stage.removeAllChildren();
       $scope.stage = null;
@@ -140,11 +136,7 @@ angular.module("bookbuilder2")
                 $scope.sounds[key].release();
               });
               $scope.sounds = {};
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-              $state.go("lessonNew", {}, {reload: true});
+              $rootScope.navigate("lessonNew");
             });
 
             menuButton.scaleX = menuButton.scaleY = $scope.scale;
@@ -378,37 +370,36 @@ angular.module("bookbuilder2")
             });
 
 
-            $scope.playSoundIntervalPromise = $interval(function () {
-              console.log("Checking current sound!");
-              _.each($scope.sounds, function (sound, key, list) {
-                if (sound.soundPlaying) {
-                  $scope.sounds[key].getCurrentPosition(
-                    function (position) {
-                      if (position < 0 && $scope.currentSoundPlaying) {
-                        soundIsFinishedPlaying(key);
-                      }
-                    },
-                    function (e) {
-
-                      console.log("Error getting pos=" + e);
-
-                    }
-                  );
-                }
-              });
-
-            }, 500, 0, true);
-
-
           });
 
         };
 
+
+        $scope.playSoundIntervalPromise = $interval(function () {
+          console.log("Checking current sound!");
+          _.each($scope.sounds, function (sound, key, list) {
+            if (sound.soundPlaying) {
+              $scope.sounds[key].getCurrentPosition(
+                function (position) {
+                  if (position < 0 && $scope.currentSoundPlaying) {
+                    soundIsFinishedPlaying(key);
+                  }
+                },
+                function (e) {
+
+                  console.log("Error getting pos=" + e);
+
+                }
+              );
+            }
+          });
+
+        }, 500, 0, true);
+
+
         function soundIsFinishedPlaying(slide) {
 
           $scope.sounds[slide].soundPlaying = false;
-
-          console.log("Name: ", slide);
 
           var soundIndex = _.findIndex($scope.activityData.slides, {
             "slide": slide
@@ -431,6 +422,10 @@ angular.module("bookbuilder2")
               $scope.slides[slide.slide].visible = false;
             });
             $scope.slides[$scope.activityData.slides[0].slide].visible = true;
+
+            console.log("completed activity!");
+            $scope.activityData.completed = true;
+            window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
           }
 
           $scope.stage.update();
@@ -460,13 +455,6 @@ angular.module("bookbuilder2")
             });//end of get menu button
 
         }
-
-        var completedActivity = function () {
-          console.log("completed activity!");
-          $scope.activityData.completed = true;
-          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
-        };
-
       });//end of image on complete
     }, 1500);//end of timeout
   });

@@ -1,8 +1,7 @@
 angular.module("bookbuilder2")
-  .controller("MultipleBirdsController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory, Toast) {
+  .controller("MultipleBirdsController", function ($scope, $ionicPlatform, $timeout, $http, _, $rootScope, Toast) {
 
     console.log("MultipleBirdsController loaded!");
-    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
     $scope.activityFolder = window.localStorage.getItem("activityFolder");
@@ -29,8 +28,6 @@ angular.module("bookbuilder2")
       createjs.Ticker.removeEventListener("tick", handleTick);
       createjs.Tween.removeAllTweens();
       $timeout.cancel(timeout);
-      $ionicHistory.clearHistory();
-      $ionicHistory.clearCache();
       $scope.stage.removeAllEventListeners();
       $scope.stage.removeAllChildren();
       $scope.stage = null;
@@ -236,7 +233,7 @@ angular.module("bookbuilder2")
                   if ($scope.activityData.completed) {
                     $scope.nextButton.gotoAndPlay("normal");
                     $scope.stage.update();
-                    TypicalFunctions.nextActivity($scope.selectedLesson, $scope.activityFolder);
+                    $rootScope.nextActivity($scope.selectedLesson, $scope.activityFolder);
                   }
                 });
                 $scope.nextButton.scaleX = $scope.nextButton.scaleY = scale;
@@ -309,11 +306,7 @@ angular.module("bookbuilder2")
                 menuButton.addEventListener("pressup", function (event) {
                   menuButton.gotoAndPlay("normal");
                   $scope.stage.update();
-                  $ionicHistory.nextViewOptions({
-                    historyRoot: true,
-                    disableBack: true
-                  });
-                  $state.go("lessonNew", {}, {reload: true});
+                  $rootScope.navigate("lessonNew");
                 });
 
                 menuButton.scaleX = menuButton.scaleY = scale;
@@ -1015,14 +1008,6 @@ angular.module("bookbuilder2")
 
         };
 
-        function completedActivity() {
-          console.log("Completed Activity!");
-          $scope.nextButton.alpha = 1;
-          $scope.checkButton.alpha = 0.5;
-          $scope.activityData.completed = true;
-          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
-        };
-
 
         /*Function that restarts the exercise*/
         function restart() {
@@ -1120,9 +1105,11 @@ angular.module("bookbuilder2")
 
 
           $scope.activityData.score = rightAnswers;
+          console.log("Completed Activity!");
+          $scope.nextButton.alpha = 1;
+          $scope.checkButton.alpha = 0.5;
+          $scope.activityData.completed = true;
           window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
-
-          completedActivity();
         }
 
 

@@ -1,8 +1,7 @@
 angular.module("bookbuilder2")
-  .controller("MultipleFishermanController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory, Toast) {
+  .controller("MultipleFishermanController", function ($scope, $ionicPlatform,$rootScope, $timeout, $http, _) {
 
     console.log("MultipleFishermanController loaded!");
-    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
     $scope.activityFolder = window.localStorage.getItem("activityFolder");
@@ -29,8 +28,6 @@ angular.module("bookbuilder2")
       createjs.Ticker.removeEventListener("tick", handleTick);
       createjs.Tween.removeAllTweens();
       $timeout.cancel(timeout);
-      $ionicHistory.clearHistory();
-      $ionicHistory.clearCache();
       $scope.stage.removeAllEventListeners();
       $scope.stage.removeAllChildren();
       $scope.stage = null;
@@ -227,11 +224,7 @@ angular.module("bookbuilder2")
             menuButton.addEventListener("pressup", function (event) {
               console.log("Press up event on Menu event!");
               menuButton.gotoAndPlay("normal");
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-              $state.go("lessonNew", {}, {reload: true});
+              $rootScope.navigate("lessonNew");
             });
 
             // menuButton.scaleX = menuButton.scaleY = $scope.scale;

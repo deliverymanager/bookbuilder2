@@ -1,9 +1,7 @@
 angular.module("bookbuilder2")
-  .controller("ResultsController", function (Email, $ionicLoading, $scope, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory, Toast, $ionicPopup) {
+  .controller("ResultsController", function (Email, $ionicLoading, $scope,$rootScope, $ionicPlatform, $timeout, $http, _, Toast, $ionicPopup) {
 
     console.log("ResultsController loaded!");
-
-    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
     $scope.activityFolder = window.localStorage.getItem("activityFolder");
@@ -31,8 +29,6 @@ angular.module("bookbuilder2")
       createjs.Ticker.removeEventListener("tick", handleTick);
       createjs.Tween.removeAllTweens();
       $timeout.cancel(timeout);
-      $ionicHistory.clearHistory();
-      $ionicHistory.clearCache();
       $scope.stage.removeAllEventListeners();
       $scope.stage.removeAllChildren();
       $scope.stage = null;
@@ -139,21 +135,15 @@ angular.module("bookbuilder2")
                 menuButton.addEventListener("pressup", function (event) {
                   console.log("pressup event!");
                   menuButton.gotoAndPlay("normal");
-                  $ionicHistory.nextViewOptions({
-                    historyRoot: true,
-                    disableBack: true
-                  });
-                  $ionicHistory.clearHistory();
-                  $ionicHistory.clearCache();
                   createjs.Tween.removeAllTweens();
                   $scope.stage.removeAllEventListeners();
                   $scope.stage.removeAllChildren();
                   $scope.$destroy();
 
                   if ($scope.book.bookTemplate === "groups") {
-                    $state.go("lesson", {}, {reload: true});
+                    $rootScope.navigate("lesson");
                   } else {
-                    $state.go("lessonNew", {}, {reload: true});
+                    $rootScope.navigate("lessonNew");
                   }
                 });
 
@@ -244,11 +234,7 @@ angular.module("bookbuilder2")
                   if (ionic.Platform.isAndroid()) {
                     ionic.Platform.exitApp();
                   } else {
-                    $ionicHistory.nextViewOptions({
-                      historyRoot: true,
-                      disableBack: true
-                    });
-                    $state.go("groups", {}, {reload: true});
+                    $rootScope.navigate("groups");
                   }
 
                 });

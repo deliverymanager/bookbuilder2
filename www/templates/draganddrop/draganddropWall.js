@@ -1,8 +1,7 @@
 angular.module("bookbuilder2")
-  .controller("DraganddropWallController", function (TypicalFunctions, $scope, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory, Toast) {
+  .controller("DraganddropWallController", function ($rootScope,$scope, $ionicPlatform, $timeout, $http, _, Toast) {
 
     console.log("DraganddropWallController loaded!");
-    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
     $scope.activityFolder = window.localStorage.getItem("activityFolder");
@@ -28,8 +27,6 @@ angular.module("bookbuilder2")
       createjs.Ticker.removeEventListener("tick", handleTick);
       createjs.Tween.removeAllTweens();
       $timeout.cancel(timeout);
-      $ionicHistory.clearHistory();
-      $ionicHistory.clearCache();
       $scope.stage.removeAllEventListeners();
       $scope.stage.removeAllChildren();
       $scope.stage = null;
@@ -188,12 +185,7 @@ angular.module("bookbuilder2")
               console.log("pressup event!");
               menuButton.gotoAndPlay("normal");
               $scope.stage.update();
-
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-              $state.go("lessonNew", {}, {reload: true});
+              $rootScope.nextActivity("lessonNew");
             });
 
             menuButton.scaleX = menuButton.scaleY = $scope.scale;
@@ -693,7 +685,7 @@ angular.module("bookbuilder2")
                     if ($scope.activityData.completed) {
                       $scope.nextButton.gotoAndPlay("normal");
                       /*Calling next function!*/
-                      TypicalFunctions.nextActivity($scope.selectedLesson, $scope.activityFolder);
+                      $rootScope.nextActivity($scope.selectedLesson, $scope.activityFolder);
                     }
 
                   });
@@ -768,16 +760,6 @@ angular.module("bookbuilder2")
             });
         }
 
-
-        function completedActivity() {
-          console.log("Completed Activity!");
-          $scope.nextButton.alpha = 1;
-          $scope.checkButton.alpha = 0.5;
-          $scope.activityData.completed = true;
-          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
-        }
-
-
         /********************************** FUNCTIONS ***********************************/
 
 
@@ -816,7 +798,11 @@ angular.module("bookbuilder2")
             $scope.nextButton.gotoAndPlay("onSelection");
 
             score("check");
-            completedActivity();
+            console.log("Completed Activity!");
+            $scope.nextButton.alpha = 1;
+            $scope.checkButton.alpha = 0.5;
+            $scope.activityData.completed = true;
+            window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
           }
         }
 

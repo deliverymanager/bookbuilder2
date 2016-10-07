@@ -1,9 +1,7 @@
 angular.module("bookbuilder2")
-  .controller("cryptoDiverController", function ($scope, $ionicPlatform, $timeout, $http, _, $state, $ionicHistory, TypicalFunctions) {
+  .controller("cryptoDiverController", function ($scope, $ionicPlatform,$rootScope, $timeout, $http, _) {
 
     console.log("cryptoDiverController loaded!");
-
-    window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
     $scope.activityFolder = window.localStorage.getItem("activityFolder");
@@ -29,8 +27,6 @@ angular.module("bookbuilder2")
       createjs.Ticker.removeEventListener("tick", handleTick);
       createjs.Tween.removeAllTweens();
       $timeout.cancel(timeout);
-      $ionicHistory.clearHistory();
-      $ionicHistory.clearCache();
       $scope.stage.removeAllEventListeners();
       $scope.stage.removeAllChildren();
       $scope.stage = null;
@@ -285,11 +281,8 @@ angular.module("bookbuilder2")
 
               console.log("Press up event on Menu event!");
               menuButton.gotoAndPlay("normal");
-              $ionicHistory.nextViewOptions({
-                historyRoot: true,
-                disableBack: true
-              });
-              $state.go("lessonNew", {}, {reload: true});
+              $rootScope.nextActivity("lessonNew");
+
             });
 
             menuButton.scaleX = menuButton.scaleY = $scope.scale;
@@ -659,7 +652,7 @@ angular.module("bookbuilder2")
                       if ($scope.activityData.completed) {
                         $scope.nextButton.gotoAndPlay("onSelection");
                         /*Calling next function!*/
-                        TypicalFunctions.nextActivity($scope.selectedLesson, $scope.activityFolder);
+                        $rootScope.nextActivity($scope.selectedLesson, $scope.activityFolder);
                       }
                     });
                     $scope.nextButton.x = 730;

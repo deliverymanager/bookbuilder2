@@ -76,7 +76,8 @@ angular.module("bookbuilder2")
           } else {
             return callback(true);
           }
-        }, checkDirOrCreate: function (path, directory, callback) {
+        },
+        checkDirOrCreate: function (path, directory, callback) {
 
           $cordovaFile.checkDir(path, directory)
             .then(function (success) {

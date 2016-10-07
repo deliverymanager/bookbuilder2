@@ -1,11 +1,17 @@
 angular.module('bookbuilder2')
-  .controller("VideoController", function ($scope, $ionicLoading, $state, $timeout, $interval, _, $sce, $ionicPlatform, $http, $ionicHistory) {
+  .controller("VideoController", function ($scope, $ionicLoading, $rootScope,$timeout, $interval, _, $sce, $ionicPlatform) {
 
-
-      window.localStorage.setItem("currentView", $ionicHistory.currentView().stateName);
+      $scope.book = JSON.parse(window.localStorage.getItem("book"));
       $scope.rootDir = window.localStorage.getItem("rootDir");
+      $scope.scale = window.localStorage.getItem("scale");
+      $scope.ratio = window.localStorage.getItem("ratio");
       $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
       $scope.activityFolder = window.localStorage.getItem("activityFolder");
+
+      console.log("$scope.rootDir", $scope.rootDir);
+      console.log("$scope.scale", $scope.scale);
+      console.log("$scope.selectedLesson", $scope.selectedLesson);
+      console.log("$scope.activityFolder", $scope.activityFolder);
 
       $scope.backgroundView = {
         "background": "url(" + $scope.rootDir + "data/assets/lesson_background_image.png) no-repeat center top",
@@ -13,15 +19,6 @@ angular.module('bookbuilder2')
         "-moz-background-size": "cover",
         "background-size": "cover"
       };
-
-      $scope.$on('$destroy', function () {
-        $timeout.cancel(timeout);
-        $ionicHistory.clearHistory();
-        $ionicHistory.clearCache();
-        $scope.stage.removeAllEventListeners();
-        $scope.stage.removeAllChildren();
-        $scope.stage = null;
-      });
 
       var activityNameInLocalStorage = $scope.selectedLesson.id + "_" + $scope.activityFolder;
 
@@ -35,7 +32,7 @@ angular.module('bookbuilder2')
         window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
       }
 
-      var timeout = $timeout(function () {
+      $timeout(function () {
         $scope.config = {
           sources: [{
             src: $sce.trustAsResourceUrl($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + '/' + $scope.activityFolder + '/' + $scope.activityFolder + '.mp4'),
@@ -60,11 +57,12 @@ angular.module('bookbuilder2')
       });
 
       $scope.backButton = function () {
-        $ionicHistory.nextViewOptions({
-          historyRoot: true,
-          disableBack: true
-        });
-        $state.go("lessonNew", {}, {reload: true});
+
+        if ($scope.book.bookTemplate === "groups") {
+          $rootScope.navigate("lesson");
+        } else {
+          $rootScope.navigate("lessonNew");
+        }
       }
 
     }
