@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-  .controller("LessonNewController", function (_, $scope, $ionicPlatform, $timeout, $http, $rootScope,Toast) {
+  .controller("LessonNewController", function (_, $scope, $ionicPlatform, $timeout, $http, $rootScope, Toast) {
 
     console.log("LessonNewController loaded!");
     $scope.rootDir = window.localStorage.getItem("rootDir");
@@ -182,12 +182,13 @@ angular.module("bookbuilder2")
             var resultsButtonSpriteSheet = new createjs.SpriteSheet(response);
             var resultsButton = new createjs.Sprite(resultsButtonSpriteSheet, "normal");
             resultsButton.x = 100;
-            resultsButton.y = 600;
+            resultsButton.y = 640;
+            resultsButton.scaleX = resultsButton.scaleY = 0.6;
             $scope.mainContainer.addChild(resultsButton);
 
             var endText = new createjs.Text("RESULTS", "30px Arial", "white");
-            endText.x = 160;
-            endText.y = 590;
+            endText.x = 140;
+            endText.y = 627;
             $scope.mainContainer.addChild(endText);
 
             resultsButton.addEventListener("mousedown", function (event) {
@@ -235,7 +236,7 @@ angular.module("bookbuilder2")
 
               var lessonTitle = new createjs.Text($scope.selectedLesson.lessonTitle + " - " + $scope.selectedLesson.title, "27px Arial", "white");
               lessonTitle.x = 490;
-              lessonTitle.y = 109;
+              lessonTitle.y = 105;
               lessonTitle.maxWidth = 450;
               $scope.mainContainer.addChild(lessonTitle);
             });
@@ -393,6 +394,7 @@ angular.module("bookbuilder2")
 
                       $scope.subActivitiesButtons[key].gotoAndPlay("normal");
                       $scope.stage.update();
+
 
                       if (!activity.active) {
                         Toast.show("Coming soon...");

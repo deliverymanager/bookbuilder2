@@ -117,7 +117,6 @@ angular.module("bookbuilder2")
         var backgroundPosition = background.getTransformedBounds();
 
         $scope.activeQuestionIndex = 0;
-        var noChoice = " _________________ ";
 
         async.waterfall([function (callback) {
 
@@ -363,7 +362,7 @@ angular.module("bookbuilder2")
             $scope.questionsContainer.width = background.image.width / 1.1;
             $scope.questionsContainer.height = background.image.height / 3;
             $scope.questionsContainer.scaleX = $scope.questionsContainer.scaleY = $scope.scale;
-            $scope.questionsContainer.x = backgroundPosition.x + (backgroundPosition.height / 22);
+            $scope.questionsContainer.x = backgroundPosition.x + backgroundPosition.width / 16;
             $scope.questionsContainer.y = -1500;
             $scope.stage.addChild($scope.questionsContainer);
 
@@ -376,13 +375,13 @@ angular.module("bookbuilder2")
             $scope.questionNumber = new createjs.Text("1", "33px Arial", "white");
             $scope.questionNumber.regX = $scope.questionNumber.getBounds().width / 2;
             $scope.questionNumber.regY = $scope.questionNumber.getBounds().height / 2;
-            $scope.questionNumber.x = $scope.questionsContainer.width / 10.5;
+            $scope.questionNumber.x = $scope.questionsContainer.width / 10;
             $scope.questionNumber.y = $scope.questionsContainer.height / 7.5;
             $scope.questionNumber.textAlign = "center";
             $scope.questionsContainer.addChild($scope.questionNumber);
 
             $scope.questionsTextContainer = new createjs.Container();
-            $scope.questionsTextContainer.x = $scope.questionsContainer.width / 7;
+            $scope.questionsTextContainer.x = $scope.questionsContainer.width / 6;
             $scope.questionsTextContainer.y = $scope.questionsContainer.height / 5;
             $scope.questionsTextContainer.regX = $scope.questionsTextContainer.width / 2;
             $scope.questionsTextContainer.regY = $scope.questionsTextContainer.height / 2;
@@ -809,143 +808,8 @@ angular.module("bookbuilder2")
             $scope.buttonContainers["onlyCChoice"].visible = true;
           }
 
-          var pretexts = question.pretext.split("\n");
-          console.log("pretexts", pretexts.length);
-          var currentPretexts = {};
-          var textHeight = 40;
-          var initialMarginLeft = 25;
-          _.each(pretexts, function (text, l, li) {
-            if (!text) {
-              text = " ";
-            }
-            currentPretexts[l] = new createjs.Text(text, "25px Arial", "black");
-            currentPretexts[l].x = initialMarginLeft;
-            currentPretexts[l].y = textHeight * l + 27;
-            $scope.questionsTextContainer.addChild(currentPretexts[l]);
-          });
 
-          $scope.firstGap = new createjs.Text(noChoice, "25px Arial", "black");
-          $scope.firstGap.x = currentPretexts[pretexts.length - 1].x + currentPretexts[pretexts.length - 1].getBounds().width;
-          $scope.firstGap.y = currentPretexts[pretexts.length - 1].y;
-          $scope.questionsTextContainer.addChild($scope.firstGap);
-
-          var firstGapUnderlinedText = $scope.firstGap.clone();
-          $scope.questionsTextContainer.addChild(firstGapUnderlinedText);
-          $scope.firstGap.textAlign = "center";
-          $scope.firstGap.maxWidth = firstGapUnderlinedText.getBounds().width * 0.9;
-          $scope.firstGap.x = currentPretexts[pretexts.length - 1].x + currentPretexts[pretexts.length - 1].getBounds().width + firstGapUnderlinedText.getBounds().width / 2;
-
-          if ($scope.activityData.questions[key].midtext) {
-
-            var midtexts = question.midtext.split("\n");
-            console.log("midtexts", midtexts.length);
-            var currentMidtexts = {};
-
-            _.each(midtexts, function (text, l, li) {
-              if (!text) {
-                text = " ";
-              }
-              currentMidtexts[l] = new createjs.Text(text, "25px Arial", "black");
-              currentMidtexts[l].x = initialMarginLeft;
-              currentMidtexts[l].y = pretexts.length * textHeight + textHeight * l + 15;
-              console.log("currentMidtexts[l].y ", currentMidtexts[l].y);
-              $scope.questionsTextContainer.addChild(currentMidtexts[l]);
-            });
-
-            $scope.secondGap = new createjs.Text(noChoice, "25px Arial", "black");
-            $scope.secondGap.x = currentMidtexts[pretexts.length - 1].x + currentMidtexts[pretexts.length - 1].getBounds().width;
-            $scope.secondGap.y = currentMidtexts[pretexts.length - 1].y;
-            $scope.questionsTextContainer.addChild($scope.secondGap);
-
-            var secondGapUnderlinedText = $scope.secondGap.clone();
-            $scope.questionsTextContainer.addChild(secondGapUnderlinedText);
-
-            $scope.secondGap.textAlign = "center";
-            $scope.secondGap.maxWidth = secondGapUnderlinedText.getBounds().width * 0.9;
-            $scope.secondGap.x = currentMidtexts[pretexts.length - 1].x + currentMidtexts[pretexts.length - 1].getBounds().width + secondGapUnderlinedText.getBounds().width / 2;
-
-            if (question.postext) {
-              var postexts = question.postext.split("\n");
-              console.log("postexts", postexts.length);
-              var currentPostexts = {};
-
-              if (postexts.length > 1) {
-                if (!postexts[0]) {
-                  postexts[0] = " ";
-                }
-                currentPostexts[0] = new createjs.Text(postexts[0], "25px Arial", "black");
-                currentPostexts[0].x = secondGapUnderlinedText.x + secondGapUnderlinedText.getBounds().width;
-                currentPostexts[0].y = secondGapUnderlinedText.y;
-                $scope.questionsTextContainer.addChild(currentPostexts[0]);
-
-                currentPostexts[1] = new createjs.Text(postexts[1], "25px Arial", "black");
-                currentPostexts[1].x = initialMarginLeft;
-                currentPostexts[1].y = currentPostexts[0].y + currentPostexts[0].getBounds().height;
-                $scope.questionsTextContainer.addChild(currentPostexts[1]);
-              } else {
-                currentPostexts[0] = new createjs.Text(postexts[0], "25px Arial", "black");
-                currentPostexts[0].x = secondGapUnderlinedText.x + secondGapUnderlinedText.getBounds().width;
-                currentPostexts[0].y = secondGapUnderlinedText.y;
-                $scope.questionsTextContainer.addChild(currentPostexts[0]);
-              }
-
-            }
-
-          } else {
-            if (question.postext) {
-
-              var postexts = question.postext.split("\n");
-              console.log("postexts", postexts.length);
-              var currentPostexts = {};
-
-              if (postexts.length > 1) {
-                if (!postexts[0]) {
-                  postexts[0] = " ";
-                }
-                currentPostexts[0] = new createjs.Text(postexts[0], "25px Arial", "black");
-                currentPostexts[0].x = firstGapUnderlinedText.x + firstGapUnderlinedText.getBounds().width;
-                currentPostexts[0].y = firstGapUnderlinedText.y;
-                $scope.questionsTextContainer.addChild(currentPostexts[0]);
-
-                currentPostexts[1] = new createjs.Text(postexts[1], "25px Arial", "black");
-                currentPostexts[1].x = initialMarginLeft;
-                currentPostexts[1].y = currentPostexts[0].y + currentPostexts[0].getBounds().height;
-                $scope.questionsTextContainer.addChild(currentPostexts[1]);
-              } else {
-                currentPostexts[0] = new createjs.Text(postexts[0], "25px Arial", "black");
-                currentPostexts[0].x = firstGapUnderlinedText.x + firstGapUnderlinedText.getBounds().width;
-                currentPostexts[0].y = firstGapUnderlinedText.y;
-                $scope.questionsTextContainer.addChild(currentPostexts[0]);
-              }
-            }
-
-          }
-
-          if (question.userAnswer) {
-            if (!$scope.activityData.completed) {
-              if (question.midtext) {
-                var splittedText = question[question.userAnswer].split("...");
-                $scope.firstGap.text = splittedText[0];
-                $scope.secondGap.text = splittedText[1];
-                $scope.firstGap.color = "black";
-                $scope.secondGap.color = "black";
-              } else {
-                $scope.firstGap.text = question[question.userAnswer];
-                $scope.firstGap.color = "black";
-              }
-            } else {
-              if (question.midtext) {
-                var splittedText = question[question.answerChoice].split("...");
-                $scope.firstGap.text = splittedText[0];
-                $scope.secondGap.text = splittedText[1];
-                $scope.firstGap.color = "black";
-                $scope.secondGap.color = "black";
-              } else {
-                $scope.firstGap.text = question[question.answerChoice];
-                $scope.firstGap.color = "black";
-              }
-            }
-          }
+          positionQuestionText(question, key);
 
 
           if ($scope.activityData.completed) {
@@ -998,6 +862,153 @@ angular.module("bookbuilder2")
               y: backgroundPosition.y + (backgroundPosition.height / 7)
             }, 300, createjs.Ease.getPowIn(2));
 
+        }
+
+        var positionQuestionText = function (question, key) {
+
+          var pretexts = question.pretext.split("\n");
+          var currentPretexts = {};
+          var textHeight = 40;
+          _.each(pretexts, function (text, l, li) {
+            if (!text) {
+              text = " ";
+            }
+            currentPretexts[l] = new createjs.Text(text, "22px Arial", "black");
+            currentPretexts[l].y = textHeight * l;
+            $scope.questionsTextContainer.addChild(currentPretexts[l]);
+          });
+
+          var firstGap = " _________________ ";
+          if (question.firstGap) {
+            firstGap = " " + question.firstGap + " ";
+          }
+
+          $scope.firstGap = new createjs.Text(firstGap, "22px Arial", "black");
+          $scope.firstGap.x = currentPretexts[pretexts.length - 1].x + currentPretexts[pretexts.length - 1].getBounds().width;
+          $scope.firstGap.y = currentPretexts[pretexts.length - 1].y;
+          $scope.questionsTextContainer.addChild($scope.firstGap);
+
+          var firstGapUnderlinedText = $scope.firstGap.clone();
+          $scope.questionsTextContainer.addChild(firstGapUnderlinedText);
+          $scope.firstGap.textAlign = "center";
+          $scope.firstGap.maxWidth = firstGapUnderlinedText.getBounds().width * 0.9;
+          $scope.firstGap.x = currentPretexts[pretexts.length - 1].x + currentPretexts[pretexts.length - 1].getBounds().width + firstGapUnderlinedText.getBounds().width / 2;
+
+          if ($scope.activityData.questions[key].midtext) {
+
+            var midtexts = question.midtext.split("\n");
+            console.log("midtexts", midtexts.length);
+            var currentMidtexts = {};
+
+            _.each(midtexts, function (text, l, li) {
+              if (!text) {
+                text = " ";
+              }
+              currentMidtexts[l] = new createjs.Text(text, "22px Arial", "black");
+              currentMidtexts[l].y = pretexts.length * textHeight + textHeight * l;
+              console.log("currentMidtexts[l].y ", currentMidtexts[l].y);
+              $scope.questionsTextContainer.addChild(currentMidtexts[l]);
+            });
+
+
+            var secondGap = " _________________ ";
+            if (question.secondGap) {
+              secondGap = " " + question.secondGap + " ";
+            }
+            $scope.secondGap = new createjs.Text(secondGap, "22px Arial", "black");
+            $scope.secondGap.x = currentMidtexts[pretexts.length - 1].x + currentMidtexts[pretexts.length - 1].getBounds().width;
+            $scope.secondGap.y = currentMidtexts[pretexts.length - 1].y;
+            $scope.questionsTextContainer.addChild($scope.secondGap);
+
+            var secondGapUnderlinedText = $scope.secondGap.clone();
+            $scope.questionsTextContainer.addChild(secondGapUnderlinedText);
+
+            $scope.secondGap.textAlign = "center";
+            $scope.secondGap.maxWidth = secondGapUnderlinedText.getBounds().width * 0.9;
+            $scope.secondGap.x = currentMidtexts[pretexts.length - 1].x + currentMidtexts[pretexts.length - 1].getBounds().width + secondGapUnderlinedText.getBounds().width / 2;
+
+            if (question.postext) {
+              var postextsWithMid = question.postext.split("\n");
+              var currentPostextsWithMid = {};
+
+              if (postextsWithMid.length > 1) {
+                if (!postextsWithMid[0]) {
+                  postextsWithMid[0] = " ";
+                }
+                currentPostextsWithMid[0] = new createjs.Text(postextsWithMid[0], "22px Arial", "black");
+                currentPostextsWithMid[0].x = secondGapUnderlinedText.x + secondGapUnderlinedText.getBounds().width;
+                currentPostextsWithMid[0].y = secondGapUnderlinedText.y;
+                $scope.questionsTextContainer.addChild(currentPostextsWithMid[0]);
+
+                currentPostextsWithMid[1] = new createjs.Text(postextsWithMid[1], "22px Arial", "black");
+                currentPostextsWithMid[1].x = 0;
+                currentPostextsWithMid[1].y = currentPostextsWithMid[0].y + textHeight;
+                $scope.questionsTextContainer.addChild(currentPostextsWithMid[1]);
+              } else {
+                currentPostextsWithMid[0] = new createjs.Text(postextsWithMid[0], "22px Arial", "black");
+                currentPostextsWithMid[0].x = secondGapUnderlinedText.x + secondGapUnderlinedText.getBounds().width;
+                currentPostextsWithMid[0].y = secondGapUnderlinedText.y;
+                $scope.questionsTextContainer.addChild(currentPostextsWithMid[0]);
+              }
+
+            }
+
+          } else {
+
+            if (question.postext) {
+
+              var postexts = question.postext.split("\n");
+              var currentPostexts = {};
+
+              if (postexts.length > 1) {
+                if (!postexts[0]) {
+                  postexts[0] = " ";
+                }
+                currentPostexts[0] = new createjs.Text(postexts[0], "22px Arial", "black");
+                currentPostexts[0].x = firstGapUnderlinedText.x + firstGapUnderlinedText.getBounds().width;
+                currentPostexts[0].y = firstGapUnderlinedText.y;
+                $scope.questionsTextContainer.addChild(currentPostexts[0]);
+
+                currentPostexts[1] = new createjs.Text(postexts[1], "22px Arial", "black");
+                currentPostexts[1].x = 0;
+                currentPostexts[1].y = currentPostexts[0].y + textHeight;
+                $scope.questionsTextContainer.addChild(currentPostexts[1]);
+              } else {
+                currentPostexts[0] = new createjs.Text(postexts[0], "22px Arial", "black");
+                currentPostexts[0].x = firstGapUnderlinedText.x + firstGapUnderlinedText.getBounds().width;
+                currentPostexts[0].y = firstGapUnderlinedText.y;
+                $scope.questionsTextContainer.addChild(currentPostexts[0]);
+              }
+            }
+
+          }
+
+
+          if (question.userAnswer) {
+            if (!$scope.activityData.completed) {
+              if (question.midtext) {
+                var splittedText = question[question.userAnswer].split("...");
+                $scope.firstGap.text = splittedText[0];
+                $scope.secondGap.text = splittedText[1];
+                $scope.firstGap.color = "black";
+                $scope.secondGap.color = "black";
+              } else {
+                $scope.firstGap.text = question[question.userAnswer];
+                $scope.firstGap.color = "black";
+              }
+            } else {
+              if (question.midtext) {
+                var splittedText = question[question.answerChoice].split("...");
+                $scope.firstGap.text = splittedText[0];
+                $scope.secondGap.text = splittedText[1];
+                $scope.firstGap.color = "black";
+                $scope.secondGap.color = "black";
+              } else {
+                $scope.firstGap.text = question[question.answerChoice];
+                $scope.firstGap.color = "black";
+              }
+            }
+          }
         };
 
         /*Function that restarts the exercise*/

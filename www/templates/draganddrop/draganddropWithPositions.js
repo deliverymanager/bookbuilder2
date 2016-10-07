@@ -444,7 +444,7 @@ angular.module("bookbuilder2")
                           console.log("pressup event!");
                           menuButton.gotoAndPlay("normal");
                           $scope.stage.update();
-                          $rootScope.nextActivity("lessonNew");
+                          $rootScope.navigate("lessonNew");
                         });
 
                         menuButton.scaleX = menuButton.scaleY = $scope.scale;

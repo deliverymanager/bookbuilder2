@@ -281,7 +281,7 @@ angular.module("bookbuilder2")
 
               console.log("Press up event on Menu event!");
               menuButton.gotoAndPlay("normal");
-              $rootScope.nextActivity("lessonNew");
+              $rootScope.navigate("lessonNew");
 
             });
 

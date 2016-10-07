@@ -156,7 +156,7 @@ angular.module("bookbuilder2")
             menuButton.on("pressup", function (event) {
               console.log("Press up event on Menu event!");
               menuButton.gotoAndPlay("normal");
-              $rootScope.nextActivity("lessonNew");
+              $rootScope.navigate("lessonNew");
             });
 
             menuButton.scaleX = menuButton.scaleY = $scope.scale;

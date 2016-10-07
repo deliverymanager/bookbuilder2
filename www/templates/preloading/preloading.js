@@ -136,11 +136,13 @@ angular.module("bookbuilder2")
 
 
       } else {
-
-        $scope.rootDir = "https://s3-eu-west-1.amazonaws.com/engrlikeenglishb1-3-0/";
+        //engrlikeenglishb1-3-0
+        //engrenglish3
+        $scope.rootDir = "https://s3-eu-west-1.amazonaws.com/engrenglish1/";
         window.localStorage.setItem("rootDir", $scope.rootDir);
         $rootScope.navigate("groups");
       }
+
     });
 
 

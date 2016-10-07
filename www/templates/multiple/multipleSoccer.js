@@ -1347,6 +1347,7 @@ angular.module("bookbuilder2")
                           $scope.resultsTotalRowQuestionsTexts[key].x = questionUnderline.x + questionUnderline.getBounds().width / 2;
                           $scope.resultsTotalRowQuestionsTexts[key].y = questionUnderline.y;
                           $scope.resultsTotalRowQuestionsTexts[key].textAlign = "center";
+                          $scope.resultsTotalRowQuestionsTexts[key].maxWidth = 110;
                           $scope.resultsTotalRowQuestionsContainers[key].addChild($scope.resultsTotalRowQuestionsTexts[key]);
 
                           if ($scope.activityData.questions[key].postext) {

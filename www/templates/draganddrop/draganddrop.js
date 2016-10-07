@@ -77,34 +77,8 @@ angular.module("bookbuilder2")
 
       createjs.Ticker.framerate = 20;
       createjs.Ticker.addEventListener("tick", handleTick);
-      /*$scope.sounds = {};
-       if (window.cordova && window.cordova.platformId !== "browser") {
-       _.each(["drag", "drop", "check"], function (sound, key, list) {
-       if (ionic.Platform.isIOS() && window.cordova) {
-       resolveLocalFileSystemURL($scope.rootDir + "data/assets/" + sound + ".mp3", function (entry) {
-       $scope.sounds[sound] = new Media(entry.toInternalURL(), function () {
-       console.log("Sound success");
-       }, function (err) {
-       console.log("Sound error", err);
-       }, function (status) {
-       console.log("Sound status", status);
-       });
-       });
-       } else {
-       console.log("Else Android");
-       $scope.sounds[sound] = new Media($scope.rootDir + "data/assets/" + sound + ".mp3", function () {
-       console.log("Sound success");
-       }, function (err) {
-       console.log("Sound error", err);
-       }, function (status) {
-       console.log("Sound status", status);
-       });
-       }
-       });
 
-       }*/
-
-      var userChoice = " _________________________________ ";
+      var userChoice = " _________________ ";
 
       /****************************** Image Loader ******************************/
       var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
@@ -153,7 +127,7 @@ angular.module("bookbuilder2")
             menuButton.addEventListener("pressup", function (event) {
               menuButton.gotoAndPlay("normal");
               $scope.stage.update();
-              $rootScope.nextActivity("lessonNew");
+              $rootScope.navigate("lesson");//This is a template only for E Like English B1
             });
 
             menuButton.scaleX = menuButton.scaleY = scale;
@@ -278,10 +252,6 @@ angular.module("bookbuilder2")
                 if ($scope.activityData.completed) {
                   return;
                 }
-                /*
-                 if (window.cordova && window.cordova.platformId !== "browser") {
-                 $scope.sounds["drag"].play();
-                 }*/
 
                 var global = $scope.stage.localToGlobal(this.x, this.y);
                 this.offset = {

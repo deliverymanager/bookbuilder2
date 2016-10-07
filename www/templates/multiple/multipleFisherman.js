@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-  .controller("MultipleFishermanController", function ($scope, $ionicPlatform,$rootScope, $timeout, $http, _) {
+  .controller("MultipleFishermanController", function ($scope, $ionicPlatform, $rootScope, $timeout, $http, _) {
 
     console.log("MultipleFishermanController loaded!");
     $scope.rootDir = window.localStorage.getItem("rootDir");
@@ -177,15 +177,7 @@ angular.module("bookbuilder2")
         $scope.resultsContainer.y = 80;
         $scope.mainContainer.addChild($scope.resultsContainer);
 
-        //resultsContainer Background
-        /*var resultsContainerGraphic = new createjs.Graphics().beginFill("orange").drawRect(0, 0, $scope.resultsContainer.width, $scope.resultsContainer.height);
-         var resultsContainerBackground = new createjs.Shape(resultsContainerGraphic);
-         resultsContainerBackground.alpha = 0.5;
-
-         $scope.resultsContainer.addChild(resultsContainerBackground);*/
-
         $scope.resultsContainer.visible = true;
-
 
         /* ------------------------------------------ TOTAL RESULTS CONTAINER ---------------------------------------------- */
         $scope.resultsTotalContainer = new createjs.Container();
@@ -194,13 +186,6 @@ angular.module("bookbuilder2")
         $scope.resultsTotalContainer.x = 0;
         $scope.resultsTotalContainer.y = 0;
         $scope.mainContainer.addChild($scope.resultsTotalContainer);
-
-        //mainContainer Background
-        /*var resultsTotalContainerGraphic = new createjs.Graphics().beginFill("pink").drawRect(0, 0, $scope.resultsTotalContainer.width, $scope.resultsTotalContainer.height);
-         var resultsTotalContainerBackground = new createjs.Shape(resultsTotalContainerGraphic);
-         resultsTotalContainerBackground.alpha = 0.5;
-
-         $scope.resultsTotalContainer.addChild(resultsTotalContainerBackground);*/
 
         $scope.resultsTotalContainer.visible = true;
 
@@ -335,20 +320,6 @@ angular.module("bookbuilder2")
                       $scope.questionTextContainer.x = 5;
                       $scope.questionTextContainer.y = 5;
                       $scope.questionContainer.addChild($scope.questionTextContainer);
-
-                      //questionContainer Background
-                      /*var questionTextContainerGraphic = new createjs.Graphics().beginFill("grey").drawRect(0, 0, $scope.questionTextContainer.width, $scope.questionTextContainer.height);
-                       var questionTextContainerBackground = new createjs.Shape(questionTextContainerGraphic);
-                       questionTextContainerBackground.alpha = 0.5;
-                       $scope.questionTextContainer.addChild(questionTextContainerBackground);*/
-
-                      /*Adding the Text that holds the question*/
-                      /* $scope.questionText = new createjs.Text("", "25px Arial", "white");
-                       $scope.questionText.x = $scope.questionTextContainer.x;
-                       $scope.questionText.y = 0;
-                       $scope.questionText.maxWidth = $scope.questionTextContainer.width;
-                       $scope.questionTextContainer.addChild($scope.questionText);*/
-
                       questionsAndAnswersCallback(null);
                     }
                   ],
@@ -379,10 +350,6 @@ angular.module("bookbuilder2")
                           var skipAnswerSpriteSheet = new createjs.SpriteSheet(response);
                           $scope.skipAnswerButton = new createjs.Sprite(skipAnswerSpriteSheet, "normal");
 
-
-                          /*Mouse down event*/
-                          $scope.skipAnswerButton.addEventListener("mousedown", function (event) {
-                          });
 
                           /*Press up event*/
                           $scope.skipAnswerButton.addEventListener("pressup", function (event) {
@@ -605,10 +572,6 @@ angular.module("bookbuilder2")
                           response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                           var firstFishSpriteSheet = new createjs.SpriteSheet(response);
                           $scope.firstFish = new createjs.Sprite(firstFishSpriteSheet, "normal");
-
-                          /*Mouse down event*/
-                          $scope.firstFish.addEventListener("mousedown", function (event) {
-                          });
 
                           /*Press up event*/
                           $scope.firstFish.addEventListener("pressup", function (event) {
@@ -1234,6 +1197,7 @@ angular.module("bookbuilder2")
                                 $scope.resultsTotalRowQuestionsTexts[key].x = questionUnderline.x + questionUnderline.getBounds().width / 2;
                                 $scope.resultsTotalRowQuestionsTexts[key].y = questionUnderline.y;
                                 $scope.resultsTotalRowQuestionsTexts[key].textAlign = "center";
+                                $scope.resultsTotalRowQuestionsTexts[key].maxWidth = 110;
                                 $scope.resultsTotalRowQuestionsContainers[key].addChild($scope.resultsTotalRowQuestionsTexts[key]);
 
                                 if ($scope.activityData.questions[key].postext) {
@@ -2011,7 +1975,7 @@ angular.module("bookbuilder2")
 
                     currentPostexts[1] = new createjs.Text(postexts[1], "19px Arial", "black");
                     currentPostexts[1].x = pretext.x;
-                    currentPostexts[1].y = currentPostexts[0].y + 28;
+                    currentPostexts[1].y = currentPostexts[0].y + 20;
                     $scope.resultQuestionContainer.addChild(currentPostexts[1]);
 
                   } else {

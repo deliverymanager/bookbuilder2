@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-  .controller("jarsController", function ($scope, $ionicPlatform, $timeout,$rootScope, $http, _) {
+  .controller("jarsController", function ($scope, $ionicPlatform, $timeout, $rootScope, $http, _) {
 
     console.log("jarsController loaded!");
     $scope.rootDir = window.localStorage.getItem("rootDir");
@@ -334,11 +334,13 @@ angular.module("bookbuilder2")
             //Resolving which jars will be used and adjusting their positions
             function (initWaterfallCallback) {
               if (_.keys($scope.activityData.wordsGroups).length === 4) {
+
                 console.warn("Number of jars: ", 4);
                 $scope.jars[_.findKey($scope.jars, {"jarIndex": 0})].visible = true;
                 $scope.jars[_.findKey($scope.jars, {"jarIndex": 1})].visible = true;
                 $scope.jars[_.findKey($scope.jars, {"jarIndex": 2})].visible = true;
-                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].visible = true;
+                $scope.jars[_.findKey($scope.jars, {"jarIndex": 3})].visible = true;
+
               } else if (_.keys($scope.activityData.wordsGroups).length === 3) {
                 console.warn("Number of jars: ", 3);
                 $scope.jars[_.findKey($scope.jars, {"jarIndex": 0})].visible = true;
@@ -376,7 +378,7 @@ angular.module("bookbuilder2")
               $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})].maxWidth = 120;
               $scope.mainContainer.addChild($scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})]);
 
-              if (_.keys($scope.activityData.wordsGroups).length === 3) {
+              if (_.keys($scope.activityData.wordsGroups).length === 3 || _.keys($scope.activityData.wordsGroups).length === 4) {
 
                 //Creating text for the third jar
                 $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[2], "30px Arial", "white");
@@ -386,12 +388,15 @@ angular.module("bookbuilder2")
                 $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})].maxWidth = 120;
                 $scope.mainContainer.addChild($scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})]);
 
-              } else if (_.keys($scope.activityData.wordsGroups).length === 4) {
+              }
 
+              if (_.keys($scope.activityData.wordsGroups).length === 4) {
+
+                console.log("text for the 4th jar",$scope.jars);
                 //Creating text for the fourth jar
                 $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[3], "30px Arial", "white");
-                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].x = $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].x + 80;
-                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].y = $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].y + 10;
+                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].x = $scope.jars[_.findKey($scope.jars, {"jarIndex": 3})].x + 80;
+                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].y = $scope.jars[_.findKey($scope.jars, {"jarIndex": 3})].y + 10;
                 $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].textAlign = "center";
                 $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].maxWidth = 120;
                 $scope.mainContainer.addChild($scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})]);

@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-  .controller("educationController", function ($scope, $ionicPlatform, $timeout, $http, _,$rootScope) {
+  .controller("educationController", function ($scope, $ionicPlatform, $timeout, $http, _, $rootScope) {
 
     console.log("educationController loaded!");
     $scope.rootDir = window.localStorage.getItem("rootDir");
@@ -153,13 +153,11 @@ angular.module("bookbuilder2")
             menuButton.addEventListener("mousedown", function (event) {
               console.log("Mouse down event on Menu button !");
               menuButton.gotoAndPlay("onSelection");
+              $scope.stage.update();
             });
 
             menuButton.addEventListener("pressup", function (event) {
-
               createjs.Tween.removeAllTweens();
-
-              console.log("Press up event on Menu event!");
               menuButton.gotoAndPlay("normal");
               $scope.stage.update();
               $rootScope.navigate("lessonNew");
@@ -299,6 +297,7 @@ angular.module("bookbuilder2")
 
                       if ($scope.activityData.completed) {
                         $scope.nextButton.gotoAndPlay("onSelection");
+                        $scope.stage.update();
                         $rootScope.nextActivity($scope.selectedLesson, $scope.activityFolder);
                       }
                     });
@@ -320,6 +319,7 @@ angular.module("bookbuilder2")
                 $scope.questionText = new createjs.Text("", "30px Arial", "white");
                 $scope.questionText.x = 100;
                 $scope.questionText.y = 100;
+                $scope.questionText.maxWidth = 315;
                 $scope.mainContainer.addChild($scope.questionText);
 
                 questionWaterfallCallback(null);
@@ -360,11 +360,13 @@ angular.module("bookbuilder2")
                     $scope.nextQuestionButton.addEventListener("mousedown", function (event) {
                       console.log("Mouse down event on Menu button !");
                       $scope.nextQuestionButton.gotoAndPlay("onSelection");
+                      $scope.stage.update();
                     });
 
                     $scope.nextQuestionButton.addEventListener("pressup", function (event) {
                       console.log("Press up event on Menu event!");
                       $scope.nextQuestionButton.gotoAndPlay("normal");
+                      $scope.stage.update();
                       nextQuestion();
                     });
 
@@ -394,11 +396,13 @@ angular.module("bookbuilder2")
                     $scope.previousButton.addEventListener("mousedown", function (event) {
                       console.log("Mouse down event on Menu button !");
                       $scope.previousButton.gotoAndPlay("onSelection");
+                      $scope.stage.update();
                     });
 
                     $scope.previousButton.addEventListener("pressup", function (event) {
                       console.log("Press up event on Menu event!");
                       $scope.previousButton.gotoAndPlay("normal");
+                      $scope.stage.update();
                       previousQuestion();
                     });
 
@@ -567,8 +571,10 @@ angular.module("bookbuilder2")
                     : $scope.scrambledEnglishLetterContainers[0].x + key * 53;
                   $scope.scrambledEnglishLetterContainers[key].y = key === 0 ? 370
                     : 370;
+
                   $scope.scrambledEnglishLetterContainers[key].startingPointX = $scope.scrambledEnglishLetterContainers[key].x;
                   $scope.scrambledEnglishLetterContainers[key].startingPointY = $scope.scrambledEnglishLetterContainers[key].y;
+
 
                   /*Mouse down event*/
                   $scope.scrambledEnglishLetterContainers[key].on("mousedown", function (evt) {
@@ -590,6 +596,8 @@ angular.module("bookbuilder2")
                       'x': global.x,
                       'y': global.y
                     };
+
+                    return true;
                   });
 
                   /*Press move event*/
@@ -606,6 +614,8 @@ angular.module("bookbuilder2")
                     var local = $scope.mainContainer.globalToLocal(evt.stageX + this.offset.x, evt.stageY + this.offset.y);
                     this.x = local.x;
                     this.y = local.y;
+
+                    return true;
                   });
 
                   /*Press up event*/
@@ -652,6 +662,8 @@ angular.module("bookbuilder2")
 
                       //If the user deselects a letter it has to be removed from the userChoices array
                     }
+
+                    return true;
                   });//end of press up event
 
 
@@ -754,6 +766,8 @@ angular.module("bookbuilder2")
                     restartButton.addEventListener("mousedown", function (event) {
                       console.log("Mouse down event on Restart event!");
                       restartButton.gotoAndPlay("onSelection");
+                      $scope.stage.update()
+
                     });
 
                     restartButton.addEventListener("pressup", function (event) {
@@ -763,6 +777,7 @@ angular.module("bookbuilder2")
                       /** NOTE: Restarting question process is a distinct function now
                        * because Next question and Previous question share the same code **/
                       restartQuestion();
+                      $scope.stage.update()
 
                     });
 
@@ -793,6 +808,8 @@ angular.module("bookbuilder2")
                     checkButton.addEventListener("mousedown", function (event) {
                       console.log("Mouse down event on Check button event!");
                       checkButton.gotoAndPlay("onSelection");
+                      $scope.stage.update()
+
                     });
 
                     checkButton.addEventListener("pressup", function (event) {
@@ -800,6 +817,7 @@ angular.module("bookbuilder2")
                       checkButton.gotoAndPlay("normal");
 
                       checkQuestion();
+                      $scope.stage.update()
 
                     });
 
@@ -881,25 +899,17 @@ angular.module("bookbuilder2")
           $scope.englishWordArray = _.shuffle($scope.englishWordArray);
           console.log("Scrambled english word: ", $scope.englishWordArray);
 
-          //NOTE: Scanning for gap element inside englishWordArray. If there is move it to the end!
-          var indexOfGapElement = _.indexOf($scope.englishWordArray, "_");
-          if (indexOfGapElement >= 0) {
-            console.log("There is a gap element in index: ", indexOfGapElement);
-            var gapElement = $scope.englishWordArray[indexOfGapElement];
-            $scope.englishWordArray.splice(indexOfGapElement, 1);
-            $scope.englishWordArray.push(gapElement);
-          }
-
+          //moving empty letters to the end
+          $scope.englishWordArray = _.without($scope.englishWordArray, '_').concat(_.filter($scope.englishWordArray, function (item) {
+            return item === "_";
+          }));
           console.log("After dealing with gap element: ", $scope.englishWordArray);
 
-          //Building the scrambled letters
-          // _.each($scope.scrambledEnglishLetterContainers, function (letter, key, list) {
-          //     $scope.scrambledEnglishLetterContainers[key].visible = false;
-          // });
           _.each($scope.englishWordArray, function (letter, key, list) {
             //Assigning the letters and if there is a gap it makes it invisible
             $scope.scrambledEnglishLetterContainers[key].visible = $scope.englishWordArray[key] !== "_";
             $scope.scrambledEnglishLetterTexts[key].text = $scope.englishWordArray[key];
+            $scope.scrambledEnglishLetterTexts[key].chosen = false;
           });
 
 
@@ -913,17 +923,19 @@ angular.module("bookbuilder2")
               _.each($scope.activityData.questions[$scope.questionIndex].userChoices, function (selectedLetter, key, list) {
                 if ($scope.activityData.questions[$scope.questionIndex].userChoices[key] !== "" && $scope.activityData.questions[$scope.questionIndex].userChoices[key]) {
 
-                  console.log("The chosen letter : ", $scope.activityData.questions[$scope.questionIndex].userChoices[key]);
 
-                  var letterIndex = _.findKey($scope.scrambledEnglishLetterTexts, {"text": $scope.activityData.questions[$scope.questionIndex].userChoices[key]});
-
-                  console.log("The index of chosen letter that found: ", letterIndex);
+                  var letterIndex = _.findKey($scope.scrambledEnglishLetterTexts, {
+                    "text": $scope.activityData.questions[$scope.questionIndex].userChoices[key],
+                    "chosen": false
+                  });
 
                   createjs.Tween.get($scope.scrambledEnglishLetterContainers[letterIndex], {loop: false})
                     .to({
                       x: $scope.answerWordLettersContainers[key].x,
                       y: $scope.answerWordLettersContainers[key].y
                     }, 200, createjs.Ease.getPowIn(2));
+
+                  $scope.scrambledEnglishLetterTexts[letterIndex].chosen = true;
                 }
               });
 
@@ -942,7 +954,10 @@ angular.module("bookbuilder2")
 
                   console.log("The chosen letter : ", $scope.activityData.questions[$scope.questionIndex].userChoices[key]);
 
-                  var letterIndex = _.findKey($scope.scrambledEnglishLetterTexts, {"text": $scope.activityData.questions[$scope.questionIndex].userChoices[key]});
+                  var letterIndex = _.findKey($scope.scrambledEnglishLetterTexts, {
+                    "text": $scope.activityData.questions[$scope.questionIndex].userChoices[key],
+                    "chosen": false
+                  });
 
                   console.log("The index of chosen letter that found: ", letterIndex);
 
@@ -951,6 +966,9 @@ angular.module("bookbuilder2")
                       x: $scope.answerWordLettersContainers[key].x,
                       y: $scope.answerWordLettersContainers[key].y
                     }, 200, createjs.Ease.getPowIn(2));
+
+                  $scope.scrambledEnglishLetterTexts[letterIndex].chosen = true;
+
                 }
               });
             }
@@ -1095,12 +1113,12 @@ angular.module("bookbuilder2")
         function checkQuestion() {
 
           console.log("userChoices that it will be checked: ", $scope.activityData.questions[$scope.questionIndex].userChoices);
-          var userChoicesWord = $scope.activityData.questions[$scope.questionIndex].userChoices.join("");
+          var userChoicesWord = _.compact($scope.activityData.questions[$scope.questionIndex].userChoices).join("");
           console.log("The userChoices word: ", userChoicesWord);
-          console.log("The right word: ", $scope.activityData.questions[$scope.questionIndex].englishWord);
+          console.log("The right word: ", _.without($scope.activityData.questions[$scope.questionIndex].englishWord, ' ').join(""));
 
           //Checking if it's correct
-          if (userChoicesWord === $scope.activityData.questions[$scope.questionIndex].englishWord) {
+          if (userChoicesWord === _.without($scope.activityData.questions[$scope.questionIndex].englishWord, ' ').join("")) {
             //--CORRECT--
 
             //Make all sprites green
