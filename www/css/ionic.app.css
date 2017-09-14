@@ -9730,3 +9730,21 @@ a.button {
   opacity: 0;
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
+
+.resultsPopupForm .popup {
+  width: 320px;
+  position: absolute;
+  top: 10px; }
+
+.resultsPopupForm .popup .popup-head {
+  padding: 0px; }
+
+.transparentBar {
+  background-color: transparent !important;
+  background-size: 0 !important;
+  opacity: 1; }
+
+.transparentBar.bar.bar-stable .title,
+.transparentBar.bar.bar-footer .title {
+  color: white;
+  font-size: xx-large; }

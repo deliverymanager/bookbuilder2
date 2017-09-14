@@ -1,9 +1,10 @@
 angular.module("bookbuilder2")
-  .controller("ResultsController", function (Email, $ionicLoading, $scope,$rootScope, $ionicPlatform, $timeout, $http, _, Toast, $ionicPopup) {
+  .controller("ResultsController", function (Email, $ionicLoading, $scope, $rootScope, $ionicPlatform, $timeout, $http, _, Toast, $ionicPopup) {
 
     console.log("ResultsController loaded!");
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+    $scope.book = JSON.parse(window.localStorage.getItem("book"));
     $scope.activityFolder = window.localStorage.getItem("activityFolder");
     $scope.book = JSON.parse(window.localStorage.getItem("book"));
 
@@ -147,7 +148,7 @@ angular.module("bookbuilder2")
                   }
                 });
 
-                menuButton.scaleX = menuButton.scaleY = $scope.scale;
+                menuButton.scaleX = menuButton.scaleY = $scope.scale * ($scope.book.headMenuButtonScale ? $scope.book.headMenuButtonScale : 1);
                 menuButton.x = 0;
                 menuButton.y = -menuButton.getTransformedBounds().height / 5;
                 $scope.stage.addChild(menuButton);
@@ -214,6 +215,39 @@ angular.module("bookbuilder2")
               });
           }, function (callback) {
 
+            $http.get($scope.rootDir + "data/assets/results_lessons_button_sprite.json")
+              .success(function (response) {
+                //Reassigning images with the rest of resource
+                response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
+                var menuResultsButtonnSpriteSheet = new createjs.SpriteSheet(response);
+                var menuResultsButton = new createjs.Sprite(menuResultsButtonnSpriteSheet, "normal");
+
+                menuResultsButton.addEventListener("mousedown", function (event) {
+                  console.log("mousedown event on a button !");
+                  menuResultsButton.gotoAndPlay("onSelection");
+                  $scope.stage.update();
+                });
+
+                menuResultsButton.addEventListener("pressup", function (event) {
+                  console.log("pressup event!");
+                  menuResultsButton.gotoAndPlay("normal");
+                  $scope.stage.update();
+                  $rootScope.navigate("groups");
+                });
+                menuResultsButton.scaleX = menuResultsButton.scaleY = $scope.scale;
+                menuResultsButton.x = backgroundPosition.x + (backgroundPosition.width / 2.7);
+                menuResultsButton.y = backgroundPosition.y + (backgroundPosition.height / 1.14);
+                $scope.stage.addChild(menuResultsButton);
+                $scope.stage.update();
+                callback();
+              })
+              .error(function (error) {
+                callback();
+                console.log("Error on getting json data for return button...", error);
+              });
+
+          }, function (callback) {
+
             $http.get($scope.rootDir + "data/assets/results_exit_button_sprite.json")
               .success(function (response) {
                 //Reassigning images with the rest of resource
@@ -248,9 +282,7 @@ angular.module("bookbuilder2")
               .error(function (error) {
                 callback();
                 console.log("Error on getting json data for return button...", error);
-
               });
-
 
           }, function (callback) {
 
@@ -293,7 +325,7 @@ angular.module("bookbuilder2")
             $scope.vocReadContainer.x = backgroundPosition.x + (backgroundPosition.width / 9);
             $scope.vocReadContainer.y = backgroundPosition.y + (backgroundPosition.height / 5.5);
             $scope.vocReadContainer.width = background.image.width / 2.7;
-            $scope.vocReadContainer.height = background.image.height / 4.3;
+            $scope.vocReadContainer.height = background.image.height / 4.5;
             $scope.stage.addChild($scope.vocReadContainer);
 
 
@@ -309,9 +341,9 @@ angular.module("bookbuilder2")
             $scope.activitiesContainer = new createjs.Container();
             $scope.activitiesContainer.scaleX = $scope.activitiesContainer.scaleY = $scope.scale;
             $scope.activitiesContainer.x = backgroundPosition.x + (backgroundPosition.width / 9);
-            $scope.activitiesContainer.y = backgroundPosition.y + (backgroundPosition.height / 2.3);
+            $scope.activitiesContainer.y = backgroundPosition.y + (backgroundPosition.height / 2.4);
             $scope.activitiesContainer.width = background.image.width / 1.44;
-            $scope.activitiesContainer.height = background.image.height / 2.3;
+            $scope.activitiesContainer.height = background.image.height / 2.15;
             $scope.stage.addChild($scope.activitiesContainer);
 
             callback();
@@ -448,11 +480,15 @@ angular.module("bookbuilder2")
               "activityFolder": "song"
             })) {
 
+            var songTemp = _.findWhere($scope.selectedLesson.lessonMenu, {
+              "activityFolder": "song"
+            });
+
             var songActivityData = JSON.parse(window.localStorage.getItem($scope.selectedLesson.id + "_song"));
             if (songActivityData) {
               $scope.calculatedActivityScores["song"] = {
                 "activityFolder": "song",
-                "title": "Song",
+                "title": (songTemp ? songTemp.name : "Song"),
                 "completed": songActivityData.completed,
                 "attempts": songActivityData.attempts,
                 "percentCorrectQuestions": 100
@@ -500,6 +536,11 @@ angular.module("bookbuilder2")
           var score = 0;
           var counter = 0;
           _.each($scope.calculatedActivityScores, function (activity, key, list) {
+
+            if (key === "reading" || key === "vocabulary" || key === "song" || key === "video") {
+              return;
+            }
+
             if (activity.completed) {
               score += activity.percentCorrectQuestions;
             }
@@ -521,7 +562,7 @@ angular.module("bookbuilder2")
 
             var vocText = new createjs.Text($scope.calculatedActivityScores["vocabulary"].title, "21px Arial", "white");
             vocText.x = $scope.vocReadContainer.width / 20;
-            vocText.y = $scope.vocReadContainer.height / 14;
+            vocText.y = $scope.vocReadContainer.height / 16;
 
             $scope.activityStateVoc = new createjs.Sprite($scope.activityState, $scope.calculatedActivityScores["vocabulary"].completed ? "completed" : "notCompleted");
             $scope.activityStateVoc.x = $scope.vocReadContainer.width / 2;
@@ -558,7 +599,7 @@ angular.module("bookbuilder2")
 
             var songText = new createjs.Text($scope.calculatedActivityScores["song"].title, "21px Arial", "white");
             songText.x = $scope.vocReadContainer.width / 20;
-            songText.y = $scope.vocReadContainer.height / 1.8;
+            songText.y = $scope.vocReadContainer.height / 1.25;
             $scope.vocReadContainer.addChild(songText);
 
             $scope.activityStateRead = new createjs.Sprite($scope.activityState, $scope.calculatedActivityScores["song"].completed ? "completed" : "notCompleted");
@@ -579,7 +620,7 @@ angular.module("bookbuilder2")
 
             var videoText = new createjs.Text($scope.calculatedActivityScores["video"].title, "21px Arial", "white");
             videoText.x = $scope.vocReadContainer.width / 20;
-            videoText.y = $scope.vocReadContainer.height / 1.25;
+            videoText.y = $scope.vocReadContainer.height / 1.8;
             $scope.vocReadContainer.addChild(videoText);
 
             $scope.activityStateRead = new createjs.Sprite($scope.activityState, $scope.calculatedActivityScores["video"].completed ? "completed" : "notCompleted");
@@ -596,7 +637,7 @@ angular.module("bookbuilder2")
           }
 
 
-          var stepHeight = 15;
+          var stepHeight = 3;
           console.log("$scope.calculatedActivityScores", $scope.calculatedActivityScores);
           _.each($scope.calculatedActivityScores, function (activity, key, list) {
 
@@ -630,8 +671,7 @@ angular.module("bookbuilder2")
             vocPerCent.y = stepHeight;
             $scope.activitiesContainer.addChild(vocPerCent);
 
-            stepHeight += 30;
-
+            stepHeight += 30 + (9 - $scope.selectedLesson.activitiesMenu.length) * 30 / 9;
           });
         }
 
@@ -650,9 +690,9 @@ angular.module("bookbuilder2")
         $scope.popEmail = function () {
 
           $scope.data = {};
-          var myPopup = $ionicPopup.show({
+          $ionicPopup.show({
             template: '<input type="text" ng-model="data.firstName" placeholder="Όνομα μαθητή"><br><input type="email" ng-model="data.sendTo" placeholder="Email Καθηγητή">',
-            title: 'Εισάγετε τα στοιχεία σας',
+            cssClass: 'resultsPopupForm',
             scope: $scope,
             buttons: [{
               text: 'Cancel'
@@ -673,7 +713,7 @@ angular.module("bookbuilder2")
                   console.log("$scope.calculatedActivityScores", $scope.calculatedActivityScores);
                   console.log($scope.data.firstName + " " + $scope.data.sendTo);
                   $scope.data.bookTitle = $scope.book.bookTitle;
-                  $scope.data.lessonTitle = $scope.selectedLesson.lessonTitle;
+                  $scope.data.lessonTitle = $scope.selectedLesson.lessonTitle + " - " + $scope.selectedLesson.title;
                   $scope.data.totalScore = $scope.totalScore.toFixed();
 
 

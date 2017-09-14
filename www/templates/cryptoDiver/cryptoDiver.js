@@ -1,9 +1,10 @@
 angular.module("bookbuilder2")
-  .controller("cryptoDiverController", function ($scope, $ionicPlatform,$rootScope, $timeout, $http, _) {
+  .controller("cryptoDiverController", function ($scope, $ionicPlatform, $rootScope, $timeout, $http, _) {
 
     console.log("cryptoDiverController loaded!");
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+    $scope.book = JSON.parse(window.localStorage.getItem("book"));
     $scope.activityFolder = window.localStorage.getItem("activityFolder");
     $scope.activityName = window.localStorage.getItem("activityName");
 
@@ -41,7 +42,6 @@ angular.module("bookbuilder2")
 
     /*Name of activity in localStorage*/
     var activityNameInLocalStorage = $scope.selectedLesson.id + "_" + $scope.activityFolder;
-    console.log("Name of activity in localStorage: ", activityNameInLocalStorage);
 
     var timeout = $timeout(function () {
 
@@ -187,7 +187,7 @@ angular.module("bookbuilder2")
             /* 2. Saving the selection */
             var foundWordIndex = _.findIndex($scope.activityData.questions, {"englishWord": getSelectedWord()});
             $scope.activityData.questions[foundWordIndex].completedWordLetters = $scope.selectedLettersArray;
-            window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+            save();
 
             /*Mark the greek word as completed*/
             $scope.greekWords[foundWordIndex].color = "blue";
@@ -285,7 +285,7 @@ angular.module("bookbuilder2")
 
             });
 
-            menuButton.scaleX = menuButton.scaleY = $scope.scale;
+            menuButton.scaleX = menuButton.scaleY = $scope.scale * ($scope.book.headMenuButtonScale ? $scope.book.headMenuButtonScale : 1);
             menuButton.x = 0;
             menuButton.y = -menuButton.getTransformedBounds().height / 5;
 
@@ -320,17 +320,10 @@ angular.module("bookbuilder2")
 
               //Assigning configured response to activityData
               $scope.activityData = response;
-              $scope.activityData.attempts = 1;
-
-              /*Adding the userAnswer attribute to response object before assigning it to activityData*/
-              /* _.each($scope.activityData.questions, function (question, key, value) {
-               $scope.activityData.questions[key].userAnswer = "";
-               });*/
-
+              $scope.activityData.attempts = 0;
+              $scope.activityData.newGame = true;
               init();
-
-              //Saving it to localStorage
-              window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+              save();
             })
             .error(function (error) {
               console.error("Error on getting json for the url...:", error);
@@ -340,12 +333,29 @@ angular.module("bookbuilder2")
         /******************************************* INIT *****************************************/
         function init() {
 
+          /*Adding page title and description $scope.activityData.title*/
+          $scope.pageTitle = new createjs.Text($scope.selectedLesson.lessonTitle + " - " + $scope.selectedLesson.title, "23px Arial", "black");
+          $scope.pageTitle.x = 120;
+          $scope.pageTitle.y = 10;
+          $scope.pageTitle.maxWidth = 300;
+          $scope.mainContainer.addChild($scope.pageTitle);
+
+          /*Adding page title and description $scope.activityData.title*/
+          $scope.pageActivity = new createjs.Text(_.findWhere($scope.selectedLesson.activitiesMenu, {
+              activityFolder: $scope.activityFolder
+            }).name + " " + ($scope.activityData.revision ? "- " + $scope.activityData.revision : ""), "18px Arial", "white");
+          $scope.pageActivity.x = 85;
+          $scope.pageActivity.y = 620;
+          $scope.pageActivity.maxWidth = 300;
+          $scope.mainContainer.addChild($scope.pageActivity);
 
           /*Adding page title and description*/
-          $scope.pageTitleAndDescription = new createjs.Text($scope.activityData.title + " - " + $scope.activityData.description, "23px Arial", "white");
-          $scope.pageTitleAndDescription.x = 85;
-          $scope.pageTitleAndDescription.y = 623;
-          $scope.mainContainer.addChild($scope.pageTitleAndDescription);
+          $scope.pageDescription = new createjs.Text($scope.activityData.description, "18px Arial", "white");
+          $scope.pageDescription.x = 85;
+          $scope.pageDescription.y = 640;
+          $scope.pageDescription.maxWidth = 300;
+          $scope.mainContainer.addChild($scope.pageDescription);
+
 
           /*Calculations for finding the height and width of each letterContainer element*/
           console.log("Length of each row in lettersArray: ", $scope.activityData.lettersArray[0].length);
@@ -364,11 +374,11 @@ angular.module("bookbuilder2")
           /*Creating the Score Text element*/
           /*Adding the score Text element*/
           $scope.scoreText = new createjs.Text("Score: " + "0" + " / " + $scope.activityData.questions.length, "30px Arial", "white");
-          $scope.scoreText.x = 540;
+          $scope.scoreText.x = 520;
           $scope.scoreText.y = 570;
           $scope.activityData.score = 0;
           $scope.mainContainer.addChild($scope.scoreText);
-
+          save();
 
           /*** 1. Creating the letters array ***/
           _.each($scope.activityData.lettersArray, function (lettersArrayRow, rowKey, list) {
@@ -520,6 +530,46 @@ angular.module("bookbuilder2")
                   });
               },
 
+              function (initWaterfallCallback) {
+
+                $http.get($scope.rootDir + "data/assets/lesson_end_button_sprite.json")
+                  .success(function (response) {
+                    response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
+                    var resultsButtonSpriteSheet = new createjs.SpriteSheet(response);
+                    $scope.resultsButton = new createjs.Sprite(resultsButtonSpriteSheet, "normal");
+                    $scope.resultsButton.x = 680;
+                    $scope.resultsButton.y = 635;
+                    $scope.resultsButton.scaleX = $scope.resultsButton.scaleY = 0.6;
+                    $scope.mainContainer.addChild($scope.resultsButton);
+
+                    $scope.endText = new createjs.Text("RESULTS", "25px Arial", "white");
+                    $scope.endText.x = 720;
+                    $scope.endText.y = 625;
+                    $scope.mainContainer.addChild($scope.endText);
+
+                    $scope.resultsButton.visible = false;
+                    $scope.endText.visible = false;
+
+                    $scope.resultsButton.addEventListener("mousedown", function (event) {
+                      console.log("mousedown event on a button !");
+                      $scope.resultsButton.gotoAndPlay("onSelection");
+                      $scope.stage.update();
+                    });
+                    $scope.resultsButton.addEventListener("pressup", function (event) {
+                      console.log("pressup event!");
+                      $scope.resultsButton.gotoAndPlay("normal");
+                      $scope.stage.update();
+                      $rootScope.navigate("results");
+                    });
+
+                    initWaterfallCallback();
+                  })
+                  .error(function (error) {
+                    console.error("Error on getting json for results button...", error);
+                    initWaterfallCallback();
+                  });
+              },
+
               /*Creating diver reaching bottom*/
               function (gameCreationCallback) {
                 $http.get($scope.rootDir + "data/assets/diver_bottom_sprite.json")
@@ -592,11 +642,11 @@ angular.module("bookbuilder2")
                         });
                         //Deleting the saved letters for completed words
                         $scope.activityData.questions[key].completedWordLetters = [];
-                        window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
-
                         /* 3. Additionally iterating through greek words and apply the default format*/
                         $scope.greekWords[key].color = "white";
                         $scope.greekWords[key].alpha = 1;
+
+                        save();
 
                       });
 
@@ -637,7 +687,6 @@ angular.module("bookbuilder2")
                     response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                     var nextButtonSpriteSheet = new createjs.SpriteSheet(response);
                     $scope.nextButton = new createjs.Sprite(nextButtonSpriteSheet, "normal");
-                    $scope.nextButton.alpha = 0.5;
 
                     $scope.nextButton.addEventListener("mousedown", function (event) {
                       console.log("Mouse down event on a button !", $scope.activityData.completed);
@@ -1063,8 +1112,8 @@ angular.module("bookbuilder2")
                 $scope.letterTexts[$scope.activityData.questions[key].completedWordLetters[letterKey].index].color = "black";
               });
               /*Update the completed greek words during startup*/
-              $scope.greekWords[key].color = "blue";
-              $scope.greekWords[key].alpha = 0.1;
+              $scope.greekWords[key].color = "black";
+              $scope.greekWords[key].alpha = 0.2;
             }
           });
         }
@@ -1084,6 +1133,13 @@ angular.module("bookbuilder2")
           $scope.scoreText.text = "Score: " + completedWords + " / " + $scope.activityData.questions.length;
           $scope.activityData.score = completedWords;
           $scope.stage.update();
+          save();
+        }
+
+        //Function for saving
+        function save() {
+          //Saving it to localStorage
+          window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
         }
 
         /*Function that resolves how much the step has to be according to the number of questions*/
@@ -1108,8 +1164,6 @@ angular.module("bookbuilder2")
           $scope.diverBottom.visible = false;
           $scope.diverBottom.gotoAndPlay("normal");
           $scope.diverSwimming.visible = true;
-          //Make completed property false
-          $scope.activityData.completed = false;
           $scope.nextButton.gotoAndPlay("normal");
           $scope.completedActivityContainer.visible = false;
 
@@ -1150,10 +1204,13 @@ angular.module("bookbuilder2")
               });
 
           }], function (err, result) {
+
             /*Re-animate diver and chain*/
             chainFloating();
             diverFloating();
 
+            console.log("completedWords", completedWords);
+            console.log("$scope.activityData.questions.length", $scope.activityData.questions.length);
             /*Resolving if the diver has reached bottom*/
             if (completedWords === $scope.activityData.questions.length) {
               $scope.diverSwimming.visible = false;
@@ -1164,8 +1221,31 @@ angular.module("bookbuilder2")
               $scope.diverBottom.gotoAndPlay("bottom");
               //Activity has completed
               $scope.activityData.completed = true;
+
+              if (_.findIndex($scope.selectedLesson.activitiesMenu, {
+                  activityFolder: $scope.activityFolder
+                }) + 1 === $scope.selectedLesson.activitiesMenu.length) {
+
+                $scope.resultsButton.visible = true;
+                $scope.endText.visible = true;
+                $scope.nextButton.visible = false;
+
+              } else {
+                console.log("Activity is not the last one");
+                console.log("index", _.findIndex($scope.selectedLesson.activitiesMenu, {
+                    activityFolder: $scope.activityFolder
+                  }) + 1);
+                console.log("activities", $scope.selectedLesson.activitiesMenu.length);
+              }
+
+              if ($scope.activityData.newGame) {
+                $scope.activityData.attempts += 1;
+                $scope.activityData.newGame = false;
+              }
+
               $scope.completedActivityContainer.visible = true;
               $scope.nextButton.gotoAndPlay("onSelection");
+              save();
             }
           });
         }
@@ -1175,7 +1255,10 @@ angular.module("bookbuilder2")
         function restartDiverAndChain() {
           $scope.diverSwimming.y = 85;
           $scope.diverChain.y = -465;
+          $scope.activityData.newGame = true;
+          $scope.activityData.score = 0;
           updateDiverAndChain();
+          save();
         }
 
       });//end of image on complete

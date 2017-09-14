@@ -5,6 +5,7 @@ angular.module("bookbuilder2")
 
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+    $scope.book = JSON.parse(window.localStorage.getItem("book"));
     $scope.activityFolder = window.localStorage.getItem("activityFolder");
     $scope.activityName = window.localStorage.getItem("activityName");
 
@@ -41,7 +42,6 @@ angular.module("bookbuilder2")
 
     /*Name of activity in localStorage*/
     var activityNameInLocalStorage = $scope.selectedLesson.id + "_" + $scope.activityFolder;
-    console.log("Name of activity in localStorage: ", activityNameInLocalStorage);
 
     var timeout = $timeout(function () {
 
@@ -125,13 +125,6 @@ angular.module("bookbuilder2")
         $scope.mainContainer.y = backgroundPosition.y;
         $scope.stage.addChild($scope.mainContainer);
 
-        // var mainContainerGraphic = new createjs.Graphics().beginFill("green").drawRect(0, 0, $scope.mainContainer.width, $scope.mainContainer.height);
-        // var mainContainerBackground = new createjs.Shape(mainContainerGraphic);
-        // mainContainerBackground.alpha = 0.5;
-        //
-        // $scope.mainContainer.addChild(mainContainerBackground);
-
-
         /* ------------------------------------------ MENU BUTTON ---------------------------------------------- */
 
         $http.get($scope.rootDir + "data/assets/head_menu_button_sprite.json")
@@ -154,7 +147,7 @@ angular.module("bookbuilder2")
               $rootScope.navigate("lessonNew");
             });
 
-            menuButton.scaleX = menuButton.scaleY = $scope.scale;
+            menuButton.scaleX = menuButton.scaleY = $scope.scale * ($scope.book.headMenuButtonScale ? $scope.book.headMenuButtonScale : 1);
             menuButton.x = 0;
             menuButton.y = -menuButton.getTransformedBounds().height / 5;
 
@@ -166,24 +159,15 @@ angular.module("bookbuilder2")
 
 
         /************************************** Initializing Page **************************************/
-
-        console.log("Searching in localStorage fo activity: ", activityNameInLocalStorage);
-
         /*Getting the activityData from the local storage*/
+        console.log("activityNameInLocalStorage", window.localStorage.getItem(activityNameInLocalStorage));
+
         if (window.localStorage.getItem(activityNameInLocalStorage)) {
 
           $scope.activityData = JSON.parse(window.localStorage.getItem(activityNameInLocalStorage));
-          console.log("Getting activityData from local storage: ", $scope.activityData);
-
-
           init();
 
         } else {
-
-          /*Getting the activityData from http.get request*/
-          console.warn("There is no activity in local storage...Getting the json through $http.get()");
-          console.log("selectedLesson.id: ", $scope.selectedLesson.id);
-          console.log("activityFolder: ", $scope.activityFolder);
 
           $http.get($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/" + $scope.activityFolder + "/bombs.json")
             .success(function (response) {
@@ -191,7 +175,8 @@ angular.module("bookbuilder2")
 
               //Assigning configured response to activityData
               $scope.activityData = response;
-              $scope.activityData.attempts = 1;
+              $scope.activityData.attempts = 0;
+              $scope.activityData.newGame = true;
 
               //Filling the activityData with questionWords and userChoices properties
               _.each($scope.activityData.questions, function (question, key, list) {
@@ -201,13 +186,8 @@ angular.module("bookbuilder2")
                 $scope.activityData.questions[key].userChoices = [];
               });
 
-              window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
-              console.log("Activity data: ", $scope.activityData);
-
               init();
-
-              //Saving it to localStorage
-              window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+              save();
             })
             .error(function (error) {
               console.error("Error on getting json for the url...:", error);
@@ -217,16 +197,27 @@ angular.module("bookbuilder2")
         /*Function init() that initializes almost everything*/
         function init() {
 
-          /*Adding page title and description*/
-          $scope.pageTitle = new createjs.Text($scope.activityData.title, "18px Arial", "white");
-          $scope.pageTitle.x = 85;
-          $scope.pageTitle.y = 610;
+          /*Adding page title and description $scope.activityData.title*/
+          $scope.pageTitle = new createjs.Text($scope.selectedLesson.lessonTitle + " - " + $scope.selectedLesson.title, "18px Arial", "white");
+          $scope.pageTitle.x = 120;
+          $scope.pageTitle.y = 10;
+          $scope.pageTitle.maxWidth = 300;
           $scope.mainContainer.addChild($scope.pageTitle);
+
+          /*Adding page title and description $scope.activityData.title*/
+          $scope.pageActivity = new createjs.Text(_.findWhere($scope.selectedLesson.activitiesMenu, {
+              activityFolder: $scope.activityFolder
+            }).name + " " + ($scope.activityData.revision ? "- " + $scope.activityData.revision : ""), "18px Arial", "white");
+          $scope.pageActivity.x = 85;
+          $scope.pageActivity.y = 610;
+          $scope.pageActivity.maxWidth = 300;
+          $scope.mainContainer.addChild($scope.pageActivity);
 
           /*Adding page title and description*/
           $scope.pageDescription = new createjs.Text($scope.activityData.description, "18px Arial", "white");
-          $scope.pageDescription.x = 120;
+          $scope.pageDescription.x = 85;
           $scope.pageDescription.y = 630;
+          $scope.pageDescription.maxWidth = 300;
           $scope.mainContainer.addChild($scope.pageDescription);
           //INITIALIZATIONS
           $scope.bombsContainers = {};
@@ -312,7 +303,7 @@ angular.module("bookbuilder2")
                     //Checking if it's was the last choice
                     if ($scope.activityData.questions[$scope.activityData.activeQuestionIndex].userChoices.length
                       === $scope.activityData.questions[$scope.activityData.activeQuestionIndex].questionWords.length) {
-                      openTheQuestionResult();
+                      openTheQuestionResult($scope.activityData.activeQuestionIndex);
                     }
 
                   });
@@ -341,18 +332,18 @@ angular.module("bookbuilder2")
                   for (var j = 0; j < 7; j++) {
                     console.log("j:", j);
                     if (i === 0 && j % 2 === 1) {
-                      $scope.bombsContainers[bombsContainerIndex].x = j === 1 ? 130 : $scope.bombsContainers[bombsContainerIndex - 1].x + 220;
+                      $scope.bombsContainers[bombsContainerIndex].x = j === 1 ? 140 : $scope.bombsContainers[bombsContainerIndex - 1].x + 220;
                       $scope.bombsContainers[bombsContainerIndex].y = 40;
                       bombsContainerIndex++;
                     }
                     if (i === 1 && j % 2 === 0) {
                       $scope.bombsContainers[bombsContainerIndex].x = j === 0 ? 40 : $scope.bombsContainers[bombsContainerIndex - 1].x + 210;
-                      $scope.bombsContainers[bombsContainerIndex].y = 210;
+                      $scope.bombsContainers[bombsContainerIndex].y = 190;
                       bombsContainerIndex++;
                     }
                     if (i === 2 && j % 2 === 1) {
-                      $scope.bombsContainers[bombsContainerIndex].x = j === 1 ? 130 : $scope.bombsContainers[7].x + 220 * bombsContainerIndex;
-                      $scope.bombsContainers[bombsContainerIndex].y = 380;
+                      $scope.bombsContainers[bombsContainerIndex].x = j === 1 ? 140 : $scope.bombsContainers[7].x + 220 * bombsContainerIndex;
+                      $scope.bombsContainers[bombsContainerIndex].y = 340;
                       bombsContainerIndex++;
                     }
                   }
@@ -368,23 +359,18 @@ angular.module("bookbuilder2")
                     response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                     var nextButtonSpriteSheet = new createjs.SpriteSheet(response);
                     $scope.nextButton = new createjs.Sprite(nextButtonSpriteSheet, "normal");
-                    $scope.nextButton.alpha = 0.5;
 
                     $scope.nextButton.addEventListener("mousedown", function (event) {
-                      console.log("mousedown event on a button !", $scope.activityData.completed);
-                      $scope.nextButton.alpha = 0.5;
-                      if ($scope.activityData.completed) {
-                        $scope.nextButton.gotoAndPlay("onSelection");
+                      if (!$scope.activityData.newGame) {
+                        $scope.nextButton.gotoAndPlay("selected");
                       }
                       $scope.stage.update();
                     });
                     $scope.nextButton.addEventListener("pressup", function (event) {
                       console.log("pressup event!");
 
-                      $scope.nextButton.alpha = 1;
-
-                      if ($scope.activityData.completed) {
-                        $scope.nextButton.gotoAndPlay("normal");
+                      if (!$scope.activityData.newGame) {
+                        $scope.nextButton.gotoAndPlay("onSelection");
                         /*Calling next function!*/
                         $rootScope.nextActivity($scope.selectedLesson, $scope.activityFolder);
                       }
@@ -398,6 +384,46 @@ angular.module("bookbuilder2")
                   .error(function (error) {
 
                     console.log("Error on getting json data for check button...", error);
+                    initWaterfallCallback();
+                  });
+              },
+
+              function (initWaterfallCallback) {
+
+                $http.get($scope.rootDir + "data/assets/lesson_end_button_sprite.json")
+                  .success(function (response) {
+                    response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
+                    var resultsButtonSpriteSheet = new createjs.SpriteSheet(response);
+                    $scope.resultsButton = new createjs.Sprite(resultsButtonSpriteSheet, "normal");
+                    $scope.resultsButton.x = 680;
+                    $scope.resultsButton.y = 635;
+                    $scope.resultsButton.scaleX = $scope.resultsButton.scaleY = 0.6;
+                    $scope.mainContainer.addChild($scope.resultsButton);
+
+                    $scope.endText = new createjs.Text("RESULTS", "25px Arial", "white");
+                    $scope.endText.x = 720;
+                    $scope.endText.y = 625;
+                    $scope.mainContainer.addChild($scope.endText);
+
+                    $scope.resultsButton.visible = false;
+                    $scope.endText.visible = false;
+
+                    $scope.resultsButton.addEventListener("mousedown", function (event) {
+                      console.log("mousedown event on a button !");
+                      $scope.resultsButton.gotoAndPlay("onSelection");
+                      $scope.stage.update();
+                    });
+                    $scope.resultsButton.addEventListener("pressup", function (event) {
+                      console.log("pressup event!");
+                      $scope.resultsButton.gotoAndPlay("normal");
+                      $scope.stage.update();
+                      $rootScope.navigate("results");
+                    });
+
+                    initWaterfallCallback();
+                  })
+                  .error(function (error) {
+                    console.error("Error on getting json for results button...", error);
                     initWaterfallCallback();
                   });
               },
@@ -463,6 +489,7 @@ angular.module("bookbuilder2")
                   $scope.questionResultText = new createjs.Text("", "30px Arial", "black");
                   $scope.questionResultText.x = 60;
                   $scope.questionResultText.y = 140;
+                  $scope.questionResultText.maxWidth = 600;
 
                   //Make it invisible
                   $scope.questionResultContainer.visible = true;
@@ -503,6 +530,10 @@ angular.module("bookbuilder2")
 
                   /*Press up event*/
                   $scope.continueButton.addEventListener("pressup", function (event) {
+
+                    if (!$scope.activityData.newGame) {
+                      return;
+                    }
                     console.log("Press up event on continue button!");
                     $scope.continueButton.alpha = 1;
                     $scope.stage.update();
@@ -552,6 +583,9 @@ angular.module("bookbuilder2")
 
                   /*Press up event*/
                   $scope.restartButton.addEventListener("pressup", function (event) {
+                    if (!$scope.activityData.newGame) {
+                      return;
+                    }
                     console.log("Press up event on restart button!");
                     $scope.restartButton.alpha = 1;
                     $scope.stage.update();
@@ -569,7 +603,7 @@ angular.module("bookbuilder2")
 
                 /**NOTE TEXT CONTAINER MAX WIDTH ? **/
 
-                  //Creating the questionResult text
+                //Creating the questionResult text
                 $scope.questionText = new createjs.Text("", "20px Arial", "black");
                 $scope.questionText.x = 150;
                 $scope.questionText.y = 530;
@@ -638,14 +672,16 @@ angular.module("bookbuilder2")
                   //Adding the texts for right answers and for user answers
                   _.each($scope.activityData.questions, function (question, key, list) {
 
-                    $scope.userAnswersTexts[key] = new createjs.Text("", "15px Arial", "black");
+                    $scope.userAnswersTexts[key] = new createjs.Text(key + 1 + ". ", "15px Arial", "black");
                     $scope.userAnswersTexts[key].x = 10;
-                    $scope.userAnswersTexts[key].y = key === 0 ? 30 : $scope.userAnswersTexts[key - 1].y + 70;
+                    $scope.userAnswersTexts[key].y = key === 0 ? 30 : $scope.userAnswersTexts[key - 1].y + 40;
+                    $scope.userAnswersTexts[key].maxWidth = 350;
                     $scope.userAnswersContainer.addChild($scope.userAnswersTexts[key]);
 
-                    $scope.rightAnswersTexts[key] = new createjs.Text("", "15px Arial", "green");
+                    $scope.rightAnswersTexts[key] = new createjs.Text(key + 1 + ". ", "15px Arial", "green");
                     $scope.rightAnswersTexts[key].x = 10;
-                    $scope.rightAnswersTexts[key].y = key === 0 ? 30 : $scope.rightAnswersTexts[key - 1].y + 70;
+                    $scope.rightAnswersTexts[key].y = key === 0 ? 30 : $scope.rightAnswersTexts[key - 1].y + 40;
+                    $scope.rightAnswersTexts[key].maxWidth = 350;
                     $scope.rightAnswersTexts[key].visible = false;
                     $scope.rightAnswersContainer.addChild($scope.rightAnswersTexts[key]);
                   });
@@ -666,19 +702,33 @@ angular.module("bookbuilder2")
 
                     /*Mouse down event*/
                     $scope.checkButton.addEventListener("mousedown", function (event) {
-                      $scope.checkButton.alpha = 0.5;
                       $scope.stage.update();
                     });
 
                     /*Press up event*/
                     $scope.checkButton.addEventListener("pressup", function (event) {
-                      console.log("Click on Check Answers button!");
-                      $scope.checkButton.alpha = 1;
-                      console.log("Checking the answers...");
                       updateScore();
-                      //nextActivity play onSelection
                       $scope.nextButton.gotoAndPlay("onSelection");
                       $scope.activityData.completed = true;
+                      $scope.activityData.attempts += 1;
+                      $scope.activityData.newGame = false;
+
+                      if (_.findIndex($scope.selectedLesson.activitiesMenu, {
+                          activityFolder: $scope.activityFolder
+                        }) + 1 === $scope.selectedLesson.activitiesMenu.length) {
+
+                        $scope.resultsButton.visible = true;
+                        $scope.endText.visible = true;
+                        $scope.nextButton.visible = false;
+
+                      } else {
+                        console.log("Activity is not the last one");
+                        console.log("index", _.findIndex($scope.selectedLesson.activitiesMenu, {
+                            activityFolder: $scope.activityFolder
+                          }) + 1);
+                        console.log("activities", $scope.selectedLesson.activitiesMenu.length);
+                      }
+
                       save();
                     });
 
@@ -714,10 +764,10 @@ angular.module("bookbuilder2")
                     $scope.restartTotalButton.addEventListener("pressup", function (event) {
                       console.log("Click on Restart button!");
                       $scope.restartTotalButton.alpha = 1;
+                      $scope.checkButton.visible = true;
                       $scope.stage.update();
                       restartActivity();
                       closeResultsTotalContainer();
-                      $scope.activityData.completed = false;
                       save();
 
                     });//End of press up element
@@ -741,15 +791,11 @@ angular.module("bookbuilder2")
               if (error) {
                 console.error("There was an error during init waterfall process...:", result);
               } else {
-                console.log("Success during init waterfall process!");
-
-                console.log("Checking if all questions answered...");
                 if ($scope.activityData.activeQuestionIndex === $scope.activityData.questions.length - 1
                   && $scope.activityData.questions[$scope.activityData.questions.length - 1].userChoices.length === $scope.activityData.questions[$scope.activityData.questions.length - 1].questionWords.length) {
-                  console.warn("The activity has finished opening resultsTotalContainer!");
                   openResultsTotalContainer();
+                  updateScore();
                 } else {
-                  console.warn("The activity hasn't finished yet...");
                   loadQuestion();
                 }
               }
@@ -764,8 +810,6 @@ angular.module("bookbuilder2")
 
           closeTheQuestionResult();
 
-          console.log("Loading question with index: ", $scope.activityData.activeQuestionIndex);
-
           //Clear everything
           _.each($scope.bombsContainers, function (bombContainer, key, list) {
             //All bombs play the normal animation
@@ -774,24 +818,17 @@ angular.module("bookbuilder2")
             $scope.bombsTexts[key].visible = false;
             $scope.bombsContainers[key].visible = false;
             //Re-initializing the question text
-            $scope.questionText.text = "";
+            $scope.questionText.text = key + 1 + ". ";
           });
 
           //Checking if user has already chose answers
           if (getUserChoicesFullSentence().length > 0) {
 
-            //Checking each of question's words if the word is in choices ok either way a bomb is build
-            console.log("Active question index: ", $scope.activityData.activeQuestionIndex);
-            console.warn("User has chosen words in this question!");
-            console.log("User choices so far: ", $scope.activityData.questions[$scope.activityData.activeQuestionIndex].userChoices);
-
             _.each($scope.activityData.questions[$scope.activityData.activeQuestionIndex].questionWords, function (word, key, list) {
 
               //Checking if the word exists in userChoices
               if (_.indexOf($scope.activityData.questions[$scope.activityData.activeQuestionIndex].userChoices, $scope.activityData.questions[$scope.activityData.activeQuestionIndex].questionWords[key]) === -1) {
-                //Adding each word to the bomb text
-                console.log("Adding the word: ", $scope.activityData.questions[$scope.activityData.activeQuestionIndex].questionWords[key]);
-                //Assign the word to bomb text
+
                 $scope.bombsTexts[key].text = $scope.activityData.questions[$scope.activityData.activeQuestionIndex].questionWords[key];
                 $scope.bombsContainers[key].visible = true;
                 $scope.bombsTexts[key].visible = true;
@@ -803,7 +840,7 @@ angular.module("bookbuilder2")
 
             if ($scope.activityData.questions[$scope.activityData.activeQuestionIndex].userChoices.length
               === $scope.activityData.questions[$scope.activityData.activeQuestionIndex].questionWords.length) {
-              openTheQuestionResult();
+              openTheQuestionResult($scope.activityData.activeQuestionIndex);
             }
 
           } else {
@@ -818,9 +855,9 @@ angular.module("bookbuilder2")
               //Make all bombs containers invisible
               $scope.bombsTexts[key].visible = false;
               $scope.bombsContainers[key].visible = false;
-              //Re-initializing the question text
-              $scope.questionText.text = "";
             });
+
+            $scope.questionText.text = $scope.activityData.activeQuestionIndex + 1 + ". ";
 
             var shuffledQuestionWords = _.shuffle($scope.activityData.questions[$scope.activityData.activeQuestionIndex].questionWords);
             console.log(shuffledQuestionWords);
@@ -837,7 +874,6 @@ angular.module("bookbuilder2")
 
         //Function for returning the full sentence by the user choices
         function getUserChoicesFullSentence() {
-          console.log("Getting full sentence for the question with index: ", $scope.activityData.activeQuestionIndex);
           var fullSentence = "";
           _.each($scope.activityData.questions[$scope.activityData.activeQuestionIndex].userChoices, function (word, key, list) {
             fullSentence += $scope.activityData.questions[$scope.activityData.activeQuestionIndex].userChoices[key];
@@ -866,8 +902,6 @@ angular.module("bookbuilder2")
             //Make all bombs containers invisible
             $scope.bombsTexts[key].visible = false;
             $scope.bombsContainers[key].visible = false;
-            //Re-initializing the question text
-            $scope.questionText.text = "";
           });
 
           //Erasing from userChoices all current answers and saving again
@@ -899,6 +933,7 @@ angular.module("bookbuilder2")
             console.log($scope.bombsTexts);
             $scope.bombsSprites[poppedOutWordIndex].gotoAndPlay("normal");
             $scope.bombsContainers[poppedOutWordIndex].visible = true;
+            $scope.bombsTexts[poppedOutWordIndex].visible = true;
 
             //Pop last word from user choices
             $scope.activityData.questions[$scope.activityData.activeQuestionIndex].userChoices.pop();
@@ -911,13 +946,11 @@ angular.module("bookbuilder2")
             console.warn("Probably it's from a restart so finding a new empty index");
 
             var emptyIndex = _.findKey($scope.bombsTexts, {"text": ""});
-            console.log("New empty index: ", emptyIndex);
-            console.log($scope.bombsTexts);
             $scope.bombsTexts[emptyIndex].text = $scope.activityData.questions[$scope.activityData.activeQuestionIndex].userChoices[$scope.activityData.questions[$scope.activityData.activeQuestionIndex].userChoices.length - 1];
             $scope.bombsSprites[emptyIndex].gotoAndPlay("normal");
             $scope.bombsContainers[emptyIndex].visible = true;
+            $scope.bombsTexts[poppedOutWordIndex].visible = true;
 
-            //Pop last word from user choices
             $scope.activityData.questions[$scope.activityData.activeQuestionIndex].userChoices.pop();
             //save
             save();
@@ -933,13 +966,13 @@ angular.module("bookbuilder2")
         }
 
         //Function for opening the question result
-        function openTheQuestionResult() {
+        function openTheQuestionResult(key) {
 
           $scope.questionResultContainer.visible = true;
-          $scope.questionResultText.text = getUserChoicesFullSentence();
+          $scope.questionResultText.text = key + 1 + ". " + getUserChoicesFullSentence();
           createjs.Tween.get($scope.questionResultContainer, {loop: false})
             .to({
-              x: 100,
+              x: 80,
               y: 80
             }, 800, createjs.Ease.getPowIn(2));
           $scope.stage.update();
@@ -948,13 +981,14 @@ angular.module("bookbuilder2")
         //Function for closing the question result
         function closeTheQuestionResult() {
           $scope.questionResultContainer.visible = false;
-
-          //nextActivity play normal
           $scope.nextButton.gotoAndPlay("normal");
         }
 
         //Updating Score
         function updateScore() {
+
+          $scope.checkButton.visible = false;
+
           var totalScore = 0;
           _.each($scope.activityData.questions, function (question, key, list) {
             var fullUserSentence = "";
@@ -964,11 +998,8 @@ angular.module("bookbuilder2")
             });
             _.each($scope.activityData.questions[key].questionWords, function (word, k, l) {
               fullRightSentence += $scope.activityData.questions[key].questionWords[k];
-              $scope.rightAnswersTexts[key].text = fullRightSentence;
+              $scope.rightAnswersTexts[key].text += $scope.activityData.questions[key].questionWords[k];
             });
-
-            console.log("fullUserSentence: ", fullUserSentence);
-            console.log("fullRightSentence:", fullRightSentence);
 
             if (fullUserSentence === fullRightSentence) {
               $scope.userAnswersTexts[key].color = "green";
@@ -980,11 +1011,14 @@ angular.module("bookbuilder2")
             }
           });
           //updating the scoreText
+          $scope.activityData.score = totalScore;
           $scope.scoreText.text = "Score: " + totalScore + " / " + $scope.activityData.questions.length;
+          save();
         }
 
         //Function used for opening resultsTotalContainer
         function openResultsTotalContainer() {
+
           $scope.resultsTotalContainer.visible = true;
           //Populating with user choices
           _.each($scope.activityData.questions, function (question, key, list) {
@@ -993,7 +1027,8 @@ angular.module("bookbuilder2")
               fullSentence += $scope.activityData.questions[key].userChoices[k];
             });
             $scope.userAnswersTexts[key].text = key + 1 + ". " + fullSentence;
-          })
+          });
+
         }
 
         //Function used for closing resultsTotalContainer
@@ -1001,7 +1036,6 @@ angular.module("bookbuilder2")
           $scope.resultsTotalContainer.visible = false;
           //Erasing all texts from resultsTotalContainer
           _.each($scope.activityData.questions, function (question, key, list) {
-            $scope.userAnswersTexts[key].text = "";
             $scope.userAnswersTexts[key].color = "black";
             $scope.rightAnswersTexts[key].text = "";
             $scope.rightAnswersTexts[key].visible = false;
@@ -1016,6 +1050,8 @@ angular.module("bookbuilder2")
 
           //Make index 0 again
           $scope.activityData.activeQuestionIndex = 0;
+          $scope.activityData.score = 0;
+          $scope.activityData.newGame = true;
           save();
           closeResultsTotalContainer();
           loadQuestion();

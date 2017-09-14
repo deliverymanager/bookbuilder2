@@ -11,11 +11,11 @@ var path = require('path');
 var exec = require('child_process').exec;
 
 
-var pluginsJSON = require(process.cwd() +'/platforms/browser/browser.json');
+var pluginsJSON = require(process.cwd() + '/platforms/browser/browser.json');
 pluginsJSON.installed_plugins = pluginsJSON.installed_plugins || [];
 
 //DO NOT REMOVE THE cordova-plugin-statusbar
-var removePlugins = ["cordova-plugin-media","cordova-custom-config","cordova-plugin-console", "cordova-plugin-crosswalk-webview", "cordova-plugin-device","ionic-plugin-keyboard", "cordova-plugin-statusbar", "cordova-plugin-x-toast", "cordova-plugin-whitelist", "cordova-plugin-google-analytics", "cordova-plugin-webserver", "cordova-plugin-inappbrowser", "com.telerik.plugins.nativepagetransitions", "ionic-plugin-deploy", "cordova-plugin-insomnia", "cordova-plugin-splashscreen", "cordova-plugin-app-version", "ionic-plugin-deploy", "cordova-plugin-insomnia", "onesignal-cordova-plugin", "cordova-plugin-file-transfer", "cordova-plugin-file", "com.paypal.cordova.mobilesdk", "cordova-ios-requires-fullscreen", "card.io.cordova.mobilesdk", "cordova-plugin-transport-security"];
+var removePlugins = ["cordova-plugin-media", "cordova-custom-config", "cordova-plugin-console", "cordova-plugin-crosswalk-webview", "cordova-plugin-device", "ionic-plugin-keyboard", "cordova-plugin-statusbar", "cordova-plugin-x-toast", "cordova-plugin-whitelist", "cordova-plugin-google-analytics", "cordova-plugin-webserver", "cordova-plugin-inappbrowser", "com.telerik.plugins.nativepagetransitions", "ionic-plugin-deploy", "cordova-plugin-insomnia", "cordova-plugin-splashscreen", "cordova-plugin-app-version", "ionic-plugin-deploy", "cordova-plugin-insomnia", "onesignal-cordova-plugin", "cordova-plugin-file-transfer", "cordova-plugin-file", "com.paypal.cordova.mobilesdk", "cordova-ios-requires-fullscreen", "card.io.cordova.mobilesdk", "cordova-plugin-transport-security"];
 
 var waterfallFunctions = [];
 

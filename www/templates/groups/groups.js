@@ -139,11 +139,11 @@ angular.module("bookbuilder2")
               $scope.spaceBetweenGroups = 55;
               if ($scope.book.bookTemplate === "groups") {
                 $scope.leftMarginGroupButtons = 165;
-                $scope.downloadDeleteIconY = 500;
+                $scope.downloadDeleteIconY = 577;
                 $scope.exitButtonY = 615;
               } else {
                 $scope.leftMarginGroupButtons = 140;
-                $scope.downloadDeleteIconY = 555;
+                $scope.downloadDeleteIconY = 557;
                 $scope.exitButtonY = 595;
               }
 
@@ -211,10 +211,51 @@ angular.module("bookbuilder2")
                     }
                   });
                 });
-                $scope.downloadIcon.scaleX = $scope.downloadIcon.scaleY = 0.3;
+                $scope.downloadIcon.scaleX = $scope.downloadIcon.scaleY = 0.28;
                 $scope.downloadIcon.x = 780;
                 $scope.downloadIcon.y = $scope.downloadDeleteIconY;
                 $scope.mainContainer.addChild($scope.downloadIcon);
+
+
+                $scope.downloadAllIcon = new createjs.Bitmap($scope.rootDir + "data/assets/downloadIcon.png");
+                $scope.downloadAllIcon.addEventListener("mousedown", function (event) {
+                  console.log("mousedown event on downloadAllIcon !");
+                  $scope.downloadAllIcon.alpha = 0.5;
+                  $scope.stage.update();
+                });
+
+                $scope.downloadAllIcon.addEventListener("pressup", function (event) {
+                  console.log("pressup event!");
+                  $scope.downloadAllIcon.alpha = 1;
+                  $scope.stage.update();
+
+                  var confirmPopup = $ionicPopup.confirm({
+                    title: 'Download All Lessons',
+                    template: 'Do you want to download the contents of all the lessons in the book?'
+                  });
+                  confirmPopup.then(function (res) {
+                    if (res) {
+
+                      downloadAllLessons(function () {
+                        $ionicLoading.hide();
+                        Toast.show("All lessons were downloaded!");
+                      });
+                    }
+                  });
+                });
+
+                var downloadText = new createjs.Text("ALL", "bold 20px Arial", "black");
+                downloadText.x = 170 + ($scope.book.bookTemplate === "groups" ? 20 : 0) + 38;
+                downloadText.y = $scope.downloadDeleteIconY + 24;
+                downloadText.textAlign = "center";
+
+                $scope.downloadAllIcon.scaleX = $scope.downloadAllIcon.scaleY = 0.28;
+                $scope.downloadAllIcon.x = 170 + ($scope.book.bookTemplate === "groups" ? 20 : 0);
+                $scope.downloadAllIcon.y = $scope.downloadDeleteIconY;
+                $scope.mainContainer.addChild($scope.downloadAllIcon);
+                $scope.mainContainer.addChild(downloadText);
+
+
               });
 
               var deleteIconLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
@@ -254,10 +295,51 @@ angular.module("bookbuilder2")
                   });
                 });
 
-                $scope.deleteIcon.scaleX = $scope.deleteIcon.scaleY = 0.3;
+
+                $scope.deleteIcon.scaleX = $scope.deleteIcon.scaleY = 0.28;
                 $scope.deleteIcon.x = 680;
                 $scope.deleteIcon.y = $scope.downloadDeleteIconY;
                 $scope.mainContainer.addChild($scope.deleteIcon);
+
+
+                $scope.deleteAllIcon = new createjs.Bitmap($scope.rootDir + "data/assets/deleteIcon.png");
+
+                $scope.deleteAllIcon.addEventListener("mousedown", function (event) {
+                  console.log("mousedown event on deleteAllIcon !");
+                  $scope.deleteAllIcon.alpha = 0.5;
+                  $scope.stage.update();
+                });
+
+                $scope.deleteAllIcon.addEventListener("pressup", function (event) {
+                  console.log("pressup event!");
+                  $scope.deleteAllIcon.alpha = 1;
+                  $scope.stage.update();
+
+                  var confirmPopup = $ionicPopup.confirm({
+                    title: 'Delete All Lessons?',
+                    template: 'Do you want to delete the contents of all the lessons in the book?'
+                  });
+                  confirmPopup.then(function (res) {
+                    if (res) {
+
+                      deleteAllLessons(function () {
+                        $ionicLoading.hide();
+                        Toast.show("All lessons were deleted!");
+                      });
+                    }
+                  });
+                });
+
+                var deleteText = new createjs.Text("ALL", "bold 20px Arial", "black");
+                deleteText.x = 70 + ($scope.book.bookTemplate === "groups" ? 20 : 0) + 38;
+                deleteText.y = $scope.downloadDeleteIconY + 24;
+                deleteText.textAlign = "center";
+
+                $scope.deleteAllIcon.scaleX = $scope.deleteAllIcon.scaleY = 0.28;
+                $scope.deleteAllIcon.x = 70 + ($scope.book.bookTemplate === "groups" ? 20 : 0);
+                $scope.deleteAllIcon.y = $scope.downloadDeleteIconY;
+                $scope.mainContainer.addChild($scope.deleteAllIcon);
+                $scope.mainContainer.addChild(deleteText);
               });
 
 
@@ -359,7 +441,7 @@ angular.module("bookbuilder2")
           $scope.lessonsMenuContainer.width = 236;
           $scope.lessonsMenuContainer.height = 440;
           $scope.lessonsMenuContainer.x = 645;
-          $scope.lessonsMenuContainer.y = 110;
+          $scope.lessonsMenuContainer.y = 120;
           $scope.mainContainer.addChild($scope.lessonsMenuContainer);
 
 
@@ -517,15 +599,22 @@ angular.module("bookbuilder2")
           checkIfLessonIsDownloaded(lesson, function (res) {
             console.log("Lesson Check " + lesson.id, res);
             if (res) {
-              $scope.savedLessonButtonsArray[lesson.id].downloaded = true;
-              $scope.savedLessonButtonsArray[lesson.id].alpha = 1;
-            } else {
-              $scope.savedLessonButtonsArray[lesson.id].downloaded = false;
-              if (lesson.active) {
-                $scope.savedLessonButtonsArray[lesson.id].alpha = 0.5;
-              } else {
-                $scope.savedLessonButtonsArray[lesson.id].alpha = 0.15;
+              if ($scope.savedLessonButtonsArray[lesson.id]) {
+                $scope.savedLessonButtonsArray[lesson.id].downloaded = true;
+                $scope.savedLessonButtonsArray[lesson.id].alpha = 1;
               }
+
+            } else {
+
+              if ($scope.savedLessonButtonsArray[lesson.id]) {
+                $scope.savedLessonButtonsArray[lesson.id].downloaded = false;
+                if (lesson.active) {
+                  $scope.savedLessonButtonsArray[lesson.id].alpha = 0.5;
+                } else {
+                  $scope.savedLessonButtonsArray[lesson.id].alpha = 0.15;
+                }
+              }
+
             }
             waterFallCallback();
           });
@@ -663,6 +752,49 @@ angular.module("bookbuilder2")
       });
     };
 
+
+    var downloadAllLessons = function (callback) {
+
+      var waterFallFunctions = [];
+      _.each($scope.book.lessonGroups, function (group, key, list) {
+        waterFallFunctions.push(function (waterFallCallback) {
+          console.log("group: ", group.groupId);
+          downloadLessonGroup(group.groupId, function () {
+            checkIfLessonGroupIsDownloaded(group.groupId, function () {
+              waterFallCallback();
+            });
+          });
+        });
+      });
+
+      async.waterfall(waterFallFunctions, function (err, res) {
+        callback();
+      });
+
+    };
+
+
+    var deleteAllLessons = function (callback) {
+
+      var waterFallFunctions = [];
+      _.each($scope.book.lessonGroups, function (group, key, list) {
+        waterFallFunctions.push(function (waterFallCallback) {
+          console.log("group: ", group.groupId);
+          deleteLessonGroup(group.groupId, function () {
+            checkIfLessonGroupIsDownloaded(group.groupId, function () {
+              waterFallCallback();
+            });
+          });
+        });
+      });
+
+      async.waterfall(waterFallFunctions, function (err, res) {
+        callback();
+      });
+
+    };
+
+
     var downloadLessonGroup = function (groupId, callback) {
       var waterFallFunctions = [];
       _.each(_.findWhere($scope.book.lessonGroups, {"groupId": groupId}).lessons, function (lesson, key, list) {
@@ -696,7 +828,7 @@ angular.module("bookbuilder2")
               window.localStorage.removeItem(lesson.id + "_" + activity.activityFolder);
             });
 
-            $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data/lessons/" + lesson.id)
+            $cordovaFile.removeRecursively($scope.rootDir, "data/lessons/" + lesson.id)
               .then(function (success) {
                 console.log(lesson.id + " assets directory deleted!");
                 waterFallCallback();
@@ -705,7 +837,7 @@ angular.module("bookbuilder2")
                 waterFallCallback();
               });
           }).error(function (err) {
-            $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data/lessons/" + lesson.id)
+            $cordovaFile.removeRecursively($scope.rootDir, "data/lessons/" + lesson.id)
               .then(function (success) {
                 console.log(lesson.id + " assets directory deleted!");
                 waterFallCallback();

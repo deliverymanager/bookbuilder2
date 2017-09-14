@@ -4,6 +4,7 @@ angular.module("bookbuilder2")
     console.log("LessonNewController loaded!");
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLessonId = window.localStorage.getItem("selectedLessonId");
+    $scope.book = JSON.parse(window.localStorage.getItem("book"));
 
     $scope.backgroundView = {
       "background": "url(" + $scope.rootDir + "data/assets/lesson_background_image.png) no-repeat center top",
@@ -154,7 +155,7 @@ angular.module("bookbuilder2")
               $rootScope.navigate("groups");
             });
 
-            menuButton.scaleX = menuButton.scaleY = $scope.scale;
+            menuButton.scaleX = menuButton.scaleY = $scope.scale * ($scope.book.headMenuButtonScale ? $scope.book.headMenuButtonScale : 1);
             menuButton.x = 0;
             menuButton.y = -menuButton.getTransformedBounds().height / 5;
 
@@ -176,40 +177,8 @@ angular.module("bookbuilder2")
         $scope.mainContainer.addChild($scope.activitiesMenuContainer);
 
 
-        $http.get($scope.rootDir + "data/assets/lesson_end_button_sprite.json")
-          .success(function (response) {
-            response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
-            var resultsButtonSpriteSheet = new createjs.SpriteSheet(response);
-            var resultsButton = new createjs.Sprite(resultsButtonSpriteSheet, "normal");
-            resultsButton.x = 100;
-            resultsButton.y = 640;
-            resultsButton.scaleX = resultsButton.scaleY = 0.6;
-            $scope.mainContainer.addChild(resultsButton);
-
-            var endText = new createjs.Text("RESULTS", "30px Arial", "white");
-            endText.x = 140;
-            endText.y = 627;
-            $scope.mainContainer.addChild(endText);
-
-            resultsButton.addEventListener("mousedown", function (event) {
-              console.log("mousedown event on a button !");
-              resultsButton.gotoAndPlay("onSelection");
-              $scope.stage.update();
-            });
-            resultsButton.addEventListener("pressup", function (event) {
-              console.log("pressup event!");
-              resultsButton.gotoAndPlay("normal");
-              $scope.stage.update();
-              $rootScope.navigate("results");
-            });
-          })
-          .error(function (error) {
-            console.error("Error on getting json for results button...", error);
-          });
-
-
         /*********************************************** GETTING JSON FOR THE SELECTED LESSON ***********************************************/
-          //Getting the right lesson json
+        //Getting the right lesson json
         console.log($scope.selectedLessonId);
 
         $http.get($scope.rootDir + 'data/lessons/' + $scope.selectedLessonId + "/lesson.json")
@@ -297,7 +266,15 @@ angular.module("bookbuilder2")
                       if (activity.activityTemplate !== "activities") {
                         $scope.mainActivitiesButtons[key].addEventListener("pressup", function (event) {
                           console.log("Press up event on a lesson button !");
+                          $scope.mainActivitiesButtons[key].gotoAndPlay("normal");
                           $scope.stage.update();
+
+                          if (_.has(activity, 'active') && !activity.active) {
+                            Toast.show("Coming soon...");
+                            if (!$rootScope.developerMode) {
+                              return;
+                            }
+                          }
                           $scope.activityFolder = $scope.mainActivitiesButtons[key].activityFolder;
                           $scope.activityName = $scope.mainActivitiesButtons[key].activityName;
                           $scope.activityTemplate = $scope.mainActivitiesButtons[key].activityTemplate;
@@ -336,6 +313,37 @@ angular.module("bookbuilder2")
 
             async.waterfall(waterfallFunctions, function (callback) {
               console.log("Buttons of activities are inserted...");
+              $http.get($scope.rootDir + "data/assets/lesson_end_button_sprite.json")
+                .success(function (response) {
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
+                  var resultsButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  var resultsButton = new createjs.Sprite(resultsButtonSpriteSheet, "normal");
+                  resultsButton.x = ($scope.selectedLesson.activitiesMenu.length > 9 ? 450 : 100);
+                  resultsButton.y = 620;
+                  resultsButton.scaleX = resultsButton.scaleY = 0.6;
+                  $scope.mainContainer.addChild(resultsButton);
+
+                  var endText = new createjs.Text("RESULTS", "30px Arial", $scope.book.resultsColor ? $scope.book.resultsColor : 'white');
+                  endText.x = ($scope.selectedLesson.activitiesMenu.length > 9 ? 490 : 140);
+                  endText.y = 607;
+                  $scope.mainContainer.addChild(endText);
+
+                  resultsButton.addEventListener("mousedown", function (event) {
+                    console.log("mousedown event on a button !");
+                    resultsButton.gotoAndPlay("onSelection");
+                    $scope.stage.update();
+                  });
+                  resultsButton.addEventListener("pressup", function (event) {
+                    console.log("pressup event!");
+                    resultsButton.gotoAndPlay("normal");
+                    $scope.stage.update();
+                    $rootScope.navigate("results");
+                  });
+                })
+                .error(function (error) {
+                  console.error("Error on getting json for results button...", error);
+                });
+
               creatingActivitiesSubMenu();
             });
 
@@ -395,10 +403,11 @@ angular.module("bookbuilder2")
                       $scope.subActivitiesButtons[key].gotoAndPlay("normal");
                       $scope.stage.update();
 
-
                       if (!activity.active) {
                         Toast.show("Coming soon...");
-                        return;
+                        if (!$rootScope.developerMode) {
+                          return;
+                        }
                       }
 
                       $scope.activityFolder = $scope.subActivitiesButtons[key].activityFolder;
@@ -411,7 +420,9 @@ angular.module("bookbuilder2")
 
                     $scope.activitiesMenuContainer.addChild($scope.subActivitiesButtons[key]);
 
-                    waterfallSubMenuCallback();
+                    $timeout(function () {
+                      waterfallSubMenuCallback();
+                    });
 
                   }).error(function (error) {
                   console.log("There was an error on getting lesson json");
@@ -494,7 +505,9 @@ angular.module("bookbuilder2")
           _.each($scope.mainActivitiesButtons, function (button, key, list) {
             waterfallFunctions.push(function (waterFallCallback) {
               createjs.Tween.get($scope.mainActivitiesButtons[key], {loop: false}).to({x: xTarget}, speed, createjs.Ease.getPowIn(2)).call(function () {
-                waterFallCallback();
+                $timeout(function () {
+                  waterFallCallback();
+                }, speed);
               });
             });
           });

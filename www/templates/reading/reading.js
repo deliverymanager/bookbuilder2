@@ -4,6 +4,7 @@ angular.module("bookbuilder2")
     console.log("ReadingController loaded!");
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+    $scope.book = JSON.parse(window.localStorage.getItem("book"));
 
     $scope.backgroundView = {
       "background": "url(" + $scope.rootDir + "data/assets/lesson_background_image.png) no-repeat center top",
@@ -146,7 +147,10 @@ angular.module("bookbuilder2")
                 }
               } else {
                 $scope.playButton.gotoAndPlay("pauseNormal");
-                $scope.playing = true;
+                $timeout(function () {
+                  $scope.playing = true;
+                }, 500);
+
                 if (window.cordova && window.cordova.platformId !== "browser") {
                   $scope.sound.play();
                 }
@@ -189,7 +193,7 @@ angular.module("bookbuilder2")
               $rootScope.navigate("lesson");
             });
 
-            menuButton.scaleX = menuButton.scaleY = $scope.scale;
+            menuButton.scaleX = menuButton.scaleY = $scope.scale * ($scope.book.headMenuButtonScale ? $scope.book.headMenuButtonScale : 1);
             menuButton.x = 0;
             menuButton.y = -menuButton.getTransformedBounds().height / 5;
             $scope.stage.addChild(menuButton);
@@ -206,7 +210,7 @@ angular.module("bookbuilder2")
           /*background.scaleX = background.scaleY = $scope.scale;*/
           title.scaleX = title.scaleY = $scope.scale;
           title.x = backgroundPosition.x + (backgroundPosition.width / 10);
-          title.y = backgroundPosition.y + (backgroundPosition.height / 17);
+          title.y = backgroundPosition.y + (backgroundPosition.height / 16);
           title.textBaseline = "alphabetic";
           $scope.stage.addChild(title);
 
@@ -214,6 +218,8 @@ angular.module("bookbuilder2")
           $scope.pages = {};
 
           _.each($scope.activityData.CuePoint, function (page, key, list) {
+
+            $scope.activityData.CuePoint[key].Time = parseInt($scope.activityData.CuePoint[key].Time);
 
             $scope.pageImageLoader["reading_book_" + (key + 1)] = new createjs.ImageLoader(new createjs.LoadItem().set({
               src: $scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/reading/reading_book_" + (key + 1) + ".png"
@@ -226,7 +232,7 @@ angular.module("bookbuilder2")
 
               $scope.pages["reading_book_" + (key + 1)].scaleX = $scope.pages["reading_book_" + (key + 1)].scaleY = $scope.scale;
               $scope.pages["reading_book_" + (key + 1)].x = backgroundPosition.x + (backgroundPosition.width / 7);
-              $scope.pages["reading_book_" + (key + 1)].y = backgroundPosition.y + (backgroundPosition.height / 6.5);
+              $scope.pages["reading_book_" + (key + 1)].y = backgroundPosition.y + (backgroundPosition.height / 6);
 
               if (key) {
                 $scope.pages["reading_book_" + (key + 1)].visible = false;
@@ -235,6 +241,7 @@ angular.module("bookbuilder2")
               $scope.stage.addChild($scope.pages["reading_book_" + (key + 1)]);
 
             });
+
           });
 
 
@@ -262,27 +269,46 @@ angular.module("bookbuilder2")
 
           $scope.playSoundIntervalPromise = $interval(function () {
 
-            $scope.sound.getCurrentPosition(
-              // success callback
-              function (position) {
-                //console.log(position);
-                if (position > 0) {
-                  checkCurrentTimePage(position);
-                }
+            if ($scope.playing) {
+              $scope.sound.getCurrentPosition(
+                // success callback
+                function (position) {
+                  console.log(position);
+                  if (position >= 0) {
+                    checkCurrentTimePage(position);
+                  } else {
+                    $scope.playing = false;
+                    $scope.playButton.gotoAndPlay("playNormal");
+                    $scope.sound.stop();
+                    $scope.activityData.completed = true;
+                    $scope.activityData.attempts = $scope.activityData.attempts + 1;
+                    window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+                    $scope.stage.update();
+                    console.log("completed activity!");
 
-              },
-              // error callback
-              function (e) {
-                console.log("Error getting pos=" + e);
-              }
-            );
+                    _.each($scope.activityData.CuePoint, function (page, key, list) {
+                      $scope.pages["reading_book_" + (key + 1)].visible = false;
+                    });
+
+
+                    $scope.pages["reading_book_1"].visible = true;
+                    $scope.currentPage = 1;
+
+                  }
+
+                },
+                // error callback
+                function (e) {
+                  console.log("Error getting pos=" + e);
+                }
+              );
+            }
+
           }, 100, 0, true);
         };
 
         if (window.localStorage.getItem(activityNameInLocalStorage)) {
           $scope.activityData = JSON.parse(window.localStorage.getItem(activityNameInLocalStorage));
-
-          $scope.activityData.attempts = $scope.activityData.attempts + 1;
           window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
           init();
 
@@ -292,7 +318,7 @@ angular.module("bookbuilder2")
             .success(function (readingJson) {
 
               $scope.activityData = readingJson;
-              $scope.activityData.attempts = 1;
+              $scope.activityData.attempts = 0;
               window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
               init();
             })
@@ -303,34 +329,21 @@ angular.module("bookbuilder2")
         }
 
         var checkCurrentTimePage = function (currentTime) {
-          var cue = _.find($scope.activityData.CuePoint, function (cue) {
-            return parseInt(cue.Time) < currentTime * 1000 && $scope.currentPage + 1 === parseInt(cue.Name);
+
+          var cue = _.find(_.sortBy($scope.activityData.CuePoint, 'Time').reverse(), function (cue) {
+            return parseInt(cue.Time) < currentTime * 1000;
           });
 
-          if ($scope.currentPage === $scope.activityData.CuePoint.length) {
-            $scope.playButton.gotoAndPlay("playNormal");
-            $scope.stage.update();
-            console.log("completed activity!");
-            $scope.activityData.completed = true;
-            window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
-          }
+          if (cue) {
 
-          if (!cue || $scope.currentPage === parseInt(cue.Name)) {
-            return;
-          }
+            _.each($scope.activityData.CuePoint, function (page, key, list) {
+              $scope.pages["reading_book_" + (key + 1)].visible = false;
+            });
 
-          console.log("cue", cue.Name);
-          _.each($scope.activityData.CuePoint, function (page, key, list) {
-            $scope.pages["reading_book_" + (key + 1)].visible = false;
-          });
-
-          if (!cue) {
-            $scope.pages["reading_book_1"].visible = true;
-            $scope.currentPage = 1;
-          } else {
             $scope.currentPage = parseInt(cue.Name);
             $scope.pages["reading_book_" + cue.Name].visible = true;
           }
+
         };
       });//end of image on complete
     }, 1500);//end of timeout

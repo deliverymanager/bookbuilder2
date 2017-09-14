@@ -20,3 +20,24 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
+.resultsPopupForm .popup {
+  width: 320px;
+  position: absolute;
+  top: 10px;
+}
+
+.resultsPopupForm .popup .popup-head {
+  padding: 0px;
+}
+
+.transparentBar {
+  background-color: rgba(0, 0, 0, 0) !important;
+  background-size: 0 !important;
+  opacity: 1;
+}
+
+.transparentBar.bar.bar-stable .title,
+.transparentBar.bar.bar-footer .title {
+  color: white;
+  font-size: xx-large;
+}

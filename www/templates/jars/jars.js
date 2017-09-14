@@ -192,13 +192,16 @@ angular.module("bookbuilder2")
               console.log("Success on getting json for the url. The response object is: ", response);
               //Assigning configured response to activityData
               $scope.activityData = response;
-              $scope.activityData.attempts = 1;
+              $scope.activityData.attempts = 0;
+              $scope.activityData.newGame = true;
 
               console.log("Building activity's logic");
 
               //Populating questions with the userChoice property
               _.each($scope.activityData.questions, function (question, key, list) {
                 $scope.activityData.questions[key].userChoice = "";
+                $scope.activityData.questions[key].userChoiceGroupKey = "";
+                $scope.activityData.questions[key].userChoiceIndex = "";
               });
 
               //Extracting the available groups and adding the wordsGroups property to activityData
@@ -221,18 +224,6 @@ angular.module("bookbuilder2")
         /*Function init() that initializes everything*/
         function init() {
 
-          /*Adding page title and description*/
-          $scope.pageTitle = new createjs.Text($scope.activityData.title, "18px Arial", "white");
-          $scope.pageTitle.x = 85;
-          $scope.pageTitle.y = 610;
-          $scope.mainContainer.addChild($scope.pageTitle);
-
-          /*Adding page title and description*/
-          $scope.pageDescription = new createjs.Text($scope.activityData.description, "18px Arial", "white");
-          $scope.pageDescription.x = 120;
-          $scope.pageDescription.y = 630;
-          $scope.mainContainer.addChild($scope.pageDescription);
-
           //INITIALIZATIONS
           $scope.wordsContainers = {};
           $scope.wordsSprites = {};
@@ -246,6 +237,39 @@ angular.module("bookbuilder2")
           });
 
           async.waterfall([
+
+            function (callback) {
+              /*Adding page title and description $scope.activityData.title*/
+              $scope.pageTitle = new createjs.Text($scope.selectedLesson.lessonTitle + " - " + $scope.selectedLesson.title, "18px Arial", "white");
+              $scope.pageTitle.x = 120;
+              $scope.pageTitle.y = 10;
+              $scope.pageTitle.maxWidth = 500;
+              $scope.mainContainer.addChild($scope.pageTitle);
+
+              /*Adding page title and description $scope.activityData.title*/
+              $scope.pageActivity = new createjs.Text(_.findWhere($scope.selectedLesson.activitiesMenu, {
+                  activityFolder: $scope.activityFolder
+                }).name + " " + ($scope.activityData.revision ? "- " + $scope.activityData.revision : ""), "18px Arial", "white");
+              $scope.pageActivity.x = 85;
+              $scope.pageActivity.y = 610;
+              $scope.pageActivity.maxWidth = 250;
+              $scope.mainContainer.addChild($scope.pageActivity);
+
+              /*Adding page title and description*/
+              $scope.pageDescription = new createjs.Text($scope.activityData.description, "18px Arial", "white");
+              $scope.pageDescription.x = 85;
+              $scope.pageDescription.y = 630;
+              $scope.pageDescription.maxWidth = 250;
+              $scope.mainContainer.addChild($scope.pageDescription);
+              //INITIALIZATIONS
+              $scope.bombsContainers = {};
+              $scope.bombsSprites = {};
+              $scope.bombsTexts = {};
+              $scope.rightAnswersTexts = {};
+              $scope.userAnswersTexts = {};
+
+              callback();
+            },
             //Getting the candySprite for the words
             function (initWaterfallCallback) {
               $http.get($scope.rootDir + "data/assets/jars_sprite.json")
@@ -363,42 +387,42 @@ angular.module("bookbuilder2")
             function (initWaterfallCallback) {
 
               //Creating text for the first jar
-              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 0})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[0], "30px Arial", "white");
-              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 0})].x = $scope.jars[_.findKey($scope.jars, {"jarIndex": 0})].x + 80;
-              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 0})].y = $scope.jars[_.findKey($scope.jars, {"jarIndex": 0})].y + 10;
+              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 0})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[0], "25px Arial", "black");
+              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 0})].x = $scope.jars[_.findKey($scope.jars, {"jarIndex": 0})].x + 83;
+              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 0})].y = $scope.jars[_.findKey($scope.jars, {"jarIndex": 0})].y + 15;
               $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 0})].textAlign = "center";
-              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 0})].maxWidth = 120;
+              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 0})].maxWidth = 130;
               $scope.mainContainer.addChild($scope.jarsText[_.findKey($scope.jars, {"jarIndex": 0})]);
 
               //Creating text for the second jar
-              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[1], "30px Arial", "white");
-              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})].x = $scope.jars[_.findKey($scope.jars, {"jarIndex": 1})].x + 80;
-              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})].y = $scope.jars[_.findKey($scope.jars, {"jarIndex": 1})].y + 10;
+              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[1], "25px Arial", "black");
+              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})].x = $scope.jars[_.findKey($scope.jars, {"jarIndex": 1})].x + 83;
+              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})].y = $scope.jars[_.findKey($scope.jars, {"jarIndex": 1})].y + 15;
               $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})].textAlign = "center";
-              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})].maxWidth = 120;
+              $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})].maxWidth = 130;
               $scope.mainContainer.addChild($scope.jarsText[_.findKey($scope.jars, {"jarIndex": 1})]);
 
               if (_.keys($scope.activityData.wordsGroups).length === 3 || _.keys($scope.activityData.wordsGroups).length === 4) {
 
                 //Creating text for the third jar
-                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[2], "30px Arial", "white");
-                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})].x = $scope.jars[_.findKey($scope.jars, {"jarIndex": 2})].x + 80;
-                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})].y = $scope.jars[_.findKey($scope.jars, {"jarIndex": 2})].y + 10;
+                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[2], "25px Arial", "black");
+                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})].x = $scope.jars[_.findKey($scope.jars, {"jarIndex": 2})].x + 83;
+                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})].y = $scope.jars[_.findKey($scope.jars, {"jarIndex": 2})].y + 15;
                 $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})].textAlign = "center";
-                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})].maxWidth = 120;
+                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})].maxWidth = 130;
                 $scope.mainContainer.addChild($scope.jarsText[_.findKey($scope.jars, {"jarIndex": 2})]);
 
               }
 
               if (_.keys($scope.activityData.wordsGroups).length === 4) {
 
-                console.log("text for the 4th jar",$scope.jars);
+                console.log("text for the 4th jar", $scope.jars);
                 //Creating text for the fourth jar
-                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[3], "30px Arial", "white");
-                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].x = $scope.jars[_.findKey($scope.jars, {"jarIndex": 3})].x + 80;
-                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].y = $scope.jars[_.findKey($scope.jars, {"jarIndex": 3})].y + 10;
+                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})] = new createjs.Text(_.keys($scope.activityData.wordsGroups)[3], "25px Arial", "black");
+                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].x = $scope.jars[_.findKey($scope.jars, {"jarIndex": 3})].x + 83;
+                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].y = $scope.jars[_.findKey($scope.jars, {"jarIndex": 3})].y + 15;
                 $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].textAlign = "center";
-                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].maxWidth = 120;
+                $scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})].maxWidth = 130;
                 $scope.mainContainer.addChild($scope.jarsText[_.findKey($scope.jars, {"jarIndex": 3})]);
               }
               initWaterfallCallback(null);
@@ -437,12 +461,12 @@ angular.module("bookbuilder2")
             function (initWaterfallCallback) {
 
               //Adding Score Text background
-              var scoreTextGraphic = new createjs.Graphics().beginFill("blue").drawRect(90, 545, 187, 47);
+              var scoreTextGraphic = new createjs.Graphics().beginFill("blue").drawRect(90, 545, 217, 47);
               var scoreTextBackground = new createjs.Shape(scoreTextGraphic);
               $scope.mainContainer.addChild(scoreTextBackground);
 
               /*Adding Score Text*/
-              $scope.scoreText = new createjs.Text("Score: " + "0" + " / " + $scope.activityData.questions.length, "30px Arial", "white");
+              $scope.scoreText = new createjs.Text("Score:  " + "0" + " / " + $scope.activityData.questions.length, "30px Arial", "white");
               $scope.scoreText.x = 100;
               $scope.scoreText.y = 550;
               $scope.mainContainer.addChild($scope.scoreText);
@@ -521,6 +545,47 @@ angular.module("bookbuilder2")
                   initWaterfallCallback(true, error);
                 });
             },
+
+            function (initWaterfallCallback) {
+
+              $http.get($scope.rootDir + "data/assets/lesson_end_button_sprite.json")
+                .success(function (response) {
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
+                  var resultsButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  $scope.resultsButton = new createjs.Sprite(resultsButtonSpriteSheet, "normal");
+                  $scope.resultsButton.x = 695;
+                  $scope.resultsButton.y = 635;
+                  $scope.resultsButton.scaleX = $scope.resultsButton.scaleY = 0.6;
+                  $scope.mainContainer.addChild($scope.resultsButton);
+
+                  $scope.endText = new createjs.Text("RESULTS", "25px Arial", "white");
+                  $scope.endText.x = 730;
+                  $scope.endText.y = 625;
+                  $scope.mainContainer.addChild($scope.endText);
+
+                  $scope.resultsButton.visible = false;
+                  $scope.endText.visible = false;
+
+                  $scope.resultsButton.addEventListener("mousedown", function (event) {
+                    console.log("mousedown event on a button !");
+                    $scope.resultsButton.gotoAndPlay("onSelection");
+                    $scope.stage.update();
+                  });
+                  $scope.resultsButton.addEventListener("pressup", function (event) {
+                    console.log("pressup event!");
+                    $scope.resultsButton.gotoAndPlay("normal");
+                    $scope.stage.update();
+                    $rootScope.navigate("results");
+                  });
+
+                  initWaterfallCallback();
+                })
+                .error(function (error) {
+                  console.error("Error on getting json for results button...", error);
+                  initWaterfallCallback();
+                });
+            },
+
             //Adding NextActivity button
             function (initWaterfallCallback) {
               /*NEXT BUTTON*/
@@ -529,23 +594,19 @@ angular.module("bookbuilder2")
                   response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var nextButtonSpriteSheet = new createjs.SpriteSheet(response);
                   $scope.nextButton = new createjs.Sprite(nextButtonSpriteSheet, "normal");
-                  $scope.nextButton.alpha = 0.5;
 
                   $scope.nextButton.on("mousedown", function (event) {
-                    console.log("mousedown event on a button !", $scope.activityData.completed);
-                    $scope.nextButton.alpha = 0.5;
-                    if ($scope.activityData.completed) {
-                      $scope.nextButton.gotoAndPlay("onSelection");
+                    console.log("mousedown event on a button !", !$scope.activityData.newGame);
+                    if (!$scope.activityData.newGame) {
+                      $scope.nextButton.gotoAndPlay("selected");
                     }
                     $scope.stage.update();
                   });
                   $scope.nextButton.on("pressup", function (event) {
                     console.log("pressup event!");
 
-                    $scope.nextButton.alpha = 1;
-
-                    if ($scope.activityData.completed) {
-                      $scope.nextButton.gotoAndPlay("normal");
+                    if (!$scope.activityData.newGame) {
+                      $scope.nextButton.gotoAndPlay("onSelection");
                       /*Calling next function!*/
                       $rootScope.nextActivity($scope.selectedLesson, $scope.activityFolder);
                     }
@@ -583,18 +644,9 @@ angular.module("bookbuilder2")
                 //Events
                 $scope.wordsContainers[key].on("mousedown", function (evt) {
 
-                  console.log("Mouse down event on candy!");
                   //Check if completed
-                  if ($scope.activityData.completed) {
+                  if (!$scope.activityData.newGame) {
                     console.warn("Activity completed cannot move!");
-
-                    if ($scope.wordsTexts[key].text === $scope.activityData.questions[key].word) {
-                      console.log("Toggle text, showing correctWord");
-                      $scope.wordsTexts[key].text = $scope.activityData.questions[key].correctWord;
-                    } else {
-                      console.log("Toggle text, showing word");
-                      $scope.wordsTexts[key].text = $scope.activityData.questions[key].word;
-                    }
                     return;
                   }
 
@@ -613,7 +665,7 @@ angular.module("bookbuilder2")
                 $scope.wordsContainers[key].on("pressmove", function (evt) {
                   console.log("Press move event on candy!");
                   //Check if completed
-                  if ($scope.activityData.completed) {
+                  if (!$scope.activityData.newGame) {
                     console.warn("Activity completed cannot move!");
                     return;
                   }
@@ -625,7 +677,7 @@ angular.module("bookbuilder2")
                 $scope.wordsContainers[key].on("pressup", function (evt) {
                   console.log("Press up event on candy!");
                   //Check if completed
-                  if ($scope.activityData.completed) {
+                  if (!$scope.activityData.newGame) {
                     console.warn("Activity completed cannot move!");
                     return;
                   }
@@ -642,6 +694,8 @@ angular.module("bookbuilder2")
 
                     //Adding the selected word to current userChoices
                     $scope.activityData.questions[key].userChoice = _.findKey($scope.jars, {"jarIndex": collisionDetectedQuestion.groupKey});
+                    $scope.activityData.questions[key].userChoiceGroupKey = collisionDetectedQuestion.groupKey;
+                    $scope.activityData.questions[key].userChoiceIndex = collisionDetectedQuestion.index;
 
                     //Saving it to localStorage
                     save();
@@ -658,6 +712,8 @@ angular.module("bookbuilder2")
 
                     //If the user deselects a letter it has to be removed from the userChoices array
                     $scope.activityData.questions[key].userChoice = "";
+                    $scope.activityData.questions[key].userChoiceGroupKey = "";
+                    $scope.activityData.questions[key].userChoiceIndex = "";
                     save();
                   }
                 });
@@ -701,22 +757,22 @@ angular.module("bookbuilder2")
         function loadGame() {
 
           //Populating the wordsTexts
-          _.each($scope.activityData.questions, function (container, key, list) {
-            $scope.wordsTexts[key].text = $scope.activityData.questions[key].word;
+          _.each($scope.activityData.questions, function (question, key, list) {
+            $scope.wordsTexts[key].text = question.word;
           });
 
           //Checking activity has completed
-          if ($scope.activityData.completed) {
+          if (!$scope.activityData.newGame) {
             checkActivity();
             return;
           }
 
           //Checking if user already made choices and moves the words that have userChoice
-
-          var firstJarIndex = 0;
-          var secondJarIndex = 0;
-          var thirdJarIndex = 0;
-          var fourthJarIndex = 0;
+          var jarIndexes = [];
+          jarIndexes[0] = 0;
+          jarIndexes[1] = 0;
+          jarIndexes[2] = 0;
+          jarIndexes[3] = 0;
 
           _.each($scope.activityData.questions, function (question, key, list) {
             if ($scope.activityData.questions[key].userChoice !== "") {
@@ -725,40 +781,40 @@ angular.module("bookbuilder2")
                 //Tween the container to the right jar
                 createjs.Tween.get($scope.wordsContainers[key], {loop: false})
                   .to({
-                    x: $scope.wordsPlaceholders[$scope.activityData.questions[key].userChoice][firstJarIndex].x,
-                    y: $scope.wordsPlaceholders[$scope.activityData.questions[key].userChoice][firstJarIndex].y
+                    x: $scope.wordsPlaceholders[$scope.activityData.questions[key].userChoice][jarIndexes[0]].x,
+                    y: $scope.wordsPlaceholders[$scope.activityData.questions[key].userChoice][jarIndexes[0]].y
                   }, 200, createjs.Ease.getPowIn(2));
 
-                firstJarIndex++;
+                jarIndexes[0]++;
 
               } else if ($scope.activityData.questions[key].userChoice === _.findKey($scope.jars, {"jarIndex": 1})) {
                 //Tween the container to the right jar
                 createjs.Tween.get($scope.wordsContainers[key], {loop: false})
                   .to({
-                    x: $scope.wordsPlaceholders[$scope.activityData.questions[key].userChoice][secondJarIndex].x,
-                    y: $scope.wordsPlaceholders[$scope.activityData.questions[key].userChoice][secondJarIndex].y
+                    x: $scope.wordsPlaceholders[$scope.activityData.questions[key].userChoice][jarIndexes[1]].x,
+                    y: $scope.wordsPlaceholders[$scope.activityData.questions[key].userChoice][jarIndexes[1]].y
                   }, 200, createjs.Ease.getPowIn(2));
 
-                secondJarIndex++;
+                jarIndexes[1]++;
 
               } else if ($scope.activityData.questions[key].userChoice === _.findKey($scope.jars, {"jarIndex": 2})) {
                 //Tween the container to the right jar
                 createjs.Tween.get($scope.wordsContainers[key], {loop: false})
                   .to({
-                    x: $scope.wordsPlaceholders[$scope.activityData.questions[key].userChoice][thirdJarIndex].x,
-                    y: $scope.wordsPlaceholders[$scope.activityData.questions[key].userChoice][thirdJarIndex].y
+                    x: $scope.wordsPlaceholders[$scope.activityData.questions[key].userChoice][jarIndexes[2]].x,
+                    y: $scope.wordsPlaceholders[$scope.activityData.questions[key].userChoice][jarIndexes[2]].y
                   }, 200, createjs.Ease.getPowIn(2));
 
-                thirdJarIndex++;
+                jarIndexes[2]++;
               } else {
                 //Tween the container to the right jar
                 createjs.Tween.get($scope.wordsContainers[key], {loop: false})
                   .to({
-                    x: $scope.wordsPlaceholders[$scope.activityData.questions[key].userChoice][fourthJarIndex].x,
-                    y: $scope.wordsPlaceholders[$scope.activityData.questions[key].userChoice][fourthJarIndex].y
+                    x: $scope.wordsPlaceholders[$scope.activityData.questions[key].userChoice][jarIndexes[3]].x,
+                    y: $scope.wordsPlaceholders[$scope.activityData.questions[key].userChoice][jarIndexes[3]].y
                   }, 200, createjs.Ease.getPowIn(2));
 
-                fourthJarIndex++;
+                jarIndexes[3]++;
               }
             }
           });
@@ -813,61 +869,97 @@ angular.module("bookbuilder2")
           return -1;
         }
 
-
         //Function for checking activity
         function checkActivity() {
 
-          //Move everything back
-          _.each($scope.wordsContainers, function (container, key, list) {
-            $scope.wordsContainers[key].x = $scope.wordsContainers[key].startingPointX;
-            $scope.wordsContainers[key].y = $scope.wordsContainers[key].startingPointY;
-          });
+          $scope.slots = [];
+          $scope.slots[0] = [0, 1, 2, 3, 4];
+          $scope.slots[1] = [0, 1, 2, 3, 4];
+          $scope.slots[2] = [0, 1, 2, 3, 4];
+          $scope.slots[3] = [0, 1, 2, 3, 4];
 
-          //Tween everything to the right jar
-          var firstJarIndex = 0;
-          var secondJarIndex = 0;
-          var thirdJarIndex = 0;
-          var fourthJarIndex = 0;
 
           _.each($scope.activityData.questions, function (question, key, list) {
-            if ($scope.activityData.questions[key].group === _.findKey($scope.jars, {"jarIndex": 0})) {
+
+            if ($scope.activityData.questions[key].userChoice === $scope.activityData.questions[key].group) {
+              console.log("Question GroupKey", question.userChoiceGroupKey);
+              console.log("Question Index", question.userChoiceIndex);
+              console.log("Question Positioned", question.word);
+              $scope.slots[question.userChoiceGroupKey] = _.without($scope.slots[question.userChoiceGroupKey], question.userChoiceIndex);
+              console.log($scope.slots[question.userChoiceGroupKey]);
+
+              if ($scope.wordsContainers[key].x !== $scope.wordsPlaceholders[question.group][question.userChoiceIndex].x
+                && $scope.wordsContainers[key].y !== $scope.wordsPlaceholders[question.group][question.userChoiceIndex].y) {
+
+                createjs.Tween.get($scope.wordsContainers[key], {loop: false})
+                  .to({
+                    x: $scope.wordsPlaceholders[question.group][question.userChoiceIndex].x,
+                    y: $scope.wordsPlaceholders[question.group][question.userChoiceIndex].y
+                  }, 200, createjs.Ease.getPowIn(2));
+              }
+
+            }
+          });
+
+          console.log("$scope.slots", $scope.slots);
+
+          _.each($scope.activityData.questions, function (question, key, list) {
+
+            if (question.group === _.findKey($scope.jars, {"jarIndex": 0})) {
               //Tween the container to the right jar
-              createjs.Tween.get($scope.wordsContainers[key], {loop: false})
-                .to({
-                  x: $scope.wordsPlaceholders[$scope.activityData.questions[key].group][firstJarIndex].x,
-                  y: $scope.wordsPlaceholders[$scope.activityData.questions[key].group][firstJarIndex].y
-                }, 200, createjs.Ease.getPowIn(2));
 
-              firstJarIndex++;
+              if ($scope.slots[0].length > 0 && $scope.activityData.questions[key].userChoice !== $scope.activityData.questions[key].group) {
+                var slot = _.sample($scope.slots[0]);
+                $scope.slots[0] = _.without($scope.slots[0], slot);
 
-            } else if ($scope.activityData.questions[key].group === _.findKey($scope.jars, {"jarIndex": 1})) {
+                createjs.Tween.get($scope.wordsContainers[key], {loop: false})
+                  .to({
+                    x: $scope.wordsPlaceholders[question.group][slot].x,
+                    y: $scope.wordsPlaceholders[question.group][slot].y
+                  }, 200, createjs.Ease.getPowIn(2));
+
+              }
+
+            } else if (question.group === _.findKey($scope.jars, {"jarIndex": 1})) {
               //Tween the container to the right jar
-              createjs.Tween.get($scope.wordsContainers[key], {loop: false})
-                .to({
-                  x: $scope.wordsPlaceholders[$scope.activityData.questions[key].group][secondJarIndex].x,
-                  y: $scope.wordsPlaceholders[$scope.activityData.questions[key].group][secondJarIndex].y
-                }, 200, createjs.Ease.getPowIn(2));
+              if ($scope.slots[1].length > 0 && $scope.activityData.questions[key].userChoice !== $scope.activityData.questions[key].group) {
 
-              secondJarIndex++;
+                var slot = _.sample($scope.slots[1]);
+                $scope.slots[1] = _.without($scope.slots[1], slot);
 
-            } else if ($scope.activityData.questions[key].group === _.findKey($scope.jars, {"jarIndex": 2})) {
+                createjs.Tween.get($scope.wordsContainers[key], {loop: false})
+                  .to({
+                    x: $scope.wordsPlaceholders[question.group][slot].x,
+                    y: $scope.wordsPlaceholders[question.group][slot].y
+                  }, 200, createjs.Ease.getPowIn(2));
+
+              }
+            } else if (question.group === _.findKey($scope.jars, {"jarIndex": 2})) {
               //Tween the container to the right jar
-              createjs.Tween.get($scope.wordsContainers[key], {loop: false})
-                .to({
-                  x: $scope.wordsPlaceholders[$scope.activityData.questions[key].group][thirdJarIndex].x,
-                  y: $scope.wordsPlaceholders[$scope.activityData.questions[key].group][thirdJarIndex].y
-                }, 200, createjs.Ease.getPowIn(2));
+              if ($scope.slots[2].length > 0 && $scope.activityData.questions[key].userChoice !== $scope.activityData.questions[key].group) {
 
-              thirdJarIndex++;
+                var slot = _.sample($scope.slots[2]);
+                $scope.slots[2] = _.without($scope.slots[2], slot);
+
+                createjs.Tween.get($scope.wordsContainers[key], {loop: false})
+                  .to({
+                    x: $scope.wordsPlaceholders[question.group][slot].x,
+                    y: $scope.wordsPlaceholders[question.group][slot].y
+                  }, 200, createjs.Ease.getPowIn(2));
+              }
             } else {
-              //Tween the container to the right jar
-              createjs.Tween.get($scope.wordsContainers[key], {loop: false})
-                .to({
-                  x: $scope.wordsPlaceholders[$scope.activityData.questions[key].group][fourthJarIndex].x,
-                  y: $scope.wordsPlaceholders[$scope.activityData.questions[key].group][fourthJarIndex].y
-                }, 200, createjs.Ease.getPowIn(2));
+              if ($scope.slots[3].length > 0 && $scope.activityData.questions[key].userChoice !== $scope.activityData.questions[key].group) {
 
-              fourthJarIndex++;
+                //Tween the container to the right jar
+                var slot = _.sample($scope.slots[3]);
+                $scope.slots[3] = _.without($scope.slots[3], slot);
+
+                createjs.Tween.get($scope.wordsContainers[key], {loop: false})
+                  .to({
+                    x: $scope.wordsPlaceholders[question.group][slot].x,
+                    y: $scope.wordsPlaceholders[question.group][slot].y
+                  }, 200, createjs.Ease.getPowIn(2));
+              }
             }
           });
 
@@ -875,6 +967,8 @@ angular.module("bookbuilder2")
           var rightAnswers = 0;
           //Checking for the right answers
           _.each($scope.activityData.questions, function (question, key, list) {
+
+            $scope.wordsTexts[key].text = $scope.activityData.questions[key].correctWord;
 
             if ($scope.activityData.questions[key].userChoice !== "") {
               if ($scope.activityData.questions[key].userChoice === $scope.activityData.questions[key].group) {
@@ -888,15 +982,38 @@ angular.module("bookbuilder2")
             }
           });
 
+
           //Updating score
-          $scope.scoreText.text = "Score: " + rightAnswers + " / " + $scope.activityData.questions.length;
+          $scope.scoreText.text = "Score:  " + rightAnswers + " / " + $scope.activityData.questions.length;
 
-          //Setting completed activity false
+          //Mark activity as completed
+          $scope.activityData.score = rightAnswers;
           $scope.activityData.completed = true;
-          $scope.nextButton.gotoAndPlay("selected");
+          $scope.checkButton.visible = false;
 
-          //Saving
+          if (_.findIndex($scope.selectedLesson.activitiesMenu, {
+              activityFolder: $scope.activityFolder
+            }) + 1 === $scope.selectedLesson.activitiesMenu.length) {
+
+            $scope.resultsButton.visible = true;
+            $scope.endText.visible = true;
+            $scope.nextButton.visible = false;
+
+          } else {
+            console.log("Activity is not the last one");
+            console.log("index", _.findIndex($scope.selectedLesson.activitiesMenu, {
+                activityFolder: $scope.activityFolder
+              }) + 1);
+            console.log("activities", $scope.selectedLesson.activitiesMenu.length);
+          }
+
+          if ($scope.activityData.newGame) {
+            $scope.activityData.attempts += 1;
+            $scope.activityData.newGame = false;
+          }
           save();
+
+          $scope.nextButton.gotoAndPlay("onSelection");
 
         }
 
@@ -904,6 +1021,11 @@ angular.module("bookbuilder2")
         function restartActivity() {
 
           //Getting all container to their starting points
+
+          _.each($scope.activityData.questions, function (question, key, list) {
+            $scope.wordsTexts[key].text = question.word;
+          });
+
           _.each($scope.wordsContainers, function (container, key, list) {
             $scope.wordsSprites[key].gotoAndPlay("pink");
             createjs.Tween.get($scope.wordsContainers[key], {loop: false})
@@ -916,13 +1038,17 @@ angular.module("bookbuilder2")
           //Erasing any user choice activity
           _.each($scope.activityData.questions, function (question, key, list) {
             $scope.activityData.questions[key].userChoice = "";
+            $scope.activityData.questions[key].userChoiceGroupKey = "";
+            $scope.activityData.questions[key].userChoiceIndex = "";
           });
 
           //Updating score
-          $scope.scoreText.text = "Score: " + "0" + " / " + $scope.activityData.questions.length;
+          $scope.scoreText.text = "Score:  " + "0" + " / " + $scope.activityData.questions.length;
 
           //Setting completed activity false
-          $scope.activityData.completed = false;
+          $scope.checkButton.visible = true;
+          $scope.activityData.score = 0;
+          $scope.activityData.newGame = true;
           $scope.nextButton.gotoAndPlay("normal");
 
           //Saving

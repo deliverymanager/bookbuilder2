@@ -4,6 +4,7 @@ angular.module("bookbuilder2")
     console.log("ReadingNewController loaded!");
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+    $scope.book = JSON.parse(window.localStorage.getItem("book"));
     $scope.activityFolder = window.localStorage.getItem("activityFolder");
 
     $scope.backgroundView = {
@@ -131,6 +132,27 @@ angular.module("bookbuilder2")
               menuButton.gotoAndPlay("normal");
               $scope.stage.update();
 
+              $scope.playButton.visible = true;
+              $scope.pauseButton.visible = false;
+              $scope.stopButton.visible = false;
+
+
+              $scope.sounds[$scope.activityData.slides[_.findIndex($scope.activityData.slides, {
+                "slide": $scope.currentSoundPlaying
+              })].slide].soundPlaying = false;
+
+              $scope.sounds[$scope.activityData.slides[_.findIndex($scope.activityData.slides, {
+                "slide": $scope.currentSoundPlaying
+              })].slide].stop();
+
+              $scope.currentSoundPlaying = $scope.activityData.slides[0].slide;
+              $scope.sounds[$scope.activityData.slides[0].slide].soundPlaying = false;
+
+              _.each($scope.activityData.slides, function (slide, key, list) {
+                $scope.slides[slide.slide].visible = false;
+              });
+              $scope.slides[$scope.activityData.slides[0].slide].visible = true;
+
               $interval.cancel($scope.playSoundIntervalPromise);
               _.each($scope.sounds, function (sound, key, list) {
                 $scope.sounds[key].release();
@@ -139,7 +161,7 @@ angular.module("bookbuilder2")
               $rootScope.navigate("lessonNew");
             });
 
-            menuButton.scaleX = menuButton.scaleY = $scope.scale;
+            menuButton.scaleX = menuButton.scaleY = $scope.scale * ($scope.book.headMenuButtonScale ? $scope.book.headMenuButtonScale : 1);
             menuButton.x = 0;
             menuButton.y = -menuButton.getTransformedBounds().height / 5;
             $scope.stage.addChild(menuButton);
@@ -193,7 +215,7 @@ angular.module("bookbuilder2")
               });
               $scope.playButton.scaleX = $scope.playButton.scaleY = 1.5;
               $scope.playButton.x = $scope.mainContainer.width / 2;
-              $scope.playButton.y = 765;
+              $scope.playButton.y = $scope.book.readingButtonsPositionY ? $scope.book.readingButtonsPositionY : 765;
               $scope.mainContainer.addChild($scope.playButton);
             })
             .error(function (error) {
@@ -243,7 +265,7 @@ angular.module("bookbuilder2")
               });
               $scope.stopButton.scaleX = $scope.stopButton.scaleY = 1.5;
               $scope.stopButton.x = $scope.mainContainer.width / 2 + 40;
-              $scope.stopButton.y = 765;
+              $scope.stopButton.y = $scope.book.readingButtonsPositionY ? $scope.book.readingButtonsPositionY : 765;
               $scope.mainContainer.addChild($scope.stopButton);
             })
             .error(function (error) {
@@ -283,7 +305,7 @@ angular.module("bookbuilder2")
 
               $scope.pauseButton.scaleX = $scope.pauseButton.scaleY = 1.5;
               $scope.pauseButton.x = $scope.mainContainer.width / 2 - 40;
-              $scope.pauseButton.y = 765;
+              $scope.pauseButton.y = $scope.book.readingButtonsPositionY ? $scope.book.readingButtonsPositionY : 765;
               $scope.mainContainer.addChild($scope.pauseButton);
             })
             .error(function (error) {
@@ -346,7 +368,7 @@ angular.module("bookbuilder2")
           async.parallel(parallelFunctions, function (err, response) {
 
             console.log("Title: ", $scope.selectedLesson.title);
-            var title = new createjs.Text($scope.selectedLesson.title, "27px Arial", "white");
+            var title = new createjs.Text($scope.selectedLesson.lessonTitle + " - " + $scope.selectedLesson.title, "27px Arial", "white");
             title.textAlign = "center";
             title.x = $scope.mainContainer.width / 2;
             title.y = 35;
@@ -418,13 +440,30 @@ angular.module("bookbuilder2")
             $scope.playButton.visible = true;
             $scope.pauseButton.visible = false;
             $scope.stopButton.visible = false;
+
+
+            $scope.sounds[$scope.activityData.slides[_.findIndex($scope.activityData.slides, {
+              "slide": $scope.currentSoundPlaying
+            })].slide].soundPlaying = false;
+
+            $scope.sounds[$scope.activityData.slides[_.findIndex($scope.activityData.slides, {
+              "slide": $scope.currentSoundPlaying
+            })].slide].stop();
+
+            $scope.currentSoundPlaying = $scope.activityData.slides[0].slide;
+            $scope.sounds[$scope.activityData.slides[0].slide].soundPlaying = false;
+
             _.each($scope.activityData.slides, function (slide, key, list) {
               $scope.slides[slide.slide].visible = false;
             });
             $scope.slides[$scope.activityData.slides[0].slide].visible = true;
+            $scope.stage.update();
 
             console.log("completed activity!");
+
+            $scope.activityData.attempts = $scope.activityData.attempts + 1;
             $scope.activityData.completed = true;
+
             window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
           }
 
@@ -435,8 +474,6 @@ angular.module("bookbuilder2")
 
         if (window.localStorage.getItem(activityNameInLocalStorage)) {
           $scope.activityData = JSON.parse(window.localStorage.getItem(activityNameInLocalStorage));
-
-          $scope.activityData.attempts = $scope.activityData.attempts + 1;
           window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
           init();
 
@@ -446,7 +483,7 @@ angular.module("bookbuilder2")
             .success(function (readingJson) {
 
               $scope.activityData = readingJson;
-              $scope.activityData.attempts = 1;
+              $scope.activityData.attempts = 0;
               window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
               init();
             })

@@ -4,6 +4,8 @@ angular.module("bookbuilder2")
     console.log("VocabularyNewController loaded!");
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+    $scope.book = JSON.parse(window.localStorage.getItem("book"));
+    $scope.book = JSON.parse(window.localStorage.getItem("book"));
 
     $scope.backgroundView = {
       "background": "url(" + $scope.rootDir + "data/assets/lesson_background_image.png) no-repeat center top",
@@ -135,7 +137,7 @@ angular.module("bookbuilder2")
               $rootScope.navigate("lessonNew");
             });
 
-            menuButton.scaleX = menuButton.scaleY = $scope.scale;
+            menuButton.scaleX = menuButton.scaleY = $scope.scale * ($scope.book.headMenuButtonScale ? $scope.book.headMenuButtonScale : 1);
             menuButton.x = 0;
             menuButton.y = -menuButton.getTransformedBounds().height / 5;
 
@@ -144,8 +146,6 @@ angular.module("bookbuilder2")
             async.waterfall([function (waterfallCall) {
               if (window.localStorage.getItem(activityNameInLocalStorage)) {
                 $scope.activityData = JSON.parse(window.localStorage.getItem(activityNameInLocalStorage));
-
-                $scope.activityData.attempts = $scope.activityData.attempts + 1;
                 window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
                 waterfallCall();
               } else {
@@ -154,7 +154,7 @@ angular.module("bookbuilder2")
                   .success(function (response) {
 
                     $scope.activityData = response;
-                    $scope.activityData.attempts = 1;
+                    $scope.activityData.attempts = 0;
                     window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
                     waterfallCall();
                   })
@@ -189,10 +189,11 @@ angular.module("bookbuilder2")
                     $scope.bigStopButton.visible = false;
                     $scope.bigPauseButton.gotoAndPlay("normal");
                     $scope.playAll = false;
+                    showAllPlayButtons();
                     $scope.stage.update();
                   });
 
-                  $scope.bigPauseButton.scaleX = $scope.bigPauseButton.scaleY = $scope.scale * 1.3;
+                  $scope.bigPauseButton.scaleX = $scope.bigPauseButton.scaleY = $scope.scale * ($scope.book.vocabularyColorButtonsScale ? $scope.book.vocabularyColorButtonsScale : 1.3);
                   $scope.bigPauseButton.x = backgroundPosition.x + (backgroundPosition.width / 2.13);
                   $scope.bigPauseButton.y = backgroundPosition.y + (backgroundPosition.height / 1.16);
                   $scope.stage.addChild($scope.bigPauseButton);
@@ -231,12 +232,13 @@ angular.module("bookbuilder2")
                     $scope.bigStopButton.gotoAndPlay("normal");
                     $scope.currentScroll = 10;
                     $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
-                    $scope.currentWord = $scope.activityData[$scope.selectedVocabularySection][0].name;
+                    $scope.currentWord = "";
                     $scope.playAll = false;
+                    showAllPlayButtons();
                     $scope.stage.update();
                   });
 
-                  $scope.bigStopButton.scaleX = $scope.bigStopButton.scaleY = $scope.scale * 1.3;
+                  $scope.bigStopButton.scaleX = $scope.bigStopButton.scaleY = $scope.scale * ($scope.book.vocabularyColorButtonsScale ? $scope.book.vocabularyColorButtonsScale : 1.3);
                   $scope.bigStopButton.x = backgroundPosition.x + (backgroundPosition.width / 1.98);
                   $scope.bigStopButton.y = backgroundPosition.y + (backgroundPosition.height / 1.16);
                   $scope.stage.addChild($scope.bigStopButton);
@@ -277,14 +279,80 @@ angular.module("bookbuilder2")
                     $scope.bigPlayButton.gotoAndPlay("normal");
                     $scope.playAll = true;
 
+                    hideAllPlayButtons();
 
-                    playWordSound($scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-                      name: $scope.currentWord
-                    })]);
+
+                    if ($scope.currentWord && _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                        name: $scope.currentWord
+                      }) < $scope.activityData[$scope.selectedVocabularySection].length - 1) {
+
+
+                      console.log("$scope.currentScroll", $scope.currentScroll);
+                      console.log("current word index", _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                        name: $scope.currentWord
+                      }));
+
+                      if ($scope.currentScroll === 10 && _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                          name: $scope.currentWord
+                        }) > 8) {
+                        $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10;
+                        $scope.currentScroll = 20;
+                      } else if ($scope.currentScroll === 20 && _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                          name: $scope.currentWord
+                        }) > 18) {
+                        $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                        $scope.currentScroll = 30;
+                      } else if ($scope.currentScroll === 30 && _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                          name: $scope.currentWord
+                        }) > 28) {
+                        $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                        $scope.currentScroll = 40;
+                      } else {
+
+                        if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                            name: $scope.currentWord
+                          }) > 28) {
+                          $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                          $scope.currentScroll = 40;
+
+                        } else if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                            name: $scope.currentWord
+                          }) > 18) {
+
+                          $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                          $scope.currentScroll = 30;
+
+                        } else if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                            name: $scope.currentWord
+                          }) > 8) {
+                          $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10;
+                          $scope.currentScroll = 20;
+                        } else {
+                          $scope.currentScroll = 10;
+                          $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
+                        }
+
+                      }
+
+                      playWordSound($scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                        name: $scope.currentWord
+                      }) + 1]);
+
+
+                    } else {
+
+                      $scope.currentScroll = 10;
+                      $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
+                      $scope.currentWord = $scope.activityData[$scope.selectedVocabularySection][0].name;
+                      playWordSound($scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                        name: $scope.currentWord
+                      })]);
+
+                    }
                     $scope.stage.update();
                   });
 
-                  $scope.bigPlayButton.scaleX = $scope.bigPlayButton.scaleY = $scope.scale * 1.4;
+                  $scope.bigPlayButton.scaleX = $scope.bigPlayButton.scaleY = $scope.scale * ($scope.book.vocabularyColorButtonsScale ? $scope.book.vocabularyColorButtonsScale : 1.3);
                   $scope.bigPlayButton.x = backgroundPosition.x + (backgroundPosition.width / 2.05);
                   $scope.bigPlayButton.y = backgroundPosition.y + (backgroundPosition.height / 1.16);
                   $scope.stage.addChild($scope.bigPlayButton);
@@ -304,9 +372,10 @@ angular.module("bookbuilder2")
               var vocMenuBackground = new createjs.Bitmap($scope.rootDir + "data/assets/vocabulary_menu_background.png");
               $scope.phrasesContainer.addChild(vocMenuBackground);
 
-              $scope.phrasesButton = new createjs.Text("Phrases", "25px Arial", "black");
+              $scope.phrasesButton = new createjs.Text("Phrases", "25px Arial", $scope.book.vocabularyColorTitles ? $scope.book.vocabularyColorTitles : 'black');
 
-              $scope.phrasesButton.x = 80;
+              $scope.phrasesButton.x = $scope.book.vocabularyTitlesPositionX ? $scope.book.vocabularyTitlesPositionX : 80;
+              $scope.phrasesButton.y = $scope.book.vocabularyTitlesPositionY ? $scope.book.vocabularyTitlesPositionY : 0;
 
               $scope.phrasesButton.textAlign = "center";
               $scope.phrasesContainer.addEventListener("mousedown", function (event) {
@@ -318,7 +387,6 @@ angular.module("bookbuilder2")
               $scope.phrasesContainer.addEventListener("pressup", function (event) {
                 console.log("Press up event!");
                 $scope.phrasesContainer.alpha = 1;
-                $scope.title.text = "Phrases";
                 loadPage("phrases");
               });
 
@@ -332,8 +400,9 @@ angular.module("bookbuilder2")
               $scope.wordsContainer = new createjs.Container();
               var vocMenuBackground = new createjs.Bitmap($scope.rootDir + "data/assets/vocabulary_menu_background.png");
               $scope.wordsContainer.addChild(vocMenuBackground);
-              $scope.wordsButton = new createjs.Text("Vocabulary", "25px Arial", "black");
-              $scope.wordsButton.x = 80;
+              $scope.wordsButton = new createjs.Text("Vocabulary", "25px Arial", $scope.book.vocabularyColorTitles ? $scope.book.vocabularyColorTitles : 'black');
+              $scope.wordsButton.x = $scope.book.vocabularyTitlesPositionX ? $scope.book.vocabularyTitlesPositionX : 80;
+              $scope.wordsButton.y = $scope.book.vocabularyTitlesPositionY ? $scope.book.vocabularyTitlesPositionY : 0;
               $scope.wordsButton.textAlign = "center";
 
               $scope.wordsContainer.addEventListener("mousedown", function (event) {
@@ -343,7 +412,6 @@ angular.module("bookbuilder2")
 
               $scope.wordsContainer.addEventListener("pressup", function (event) {
                 $scope.wordsContainer.alpha = 1;
-                $scope.title.text = "Vocabulary";
                 loadPage("words");
               });
 
@@ -384,7 +452,7 @@ angular.module("bookbuilder2")
                     }
                     $scope.stage.update();
                   });
-                  englishBigButton.scaleX = englishBigButton.scaleY = $scope.scale;
+                  englishBigButton.scaleX = englishBigButton.scaleY = $scope.scale * ($scope.book.vocabularyColorButtonsScale ? $scope.book.vocabularyColorButtonsScale : 1);
                   englishBigButton.x = backgroundPosition.x + (backgroundPosition.width / 2.6);
                   englishBigButton.y = backgroundPosition.y + (backgroundPosition.height / 1.15);
                   $scope.stage.addChild(englishBigButton);
@@ -432,7 +500,7 @@ angular.module("bookbuilder2")
                     $scope.stage.update();
                   });
 
-                  greekBigButton.scaleX = greekBigButton.scaleY = $scope.scale;
+                  greekBigButton.scaleX = greekBigButton.scaleY = $scope.scale * ($scope.book.vocabularyColorButtonsScale ? $scope.book.vocabularyColorButtonsScale : 1);
                   greekBigButton.x = backgroundPosition.x + (backgroundPosition.width / 1.7);
                   greekBigButton.y = backgroundPosition.y + (backgroundPosition.height / 1.15);
                   $scope.stage.addChild(greekBigButton);
@@ -463,6 +531,7 @@ angular.module("bookbuilder2")
                         }, function (status) {
                           console.log("Sound status: ", status);
                         });
+                        $scope.sounds[word.name].soundWasPlayed = false;
                         waterfallCallback();
                       });
                     } else {
@@ -474,6 +543,7 @@ angular.module("bookbuilder2")
                         }, function (status) {
                           console.log("Sound status", status);
                         });
+                        $scope.sounds[word.name].soundWasPlayed = false;
                       }
                       waterfallCallback();
                     }
@@ -609,7 +679,29 @@ angular.module("bookbuilder2")
                           $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 20;
                           $scope.currentScroll = 30;
                         } else {
-                          $scope.currentScroll = 10;
+
+                          if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                              name: $scope.currentWord
+                            }) > 28) {
+                            $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                            $scope.currentScroll = 40;
+
+                          } else if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                              name: $scope.currentWord
+                            }) > 18) {
+
+                            $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                            $scope.currentScroll = 30;
+
+                          } else if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                              name: $scope.currentWord
+                            }) > 8) {
+                            $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10;
+                            $scope.currentScroll = 20;
+                          } else {
+                            $scope.currentScroll = 10;
+                            $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
+                          }
                         }
 
                         $scope.stage.update();
@@ -674,21 +766,13 @@ angular.module("bookbuilder2")
                 $scope.titleContainer.x = backgroundPosition.x + (backgroundPosition.width / 4);
                 $scope.titleContainer.y = backgroundPosition.y + (backgroundPosition.height / 35);
 
-                $scope.title = new createjs.Text("Vocabulary", "25px Arial", "white");
+                $scope.title = new createjs.Text("Listen, say and learn.", "25px Arial", "white");
                 $scope.titleContainer.scaleX = $scope.titleContainer.scaleY = $scope.scale;
                 $scope.title.textAlign = "center";
                 $scope.title.x = 260;
                 $scope.title.y = 15;
                 $scope.titleContainer.addChild($scope.title);
                 $scope.stage.addChild($scope.titleContainer);
-
-                /* var lessonTitle = new createjs.Text($scope.selectedLesson.lessonTitle, "27px Arial", "white");
-                 lessonTitle.color = "black";
-                 lessonTitle.scaleX = lessonTitle.scaleY = $scope.scale;
-                 lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 5);
-                 lessonTitle.y = backgroundPosition.y + (backgroundPosition.height / 18);
-                 lessonTitle.textAlign = "center";
-                 $scope.stage.addChild(lessonTitle);*/
 
                 $scope.mainContainer = new createjs.Container();
                 $scope.mainContainer.width = background.image.width;
@@ -707,7 +791,6 @@ angular.module("bookbuilder2")
                 });
               }], function (err, response) {
                 async.waterfall(waterFallFunctions, function (err, response) {
-                  $scope.title.text = "Vocabulary";
                   loadPage("words");
                 });
               });
@@ -723,9 +806,10 @@ angular.module("bookbuilder2")
 
         $scope.playSoundIntervalPromise = $interval(function () {
           _.each($scope.sounds, function (sound, key, list) {
-            if (sound.soundPlaying) {
+            if ($scope.sounds[key].soundPlaying) {
               $scope.sounds[key].getCurrentPosition(
                 function (position) {
+                  console.log("position", position);
                   if (position < 0) {
                     soundIsFinishedPlaying(key);
                   }
@@ -743,7 +827,7 @@ angular.module("bookbuilder2")
           $scope.sounds[name].soundPlaying = false;
 
           $scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
-            "name": name
+            name: name
           })].soundWasPlayed = true;
 
           window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
@@ -755,6 +839,7 @@ angular.module("bookbuilder2")
           if ($scope.playAll && _.findWhere($scope.activityData[$scope.selectedVocabularySection], {
               name: $scope.currentWord
             })) {
+
             if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                 name: $scope.currentWord
               }) < $scope.activityData[$scope.selectedVocabularySection].length - 1) {
@@ -780,6 +865,30 @@ angular.module("bookbuilder2")
                 }) > 28) {
                 $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
                 $scope.currentScroll = 40;
+              } else {
+
+                if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                    name: $scope.currentWord
+                  }) > 28) {
+                  $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                  $scope.currentScroll = 40;
+
+                } else if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                    name: $scope.currentWord
+                  }) > 18) {
+
+                  $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                  $scope.currentScroll = 30;
+
+                } else if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
+                    name: $scope.currentWord
+                  }) > 8) {
+                  $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10;
+                  $scope.currentScroll = 20;
+                } else {
+                  $scope.currentScroll = 10;
+                  $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
+                }
               }
 
               playWordSound($scope.activityData[$scope.selectedVocabularySection][_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
@@ -795,14 +904,20 @@ angular.module("bookbuilder2")
               $scope.currentScroll = 10;
               $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
               $scope.bigStopButton.gotoAndPlay("normal");
-              $scope.currentWord = $scope.activityData[$scope.selectedVocabularySection][0].name;
+              $scope.currentWord = "";
               $scope.playAll = false;
+              showAllPlayButtons();
               $scope.stage.update();
             }
+
           } else {
+
             $scope.bigPauseButton.visible = false;
             $scope.bigStopButton.visible = false;
             $scope.bigPlayButton.visible = true;
+
+            showAllPlayButtons();
+
           }
 
           checkIfAllSoundsWerePlayed();
@@ -913,7 +1028,7 @@ angular.module("bookbuilder2")
           $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
           $scope.selectedVocabularySection = vocabularySection;
           $scope.playAll = false;
-          $scope.currentWord = $scope.activityData[vocabularySection][0].name;
+          $scope.currentWord = "";
 
           $scope.bigPauseButton.visible = false;
           $scope.bigStopButton.visible = false;
@@ -936,77 +1051,107 @@ angular.module("bookbuilder2")
         function loadButtons(wordsArray) {
           console.log("$scope.mainContainer", $scope.mainContainer.numChildren);
           /*Iterating and populating the container*/
+          $scope.enSmallButton = [];
+          $scope.grSmallButton = [];
+          $scope.playSmallButton = [];
+
           _.each(wordsArray, function (word, key, list) {
 
-            var enSmallButton = new createjs.Sprite($scope.enSmallButtonSpriteSheet, "normal");
-            enSmallButton.addEventListener("mousedown", function (event) {
+            $scope.enSmallButton[key] = new createjs.Sprite($scope.enSmallButtonSpriteSheet, "normal");
+            $scope.enSmallButton[key].addEventListener("mousedown", function (event) {
               console.log("Mouse down event on a button !");
-              enSmallButton.gotoAndPlay("onSelection");
+              $scope.enSmallButton[key].gotoAndPlay("onSelection");
               $scope.stage.update();
             });
 
-            enSmallButton.addEventListener("pressup", function (event) {
+            $scope.enSmallButton[key].addEventListener("pressup", function (event) {
               console.log("Press up event!");
-              enSmallButton.gotoAndPlay("normal");
+              $scope.enSmallButton[key].gotoAndPlay("normal");
               $scope.englishWordsBitmaps[word.name].visible = !$scope.englishWordsBitmaps[word.name].visible;
               $scope.stage.update();
             });
 
-            enSmallButton.regX = enSmallButton.x / 2;
-            enSmallButton.regY = enSmallButton.y / 2;
-            enSmallButton.x = enSmallButton.getBounds().width / 2;
-            enSmallButton.y = $scope.buttonsContainer.buttonsSubContainers[word.name].height / 2;
+            $scope.enSmallButton[key].regX = $scope.enSmallButton[key].x / 2;
+            $scope.enSmallButton[key].regY = $scope.enSmallButton[key].y / 2;
+            $scope.enSmallButton[key].x = $scope.enSmallButton[key].getBounds().width / 2;
+            $scope.enSmallButton[key].y = $scope.buttonsContainer.buttonsSubContainers[word.name].height / 2;
 
             /*********************Creating Greek button*********************/
-            var grSmallButton = new createjs.Sprite($scope.grSmallButtonSpriteSheet, "normal");
+            $scope.grSmallButton[key] = new createjs.Sprite($scope.grSmallButtonSpriteSheet, "normal");
 
-            grSmallButton.addEventListener("mousedown", function (event) {
+            $scope.grSmallButton[key].addEventListener("mousedown", function (event) {
               console.log("Mouse down event on a button !");
-              grSmallButton.gotoAndPlay("selected");
+              $scope.grSmallButton[key].gotoAndPlay("selected");
               $scope.stage.update();
             });
 
-            grSmallButton.addEventListener("pressup", function (event) {
+            $scope.grSmallButton[key].addEventListener("pressup", function (event) {
               console.log("Press up event!");
-              grSmallButton.gotoAndPlay("normal");
+              $scope.grSmallButton[key].gotoAndPlay("normal");
               $scope.greekWordsBitmaps[word.name].visible = !$scope.greekWordsBitmaps[word.name].visible;
               $scope.stage.update();
 
             });
-            grSmallButton.regX = grSmallButton.x / 2;
-            grSmallButton.regY = grSmallButton.y / 2;
-            grSmallButton.x = $scope.buttonsContainer.buttonsSubContainers[word.name].width / 2.3;
-            grSmallButton.y = $scope.buttonsContainer.buttonsSubContainers[word.name].height / 2;
+            $scope.grSmallButton[key].regX = $scope.grSmallButton[key].x / 2;
+            $scope.grSmallButton[key].regY = $scope.grSmallButton[key].y / 2;
+            $scope.grSmallButton[key].x = $scope.buttonsContainer.buttonsSubContainers[word.name].width / 2.3;
+            $scope.grSmallButton[key].y = $scope.buttonsContainer.buttonsSubContainers[word.name].height / 2;
 
             /********************* Creating Play button *********************/
-            var playSmallButton = new createjs.Sprite($scope.playSmallButtonSpriteSheet, "normal");
-            playSmallButton.addEventListener("mousedown", function (event) {
-              console.log("Mouse down event on a button !");
-              playSmallButton.gotoAndPlay("selected");
+            $scope.playSmallButton[key] = new createjs.Sprite($scope.playSmallButtonSpriteSheet, "normal");
+            $scope.playSmallButton[key].addEventListener("mousedown", function (event) {
+              console.log("Mouse down event on a button playSmallButton");
+              $scope.playSmallButton[key].gotoAndPlay("selected");
               $scope.stage.update();
+
             });
 
-            playSmallButton.addEventListener("pressup", function (event) {
-              playSmallButton.gotoAndPlay("normal");
+            $scope.playSmallButton[key].addEventListener("pressup", function (event) {
+
+              $scope.playSmallButton[key].gotoAndPlay("normal");
               playWordSound(word);
               $scope.stage.update();
               $scope.playAll = false;
+
               $scope.bigPauseButton.visible = false;
               $scope.bigStopButton.visible = false;
               $scope.bigPlayButton.visible = false;
+
+              hideAllPlayButtons();
+
             });
 
-            playSmallButton.regX = playSmallButton.x / 2;
-            playSmallButton.regY = playSmallButton.y / 2;
-            //playSmallButton.scaleX = playSmallButton.scaleY = 0.7;
-            playSmallButton.x = $scope.buttonsContainer.buttonsSubContainers[word.name].width / 1.5;
-            playSmallButton.y = $scope.buttonsContainer.buttonsSubContainers[word.name].height / 2;
-            $scope.buttonsContainer.buttonsSubContainers[word.name].addChild(enSmallButton);
-            $scope.buttonsContainer.buttonsSubContainers[word.name].addChild(grSmallButton);
-            $scope.buttonsContainer.buttonsSubContainers[word.name].addChild(playSmallButton);
+            $scope.playSmallButton[key].regX = $scope.playSmallButton[key].x / 2;
+            $scope.playSmallButton[key].regY = $scope.playSmallButton[key].y / 2;
+            //$scope.playSmallButton[key].scaleX = $scope.playSmallButton[key].scaleY = 0.7;
+            $scope.playSmallButton[key].x = $scope.buttonsContainer.buttonsSubContainers[word.name].width / 1.5;
+            $scope.playSmallButton[key].y = $scope.buttonsContainer.buttonsSubContainers[word.name].height / 2;
+            $scope.buttonsContainer.buttonsSubContainers[word.name].addChild($scope.enSmallButton[key]);
+            $scope.buttonsContainer.buttonsSubContainers[word.name].addChild($scope.grSmallButton[key]);
+            $scope.buttonsContainer.buttonsSubContainers[word.name].addChild($scope.playSmallButton[key]);
           });
         }//End of loadButtons function
 
+        var hideAllPlayButtons = function () {
+
+          $scope.wordsContainer.visible = false;
+          $scope.phrasesContainer.visible = false;
+
+          _.each($scope.activityData[$scope.selectedVocabularySection], function (word, k, list) {
+            $scope.playSmallButton[k].visible = false;
+          });
+        };
+
+        var showAllPlayButtons = function () {
+
+          $scope.wordsContainer.visible = true;
+          $scope.phrasesContainer.visible = true;
+
+          _.each($scope.activityData[$scope.selectedVocabularySection], function (word, k, list) {
+            $scope.playSmallButton[k].visible = true;
+          });
+
+        };
 
         function playWordSound(word) {
           if (!_.findWhere($scope.activityData[$scope.selectedVocabularySection], {
@@ -1016,8 +1161,10 @@ angular.module("bookbuilder2")
           }
           if (window.cordova && window.cordova.platformId !== "browser") {
             $scope.bigPlayButton.visible = false;
-            $scope.sounds[word.name].soundPlaying = true;
             $scope.sounds[word.name].play();
+            $timeout(function () {
+              $scope.sounds[word.name].soundPlaying = true;
+            }, 500);
           }
           $scope.currentWord = word.name;
           $scope.indexContainer.indexSubContainers[word.name].indexBackground.visible = true;
@@ -1031,7 +1178,7 @@ angular.module("bookbuilder2")
 
           _.each(wordsArray, function (word, key, list) {
 
-            var wordIndex = new createjs.Text(key + 1 + ".", "25px Arial", "white");
+            var wordIndex = new createjs.Text(key + 1 + ".", "25px Arial", $scope.book.vocabularyColor ? $scope.book.vocabularyColor : 'white');
             $timeout(function () {
               wordIndex.x = $scope.indexContainer.indexSubContainers[word.name].width / 2;
               wordIndex.y = $scope.indexContainer.indexSubContainers[word.name].height / 2;
@@ -1048,7 +1195,7 @@ angular.module("bookbuilder2")
         function loadEnglishWords(wordsArray) {
 
           $scope.englishWordsBitmaps = {};
-          var scaleImage = 1.5;
+          var scaleImage = 1.25;
 
           /*Iterating and populating the container*/
           _.each(wordsArray, function (word, key, list) {
@@ -1056,12 +1203,11 @@ angular.module("bookbuilder2")
             $timeout(function () {
               $scope.englishWordsBitmaps[word.name].x = 0;
               $scope.englishWordsBitmaps[word.name].regY = $scope.englishWordsBitmaps[word.name].image.height / 2;
-              console.log("$scope.englishWordsBitmaps[word.name].image.height", $scope.englishWordsBitmaps[word.name].image.height);
 
               if ($scope.englishWordsBitmaps[word.name].image.width * scaleImage >= $scope.englishWordsContainer.englishSubContainers[word.name].width * 0.95) {
                 $scope.englishWordsBitmaps[word.name].scaleX = $scope.englishWordsBitmaps[word.name].scaleY = $scope.englishWordsContainer.englishSubContainers[word.name].width * 0.95 / $scope.englishWordsBitmaps[word.name].image.width;
               } else {
-                $scope.englishWordsBitmaps[word.name].scaleX = $scope.englishWordsBitmaps[word.name].scaleY = scaleImage;
+                $scope.englishWordsBitmaps[word.name].scaleX = $scope.englishWordsBitmaps[word.name].scaleY = word.scale ? word.scale : scaleImage;
               }
 
               $scope.englishWordsBitmaps[word.name].y = $scope.englishWordsContainer.englishSubContainers[word.name].height / 2;
@@ -1073,7 +1219,7 @@ angular.module("bookbuilder2")
 
         /*LOAD GREEK WORDS*/
         function loadGreekWords(wordsArray) {
-          var scaleImage = 1.5;
+          var scaleImage = 1.25;
           $scope.greekWordsBitmaps = {};
           _.each(wordsArray, function (word, key, list) {
             $scope.greekWordsBitmaps[word.name] = new createjs.Bitmap($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/vocabulary/" + word.name + "_gr.png");
@@ -1081,10 +1227,10 @@ angular.module("bookbuilder2")
               $scope.greekWordsBitmaps[word.name].x = 0;
               console.log("$scope.greekWordsBitmaps[word.name].image.height", $scope.greekWordsBitmaps[word.name].image.height);
               $scope.greekWordsBitmaps[word.name].regY = $scope.greekWordsBitmaps[word.name].image.height / 2;
-              if ($scope.greekWordsBitmaps[word.name].image.width * scaleImage >= $scope.greekWordsContainer.greekWordsSubContainers[word.name].width * 0.95) {
+              if ($scope.greekWordsBitmaps[word.name].image.width * (word.scale ? word.scale : scaleImage) >= $scope.greekWordsContainer.greekWordsSubContainers[word.name].width * 0.95) {
                 $scope.greekWordsBitmaps[word.name].scaleX = $scope.greekWordsBitmaps[word.name].scaleY = $scope.greekWordsContainer.greekWordsSubContainers[word.name].width * 0.95 / $scope.greekWordsBitmaps[word.name].image.width;
               } else {
-                $scope.greekWordsBitmaps[word.name].scaleX = $scope.greekWordsBitmaps[word.name].scaleY = scaleImage;
+                $scope.greekWordsBitmaps[word.name].scaleX = $scope.greekWordsBitmaps[word.name].scaleY = word.scale ? word.scale : scaleImage;
               }
               $scope.greekWordsBitmaps[word.name].y = $scope.greekWordsContainer.greekWordsSubContainers[word.name].height / 2;
               $scope.greekWordsContainer.greekWordsSubContainers[word.name].addChild($scope.greekWordsBitmaps[word.name]);
@@ -1094,24 +1240,47 @@ angular.module("bookbuilder2")
 
 
         function checkIfAllSoundsWerePlayed() {
+
+          //If all sounds were played then it saves an attempt and then it clears all the soundWasPlayed so that it can count again an attempt!
+
+          //$scope.activityData.attempts
+          //$scope.activityData[$scope.selectedVocabularySection][name].soundWasPlayed
+
           var completed = true;
+          var counter = 0;
 
           _.each($scope.activityData, function (tabWords, tab, list) {
+
             _.each(tabWords, function (word, key, list) {
 
               if (!word.soundWasPlayed) {
                 completed = false;
+                counter++;
               }
 
             });
+
           });
 
+
           if (completed) {
+
+            $scope.activityData.attempts = $scope.activityData.attempts + 1;
             $scope.activityData.completed = true;
+
+            _.each($scope.activityData, function (tabWords, tab, list) {
+              _.each(tabWords, function (word, key, list) {
+                $scope.activityData[tab][key].soundWasPlayed = false;
+              });
+            });
+
             window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
+            console.log("ACTIVITY COMPLETED!!!");
+
           } else {
-            console.log("Not completed activity!");
+            console.log("there are sound remaining unplayed", counter);
           }
+
         };
       });//end of image on complete
     }, 1500);//end of timeout

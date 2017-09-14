@@ -1,35 +1,99 @@
 {
-  "name": "bookbuilder2",
-  "version": "1.1.1",
-  "description": "bookbuilder2",
-  "dependencies": {
-    "@ionic/cloud": "^0.10.0",
-    "gulp-concat": "^2.2.0",
-    "gulp-minify-css": "^0.3.0",
-    "gulp-rename": "^1.2.0",
-    "gulp-sass": "^2.0.4"
-  },
-  "devDependencies": {
-    "bower": "^1.3.3",
-    "gulp-util": "^2.2.14",
-    "shelljs": "^0.3.0"
-  },
-  "cordovaPlugins": [
-    "cordova-plugin-device",
-    "cordova-plugin-console",
-    "cordova-plugin-whitelist",
-    "cordova-plugin-splashscreen",
-    "cordova-plugin-statusbar",
-    "ionic-plugin-keyboard",
-    {
-      "locator": "https://github.com/Telerik-Verified-Plugins/NativePageTransitions",
-      "id": "com.telerik.plugins.nativepagetransitions"
+    "name": "bookbuilder2",
+    "version": "1.1.1",
+    "description": "bookbuilder2",
+    "dependencies": {
+        "@ionic/cloud": "^0.9.0",
+        "archiver": "^1.3.0",
+        "async": "^2.4.1",
+        "aws-sdk": "^2.73.0",
+        "cordova-android": "^6.2.3",
+        "cordova-browser": "^4.1.0",
+        "cordova-ios": "^4.4.0",
+        "cordova-plugin-app-version": "^0.1.9",
+        "cordova-plugin-camera": "^2.4.1",
+        "cordova-plugin-compat": "^1.1.0",
+        "cordova-plugin-console": "^1.0.7",
+        "cordova-plugin-device": "^1.1.6",
+        "cordova-plugin-facebook4": "^1.9.1",
+        "cordova-plugin-file": "^4.3.3",
+        "cordova-plugin-file-transfer": "^1.6.3",
+        "cordova-plugin-googleplus": "^5.1.1",
+        "cordova-plugin-insomnia": "^4.3.0",
+        "cordova-plugin-media": "^3.0.1",
+        "cordova-plugin-splashscreen": "^4.0.3",
+        "cordova-plugin-statusbar": "^2.2.3",
+        "cordova-plugin-webserver": "^1.0.3",
+        "cordova-plugin-whitelist": "^1.3.2",
+        "cordova-plugin-x-toast": "^2.6.0",
+        "deli": "0.0.2",
+        "fs-extra": "^3.0.1",
+        "gulp": "^3.5.6",
+        "gulp-concat": "^2.2.0",
+        "gulp-minify-css": "^0.3.0",
+        "gulp-rename": "^1.2.0",
+        "gulp-sass": "^2.0.4",
+        "imagemagick": "^0.1.3",
+        "ionic-plugin-deploy": "^0.6.7",
+        "ionic-plugin-keyboard": "^2.2.1",
+        "jsonfile": "^3.0.0",
+        "lodash.clonedeep": "^4.5.0",
+        "node-bitlyapi": "^0.4.0",
+        "node-forge": "^0.7.1",
+        "onesignal-cordova-plugin": "^2.1.2",
+        "phantomjs": "^2.1.7",
+        "piazza": "^0.1.4",
+        "request": "^2.81.0",
+        "satellizer": "^0.15.5",
+        "swiper": "^3.4.0",
+        "through2": "^2.0.3",
+        "underscore": "^1.8.3",
+        "webpage": "^0.3.0",
+        "xml2js": "^0.4.17"
     },
-    "cordova-plugin-wkwebview",
-    "ionic-plugin-deploy"
-  ],
-  "cordovaPlatforms": [
-    "android",
-    "ios"
-  ]
+    "devDependencies": {
+        "bower": "^1.3.3",
+        "gulp-util": "^2.2.14",
+        "shelljs": "^0.3.0"
+    },
+    "cordovaPlugins": [
+        "cordova-plugin-device",
+        "cordova-plugin-console",
+        "cordova-plugin-whitelist",
+        "cordova-plugin-splashscreen",
+        "cordova-plugin-statusbar",
+        "ionic-plugin-keyboard",
+        {
+            "locator": "https://github.com/Telerik-Verified-Plugins/NativePageTransitions",
+            "id": "com.telerik.plugins.nativepagetransitions"
+        },
+        "cordova-plugin-wkwebview",
+        "ionic-plugin-deploy"
+    ],
+    "cordovaPlatforms": [
+        "android",
+        "ios"
+    ],
+    "cordova": {
+        "platforms": [
+            "android",
+            "ios"
+        ],
+        "plugins": {
+            "cordova-plugin-console": {},
+            "cordova-plugin-device": {},
+            "ionic-plugin-keyboard": {},
+            "cordova-plugin-statusbar": {},
+            "cordova-plugin-x-toast": {},
+            "cordova-plugin-whitelist": {},
+            "ionic-plugin-deploy": {},
+            "cordova-plugin-insomnia": {},
+            "cordova-plugin-app-version": {},
+            "cordova-plugin-webserver": {},
+            "cordova-plugin-splashscreen": {},
+            "cordova-plugin-file": {},
+            "cordova-plugin-file-transfer": {},
+            "cordova-plugin-media": {}
+        }
+    }
 }

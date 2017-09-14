@@ -4,6 +4,7 @@ angular.module("bookbuilder2")
     console.log("MultipleBirdsController loaded!");
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
+    $scope.book = JSON.parse(window.localStorage.getItem("book"));
     $scope.activityFolder = window.localStorage.getItem("activityFolder");
     $scope.activityName = window.localStorage.getItem("activityName");
 
@@ -99,16 +100,16 @@ angular.module("bookbuilder2")
         scaleY = scaleY.toFixed(2);
         var scaleX = $scope.stage.canvas.width / background.image.width;
         scaleX = scaleX.toFixed(2);
-        var scale = 1;
+        $scope.scale = 1;
         if (scaleX >= scaleY) {
-          scale = scaleY;
+          $scope.scale = scaleY;
         } else {
-          scale = scaleX;
+          $scope.scale = scaleX;
         }
-        console.log("GENERAL SCALING FACTOR", scale);
+        console.log("GENERAL SCALING FACTOR", $scope.scale);
 
-        background.scaleX = scale;
-        background.scaleY = scale;
+        background.scaleX = $scope.scale;
+        background.scaleY = $scope.scale;
         background.regX = background.image.width / 2;
         background.regY = background.image.height / 2;
         background.x = $scope.stage.canvas.width / 2;
@@ -159,7 +160,8 @@ angular.module("bookbuilder2")
                     question.userAnswer = "";
                   });
                   $scope.activityData = response;
-                  $scope.activityData.attempts = 1;
+                  $scope.activityData.attempts = 0;
+                  $scope.activityData.newGame = true;
                   window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
                   console.log("$scope.activityData from local file: ", $scope.activityData);
                   callback();
@@ -172,7 +174,7 @@ angular.module("bookbuilder2")
           }, function (callback) {
 
             $scope.scoreText = new createjs.Text("Score: " + "0" + " / " + $scope.activityData.questions.length, "27px Arial", "white");
-            $scope.scoreText.scaleX = $scope.scoreText.scaleY = scale;
+            $scope.scoreText.scaleX = $scope.scoreText.scaleY = $scope.scale;
             $scope.scoreText.x = backgroundPosition.x + (backgroundPosition.width / 1.3);
             $scope.scoreText.y = backgroundPosition.y + (backgroundPosition.height / 22);
             $scope.scoreText.textBaseline = "alphabetic";
@@ -200,7 +202,7 @@ angular.module("bookbuilder2")
                   $scope.stage.update();
                   restart();
                 });
-                returnButton.scaleX = returnButton.scaleY = scale;
+                returnButton.scaleX = returnButton.scaleY = $scope.scale;
                 returnButton.x = backgroundPosition.x + (backgroundPosition.width / 2);
                 returnButton.y = backgroundPosition.y + (backgroundPosition.height / 1.069);
                 $scope.stage.addChild(returnButton);
@@ -219,23 +221,22 @@ angular.module("bookbuilder2")
                 response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                 var nextButtonSpriteSheet = new createjs.SpriteSheet(response);
                 $scope.nextButton = new createjs.Sprite(nextButtonSpriteSheet, "normal");
-                $scope.nextButton.alpha = 0.5;
 
                 $scope.nextButton.addEventListener("mousedown", function (event) {
-                  console.log("mousedown event on a button !", $scope.activityData.completed);
-                  if ($scope.activityData.completed) {
-                    $scope.nextButton.gotoAndPlay("onSelection");
+                  console.log("mousedown event on a button !", !$scope.activityData.newGame);
+                  if (!$scope.activityData.newGame) {
+                    $scope.nextButton.gotoAndPlay("selected");
                   }
                   $scope.stage.update();
                 });
                 $scope.nextButton.addEventListener("pressup", function (event) {
-                  if ($scope.activityData.completed) {
-                    $scope.nextButton.gotoAndPlay("normal");
+                  if (!$scope.activityData.newGame) {
+                    $scope.nextButton.gotoAndPlay("onSelection");
                     $scope.stage.update();
                     $rootScope.nextActivity($scope.selectedLesson, $scope.activityFolder);
                   }
                 });
-                $scope.nextButton.scaleX = $scope.nextButton.scaleY = scale;
+                $scope.nextButton.scaleX = $scope.nextButton.scaleY = $scope.scale;
                 $scope.nextButton.x = backgroundPosition.x + (backgroundPosition.width / 1.18);
                 $scope.nextButton.y = backgroundPosition.y + (backgroundPosition.height / 1.05);
                 $scope.stage.addChild($scope.nextButton);
@@ -255,14 +256,14 @@ angular.module("bookbuilder2")
                 response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                 var checkButtonSpriteSheet = new createjs.SpriteSheet(response);
                 $scope.checkButton = new createjs.Sprite(checkButtonSpriteSheet, "normal");
-                if (!$scope.activityData.completed) {
+                if ($scope.activityData.newGame) {
                   $scope.checkButton.alpha = 1;
                 } else {
                   $scope.checkButton.alpha = 0.5;
                 }
                 $scope.checkButton.addEventListener("mousedown", function (event) {
                   console.log("mousedown event on a button !");
-                  if (!$scope.activityData.completed) {
+                  if ($scope.activityData.newGame) {
                     $scope.checkButton.gotoAndPlay("onSelection");
                   }
                   $scope.stage.update();
@@ -270,14 +271,14 @@ angular.module("bookbuilder2")
                 $scope.checkButton.addEventListener("pressup", function (event) {
                   console.log("pressup event!");
 
-                  if (!$scope.activityData.completed) {
+                  if ($scope.activityData.newGame) {
                     $scope.checkButton.gotoAndPlay("normal");
                     $scope.stage.update();
 
-                    check();
+                    score();
                   }
                 });
-                $scope.checkButton.scaleX = $scope.checkButton.scaleY = scale;
+                $scope.checkButton.scaleX = $scope.checkButton.scaleY = $scope.scale;
                 $scope.checkButton.x = backgroundPosition.x + (backgroundPosition.width / 1.7);
                 $scope.checkButton.y = backgroundPosition.y + (backgroundPosition.height / 1.096);
                 $scope.stage.addChild($scope.checkButton);
@@ -308,7 +309,7 @@ angular.module("bookbuilder2")
                   $rootScope.navigate("lessonNew");
                 });
 
-                menuButton.scaleX = menuButton.scaleY = scale;
+                menuButton.scaleX = menuButton.scaleY = $scope.scale * ($scope.book.headMenuButtonScale ? $scope.book.headMenuButtonScale : 1);
                 menuButton.x = 0;
                 menuButton.y = -menuButton.getTransformedBounds().height / 5;
 
@@ -320,399 +321,415 @@ angular.module("bookbuilder2")
                 callback();
               });
 
-          }, function (callback) {
-
-            console.log("Waterfall loading title");
-
-            var title = new createjs.Text($scope.activityData.title, "27px Arial", "white");
-            title.scaleX = title.scaleY = scale;
-            title.x = backgroundPosition.x + (backgroundPosition.width / 8);
-            title.y = backgroundPosition.y + (backgroundPosition.height / 22);
-            title.textBaseline = "alphabetic";
-            $scope.stage.addChild(title);
-            callback();
-
-          }, function (callback) {
-
-            console.log("Waterfall loading activity name");
-
-            var lessonTitle = new createjs.Text($scope.activityName, "24px Arial", "white");
-            lessonTitle.scaleX = lessonTitle.scaleY = scale;
-            lessonTitle.x = backgroundPosition.x + (backgroundPosition.width / 6.7);
-            lessonTitle.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
-            lessonTitle.textBaseline = "alphabetic";
-            lessonTitle.textAlign = "center";
-            $scope.stage.addChild(lessonTitle);
-            callback();
-
-          }, function (callback) {
-
-            console.log("Waterfall loading description");
-
-            var descriptionText = new createjs.Text($scope.activityData.description, "18px Arial", "white");
-            descriptionText.scaleX = descriptionText.scaleY = scale;
-            descriptionText.x = backgroundPosition.x + (backgroundPosition.width / 12.7);
-            descriptionText.y = backgroundPosition.y + (backgroundPosition.height / 1.03);
-            descriptionText.textBaseline = "alphabetic";
-            $scope.stage.addChild(descriptionText);
-            callback();
-
-
-          }, function (callback) {
-
-            $scope.questionsContainer = new createjs.Container();
-            $scope.questionsContainer.width = background.image.width / 1.1;
-            $scope.questionsContainer.height = background.image.height / 3;
-            $scope.questionsContainer.scaleX = $scope.questionsContainer.scaleY = scale;
-            $scope.questionsContainer.x = backgroundPosition.x + (backgroundPosition.height / 22);
-            $scope.questionsContainer.y = -1500;
-            $scope.stage.addChild($scope.questionsContainer);
-
-            var questionBackground = new createjs.Bitmap($scope.rootDir + "data/assets/spray_choice_text_bubble.png");
-            //questionBackground.regY = questionBackground.image.height / 2;
-            //questionBackground.regX = questionBackground.image.width / 2;
-            questionBackground.x = 40;
-            $scope.questionsContainer.addChild(questionBackground);
-
-            $scope.questionNumber = new createjs.Text("1", "33px Arial", "white");
-            $scope.questionNumber.regX = $scope.questionNumber.getBounds().width / 2;
-            $scope.questionNumber.regY = $scope.questionNumber.getBounds().height / 2;
-            $scope.questionNumber.x = $scope.questionsContainer.width / 10.5;
-            $scope.questionNumber.y = $scope.questionsContainer.height / 7.5;
-            $scope.questionNumber.textAlign = "center";
-            $scope.questionsContainer.addChild($scope.questionNumber);
-
-            $scope.questionsTextContainer = new createjs.Container();
-            $scope.questionsTextContainer.x = $scope.questionsContainer.width / 7;
-            $scope.questionsTextContainer.y = $scope.questionsContainer.height / 5;
-            $scope.questionsTextContainer.regX = $scope.questionsTextContainer.width / 2;
-            $scope.questionsTextContainer.regY = $scope.questionsTextContainer.height / 2;
-            $scope.questionsTextContainer.width = $scope.questionsContainer.width / 1.4;
-            $scope.questionsTextContainer.height = $scope.questionsContainer.height / 1.5;
-            $scope.questionsContainer.addChild($scope.questionsTextContainer);
-
-            callback();
-
-          }, function (callback) {
-
-            $scope.answersContainer = new createjs.Container();
-            $scope.answersContainer.width = background.image.width / 1.1;
-            $scope.answersContainer.height = background.image.height / 3.2;
-            $scope.answersContainer.scaleX = $scope.answersContainer.scaleY = scale;
-            $scope.answersContainer.x = backgroundPosition.x + (backgroundPosition.width / 22);
-            $scope.answersContainer.y = +1500;
-            $scope.stage.addChild($scope.answersContainer);
-            $scope.buttonContainers = {};
-
-            $scope.buttonContainers["aChoice"] = new createjs.Container();
-            $scope.buttonContainers["aChoice"].width = $scope.answersContainer.width / 2;
-            $scope.buttonContainers["aChoice"].height = $scope.answersContainer.height / 2;
-            $scope.buttonContainers["aChoice"].x = 0;
-            $scope.buttonContainers["aChoice"].y = 0;
-            $scope.buttonContainers["aChoice"].visible = false;
-            $scope.answersContainer.addChild($scope.buttonContainers["aChoice"]);
-
-            $scope.buttonContainers["bChoice"] = new createjs.Container();
-            $scope.buttonContainers["bChoice"].width = $scope.answersContainer.width / 2;
-            $scope.buttonContainers["bChoice"].height = $scope.answersContainer.height / 2;
-            $scope.buttonContainers["bChoice"].x = $scope.buttonContainers["bChoice"].width;
-            $scope.buttonContainers["bChoice"].y = 0;
-            $scope.buttonContainers["bChoice"].visible = false;
-            $scope.answersContainer.addChild($scope.buttonContainers["bChoice"]);
-
-            $scope.buttonContainers["cChoice"] = new createjs.Container();
-            $scope.buttonContainers["cChoice"].width = $scope.answersContainer.width / 2;
-            $scope.buttonContainers["cChoice"].height = $scope.answersContainer.height / 2;
-            $scope.buttonContainers["cChoice"].x = 0;
-            $scope.buttonContainers["cChoice"].y = $scope.buttonContainers["cChoice"].height;
-            $scope.buttonContainers["cChoice"].visible = false;
-            $scope.answersContainer.addChild($scope.buttonContainers["cChoice"]);
-
-            $scope.buttonContainers["dChoice"] = new createjs.Container();
-            $scope.buttonContainers["dChoice"].width = $scope.answersContainer.width / 2;
-            $scope.buttonContainers["dChoice"].height = $scope.answersContainer.height / 2;
-            $scope.buttonContainers["dChoice"].x = $scope.buttonContainers["dChoice"].width;
-            $scope.buttonContainers["dChoice"].y = $scope.buttonContainers["dChoice"].height;
-            $scope.buttonContainers["dChoice"].visible = false;
-            $scope.answersContainer.addChild($scope.buttonContainers["dChoice"]);
-
-            $scope.buttonContainers["onlyCChoice"] = new createjs.Container();
-            $scope.buttonContainers["onlyCChoice"].width = $scope.answersContainer.width;
-            $scope.buttonContainers["onlyCChoice"].height = $scope.answersContainer.height / 2;
-            $scope.buttonContainers["onlyCChoice"].x = 0;
-            $scope.buttonContainers["onlyCChoice"].y = $scope.buttonContainers["onlyCChoice"].height;
-            $scope.buttonContainers["onlyCChoice"].visible = false;
-            $scope.answersContainer.addChild($scope.buttonContainers["onlyCChoice"]);
-
-            $http.get($scope.rootDir + "data/assets/multiple_choice_choice_button_sprite.json")
-              .success(function (response) {
-
-                response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
-
-                var answerButtonSpriteSheet = new createjs.SpriteSheet(response);
-
-                $scope.buttonChoices = {};
-                $scope.buttonChoicesText = {};
-
-                $scope.buttonChoices["aChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "black");
-                $scope.buttonChoices["aChoice"].regX = $scope.buttonChoices["aChoice"].getBounds().width / 2;
-                $scope.buttonChoices["aChoice"].regY = $scope.buttonChoices["aChoice"].getBounds().height / 2;
-                $scope.buttonChoices["aChoice"].x = $scope.buttonContainers["aChoice"].width / 2;
-                $scope.buttonChoices["aChoice"].y = $scope.buttonContainers["aChoice"].height / 2;
-                $scope.buttonContainers["aChoice"].addChild($scope.buttonChoices["aChoice"]);
-
-                var answerAButtonLetter = new createjs.Text("a.", "31px Arial", "black");
-                answerAButtonLetter.regX = answerAButtonLetter.getBounds().width / 2;
-                answerAButtonLetter.regY = answerAButtonLetter.getBounds().height / 2;
-                answerAButtonLetter.x = $scope.buttonContainers["aChoice"].width / 11;
-                answerAButtonLetter.y = $scope.buttonContainers["aChoice"].height / 2.1;
-                $scope.buttonContainers["aChoice"].addChild(answerAButtonLetter);
-
-                $scope.buttonChoicesText["aChoice"] = new createjs.Text("Answer A", "25px Arial", "black");
-                $scope.buttonChoicesText["aChoice"].regY = $scope.buttonChoicesText["aChoice"].getBounds().height / 2;
-                $scope.buttonChoicesText["aChoice"].x = $scope.buttonContainers["aChoice"].width / 1.9;
-                $scope.buttonChoicesText["aChoice"].y = $scope.buttonContainers["aChoice"].height / 2.1;
-                $scope.buttonChoicesText["aChoice"].textAlign = "center";
-                $scope.buttonChoicesText["aChoice"].maxWidth = 200;
-                $scope.buttonContainers["aChoice"].addChild($scope.buttonChoicesText["aChoice"]);
-
-
-                $scope.buttonChoices["aChoice"].addEventListener("pressup", function (event) {
-                  console.log("answerAButton fires pressup event!");
-                  if (!$scope.activityData.completed) {
-
-                    selectChoice("aChoice");
-                  }
-                });
-
-
-                $scope.buttonChoices["bChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "black");
-                $scope.buttonChoices["bChoice"].regX = $scope.buttonChoices["bChoice"].getBounds().width / 2;
-                $scope.buttonChoices["bChoice"].regY = $scope.buttonChoices["bChoice"].getBounds().height / 2;
-                $scope.buttonChoices["bChoice"].x = $scope.buttonContainers["bChoice"].width / 2;
-                $scope.buttonChoices["bChoice"].y = $scope.buttonContainers["bChoice"].height / 2;
-                $scope.buttonContainers["bChoice"].addChild($scope.buttonChoices["bChoice"]);
-
-                var answerBButtonLetter = new createjs.Text("b.", "31px Arial", "black");
-                answerBButtonLetter.regX = answerBButtonLetter.getBounds().width / 2;
-                answerBButtonLetter.regY = answerBButtonLetter.getBounds().height / 2;
-                answerBButtonLetter.x = $scope.buttonContainers["bChoice"].width / 11;
-                answerBButtonLetter.y = $scope.buttonContainers["bChoice"].height / 2.1;
-                $scope.buttonContainers["bChoice"].addChild(answerBButtonLetter);
-
-                $scope.buttonChoicesText["bChoice"] = new createjs.Text("Answer B", "25px Arial", "black");
-                $scope.buttonChoicesText["bChoice"].regY = $scope.buttonChoicesText["bChoice"].getBounds().height / 2;
-                $scope.buttonChoicesText["bChoice"].x = $scope.buttonContainers["bChoice"].width / 1.9;
-                $scope.buttonChoicesText["bChoice"].y = $scope.buttonContainers["bChoice"].height / 2.1;
-                $scope.buttonChoicesText["bChoice"].textAlign = "center";
-                $scope.buttonChoicesText["bChoice"].maxWidth = 200;
-                $scope.buttonContainers["bChoice"].addChild($scope.buttonChoicesText["bChoice"]);
-
-                $scope.buttonChoices["bChoice"].addEventListener("pressup", function (event) {
-                  console.log("answerBButton fires pressup event!");
-                  if (!$scope.activityData.completed) {
-                    selectChoice("bChoice");
-                  }
-                });
-
-                $scope.buttonChoices["cChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "black");
-                $scope.buttonChoices["cChoice"].regX = $scope.buttonChoices["cChoice"].getBounds().width / 2;
-                $scope.buttonChoices["cChoice"].regY = $scope.buttonChoices["cChoice"].getBounds().height / 2;
-                $scope.buttonChoices["cChoice"].x = $scope.buttonContainers["cChoice"].width / 2;
-                $scope.buttonChoices["cChoice"].y = $scope.buttonContainers["cChoice"].height / 2;
-                $scope.buttonContainers["cChoice"].addChild($scope.buttonChoices["cChoice"]);
-
-
-                var answerCButtonLetter = new createjs.Text("c.", "31px Arial", "black");
-                answerCButtonLetter.regX = answerCButtonLetter.getBounds().width / 2;
-                answerCButtonLetter.regY = answerCButtonLetter.getBounds().height / 2;
-                answerCButtonLetter.x = $scope.buttonContainers["cChoice"].width / 11;
-                answerCButtonLetter.y = $scope.buttonContainers["cChoice"].height / 2.1;
-                $scope.buttonContainers["cChoice"].addChild(answerCButtonLetter);
-
-                $scope.buttonChoicesText["cChoice"] = new createjs.Text("Answer C", "25px Arial", "black");
-                $scope.buttonChoicesText["cChoice"].regY = $scope.buttonChoicesText["cChoice"].getBounds().height / 2;
-                $scope.buttonChoicesText["cChoice"].x = $scope.buttonContainers["cChoice"].width / 1.9;
-                $scope.buttonChoicesText["cChoice"].y = $scope.buttonContainers["cChoice"].height / 2.1;
-                $scope.buttonChoicesText["cChoice"].textAlign = "center";
-                $scope.buttonChoicesText["cChoice"].maxWidth = 200;
-                $scope.buttonContainers["cChoice"].addChild($scope.buttonChoicesText["cChoice"]);
-
-
-                $scope.buttonChoices["cChoice"].addEventListener("pressup", function (event) {
-                  console.log("answerCButton fires pressup event!");
-                  if (!$scope.activityData.completed) {
-
-                    selectChoice("cChoice");
-                  }
-                });
-
-
-                $scope.buttonChoices["dChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "black");
-                $scope.buttonChoices["dChoice"].regX = $scope.buttonChoices["dChoice"].getBounds().width / 2;
-                $scope.buttonChoices["dChoice"].regY = $scope.buttonChoices["dChoice"].getBounds().height / 2;
-                $scope.buttonChoices["dChoice"].x = $scope.buttonContainers["dChoice"].width / 2;
-                $scope.buttonChoices["dChoice"].y = $scope.buttonContainers["dChoice"].height / 2;
-                $scope.buttonContainers["dChoice"].addChild($scope.buttonChoices["dChoice"]);
-
-                var answerDButtonLetter = new createjs.Text("d.", "31px Arial", "black");
-                answerDButtonLetter.regX = answerDButtonLetter.getBounds().width / 2;
-                answerDButtonLetter.regY = answerDButtonLetter.getBounds().height / 2;
-                answerDButtonLetter.x = $scope.buttonContainers["dChoice"].width / 11;
-                answerDButtonLetter.y = $scope.buttonContainers["dChoice"].height / 2.1;
-                $scope.buttonContainers["dChoice"].addChild(answerDButtonLetter);
-
-                $scope.buttonChoicesText["dChoice"] = new createjs.Text("Answer D", "25px Arial", "black ");
-                $scope.buttonChoicesText["dChoice"].regY = $scope.buttonChoicesText["dChoice"].getBounds().height / 2;
-                $scope.buttonChoicesText["dChoice"].x = $scope.buttonContainers["dChoice"].width / 1.9;
-                $scope.buttonChoicesText["dChoice"].y = $scope.buttonContainers["dChoice"].height / 2.1;
-                $scope.buttonChoicesText["dChoice"].textAlign = "center";
-                $scope.buttonChoicesText["dChoice"].maxWidth = 200;
-                $scope.buttonContainers["dChoice"].addChild($scope.buttonChoicesText["dChoice"]);
-
-                $scope.buttonChoices["dChoice"].addEventListener("pressup", function (event) {
-                  console.log("answerDButton fires pressup event!");
-                  if (!$scope.activityData.completed) {
-
-                    selectChoice("dChoice");
-                  }
-                });
-
-
-                $scope.buttonChoices["onlyCChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "black");
-                $scope.buttonChoices["onlyCChoice"].regX = $scope.buttonChoices["onlyCChoice"].getBounds().width / 2;
-                $scope.buttonChoices["onlyCChoice"].regY = $scope.buttonChoices["onlyCChoice"].getBounds().height / 2;
-                $scope.buttonChoices["onlyCChoice"].x = $scope.buttonContainers["onlyCChoice"].width / 2;
-                $scope.buttonChoices["onlyCChoice"].y = $scope.buttonContainers["onlyCChoice"].height / 2;
-                $scope.buttonContainers["onlyCChoice"].addChild($scope.buttonChoices["onlyCChoice"]);
-
-                var answerOnlyCButtonLetter = new createjs.Text("c.", "31px Arial", "black");
-                answerOnlyCButtonLetter.regX = answerOnlyCButtonLetter.getBounds().width / 2;
-                answerOnlyCButtonLetter.regY = answerOnlyCButtonLetter.getBounds().height / 2;
-                answerOnlyCButtonLetter.x = $scope.buttonContainers["onlyCChoice"].width / 3.4;
-                answerOnlyCButtonLetter.y = $scope.buttonContainers["onlyCChoice"].height / 2.1;
-                $scope.buttonContainers["onlyCChoice"].addChild(answerOnlyCButtonLetter);
-
-
-                $scope.buttonChoicesText["onlyCChoice"] = new createjs.Text("Answer C", "25px Arial", "black");
-                $scope.buttonChoicesText["onlyCChoice"].regY = $scope.buttonChoicesText["onlyCChoice"].getBounds().height / 2;
-                $scope.buttonChoicesText["onlyCChoice"].x = $scope.buttonContainers["onlyCChoice"].width / 1.9;
-                $scope.buttonChoicesText["onlyCChoice"].y = $scope.buttonContainers["onlyCChoice"].height / 2.1;
-                $scope.buttonChoicesText["onlyCChoice"].textAlign = "center";
-                $scope.buttonChoicesText["onlyCChoice"].maxWidth = 200;
-                $scope.buttonContainers["onlyCChoice"].addChild($scope.buttonChoicesText["onlyCChoice"]);
-
-
-                $scope.buttonChoices["onlyCChoice"].addEventListener("pressup", function (event) {
-                  console.log("answerOnlyCContainer fires pressup event!");
-                  if (!$scope.activityData.completed) {
-
-                    selectChoice("onlyCChoice");
-                  }
-                });
-
-
-                callback();
-              });
-
-
-          }, function (callback) {
-
-            $scope.navigatorContainer = new createjs.Container();
-            $scope.navigatorContainer.width = background.image.width / 1.1;
-            $scope.navigatorContainer.height = background.image.height / 8;
-            $scope.navigatorContainer.scaleX = $scope.navigatorContainer.scaleY = scale;
-            $scope.navigatorContainer.x = backgroundPosition.x + (backgroundPosition.width / 22);
-            $scope.navigatorContainer.y = backgroundPosition.y + (backgroundPosition.height / 1.28);
-            $scope.stage.addChild($scope.navigatorContainer);
-
-            var yellowBar = new createjs.Bitmap($scope.rootDir + "data/assets/lesson_yellow_line.png");
-            yellowBar.scaleX = 1.145;
-            //yellowBar.regX = yellowBar.image.width / 2;
-            //yellowBar.regY = yellowBar.image.height / 2;
-            yellowBar.x = 20;
-            yellowBar.y = 30;
-            $scope.navigatorContainer.addChild(yellowBar);
-
-            /*Yellow bar button Sprite Button*/
-            $http.get($scope.rootDir + "data/assets/yellow_line_big_bubble.json")
-              .success(function (response) {
-
-                response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
-                var yellowBarButtonSpriteSheet = new createjs.SpriteSheet(response);
-
-                $scope.yellowBarContainers = {};
-                var buttonWidth = $scope.navigatorContainer.width / ($scope.activityData.questions.length + 1);
-
-                _.each($scope.activityData.questions, function (question, key, list) {
-
-                  $scope.yellowBarContainers[key] = new createjs.Container();
-                  $scope.yellowBarContainers[key].width = buttonWidth;
-                  $scope.yellowBarContainers[key].height = $scope.navigatorContainer.height;
-                  $scope.yellowBarContainers[key].regY = $scope.yellowBarContainers[key].height / 2;
-                  $scope.yellowBarContainers[key].regX = $scope.yellowBarContainers[key].width / 2;
-                  $scope.yellowBarContainers[key].x = $scope.yellowBarContainers[key].width + $scope.yellowBarContainers[key].width * key;
-                  $scope.yellowBarContainers[key].y = $scope.yellowBarContainers[key].height / 2;
-                  $scope.navigatorContainer.addChild($scope.yellowBarContainers[key]);
-
-                  $scope.yellowBarContainers[key].yellowBarButtons = {};
-                  $scope.yellowBarContainers[key].yellowBarButtons[key] = new createjs.Sprite(yellowBarButtonSpriteSheet, "white");
-                  $scope.yellowBarContainers[key].yellowBarButtons[key].regX = $scope.yellowBarContainers[key].yellowBarButtons[key].getBounds().width / 2;
-                  $scope.yellowBarContainers[key].yellowBarButtons[key].regY = $scope.yellowBarContainers[key].yellowBarButtons[key].getBounds().height / 2;
-                  $scope.yellowBarContainers[key].yellowBarButtons[key].x = $scope.yellowBarContainers[key].width / 2;
-                  $scope.yellowBarContainers[key].yellowBarButtons[key].y = $scope.yellowBarContainers[key].height / 2.3;
-
-
-                  $scope.yellowBarContainers[key].yellowBarButtons[key].addEventListener("pressup", function (event) {
-
-                    $scope.yellowBarContainers[key].scaleX = $scope.yellowBarContainers[key].scaleY = 1.4;
-                    _.each($scope.activityData.questions, function (question, k, list) {
-                      if (k !== key) {
-                        $scope.yellowBarContainers[k].scaleX = $scope.yellowBarContainers[k].scaleY = 1;
-                      }
-                    });
+          },
+
+            function (initWaterfallCallback) {
+
+              $http.get($scope.rootDir + "data/assets/lesson_end_button_sprite.json")
+                .success(function (response) {
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
+                  var resultsButtonSpriteSheet = new createjs.SpriteSheet(response);
+                  $scope.resultsButton = new createjs.Sprite(resultsButtonSpriteSheet, "normal");
+                  $scope.resultsButton.x = backgroundPosition.x + (backgroundPosition.width / 1.25);
+                  $scope.resultsButton.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
+                  $scope.resultsButton.scaleX = $scope.resultsButton.scaleY = 0.6 * $scope.scale;
+                  $scope.stage.addChild($scope.resultsButton);
+
+                  $scope.endText = new createjs.Text("RESULTS", "25px Arial", "white");
+                  $scope.endText.x = backgroundPosition.x + (backgroundPosition.width / 1.2);
+                  $scope.endText.y = backgroundPosition.y + (backgroundPosition.height / 1.08);
+                  $scope.endText.scaleX = $scope.endText.scaleY = $scope.scale;
+                  $scope.stage.addChild($scope.endText);
+
+                  $scope.resultsButton.visible = false;
+                  $scope.endText.visible = false;
+
+                  $scope.resultsButton.addEventListener("mousedown", function (event) {
+                    console.log("mousedown event on a button !");
+                    $scope.resultsButton.gotoAndPlay("onSelection");
                     $scope.stage.update();
-
-                    async.parallel([function (parallelCallback) {
-
-                      createjs.Tween.get($scope.answersContainer, {loop: false})
-                        .to({
-                          y: +1000 * scale
-                        }, 300, createjs.Ease.getPowIn(2)).call(function () {
-                        parallelCallback();
-                      });
-
-                    }, function (parallelCallback) {
-
-                      createjs.Tween.get($scope.questionsContainer, {loop: false})
-                        .to({
-                          y: -1000 * scale
-                        }, 300, createjs.Ease.getPowIn(2)).call(function () {
-                        parallelCallback();
-                      });
-                    }], function (err, response) {
-                      loadQuestion(key);
-                    });
-
+                  });
+                  $scope.resultsButton.addEventListener("pressup", function (event) {
+                    console.log("pressup event!");
+                    $scope.resultsButton.gotoAndPlay("normal");
+                    $scope.stage.update();
+                    $rootScope.navigate("results");
                   });
 
-                  $scope.yellowBarContainers[key].addChild($scope.yellowBarContainers[key].yellowBarButtons[key]);
-                  var yellowBarButtonIndex = new createjs.Text(key + 1, "15px Arial", "black");
-                  yellowBarButtonIndex.regY = yellowBarButtonIndex.getBounds().height / 2;
-                  yellowBarButtonIndex.x = $scope.yellowBarContainers[key].width / 2.15;
-                  yellowBarButtonIndex.y = $scope.yellowBarContainers[key].height / 6;
-                  yellowBarButtonIndex.textAlign = "center";
-                  $scope.yellowBarContainers[key].addChild(yellowBarButtonIndex);
-
+                  initWaterfallCallback();
+                })
+                .error(function (error) {
+                  console.error("Error on getting json for results button...", error);
+                  initWaterfallCallback();
                 });
-                callback();
 
-              })
-              .error(function (error) {
-                console.error("Error on getting json for answer button...", error);
-                callback();
-              });
-          }
+            },
+
+            function (callback) {
+
+              /*Adding page title and description $scope.activityData.title*/
+              $scope.pageTitle = new createjs.Text($scope.selectedLesson.lessonTitle + " - " + $scope.selectedLesson.title, "18px Arial", "white");
+              $scope.pageTitle.x = backgroundPosition.x + (backgroundPosition.width / 8);
+              $scope.pageTitle.y = backgroundPosition.y + (backgroundPosition.width / 27);
+              $scope.pageTitle.maxWidth = backgroundPosition.width / 2 / $scope.scale;
+              $scope.pageTitle.textBaseline = "alphabetic";
+              $scope.pageTitle.scaleX = $scope.pageTitle.scaleY = $scope.scale;
+              $scope.stage.addChild($scope.pageTitle);
+
+
+              /*Adding page title and description $scope.activityData.title*/
+              $scope.pageActivity = new createjs.Text(_.findWhere($scope.selectedLesson.activitiesMenu, {
+                  activityFolder: $scope.activityFolder
+                }).name + " " + ($scope.activityData.revision ? "- " + $scope.activityData.revision : ""), "18px Arial", "white");
+              $scope.pageActivity.x = backgroundPosition.x + (backgroundPosition.width / 12);
+              $scope.pageActivity.y = backgroundPosition.y + (backgroundPosition.height / 1.09);
+              $scope.pageActivity.scaleX = $scope.pageActivity.scaleY = $scope.scale;
+              $scope.pageActivity.maxWidth = backgroundPosition.width / 3 / $scope.scale;
+              $scope.stage.addChild($scope.pageActivity);
+
+              /*Adding page title and description*/
+              $scope.pageDescription = new createjs.Text($scope.activityData.description, "18px Arial", "white");
+              $scope.pageDescription.x = backgroundPosition.x + (backgroundPosition.width / 12);
+              $scope.pageDescription.y = backgroundPosition.y + (backgroundPosition.height / 1.06);
+              $scope.pageDescription.scaleX = $scope.pageDescription.scaleY = $scope.scale;
+              $scope.pageDescription.maxWidth = backgroundPosition.width / 3 / $scope.scale;
+              $scope.stage.addChild($scope.pageDescription);
+
+              console.log("Waterfall loading title");
+
+              callback();
+
+            }, function (callback) {
+
+              $scope.questionsContainer = new createjs.Container();
+              $scope.questionsContainer.width = background.image.width / 1.1;
+              $scope.questionsContainer.height = background.image.height / 3;
+              $scope.questionsContainer.scaleX = $scope.questionsContainer.scaleY = $scope.scale;
+              $scope.questionsContainer.x = backgroundPosition.x + (backgroundPosition.height / 22);
+              $scope.questionsContainer.y = -1500;
+              $scope.stage.addChild($scope.questionsContainer);
+
+              var questionBackground = new createjs.Bitmap($scope.rootDir + "data/assets/spray_choice_text_bubble.png");
+              //questionBackground.regY = questionBackground.image.height / 2;
+              //questionBackground.regX = questionBackground.image.width / 2;
+              questionBackground.x = 40;
+              $scope.questionsContainer.addChild(questionBackground);
+
+              $scope.questionNumber = new createjs.Text("1", "33px Arial", "white");
+              $scope.questionNumber.regX = $scope.questionNumber.getBounds().width / 2;
+              $scope.questionNumber.regY = $scope.questionNumber.getBounds().height / 2;
+              $scope.questionNumber.x = $scope.questionsContainer.width / 10.5;
+              $scope.questionNumber.y = $scope.questionsContainer.height / 7.5;
+              $scope.questionNumber.textAlign = "center";
+              $scope.questionsContainer.addChild($scope.questionNumber);
+
+              $scope.questionsTextContainer = new createjs.Container();
+              $scope.questionsTextContainer.x = $scope.questionsContainer.width / 6;
+              $scope.questionsTextContainer.y = $scope.questionsContainer.height / 5;
+              $scope.questionsTextContainer.regX = $scope.questionsTextContainer.width / 2;
+              $scope.questionsTextContainer.regY = $scope.questionsTextContainer.height / 2;
+              $scope.questionsTextContainer.width = $scope.questionsContainer.width / 1.4;
+              $scope.questionsTextContainer.height = $scope.questionsContainer.height / 1.5;
+              $scope.questionsContainer.addChild($scope.questionsTextContainer);
+
+              callback();
+
+            }, function (callback) {
+
+              $scope.answersContainer = new createjs.Container();
+              $scope.answersContainer.width = background.image.width / 1.1;
+              $scope.answersContainer.height = background.image.height / 3.2;
+              $scope.answersContainer.scaleX = $scope.answersContainer.scaleY = $scope.scale;
+              $scope.answersContainer.x = backgroundPosition.x + (backgroundPosition.width / 22);
+              $scope.answersContainer.y = +1500;
+              $scope.stage.addChild($scope.answersContainer);
+              $scope.buttonContainers = {};
+
+              $scope.buttonContainers["aChoice"] = new createjs.Container();
+              $scope.buttonContainers["aChoice"].width = $scope.answersContainer.width / 2;
+              $scope.buttonContainers["aChoice"].height = $scope.answersContainer.height / 2;
+              $scope.buttonContainers["aChoice"].x = 0;
+              $scope.buttonContainers["aChoice"].y = 0;
+              $scope.buttonContainers["aChoice"].visible = false;
+              $scope.answersContainer.addChild($scope.buttonContainers["aChoice"]);
+
+              $scope.buttonContainers["bChoice"] = new createjs.Container();
+              $scope.buttonContainers["bChoice"].width = $scope.answersContainer.width / 2;
+              $scope.buttonContainers["bChoice"].height = $scope.answersContainer.height / 2;
+              $scope.buttonContainers["bChoice"].x = $scope.buttonContainers["bChoice"].width;
+              $scope.buttonContainers["bChoice"].y = 0;
+              $scope.buttonContainers["bChoice"].visible = false;
+              $scope.answersContainer.addChild($scope.buttonContainers["bChoice"]);
+
+              $scope.buttonContainers["cChoice"] = new createjs.Container();
+              $scope.buttonContainers["cChoice"].width = $scope.answersContainer.width / 2;
+              $scope.buttonContainers["cChoice"].height = $scope.answersContainer.height / 2;
+              $scope.buttonContainers["cChoice"].x = 0;
+              $scope.buttonContainers["cChoice"].y = $scope.buttonContainers["cChoice"].height;
+              $scope.buttonContainers["cChoice"].visible = false;
+              $scope.answersContainer.addChild($scope.buttonContainers["cChoice"]);
+
+              $scope.buttonContainers["dChoice"] = new createjs.Container();
+              $scope.buttonContainers["dChoice"].width = $scope.answersContainer.width / 2;
+              $scope.buttonContainers["dChoice"].height = $scope.answersContainer.height / 2;
+              $scope.buttonContainers["dChoice"].x = $scope.buttonContainers["dChoice"].width;
+              $scope.buttonContainers["dChoice"].y = $scope.buttonContainers["dChoice"].height;
+              $scope.buttonContainers["dChoice"].visible = false;
+              $scope.answersContainer.addChild($scope.buttonContainers["dChoice"]);
+
+              $scope.buttonContainers["onlyCChoice"] = new createjs.Container();
+              $scope.buttonContainers["onlyCChoice"].width = $scope.answersContainer.width;
+              $scope.buttonContainers["onlyCChoice"].height = $scope.answersContainer.height / 2;
+              $scope.buttonContainers["onlyCChoice"].x = 0;
+              $scope.buttonContainers["onlyCChoice"].y = $scope.buttonContainers["onlyCChoice"].height;
+              $scope.buttonContainers["onlyCChoice"].visible = false;
+              $scope.answersContainer.addChild($scope.buttonContainers["onlyCChoice"]);
+
+              $http.get($scope.rootDir + "data/assets/multiple_choice_choice_button_sprite.json")
+                .success(function (response) {
+
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
+
+                  var answerButtonSpriteSheet = new createjs.SpriteSheet(response);
+
+                  $scope.buttonChoices = {};
+                  $scope.buttonChoicesText = {};
+
+                  $scope.buttonChoices["aChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "black");
+                  $scope.buttonChoices["aChoice"].regX = $scope.buttonChoices["aChoice"].getBounds().width / 2;
+                  $scope.buttonChoices["aChoice"].regY = $scope.buttonChoices["aChoice"].getBounds().height / 2;
+                  $scope.buttonChoices["aChoice"].x = $scope.buttonContainers["aChoice"].width / 2;
+                  $scope.buttonChoices["aChoice"].y = $scope.buttonContainers["aChoice"].height / 2;
+                  $scope.buttonContainers["aChoice"].addChild($scope.buttonChoices["aChoice"]);
+
+                  var answerAButtonLetter = new createjs.Text("a.", "31px Arial", "black");
+                  answerAButtonLetter.regX = answerAButtonLetter.getBounds().width / 2;
+                  answerAButtonLetter.regY = answerAButtonLetter.getBounds().height / 2;
+                  answerAButtonLetter.x = $scope.buttonContainers["aChoice"].width / 11;
+                  answerAButtonLetter.y = $scope.buttonContainers["aChoice"].height / 2.1;
+                  $scope.buttonContainers["aChoice"].addChild(answerAButtonLetter);
+
+                  $scope.buttonChoicesText["aChoice"] = new createjs.Text("Answer A", "25px Arial", "black");
+                  $scope.buttonChoicesText["aChoice"].regY = $scope.buttonChoicesText["aChoice"].getBounds().height / 2;
+                  $scope.buttonChoicesText["aChoice"].regX = $scope.buttonChoicesText["aChoice"].getBounds().width / 2;
+                  $scope.buttonChoicesText["aChoice"].x = $scope.buttonContainers["aChoice"].width / 1.55;
+                  $scope.buttonChoicesText["aChoice"].y = $scope.buttonContainers["aChoice"].height / 2.1;
+                  $scope.buttonChoicesText["aChoice"].textAlign = "center";
+                  $scope.buttonChoicesText["aChoice"].maxWidth = $scope.buttonChoices["aChoice"].getBounds().width * 0.7;
+                  $scope.buttonContainers["aChoice"].addChild($scope.buttonChoicesText["aChoice"]);
+
+
+                  $scope.buttonChoices["aChoice"].addEventListener("pressup", function (event) {
+                    console.log("answerAButton fires pressup event!");
+                    if ($scope.activityData.newGame) {
+
+                      selectChoice("aChoice");
+                    }
+                  });
+
+
+                  $scope.buttonChoices["bChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "black");
+                  $scope.buttonChoices["bChoice"].regX = $scope.buttonChoices["bChoice"].getBounds().width / 2;
+                  $scope.buttonChoices["bChoice"].regY = $scope.buttonChoices["bChoice"].getBounds().height / 2;
+                  $scope.buttonChoices["bChoice"].x = $scope.buttonContainers["bChoice"].width / 2;
+                  $scope.buttonChoices["bChoice"].y = $scope.buttonContainers["bChoice"].height / 2;
+                  $scope.buttonContainers["bChoice"].addChild($scope.buttonChoices["bChoice"]);
+
+                  var answerBButtonLetter = new createjs.Text("b.", "31px Arial", "black");
+                  answerBButtonLetter.regX = answerBButtonLetter.getBounds().width / 2;
+                  answerBButtonLetter.regY = answerBButtonLetter.getBounds().height / 2;
+                  answerBButtonLetter.x = $scope.buttonContainers["bChoice"].width / 11;
+                  answerBButtonLetter.y = $scope.buttonContainers["bChoice"].height / 2.1;
+                  $scope.buttonContainers["bChoice"].addChild(answerBButtonLetter);
+
+                  $scope.buttonChoicesText["bChoice"] = new createjs.Text("Answer B", "25px Arial", "black");
+                  $scope.buttonChoicesText["bChoice"].regY = $scope.buttonChoicesText["bChoice"].getBounds().height / 2;
+                  $scope.buttonChoicesText["bChoice"].regX = $scope.buttonChoicesText["bChoice"].getBounds().width / 2;
+                  $scope.buttonChoicesText["bChoice"].x = $scope.buttonContainers["bChoice"].width / 1.55;
+                  $scope.buttonChoicesText["bChoice"].y = $scope.buttonContainers["bChoice"].height / 2.1;
+                  $scope.buttonChoicesText["bChoice"].textAlign = "center";
+                  $scope.buttonChoicesText["bChoice"].maxWidth = $scope.buttonChoices["bChoice"].getBounds().width * 0.7;
+                  $scope.buttonContainers["bChoice"].addChild($scope.buttonChoicesText["bChoice"]);
+
+                  $scope.buttonChoices["bChoice"].addEventListener("pressup", function (event) {
+                    console.log("answerBButton fires pressup event!");
+                    if ($scope.activityData.newGame) {
+                      selectChoice("bChoice");
+                    }
+                  });
+
+                  $scope.buttonChoices["cChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "black");
+                  $scope.buttonChoices["cChoice"].regX = $scope.buttonChoices["cChoice"].getBounds().width / 2;
+                  $scope.buttonChoices["cChoice"].regY = $scope.buttonChoices["cChoice"].getBounds().height / 2;
+                  $scope.buttonChoices["cChoice"].x = $scope.buttonContainers["cChoice"].width / 2;
+                  $scope.buttonChoices["cChoice"].y = $scope.buttonContainers["cChoice"].height / 2;
+                  $scope.buttonContainers["cChoice"].addChild($scope.buttonChoices["cChoice"]);
+
+
+                  var answerCButtonLetter = new createjs.Text("c.", "31px Arial", "black");
+                  answerCButtonLetter.regX = answerCButtonLetter.getBounds().width / 2;
+                  answerCButtonLetter.regY = answerCButtonLetter.getBounds().height / 2;
+                  answerCButtonLetter.x = $scope.buttonContainers["cChoice"].width / 11;
+                  answerCButtonLetter.y = $scope.buttonContainers["cChoice"].height / 2.1;
+                  $scope.buttonContainers["cChoice"].addChild(answerCButtonLetter);
+
+                  $scope.buttonChoicesText["cChoice"] = new createjs.Text("Answer C", "25px Arial", "black");
+                  $scope.buttonChoicesText["cChoice"].regY = $scope.buttonChoicesText["cChoice"].getBounds().height / 2;
+                  $scope.buttonChoicesText["cChoice"].regX = $scope.buttonChoicesText["cChoice"].getBounds().width / 2;
+                  $scope.buttonChoicesText["cChoice"].x = $scope.buttonContainers["cChoice"].width / 1.55;
+                  $scope.buttonChoicesText["cChoice"].y = $scope.buttonContainers["cChoice"].height / 2.1;
+                  $scope.buttonChoicesText["cChoice"].textAlign = "center";
+                  $scope.buttonChoicesText["cChoice"].maxWidth = $scope.buttonChoices["cChoice"].getBounds().width * 0.7;
+                  $scope.buttonContainers["cChoice"].addChild($scope.buttonChoicesText["cChoice"]);
+
+
+                  $scope.buttonChoices["cChoice"].addEventListener("pressup", function (event) {
+                    console.log("answerCButton fires pressup event!");
+                    if ($scope.activityData.newGame) {
+
+                      selectChoice("cChoice");
+                    }
+                  });
+
+
+                  $scope.buttonChoices["dChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "black");
+                  $scope.buttonChoices["dChoice"].regX = $scope.buttonChoices["dChoice"].getBounds().width / 2;
+                  $scope.buttonChoices["dChoice"].regY = $scope.buttonChoices["dChoice"].getBounds().height / 2;
+                  $scope.buttonChoices["dChoice"].x = $scope.buttonContainers["dChoice"].width / 2;
+                  $scope.buttonChoices["dChoice"].y = $scope.buttonContainers["dChoice"].height / 2;
+                  $scope.buttonContainers["dChoice"].addChild($scope.buttonChoices["dChoice"]);
+
+                  var answerDButtonLetter = new createjs.Text("d.", "31px Arial", "black");
+                  answerDButtonLetter.regX = answerDButtonLetter.getBounds().width / 2;
+                  answerDButtonLetter.regY = answerDButtonLetter.getBounds().height / 2;
+                  answerDButtonLetter.x = $scope.buttonContainers["dChoice"].width / 11;
+                  answerDButtonLetter.y = $scope.buttonContainers["dChoice"].height / 2.1;
+                  $scope.buttonContainers["dChoice"].addChild(answerDButtonLetter);
+
+                  $scope.buttonChoicesText["dChoice"] = new createjs.Text("Answer D", "25px Arial", "black ");
+                  $scope.buttonChoicesText["dChoice"].regY = $scope.buttonChoicesText["dChoice"].getBounds().height / 2;
+                  $scope.buttonChoicesText["dChoice"].regX = $scope.buttonChoicesText["dChoice"].getBounds().width / 2;
+                  $scope.buttonChoicesText["dChoice"].x = $scope.buttonContainers["dChoice"].width / 1.55;
+                  $scope.buttonChoicesText["dChoice"].y = $scope.buttonContainers["dChoice"].height / 2.1;
+                  $scope.buttonChoicesText["dChoice"].textAlign = "center";
+                  $scope.buttonChoicesText["cChoice"].maxWidth = $scope.buttonChoices["cChoice"].getBounds().width * 0.7;
+                  $scope.buttonContainers["dChoice"].addChild($scope.buttonChoicesText["dChoice"]);
+
+                  $scope.buttonChoices["dChoice"].addEventListener("pressup", function (event) {
+                    console.log("answerDButton fires pressup event!");
+                    if ($scope.activityData.newGame) {
+
+                      selectChoice("dChoice");
+                    }
+                  });
+
+
+                  $scope.buttonChoices["onlyCChoice"] = new createjs.Sprite(answerButtonSpriteSheet, "black");
+                  $scope.buttonChoices["onlyCChoice"].regX = $scope.buttonChoices["onlyCChoice"].getBounds().width / 2;
+                  $scope.buttonChoices["onlyCChoice"].regY = $scope.buttonChoices["onlyCChoice"].getBounds().height / 2;
+                  $scope.buttonChoices["onlyCChoice"].x = $scope.buttonContainers["onlyCChoice"].width / 2;
+                  $scope.buttonChoices["onlyCChoice"].y = $scope.buttonContainers["onlyCChoice"].height / 2;
+                  $scope.buttonContainers["onlyCChoice"].addChild($scope.buttonChoices["onlyCChoice"]);
+
+                  var answerOnlyCButtonLetter = new createjs.Text("c.", "31px Arial", "black");
+                  answerOnlyCButtonLetter.regX = answerOnlyCButtonLetter.getBounds().width / 2;
+                  answerOnlyCButtonLetter.regY = answerOnlyCButtonLetter.getBounds().height / 2;
+                  answerOnlyCButtonLetter.x = $scope.buttonContainers["onlyCChoice"].width / 3.4;
+                  answerOnlyCButtonLetter.y = $scope.buttonContainers["onlyCChoice"].height / 2.1;
+                  $scope.buttonContainers["onlyCChoice"].addChild(answerOnlyCButtonLetter);
+
+
+                  $scope.buttonChoicesText["onlyCChoice"] = new createjs.Text("Answer C", "25px Arial", "black");
+                  $scope.buttonChoicesText["onlyCChoice"].regY = $scope.buttonChoicesText["onlyCChoice"].getBounds().height / 2;
+                  $scope.buttonChoicesText["onlyCChoice"].regX = $scope.buttonChoicesText["onlyCChoice"].getBounds().width / 2;
+                  $scope.buttonChoicesText["onlyCChoice"].x = $scope.buttonContainers["onlyCChoice"].width / 1.75;
+                  $scope.buttonChoicesText["onlyCChoice"].y = $scope.buttonContainers["onlyCChoice"].height / 2.1;
+                  $scope.buttonChoicesText["onlyCChoice"].textAlign = "center";
+                  $scope.buttonChoicesText["onlyCChoice"].maxWidth = $scope.buttonChoices["onlyCChoice"].getBounds().width * 0.7;
+                  $scope.buttonContainers["onlyCChoice"].addChild($scope.buttonChoicesText["onlyCChoice"]);
+
+
+                  $scope.buttonChoices["onlyCChoice"].addEventListener("pressup", function (event) {
+                    console.log("answerOnlyCContainer fires pressup event!");
+                    if ($scope.activityData.newGame) {
+
+                      selectChoice("onlyCChoice");
+                    }
+                  });
+
+
+                  callback();
+                });
+
+
+            }, function (callback) {
+
+              $scope.navigatorContainer = new createjs.Container();
+              $scope.navigatorContainer.width = background.image.width / 1.1;
+              $scope.navigatorContainer.height = background.image.height / 8;
+              $scope.navigatorContainer.scaleX = $scope.navigatorContainer.scaleY = $scope.scale;
+              $scope.navigatorContainer.x = backgroundPosition.x + (backgroundPosition.width / 22);
+              $scope.navigatorContainer.y = backgroundPosition.y + (backgroundPosition.height / 1.28);
+              $scope.stage.addChild($scope.navigatorContainer);
+
+              var yellowBar = new createjs.Bitmap($scope.rootDir + "data/assets/lesson_yellow_line.png");
+              yellowBar.scaleX = 1.145;
+              //yellowBar.regX = yellowBar.image.width / 2;
+              //yellowBar.regY = yellowBar.image.height / 2;
+              yellowBar.x = 20;
+              yellowBar.y = 30;
+              $scope.navigatorContainer.addChild(yellowBar);
+
+              /*Yellow bar button Sprite Button*/
+              $http.get($scope.rootDir + "data/assets/yellow_line_big_bubble.json")
+                .success(function (response) {
+
+                  response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
+                  var yellowBarButtonSpriteSheet = new createjs.SpriteSheet(response);
+
+                  $scope.yellowBarContainers = {};
+                  var buttonWidth = $scope.navigatorContainer.width / ($scope.activityData.questions.length + 1);
+
+                  _.each($scope.activityData.questions, function (question, key, list) {
+
+                    $scope.yellowBarContainers[key] = new createjs.Container();
+                    $scope.yellowBarContainers[key].width = buttonWidth;
+                    $scope.yellowBarContainers[key].height = $scope.navigatorContainer.height;
+                    $scope.yellowBarContainers[key].regY = $scope.yellowBarContainers[key].height / 2;
+                    $scope.yellowBarContainers[key].regX = $scope.yellowBarContainers[key].width / 2;
+                    $scope.yellowBarContainers[key].x = $scope.yellowBarContainers[key].width + $scope.yellowBarContainers[key].width * key;
+                    $scope.yellowBarContainers[key].y = $scope.yellowBarContainers[key].height / 2;
+                    $scope.navigatorContainer.addChild($scope.yellowBarContainers[key]);
+
+                    $scope.yellowBarContainers[key].yellowBarButtons = {};
+                    $scope.yellowBarContainers[key].yellowBarButtons[key] = new createjs.Sprite(yellowBarButtonSpriteSheet, "white");
+                    $scope.yellowBarContainers[key].yellowBarButtons[key].regX = $scope.yellowBarContainers[key].yellowBarButtons[key].getBounds().width / 2;
+                    $scope.yellowBarContainers[key].yellowBarButtons[key].regY = $scope.yellowBarContainers[key].yellowBarButtons[key].getBounds().height / 2;
+                    $scope.yellowBarContainers[key].yellowBarButtons[key].x = $scope.yellowBarContainers[key].width / 2;
+                    $scope.yellowBarContainers[key].yellowBarButtons[key].y = $scope.yellowBarContainers[key].height / 2.3;
+
+
+                    $scope.yellowBarContainers[key].yellowBarButtons[key].addEventListener("pressup", function (event) {
+                      pressOnYellowBar(key);
+                    });
+
+                    $scope.yellowBarContainers[key].addChild($scope.yellowBarContainers[key].yellowBarButtons[key]);
+                    var yellowBarButtonIndex = new createjs.Text(key + 1, "15px Arial", "black");
+                    yellowBarButtonIndex.regY = yellowBarButtonIndex.getBounds().height / 2;
+                    yellowBarButtonIndex.x = $scope.yellowBarContainers[key].width / 2.15;
+                    yellowBarButtonIndex.y = $scope.yellowBarContainers[key].height / 6;
+                    yellowBarButtonIndex.textAlign = "center";
+                    $scope.yellowBarContainers[key].addChild(yellowBarButtonIndex);
+
+                  });
+                  callback();
+
+                })
+                .error(function (error) {
+                  console.error("Error on getting json for answer button...", error);
+                  callback();
+                });
+            }
           ],
           function (err, response) {
             console.log("General Callback and init");
@@ -761,7 +778,7 @@ angular.module("bookbuilder2")
             }
 
             if (question.userAnswer) {
-              if ($scope.activityData.completed) {
+              if (!$scope.activityData.newGame) {
                 if (question.userAnswer === question.answerChoice) {
                   $scope.yellowBarContainers[k].yellowBarButtons[k].gotoAndPlay("green");
                 } else {
@@ -773,7 +790,45 @@ angular.module("bookbuilder2")
             }
           });
           loadQuestion(0);
-          check();
+
+          if (!$scope.activityData.newGame) {
+            score();
+          }
+
+        }
+
+
+        function pressOnYellowBar(key) {
+
+          $scope.yellowBarContainers[key].scaleX = $scope.yellowBarContainers[key].scaleY = 1.4;
+          _.each($scope.activityData.questions, function (question, k, list) {
+            if (k !== key) {
+              $scope.yellowBarContainers[k].scaleX = $scope.yellowBarContainers[k].scaleY = 1;
+            }
+          });
+          $scope.stage.update();
+
+          async.parallel([function (parallelCallback) {
+
+            createjs.Tween.get($scope.answersContainer, {loop: false})
+              .to({
+                y: +1000 * $scope.scale
+              }, 300, createjs.Ease.getPowIn(2)).call(function () {
+              parallelCallback();
+            });
+
+          }, function (parallelCallback) {
+
+            createjs.Tween.get($scope.questionsContainer, {loop: false})
+              .to({
+                y: -1000 * $scope.scale
+              }, 300, createjs.Ease.getPowIn(2)).call(function () {
+              parallelCallback();
+            });
+          }], function (err, response) {
+            loadQuestion(key);
+          });
+
         }
 
 
@@ -818,7 +873,7 @@ angular.module("bookbuilder2")
 
           positionQuestionText(question, key);
 
-          if ($scope.activityData.completed) {
+          if (!$scope.activityData.newGame) {
 
             console.log("UserAnswer", question.userAnswer);
             console.log("answerChoice", question.answerChoice);
@@ -854,6 +909,33 @@ angular.module("bookbuilder2")
                 $scope.buttonChoicesText[question.userAnswer].color = "white";
 
               }
+            } else {
+
+              if (question.answerChoice === "cChoice") {
+                $scope.buttonChoices["cChoice"].gotoAndPlay("red");
+                $scope.buttonChoices["onlyCChoice"].gotoAndPlay("red");
+                $scope.buttonChoicesText["cChoice"].color = "white";
+                $scope.buttonChoicesText["onlyCChoice"].color = "white";
+              } else {
+                $scope.buttonChoices[question.answerChoice].gotoAndPlay("red");
+                $scope.buttonChoicesText[question.answerChoice].color = "white";
+              }
+
+              if (question.midtext) {
+                var splittedText = question[question.answerChoice].split("...");
+                $scope.firstGap.text = splittedText[0];
+                $scope.secondGap.text = splittedText[1];
+                $scope.firstGap.color = "black";
+                $scope.secondGap.color = "black";
+              } else {
+                $scope.firstGap.text = question[question.answerChoice];
+                $scope.firstGap.color = "black";
+              }
+
+            }
+
+            if (question.capitalized) {
+              $scope.firstGap.text = $scope.firstGap.text[0].toUpperCase() + $scope.firstGap.text.substr(1);
             }
           }
 
@@ -870,6 +952,47 @@ angular.module("bookbuilder2")
 
         }
 
+        var checkFirstCharOfPhrase = function (word) {
+          if (word[0] !== "," && word[0] !== "." && word[0] !== "!" && word[0] !== ":" && word[0] !== ";" && word[0] !== "?") {
+            word = " " + word;
+          }
+          return word;
+        };
+        var checkLastCharIfEmpty = function (word) {
+          if (word[word.length - 1] !== " ") {
+            word = word + " ";
+          }
+          return word;
+        };
+
+
+        var checkForBold = function (text) {
+          var preText = "";
+          var textToBeBold = "";
+          var postText = "";
+          if (text.indexOf("$(") !== -1) {
+
+            console.log("text", text);
+            preText = text.split("$(")[0];
+            console.log("preText", preText);
+
+            textToBeBold = text.split("$(")[1];
+            console.log("textToBeBold", textToBeBold);
+
+            postText = textToBeBold.split(")$")[1];
+            console.log("postText", postText);
+
+            textToBeBold = textToBeBold.split(")$")[0];
+            console.log("textToBeBold", textToBeBold);
+
+            return {
+              preText: preText,
+              textToBeBold: textToBeBold,
+              postText: postText
+            };
+          }
+          return false;
+        };
 
         var positionQuestionText = function (question, key) {
 
@@ -880,15 +1003,36 @@ angular.module("bookbuilder2")
             if (!text) {
               text = " ";
             }
-            currentPretexts[l] = new createjs.Text(text, "22px Arial", "black");
-            currentPretexts[l].y = textHeight * l;
-            $scope.questionsTextContainer.addChild(currentPretexts[l]);
+            text = checkLastCharIfEmpty(text);
+            if (!checkForBold(text)) {
+              currentPretexts[l] = new createjs.Text(text, "22px Arial", "black");
+              currentPretexts[l].y = textHeight * l;
+              $scope.questionsTextContainer.addChild(currentPretexts[l]);
+            } else {
+              var texts = checkForBold(text);
+              console.log("texts", texts);
+              var preTextBold = new createjs.Text(texts.preText, "22px Arial", "black");
+              preTextBold.x = 0;
+              preTextBold.y = textHeight * l;
+              $scope.questionsTextContainer.addChild(preTextBold);
+
+              var boldText = new createjs.Text(texts.textToBeBold, "22px Arial", "blue");
+              boldText.y = textHeight * l;
+              boldText.x = texts.preText ? (preTextBold.x + preTextBold.getBounds().width) : 0;
+              $scope.questionsTextContainer.addChild(boldText);
+
+              currentPretexts[l] = new createjs.Text(texts.postText, "22px Arial", "black");
+              currentPretexts[l].y = textHeight * l;
+              currentPretexts[l].x = boldText.x + boldText.getBounds().width;
+              $scope.questionsTextContainer.addChild(currentPretexts[l]);
+            }
+
           });
 
-          var firstGap = " ______________ ";
+          var firstGap = "______________";
 
           if (question.firstGap) {
-            firstGap = " " + question.firstGap + " ";
+            firstGap = question.firstGap;
           }
 
           $scope.firstGap = new createjs.Text(firstGap, "22px Arial", "black");
@@ -912,22 +1056,34 @@ angular.module("bookbuilder2")
               if (!text) {
                 text = " ";
               }
+              text = checkLastCharIfEmpty(text);
+              text = checkFirstCharOfPhrase(text);
               currentMidtexts[l] = new createjs.Text(text, "22px Arial", "black");
-              currentMidtexts[l].y = pretexts.length * textHeight + textHeight * l;
+
+              console.log("question.noDefaultNewLineForMidtext", question.noDefaultNewLineForMidtext);
+              if (question.noDefaultNewLineForMidtext && l === 0) {
+                console.log("noDefaultNewLineForMidtext");
+                currentMidtexts[l].x = $scope.firstGap.x + firstGapUnderlinedText.getBounds().width / 2;
+                currentMidtexts[l].y = $scope.firstGap.y;
+              } else {
+                currentMidtexts[l].x = 0;
+                currentMidtexts[l].y = pretexts.length * textHeight + textHeight * l;
+              }
+
               console.log("currentMidtexts[l].y ", currentMidtexts[l].y);
               $scope.questionsTextContainer.addChild(currentMidtexts[l]);
             });
 
-            var secondGap = " ______________ ";
+            var secondGap = "______________";
 
 
             if (question.secondGap) {
-              secondGap = " " + question.secondGap + " ";
+              secondGap = question.secondGap;
             }
 
             $scope.secondGap = new createjs.Text(secondGap, "22px Arial", "black");
-            $scope.secondGap.x = currentMidtexts[pretexts.length - 1].x + currentMidtexts[pretexts.length - 1].getBounds().width;
-            $scope.secondGap.y = currentMidtexts[pretexts.length - 1].y;
+            $scope.secondGap.x = currentMidtexts[midtexts.length - 1].x + currentMidtexts[midtexts.length - 1].getBounds().width;
+            $scope.secondGap.y = currentMidtexts[midtexts.length - 1].y;
             $scope.questionsTextContainer.addChild($scope.secondGap);
 
             var secondGapUnderlinedText = $scope.secondGap.clone();
@@ -935,7 +1091,7 @@ angular.module("bookbuilder2")
 
             $scope.secondGap.textAlign = "center";
             $scope.secondGap.maxWidth = secondGapUnderlinedText.getBounds().width * 0.9;
-            $scope.secondGap.x = currentMidtexts[pretexts.length - 1].x + currentMidtexts[pretexts.length - 1].getBounds().width + secondGapUnderlinedText.getBounds().width / 2;
+            $scope.secondGap.x = currentMidtexts[midtexts.length - 1].x + currentMidtexts[midtexts.length - 1].getBounds().width + secondGapUnderlinedText.getBounds().width / 2;
 
             if (question.postext) {
               var postextsWithMid = question.postext.split("\n");
@@ -945,16 +1101,20 @@ angular.module("bookbuilder2")
                 if (!postextsWithMid[0]) {
                   postextsWithMid[0] = " ";
                 }
+
+                postextsWithMid[0] = checkFirstCharOfPhrase(postextsWithMid[0]);
                 currentPostextsWithMid[0] = new createjs.Text(postextsWithMid[0], "22px Arial", "black");
                 currentPostextsWithMid[0].x = secondGapUnderlinedText.x + secondGapUnderlinedText.getBounds().width;
                 currentPostextsWithMid[0].y = secondGapUnderlinedText.y;
                 $scope.questionsTextContainer.addChild(currentPostextsWithMid[0]);
 
+                postextsWithMid[1] = checkFirstCharOfPhrase(postextsWithMid[1]);
                 currentPostextsWithMid[1] = new createjs.Text(postextsWithMid[1], "22px Arial", "black");
                 currentPostextsWithMid[1].x = 0;
                 currentPostextsWithMid[1].y = currentPostextsWithMid[0].y + textHeight;
                 $scope.questionsTextContainer.addChild(currentPostextsWithMid[1]);
               } else {
+                postextsWithMid[0] = checkFirstCharOfPhrase(postextsWithMid[0]);
                 currentPostextsWithMid[0] = new createjs.Text(postextsWithMid[0], "22px Arial", "black");
                 currentPostextsWithMid[0].x = secondGapUnderlinedText.x + secondGapUnderlinedText.getBounds().width;
                 currentPostextsWithMid[0].y = secondGapUnderlinedText.y;
@@ -974,16 +1134,20 @@ angular.module("bookbuilder2")
                 if (!postexts[0]) {
                   postexts[0] = " ";
                 }
+
+                postexts[0] = checkFirstCharOfPhrase(postexts[0]);
                 currentPostexts[0] = new createjs.Text(postexts[0], "22px Arial", "black");
                 currentPostexts[0].x = firstGapUnderlinedText.x + firstGapUnderlinedText.getBounds().width;
                 currentPostexts[0].y = firstGapUnderlinedText.y;
                 $scope.questionsTextContainer.addChild(currentPostexts[0]);
 
+                postexts[1] = checkFirstCharOfPhrase(postexts[1]);
                 currentPostexts[1] = new createjs.Text(postexts[1], "22px Arial", "black");
                 currentPostexts[1].x = 0;
                 currentPostexts[1].y = currentPostexts[0].y + textHeight;
                 $scope.questionsTextContainer.addChild(currentPostexts[1]);
               } else {
+                postexts[0] = checkFirstCharOfPhrase(postexts[0]);
                 currentPostexts[0] = new createjs.Text(postexts[0], "22px Arial", "black");
                 currentPostexts[0].x = firstGapUnderlinedText.x + firstGapUnderlinedText.getBounds().width;
                 currentPostexts[0].y = firstGapUnderlinedText.y;
@@ -995,7 +1159,7 @@ angular.module("bookbuilder2")
 
 
           if (question.userAnswer) {
-            if (!$scope.activityData.completed) {
+            if ($scope.activityData.newGame) {
               if (question.midtext) {
                 var splittedText = question[question.userAnswer].split("...");
                 $scope.firstGap.text = splittedText[0];
@@ -1024,14 +1188,12 @@ angular.module("bookbuilder2")
         /*Function that restarts the exercise*/
         function restart() {
 
-          $scope.nextButton.alpha = 0.5;
           $scope.nextButton.gotoAndPlay("normal");
 
           $scope.checkButton.alpha = 1;
           $scope.checkButton.gotoAndPlay("normal");
 
-          $scope.activityData.completed = false;
-          $scope.activityData.attempts += +1;
+          $scope.activityData.newGame = true;
 
           _.each($scope.activityData.questions, function (question, key, value) {
             $scope.activityData.questions[key].userAnswer = "";
@@ -1043,27 +1205,12 @@ angular.module("bookbuilder2")
           $scope.yellowBarContainers[0].scaleX = $scope.yellowBarContainers[0].scaleY = 1.4;
           window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
 
-          //Making score text 0 again
+          $scope.resultsButton.visible = false;
+          $scope.endText.visible = false;
           $scope.scoreText.text = "Score: " + 0 + " / " + $scope.activityData.questions.length;
 
           loadQuestion(0);
         }
-
-
-        /*Function that checks user answers and calls score function and showAnswers function*/
-        function check() {
-          console.log("Checking Answers!");
-          if (_.findWhere($scope.activityData.questions, {
-              "userAnswer": ""
-            })) {
-            console.log("Please fill all the gaps!");
-            Toast.show("Please fill all the gaps!");
-            return;
-          } else {
-            score();
-          }
-        }
-
 
         /*Function that calculates score*/
         function score() {
@@ -1080,47 +1227,34 @@ angular.module("bookbuilder2")
           });
           console.log("rightAnswers", rightAnswers);
           $scope.scoreText.text = "Score: " + rightAnswers + " / " + $scope.activityData.questions.length;
-
-          if ($scope.activityData.questions[$scope.activeQuestionIndex].userAnswer === $scope.activityData.questions[$scope.activeQuestionIndex].answerChoice) {
-            if ($scope.activityData.questions[$scope.activeQuestionIndex].userAnswer === "cChoice") {
-              $scope.buttonChoices["cChoice"].gotoAndPlay("green");
-              $scope.buttonChoices["onlyCChoice"].gotoAndPlay("green");
-              $scope.buttonChoicesText["cChoice"].color = "white";
-              $scope.buttonChoicesText["onlyCChoice"].color = "white";
-            } else {
-              $scope.buttonChoices[$scope.activityData.questions[$scope.activeQuestionIndex].userAnswer].gotoAndPlay("green");
-              $scope.buttonChoicesText[$scope.activityData.questions[$scope.activeQuestionIndex].userAnswer].color = "white";
-            }
-          } else if ($scope.activityData.questions[$scope.activeQuestionIndex].userAnswer) {
-
-            if ($scope.activityData.questions[$scope.activeQuestionIndex].answerChoice === "cChoice") {
-              $scope.buttonChoices["cChoice"].gotoAndPlay("green");
-              $scope.buttonChoices["onlyCChoice"].gotoAndPlay("green");
-              $scope.buttonChoicesText["cChoice"].color = "white";
-              $scope.buttonChoicesText["onlyCChoice"].color = "white";
-            } else {
-              $scope.buttonChoices[$scope.activityData.questions[$scope.activeQuestionIndex].answerChoice].gotoAndPlay("green");
-              $scope.buttonChoicesText[$scope.activityData.questions[$scope.activeQuestionIndex].answerChoice].color = "white";
-            }
-
-
-            if ($scope.activityData.questions[$scope.activeQuestionIndex].userAnswer === "cChoice") {
-              $scope.buttonChoices["cChoice"].gotoAndPlay("red");
-              $scope.buttonChoices["onlyCChoice"].gotoAndPlay("red");
-              $scope.buttonChoicesText["cChoice"].color = "white";
-              $scope.buttonChoicesText["onlyCChoice"].color = "white";
-            } else {
-              $scope.buttonChoicesText[$scope.activityData.questions[$scope.activeQuestionIndex].userAnswer].color = "white";
-              $scope.buttonChoices[$scope.activityData.questions[$scope.activeQuestionIndex].userAnswer].gotoAndPlay("red");
-            }
-          }
-
-
           $scope.activityData.score = rightAnswers;
           console.log("Completed Activity!");
-          $scope.nextButton.alpha = 1;
           $scope.checkButton.alpha = 0.5;
           $scope.activityData.completed = true;
+          $scope.nextButton.gotoAndPlay("onSelection");
+
+          if (_.findIndex($scope.selectedLesson.activitiesMenu, {
+              activityFolder: $scope.activityFolder
+            }) + 1 === $scope.selectedLesson.activitiesMenu.length) {
+
+            $scope.resultsButton.visible = true;
+            $scope.endText.visible = true;
+            $scope.nextButton.visible = false;
+
+          } else {
+            console.log("Activity is not the last one");
+            console.log("index", _.findIndex($scope.selectedLesson.activitiesMenu, {
+                activityFolder: $scope.activityFolder
+              }) + 1);
+            console.log("activities", $scope.selectedLesson.activitiesMenu.length);
+          }
+
+          if ($scope.activityData.newGame) {
+            $scope.activityData.attempts += 1;
+            $scope.activityData.newGame = false;
+          }
+
+          pressOnYellowBar(0);
           window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
         }
 

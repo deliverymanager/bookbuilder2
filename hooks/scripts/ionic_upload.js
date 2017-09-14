@@ -24,7 +24,7 @@ fs.readFile(process.cwd() + '/config.xml', function (err, data) {
 
       console.log("We are in DEVELOPER mode, uploading to dev channel");
 
-      exec('ionic upload --deploy=dev', {cwd: process.cwd()}, function (error, stdout, stderr) {
+      exec('ionic upload --deploy=dev --email adomvris@gmail.com --password ane@@4033', {cwd: process.cwd()}, function (error, stdout, stderr) {
         // if you also want to change current process working directory:
         if (error) {
           console.log(error);
@@ -36,7 +36,7 @@ fs.readFile(process.cwd() + '/config.xml', function (err, data) {
 
       console.log("We are in PRODUCTION mode, uploading to channel " + result.widget.$.version);
 
-      exec('ionic upload --note=' + result.widget.$.version, {cwd: process.cwd()}, function (error, stdout, stderr) {
+      exec('ionic upload --note=' + result.widget.$.version + " --email adomvris@gmail.com --password ane@@4033", {cwd: process.cwd()}, function (error, stdout, stderr) {
         // if you also want to change current process working directory:
         if (error) {
           console.log(error);
@@ -55,6 +55,7 @@ fs.readFile(process.cwd() + '/config.xml', function (err, data) {
       });
 
     }
+
   });
 
 });

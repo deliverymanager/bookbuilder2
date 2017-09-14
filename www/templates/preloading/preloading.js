@@ -34,10 +34,18 @@ angular.module("bookbuilder2")
         "activityFolder": activityFolder
       });
 
+      console.log("index", index);
+      console.log("selectedLesson", selectedLesson);
+
       if (index < selectedLesson.activitiesMenu.length - 1) {
         window.localStorage.setItem("activityFolder", selectedLesson.activitiesMenu[index + 1].activityFolder);
         window.localStorage.setItem("activityName", selectedLesson.activitiesMenu[index + 1].name);
-        $rootScope.navigate(selectedLesson.activitiesMenu[index + 1].activityTemplate);
+
+        if (selectedLesson.activitiesMenu[index].activityTemplate === selectedLesson.activitiesMenu[index + 1].activityTemplate) {
+          $state.go($state.current, {}, {reload: true});
+        } else {
+          $rootScope.navigate(selectedLesson.activitiesMenu[index + 1].activityTemplate);
+        }
       } else {
         $rootScope.navigate("results");
       }
@@ -53,9 +61,15 @@ angular.module("bookbuilder2")
         console.log("hide SplashScreen");
         navigator.splashscreen.hide();
 
-        $scope.rootDir = window.cordova.file.dataDirectory;
+        console.log("window.cordova.file.externalDataDirectory", window.cordova.file.externalDataDirectory);
+        if (window.cordova.file.externalDataDirectory) {
+          $scope.rootDir = window.cordova.file.externalDataDirectory
+        } else {
+          $scope.rootDir = window.cordova.file.dataDirectory;
+        }
+
         window.localStorage.setItem("rootDir", $scope.rootDir);
-        console.log($scope.rootDir);
+        console.log("$scope.rootDir", $scope.rootDir);
 
         $timeout(function () {
           window.cordova.getAppVersion.getPackageName(function (name) {
@@ -138,7 +152,8 @@ angular.module("bookbuilder2")
       } else {
         //engrlikeenglishb1-3-0
         //engrenglish3
-        $scope.rootDir = "https://s3-eu-west-1.amazonaws.com/engrenglish1/";
+        //RUN ON BROWSER FOR DEVELOPING https://s3-eu-west-1.amazonaws.com/bookbuilder2/index.html
+        $scope.rootDir = "https://s3-eu-west-1.amazonaws.com/engrlikeenglishb1-3-0/";
         window.localStorage.setItem("rootDir", $scope.rootDir);
         $rootScope.navigate("groups");
       }
@@ -233,6 +248,8 @@ angular.module("bookbuilder2")
         $rootScope.developerMode = false;
       }
 
+      checkDownloadedSnapshotsAndDeleteUnused();
+
       if ($rootScope.developerMode) {
         $ionicDeploy.channel = "dev";
 
@@ -245,7 +262,7 @@ angular.module("bookbuilder2")
                 template: "DEVELOPER UPDATE ..."
               });
 
-              $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data")
+              $cordovaFile.removeRecursively($scope.rootDir, "data")
                 .then(function (success) {
 
                   installIonicUpdate();
@@ -296,7 +313,7 @@ angular.module("bookbuilder2")
                         $rootScope.versionNumber = window.localStorage.getItem("versionNumber");
                       }
 
-                      $cordovaFile.removeRecursively(window.cordova.file.dataDirectory, "data")
+                      $cordovaFile.removeRecursively($scope.rootDir, "data")
                         .then(function (success) {
 
                           $ionicLoading.show({
@@ -328,24 +345,69 @@ angular.module("bookbuilder2")
       }
     };
 
-    var installIonicUpdate = function () {
+    var checkDownloadedSnapshotsAndDeleteUnused = function () {
 
-      $ionicDeploy.download().then(function () {
+      var snapshotsDownloaded = window.localStorage.getItem("snapshots");
+      if (snapshotsDownloaded) {
+        snapshotsDownloaded = JSON.parse(snapshotsDownloaded);
+      }
 
-        $ionicLoading.show({
-          template: "INSTALLING APP UPDATE ..."
+      console.log("LocalStorage snapshots", snapshotsDownloaded);
+
+      if (snapshotsDownloaded && !_.isEmpty(snapshotsDownloaded)) {
+
+        $ionicDeploy.getSnapshots().then(function (snapshots) {
+          // snapshots will be an array of snapshot uuids
+          var newSnapshotsDownloaded = _.difference(snapshots, snapshotsDownloaded);
+          console.log("newSnapshotsDownloaded", newSnapshotsDownloaded);
+
+          if (newSnapshotsDownloaded && !_.isEmpty(newSnapshotsDownloaded)) {
+
+            _.each(_.difference(snapshots, newSnapshotsDownloaded), function (snapshot) {
+              console.log("deleting snapshots", snapshot);
+              $ionicDeploy.deleteSnapshot(snapshot);
+            });
+
+          }
+
+          $timeout(function () {
+            $ionicDeploy.getSnapshots().then(function (snapshots) {
+              console.log("snapshots", snapshots);
+              if (snapshots && !_.isEmpty(snapshots)) {
+                //Saving the already downloaded snapshots
+                window.localStorage.setItem("snapshots", JSON.stringify(snapshots));
+              }
+            });
+          }, 2000);
+
         });
 
-        $ionicDeploy.extract().then(function () {
+      }
+    };
+
+
+    var installIonicUpdate = function () {
+
+      $ionicDeploy.getSnapshots().then(function (snapshots) {
+
+        // snapshots will be an array of snapshot uuids
+        console.warn("snapshots", snapshots);
+        if (snapshots && !_.isEmpty(snapshots)) {
+          //Saving the already downloaded snapshots
+          window.localStorage.setItem("snapshots", JSON.stringify(snapshots));
+        }
+
+        $ionicDeploy.download().then(function () {
+
           $ionicLoading.show({
-            template: "RESTARTING APP ..."
+            template: "INSTALLING APP UPDATE ..."
           });
 
-          //This is very important so that the new json files will be used instead of the ones saved in localstorage!!!!
-          window.localStorage.clear();
+          $ionicDeploy.extract().then(function () {
+            $ionicLoading.show({
+              template: "RESTARTING APP ..."
+            });
 
-          $ionicHistory.clearHistory();
-          $ionicHistory.clearCache().then(function (response) {
             $ionicDeploy.load();
           });
         });

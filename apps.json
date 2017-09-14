@@ -2,21 +2,26 @@
   {
     "bundle_id": "gr.dwhite.enGrEnglish1",
     "name": "I Like English 1",
-    "description": "I Like English 1 by www.supercourse.com"
+    "description": "I Like English 1 by www.supercourse.gr"
   },
   {
     "bundle_id": "gr.dwhite.enGrEnglish2",
     "name": "I Like English 2",
-    "description": "I Like English 2 by www.supercourse.com"
+    "description": "I Like English 2 by www.supercourse.gr"
   },
   {
     "bundle_id": "gr.dwhite.enGrEnglish3",
     "name": "I Like English 3",
-    "description": "I Like English 3 by www.supercourse.com"
+    "description": "I Like English 3 by www.supercourse.gr"
   },
   {
     "bundle_id": "gr.dwhite.enGrLikeEnglishB1",
     "name": "I Like English B1",
-    "description": "I like Junior B1 by www.supercourse.com"
+    "description": "I like English B1 by www.supercourse.gr"
+  },
+  {
+    "bundle_id": "gr.dwhite.engrtechiteasy",
+    "name": "Tech it Easy",
+    "description": "Tech it Easy by www.supercourse.gr"
   }
 ]

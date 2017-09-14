@@ -78,6 +78,12 @@ angular.module('bookbuilder2', ['ionic', 'ionic.cloud', 'ngCordova', 'ngSanitize
         templateUrl: "templates/vocabularyNew/vocabularyNew.html",
         controller: "VocabularyNewController"
       })
+      .state('vocabularyNewNoImages', {
+        cache: false,
+        url: "/vocabularyNewNoImages",
+        templateUrl: "templates/vocabularyNewNoImages/vocabularyNewNoImages.html",
+        controller: "VocabularyNewNoImagesController"
+      })
       .state('reading', {
         cache: false,
         url: "/reading",
@@ -119,6 +125,24 @@ angular.module('bookbuilder2', ['ionic', 'ionic.cloud', 'ngCordova', 'ngSanitize
         templateUrl: "templates/multiple/multipleSpray.html",
         controller: "MultipleSprayController"
       })
+      .state('multipleSprayLargeButtons', {
+        cache: false,
+        url: "/multipleSprayLargeButtons",
+        templateUrl: "templates/multiple/multipleSprayLargeButtons.html",
+        controller: "MultipleSprayLargeButtonsController"
+      })
+      .state('multipleDoubleQuestions', {
+        cache: false,
+        url: "/multipleDoubleQuestions",
+        templateUrl: "templates/multiple/multipleDoubleQuestions.html",
+        controller: "MultipleDoubleQuestionsController"
+      })
+      .state('multipleSprayWithImage', {
+        cache: false,
+        url: "/multipleSprayWithImage",
+        templateUrl: "templates/multiple/multipleSprayWithImage.html",
+        controller: "MultipleSprayWithImageController"
+      })
       .state('multipleBirds', {
         cache: false,
         url: "/multipleBirds",
@@ -142,6 +166,12 @@ angular.module('bookbuilder2', ['ionic', 'ionic.cloud', 'ngCordova', 'ngSanitize
         url: "/cryptoDiver",
         templateUrl: "templates/cryptoDiver/cryptoDiver.html",
         controller: "cryptoDiverController"
+      })
+      .state('cryptoWithImages', {
+        cache: false,
+        url: "/cryptoWithImages",
+        templateUrl: "templates/cryptoWithImages/cryptoWithImages.html",
+        controller: "CryptoWithImagesController"
       })
       .state('wizard', {
         cache: false,
@@ -179,12 +209,6 @@ angular.module('bookbuilder2', ['ionic', 'ionic.cloud', 'ngCordova', 'ngSanitize
         templateUrl: "templates/education/education.html",
         controller: "educationController"
       })
-      .state('correctOrder', {
-        cache: false,
-        url: "/correctOrder",
-        templateUrl: "templates/correctOrder/correctOrder.html",
-        controller: "correctOrderController"
-      })
       .state('correctIncorrect', {
         cache: false,
         url: "/correctIncorrect",
@@ -214,6 +238,12 @@ angular.module('bookbuilder2', ['ionic', 'ionic.cloud', 'ngCordova', 'ngSanitize
         url: "/video",
         templateUrl: "templates/video/video.html",
         controller: "VideoController"
+      })
+      .state('videoWithSubs', {
+        cache: false,
+        url: "/videoWithSubs",
+        templateUrl: "templates/videoWithSubs/videoWithSubs.html",
+        controller: "VideoWithSubsController"
       })
       .state('results', {
         cache: false,
