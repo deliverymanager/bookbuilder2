@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="244030600" id="gr.dwhite.enGrLikeEnglishB1" version="4.3.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>I Like English B1</name>
-    <description>I like English B1 by www.supercourse.gr</description>
+<widget android-versionCode="240000000" id="gr.dwhite.engrtechiteasy" version="0.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Tech it Easy</name>
+    <description>Tech it Easy by www.supercourse.gr</description>
     <author email="apps@dwhite.gr" href="http://dwhite.gr">
     www.dwhite.gr
   </author>

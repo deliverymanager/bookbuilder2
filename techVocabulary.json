@@ -1,0 +1,2562 @@
+{
+	"lesson1": {
+		"word": [
+			{
+				"lessonNumber": "1",
+				"order": "1.",
+				"english": "head",
+				"greek": "κεφάλι",
+				"example": "The panda has got a white head but black legs.",
+				"audio": "L1W2.mp3"
+			},
+			{
+				"lessonNumber": "1",
+				"order": "2.",
+				"english": "hair",
+				"greek": "μαλλιά",
+				"example": "Mary has got long brown hair.",
+				"audio": "L1W3.mp3"
+			},
+			{
+				"lessonNumber": "1",
+				"order": "3.",
+				"english": "mouth",
+				"greek": "στόμα",
+				"example": "I have got thirty-two teeth in my mouth.",
+				"audio": "L1W4.mp3"
+			},
+			{
+				"lessonNumber": "1",
+				"order": "4.",
+				"english": "arm",
+				"greek": "χέρι",
+				"example": "Tech has got short arms, but long legs.",
+				"audio": "L1W5.mp3"
+			},
+			{
+				"lessonNumber": "1",
+				"order": "5.",
+				"english": "hand",
+				"greek": "χέρι(παλάμη)",
+				"example": "- What have you got in your hands? - Cherries!",
+				"audio": "L1W6.mp3"
+			},
+			{
+				"lessonNumber": "1",
+				"order": "6.",
+				"english": "finger",
+				"greek": "δάχτυλο χεριού",
+				"example": "I have got ten fingers on my hands.",
+				"audio": "L1W7.mp3"
+			},
+			{
+				"lessonNumber": "1",
+				"order": "7.",
+				"english": "leg",
+				"greek": "πόδι",
+				"example": "Cats have got four legs.",
+				"audio": "L1W8.mp3"
+			},
+			{
+				"lessonNumber": "1",
+				"order": "8.",
+				"english": "foot",
+				"greek": "πόδι (πατούσα)",
+				"example": "The red shoes are too small for my feet.",
+				"audio": "L1W9.mp3"
+			},
+			{
+				"lessonNumber": "1",
+				"order": "9.",
+				"english": "toe",
+				"greek": "δάχτυλο ποδιού",
+				"example": "I have got ten toes on my feet.",
+				"audio": "L1W10.mp3"
+			},
+			{
+				"lessonNumber": "1",
+				"order": "10.",
+				"english": "create",
+				"greek": "δημιουργώ",
+				"example": "Let's create a story with kings and queens.",
+				"audio": "L1GW1.mp3"
+			},
+			{
+				"lessonNumber": "1",
+				"order": "11.",
+				"english": "player",
+				"greek": "παίκτης, -τρια",
+				"example": "Messi is a very good football player.",
+				"audio": "L1GW2.mp3"
+			},
+			{
+				"lessonNumber": "1",
+				"order": "12.",
+				"english": "like",
+				"greek": "σαν, όπως",
+				"example": "My sister is like my mother, with black hair and green eyes.",
+				"audio": "L1GW3.mp3"
+			},
+			{
+				"lessonNumber": "1",
+				"order": "13.",
+				"english": "also",
+				"greek": "επίσης",
+				"example": "Mr Gardner has got sheep on his farm. He has also got horses.",
+				"audio": "L1GW4.mp3"
+			},
+			{
+				"lessonNumber": "1",
+				"order": "14.",
+				"english": "trendy",
+				"greek": "μοδάτος",
+				"example": "Your jeans are very trendy.",
+				"audio": "L1GW5.mp3"
+			},
+			{
+				"lessonNumber": "1",
+				"order": "15.",
+				"english": "but",
+				"greek": "αλλά",
+				"example": "I have got a tablet but I haven’t got a laptop.",
+				"audio": "L1GW6.mp3"
+			},
+			{
+				"lessonNumber": "1",
+				"order": "16.",
+				"english": "any",
+				"greek": "καθόλου",
+				"example": "Have we got any apples?",
+				"audio": "L1GW7.mp3"
+			},
+			{
+				"lessonNumber": "1",
+				"order": "17.",
+				"english": "blonde",
+				"greek": "ξανθός",
+				"example": "My doll has got long blonde hair.",
+				"audio": "L1GW8.mp3"
+			}
+		],
+		"phrase": [
+			{
+				"lessonNumber": "1",
+				"order": "•",
+				"english": "Well done!",
+				"greek": "Μπράβο!",
+				"example": "You are a very good student. Well done!",
+				"audio": "L1P1.mp3"
+			},
+			{
+				"lessonNumber": "1",
+				"order": "•",
+				"english": "Level complete!",
+				"greek": "Το επίπεδο ολοκληρώθηκε!",
+				"example": "Level 1 complete! Let’s go to level 2!",
+				"audio": "L1P2.mp3"
+			}
+		]
+	},
+	"lesson2": {
+		"word": [
+			{
+				"lessonNumber": "2",
+				"order": "1.",
+				"english": "bedroom",
+				"greek": "υπνοδωμάτιο",
+				"example": "My toys are in my bedroom.",
+				"audio": "L2W2.mp3"
+			},
+			{
+				"lessonNumber": "2",
+				"order": "2.",
+				"english": "bathroom",
+				"greek": "μπάνιο",
+				"example": "There is a toilet in my bathroom.",
+				"audio": "L2W3.mp3"
+			},
+			{
+				"lessonNumber": "2",
+				"order": "3.",
+				"english": "kitchen",
+				"greek": "κουζίνα",
+				"example": "We cook in the kitchen.",
+				"audio": "L2W4.mp3"
+			},
+			{
+				"lessonNumber": "2",
+				"order": "4.",
+				"english": "living room",
+				"greek": "σαλόνι",
+				"example": "There is a big TV in the living room.",
+				"audio": "L2W5.mp3"
+			},
+			{
+				"lessonNumber": "2",
+				"order": "5.",
+				"english": "balcony",
+				"greek": "μπαλκόνι",
+				"example": "In the summer, we sit on the balcony.",
+				"audio": "L2W6.mp3"
+			},
+			{
+				"lessonNumber": "2",
+				"order": "6.",
+				"english": "garden",
+				"greek": "κήπος",
+				"example": "My house has got a garden with flowers and trees.",
+				"audio": "L2W7.mp3"
+			},
+			{
+				"lessonNumber": "2",
+				"order": "7.",
+				"english": "project",
+				"greek": "σχολική εργασία",
+				"example": "I have got an English project for school.",
+				"audio": "L2GW1.mp3"
+			},
+			{
+				"lessonNumber": "2",
+				"order": "8.",
+				"english": "favourite",
+				"greek": "αγαπημένος",
+				"example": "Pizza is my favourite food.",
+				"audio": "L2GW2.mp3"
+			},
+			{
+				"lessonNumber": "2",
+				"order": "9.",
+				"english": "place",
+				"greek": "μέρος",
+				"example": "Santorini is a beautiful place.",
+				"audio": "L2GW3.mp3"
+			},
+			{
+				"lessonNumber": "2",
+				"order": "10.",
+				"english": "room",
+				"greek": "δωμάτιο / αίθουσα",
+				"example": "There are six rooms in my house.",
+				"audio": "L2GW4.mp3"
+			},
+			{
+				"lessonNumber": "2",
+				"order": "11.",
+				"english": "parents",
+				"greek": "γονείς",
+				"example": "My parents’ names are Olivia and Harry.",
+				"audio": "L2GW5.mp3"
+			},
+			{
+				"lessonNumber": "2",
+				"order": "12.",
+				"english": "very",
+				"greek": "πολύ",
+				"example": "Basketball players are very tall.",
+				"audio": "L2GW6.mp3"
+			},
+			{
+				"lessonNumber": "2",
+				"order": "13.",
+				"english": "modern",
+				"greek": "μοντέρνος",
+				"example": "Grandma's house is old. It isn't modern.",
+				"audio": "L2GW7.mp3"
+			},
+			{
+				"lessonNumber": "2",
+				"order": "14.",
+				"english": "nice",
+				"greek": "ωραίος / καλός",
+				"example": "I like your T-shirt! It’s nice!",
+				"audio": "L2GW8.mp3"
+			},
+			{
+				"lessonNumber": "2",
+				"order": "15.",
+				"english": "beautiful",
+				"greek": "όμορφος",
+				"example": "Anna has got beautiful big blue eyes.",
+				"audio": "L2GW9.mp3"
+			},
+			{
+				"lessonNumber": "2",
+				"order": "16.",
+				"english": "flower",
+				"greek": "λουλούδι",
+				"example": "Tulips are my favourite flowers.",
+				"audio": "L2GW10.mp3"
+			},
+			{
+				"lessonNumber": "2",
+				"order": "17.",
+				"english": "comfortable",
+				"greek": "άνετος, αναπαυτικός",
+				"example": "My bed is very comfortable.",
+				"audio": "L2GW11.mp3"
+			}
+		],
+		"phrase": [
+			{
+				"lessonNumber": "2",
+				"order": "•",
+				"english": "I like it!",
+				"greek": "Μου αρέσει!",
+				"example": "Monopoly is a great game. I like it!",
+				"audio": "L2P1.mp3"
+			}
+		]
+	},
+	"lesson3": {
+		"word": [
+			{
+				"lessonNumber": "3",
+				"order": "1.",
+				"english": "sofa",
+				"greek": "καναπές",
+				"example": "There is a big comfortable sofa in the living room.",
+				"audio": "L3W2.mp3"
+			},
+			{
+				"lessonNumber": "3",
+				"order": "2.",
+				"english": "lamp",
+				"greek": "λάμπα",
+				"example": "I have got a lamp on my desk.",
+				"audio": "L3W3.mp3"
+			},
+			{
+				"lessonNumber": "3",
+				"order": "3.",
+				"english": "table",
+				"greek": "τραπέζι",
+				"example": "WeThere are some bananas on the kitchen table.",
+				"audio": "L3W4.mp3"
+			},
+			{
+				"lessonNumber": "3",
+				"order": "4.",
+				"english": "chair",
+				"greek": "καρέκλα",
+				"example": "Sit on this chair, please.",
+				"audio": "L3W5.mp3"
+			},
+			{
+				"lessonNumber": "3",
+				"order": "5.",
+				"english": "bookcase",
+				"greek": "βιβλιοθήκη",
+				"example": "Those books in the bookcase are Jason’s.",
+				"audio": "L3W6.mp3"
+			},
+			{
+				"lessonNumber": "3",
+				"order": "6.",
+				"english": "shelf",
+				"greek": "ράφι",
+				"example": "My bookcase has got seven shelves.",
+				"audio": "L3W7.mp3"
+			},
+			{
+				"lessonNumber": "3",
+				"order": "7.",
+				"english": "wardrobe",
+				"greek": "ντουλάπα",
+				"example": "My sister has got five dresses in the wardrobe.",
+				"audio": "L3W8.mp3"
+			},
+			{
+				"lessonNumber": "3",
+				"order": "8.",
+				"english": "find",
+				"greek": "βρίσκω",
+				"example": "Let's find the answer to this question.",
+				"audio": "L3GW1.mp3"
+			},
+			{
+				"lessonNumber": "3",
+				"order": "9.",
+				"english": "map",
+				"greek": "χάρτης",
+				"example": "There is a map of London in my geography book.",
+				"audio": "L3GW2.mp3"
+			},
+			{
+				"lessonNumber": "3",
+				"order": "10.",
+				"english": "the USA",
+				"greek": "ΗΠΑ (Ηνωμένες Πολιτείες Αμερικής)",
+				"example": "New York is in the USA.",
+				"audio": "L3GW3.mp3"
+			},
+			{
+				"lessonNumber": "3",
+				"order": "11.",
+				"english": "great",
+				"greek": "υπέροχος, -α",
+				"example": "- Let’s go to the park! - That’s a great idea! / - There is chocolate cake in the kitchen. -  Great! Let’s eat it!",
+				"audio": "L3GW4.mp3"
+			},
+			{
+				"lessonNumber": "3",
+				"order": "12.",
+				"english": "now",
+				"greek": "τώρα",
+				"example": "My brother isn’t here now. He’s at the cinema.",
+				"audio": "L3GW5.mp3"
+			},
+			{
+				"lessonNumber": "3",
+				"order": "13.",
+				"english": "burger",
+				"greek": "μπέργκερ / μπιφτέκι",
+				"example": "I like my burger with ketchup.",
+				"audio": "L3GW6.mp3"
+			},
+			{
+				"lessonNumber": "3",
+				"order": "14.",
+				"english": "real",
+				"greek": "αληθινός",
+				"example": "This is not a real dog. It’s a toy.",
+				"audio": "L3GW7.mp3"
+			},
+			{
+				"lessonNumber": "3",
+				"order": "15.",
+				"english": "cool",
+				"greek": "τέλειος, απίθανος",
+				"example": "I like your bike. It’s cool!",
+				"audio": "L3GW8.mp3"
+			},
+			{
+				"lessonNumber": "3",
+				"order": "16.",
+				"english": "skateboard",
+				"greek": "σανίδα σκέιτμπορντ",
+				"example": "My skateboard is fantastic!",
+				"audio": "L3GW9.mp3"
+			}
+		],
+		"phrase": [
+			{
+				"lessonNumber": "3",
+				"order": "•",
+				"english": "Let’s start!",
+				"greek": "Ας ξεκινήσουμε!",
+				"example": "-Good morning children! Let’s start the lesson.",
+				"audio": "L3P1.mp3"
+			},
+			{
+				"lessonNumber": "3",
+				"order": "•",
+				"english": "Where is …?",
+				"greek": "Πού είναι …;",
+				"example": "- Where is my school bag, Mum? - It’s on your bed!",
+				"audio": "L3P2.mp3"
+			},
+			{
+				"lessonNumber": "3",
+				"order": "•",
+				"english": "We did it!",
+				"greek": "Τα καταφέραμε!",
+				"example": "We are first! We did it!",
+				"audio": "L3P3.mp3"
+			}
+		]
+	},
+	"lesson4": {
+		"word": [
+			{
+				"lessonNumber": "4",
+				"order": "1.",
+				"english": "art",
+				"greek": "εικαστικά, καλλιτεχνικά",
+				"example": "My favourite subject is art, because I love colours.",
+				"audio": "L4W2.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "2.",
+				"english": "IT",
+				"greek": "πληροφορική",
+				"example": "In IT we learn about computer technology.",
+				"audio": "L4W3.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "3.",
+				"english": "PE",
+				"greek": "γυμναστική",
+				"example": "In the PE lesson we do sports.",
+				"audio": "L4W4.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "4.",
+				"english": "maths",
+				"greek": "μαθηματικά",
+				"example": "I like maths because I am very good with numbers.",
+				"audio": "L4W5.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "5.",
+				"english": "history",
+				"greek": "ιστορία",
+				"example": "I read history books about Rome.",
+				"audio": "L4W6.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "6.",
+				"english": "geography",
+				"greek": "γεωγραφία",
+				"example": "Nancy has got a geography project about Asia.",
+				"audio": "L4W7.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "7.",
+				"english": "science",
+				"greek": "φυσικές επιστήμες (φυσική, χημεία, βιολογία)",
+				"example": "Our science lesson today is about the sun.",
+				"audio": "L4W8.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "8.",
+				"english": "back",
+				"greek": "πίσω",
+				"example": "Are your parents back from work?",
+				"audio": "L4GW1.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "9.",
+				"english": "new",
+				"greek": "καινούριος",
+				"example": "Mario is new at this school.",
+				"audio": "L4GW2.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "10.",
+				"english": "too",
+				"greek": "επίσης",
+				"example": "Emily is a very smart girl and she is beautiful, too.",
+				"audio": "L4GW3.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "11.",
+				"english": "Italy",
+				"greek": "Ιταλία",
+				"example": "Fabio loves spaghetti because he’s from Italy.",
+				"audio": "L4GW4.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "12.",
+				"english": "class",
+				"greek": "τάξη, τμήμα",
+				"example": "There are twenty students in my class this year.",
+				"audio": "L4GW5.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "13.",
+				"english": "year",
+				"greek": "χρονιά",
+				"example": "A year has got four seasons and twelve months.",
+				"audio": "L4GW6.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "14.",
+				"english": "interesting",
+				"greek": "ενδιαφέρων",
+				"example": "English is a very interesting subject. I like it!",
+				"audio": "L4GW7.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "15.",
+				"english": "easy",
+				"greek": "εύκολος",
+				"example": "I find this puzzle very easy. Let's do it!",
+				"audio": "L4GW8.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "16.",
+				"english": "fun",
+				"greek": "διασκεδαστικός",
+				"example": "MyI play basketball because it’s fun!",
+				"audio": "L4GW9.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "17.",
+				"english": "Greece",
+				"greek": "Ελλάδα",
+				"example": "Let's find Greece on the map.",
+				"audio": "L4GW10.mp3"
+			}
+		],
+		"phrase": [
+			{
+				"lessonNumber": "4",
+				"order": "•",
+				"english": "I don’t know.",
+				"greek": "Δε ξέρω.",
+				"example": "I don't know this boy. What's his name?",
+				"audio": "L4P1.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "•",
+				"english": "Come on!",
+				"greek": "Έλα! / Ελάτε!",
+				"example": "Come on, children! Let’s go to the park and play!",
+				"audio": "L4P2.mp3"
+			},
+			{
+				"lessonNumber": "4",
+				"order": "•",
+				"english": "Nice to meet you!",
+				"greek": "Χαίρω πολύ!",
+				"example": "- Hello, my name is Nick! - Nice to meet you!",
+				"audio": "L4P3.mp3"
+			}
+		]
+	},
+	"lesson5": {
+		"word": [
+			{
+				"lessonNumber": "5",
+				"order": "1.",
+				"english": "classroom",
+				"greek": "αίθουσα",
+				"example": "There are twenty-five desks in my classroom.",
+				"audio": "L5W2.mp3"
+			},
+			{
+				"lessonNumber": "5",
+				"order": "2.",
+				"english": "library",
+				"greek": "βιβλιοθήκη",
+				"example": "The school library has got interesting books.",
+				"audio": "L5W3.mp3"
+			},
+			{
+				"lessonNumber": "5",
+				"order": "3.",
+				"english": "gym",
+				"greek": "γυμναστήριο",
+				"example": "-Where is the PE teacher? - He's in the gym.",
+				"audio": "L5W4.mp3"
+			},
+			{
+				"lessonNumber": "5",
+				"order": "4.",
+				"english": "science lab",
+				"greek": "εργαστήριο (φυσικής, χημείας κτλ.)",
+				"example": "There are three microscopes in the science lab.",
+				"audio": "L5W5.mp3"
+			},
+			{
+				"lessonNumber": "5",
+				"order": "5.",
+				"english": "canteen",
+				"greek": "κυλικείο",
+				"example": "Let’s have some lemonade at the school canteen.",
+				"audio": "L5W6.mp3"
+			},
+			{
+				"lessonNumber": "5",
+				"order": "6.",
+				"english": "toilets",
+				"greek": "τουαλέτες",
+				"example": "The teachers’ toilets are on the first floor.",
+				"audio": "L5W7.mp3"
+			},
+			{
+				"lessonNumber": "5",
+				"order": "7.",
+				"english": "playground",
+				"greek": "αυλή (σχολείου) / παιδική χαρά",
+				"example": "The children aren't in the classroom now. They're in the playground.",
+				"audio": "L5W8.mp3"
+			},
+			{
+				"lessonNumber": "5",
+				"order": "8.",
+				"english": "(swimming) pool",
+				"greek": "πισίνα",
+				"example": "We go to the swimming pool in the summer.",
+				"audio": "L5W9.mp3"
+			},
+			{
+				"lessonNumber": "5",
+				"order": "9.",
+				"english": "floor",
+				"greek": "όροφος / πάτωμα",
+				"example": "This shop is big! It has got seven floors! / Let’s sit on the floor and read a story.",
+				"audio": "L5GW1.mp3"
+			},
+			{
+				"lessonNumber": "5",
+				"order": "10.",
+				"english": "food",
+				"greek": "φαγητό",
+				"example": "I like the food in that restaurant.",
+				"audio": "L5GW2.mp3"
+			},
+			{
+				"lessonNumber": "5",
+				"order": "11.",
+				"english": "tasty",
+				"greek": "νόστιμος",
+				"example": "This is a very tasty burger.",
+				"audio": "L5GW3.mp3"
+			},
+			{
+				"lessonNumber": "5",
+				"order": "12.",
+				"english": "bell",
+				"greek": "κουδούνι",
+				"example": "Oh, listen! The bell! Open the door, please.",
+				"audio": "L5GW4.mp3"
+			}
+		],
+		"phrase": [
+			{
+				"lessonNumber": "5",
+				"order": "•",
+				"english": "on your left",
+				"greek": "στα αριστερά σου",
+				"example": "-Where is the bathroom, please? – It’s the second door on your left.",
+				"audio": "L5P1.mp3"
+			},
+			{
+				"lessonNumber": "5",
+				"order": "•",
+				"english": "on your right",
+				"greek": "στα δεξιά σου",
+				"example": "Look! The library is on your right!",
+				"audio": "L5P2.mp3"
+			},
+			{
+				"lessonNumber": "5",
+				"order": "•",
+				"english": "See you later!",
+				"greek": "Τα λέμε αργότερα!",
+				"example": "- Bye Eric! - Goodbye Andy! See you later!",
+				"audio": "L5P3.mp3"
+			},
+			{
+				"lessonNumber": "5",
+				"order": "•",
+				"english": "my dream school",
+				"greek": "το σχολείο των ονείρων μου",
+				"example": "This place is great! It's my dream school!",
+				"audio": "L5P4.mp3"
+			}
+		]
+	},
+	"lesson6": {
+		"word": [
+			{
+				"lessonNumber": "6",
+				"order": "1.",
+				"english": "notebook",
+				"greek": "τετράδιο",
+				"example": "Ken has got a blue notebook for the science lesson.",
+				"audio": "L6W2.mp3"
+			},
+			{
+				"lessonNumber": "6",
+				"order": "2.",
+				"english": "rubber",
+				"greek": "σβήστρα",
+				"example": "Lucy’s rubber is next to her pencil.",
+				"audio": "L6W3.mp3"
+			},
+			{
+				"lessonNumber": "6",
+				"order": "3.",
+				"english": "marker",
+				"greek": "μαρκαδόρος",
+				"example": "Colour the sun with a yellow marker, children!",
+				"audio": "L6W4.mp3"
+			},
+			{
+				"lessonNumber": "6",
+				"order": "4.",
+				"english": "pencil case",
+				"greek": "κασετίνα",
+				"example": "There are pencils, pens and a rubber in my pencil case.",
+				"audio": "L6W5.mp3"
+			},
+			{
+				"lessonNumber": "6",
+				"order": "5.",
+				"english": "pencil sharpener",
+				"greek": "ξύστρα",
+				"example": "I haven’t got a pencil sharpener because I write with a pen.",
+				"audio": "L6W6.mp3"
+			},
+			{
+				"lessonNumber": "6",
+				"order": "6.",
+				"english": "article",
+				"greek": "άρθρο",
+				"example": "My dad reads articles about sports.",
+				"audio": "L6GW1.mp3"
+			},
+			{
+				"lessonNumber": "6",
+				"order": "7.",
+				"english": "magazine",
+				"greek": "περιοδικό",
+				"example": "My mum has got some women's magazines on her desk.",
+				"audio": "L6GW2.mp3"
+			},
+			{
+				"lessonNumber": "6",
+				"order": "8.",
+				"english": "pupil",
+				"greek": "μαθητής, -ήτρια",
+				"example": "ThisThere are ninety-three pupils in our school.",
+				"audio": "L6GW3.mp3"
+			},
+			{
+				"lessonNumber": "6",
+				"order": "9.",
+				"english": "see",
+				"greek": "βλέπω",
+				"example": "Let’s see this new film at the cinema.",
+				"audio": "L6GW4.mp3"
+			},
+			{
+				"lessonNumber": "6",
+				"order": "10.",
+				"english": "England",
+				"greek": "Αγγλία",
+				"example": "London and Liverpool are in England.",
+				"audio": "L6GW5.mp3"
+			},
+			{
+				"lessonNumber": "6",
+				"order": "11.",
+				"english": "lunchbox",
+				"greek": "κουτί για γεύμα",
+				"example": "Paul has got an apple in his lunchbox.",
+				"audio": "L6GW6.mp3"
+			},
+			{
+				"lessonNumber": "6",
+				"order": "12.",
+				"english": "snack",
+				"greek": "κολατσιό, σνακ",
+				"example": "I’m hungry! Let’s have a snack!",
+				"audio": "L6GW7.mp3"
+			},
+			{
+				"lessonNumber": "6",
+				"order": "13.",
+				"english": "Finland",
+				"greek": "Φινλανδία",
+				"example": "It's very cold in Finland.",
+				"audio": "L6GW8.mp3"
+			},
+			{
+				"lessonNumber": "6",
+				"order": "14.",
+				"english": "flute",
+				"greek": "φλάουτο",
+				"example": "I play the flute and the violin.",
+				"audio": "L6GW9.mp3"
+			},
+			{
+				"lessonNumber": "6",
+				"order": "15.",
+				"english": "Japan",
+				"greek": "Ιαπωνία",
+				"example": "- Where is Akira from? - He's from Japan.",
+				"audio": "L6GW10.mp3"
+			},
+			{
+				"lessonNumber": "6",
+				"order": "16.",
+				"english": "all",
+				"greek": "όλοι",
+				"example": "All the pupils are in the classroom now.",
+				"audio": "L6GW11.mp3"
+			},
+			{
+				"lessonNumber": "6",
+				"order": "17.",
+				"english": "Ethiopia",
+				"greek": "Αιθιοπία",
+				"example": "- Where is Ethiopia? - It's in Africa.",
+				"audio": "L6GW12.mp3"
+			}
+		],
+		"phrase": [
+			{
+				"lessonNumber": "6",
+				"order": "•",
+				"english": "around the world",
+				"greek": "σε όλον τον κόσμο",
+				"example": "I have got friends from all around the world.",
+				"audio": "L6P1.mp3"
+			},
+			{
+				"lessonNumber": "6",
+				"order": "•",
+				"english": "it’s called",
+				"greek": "λέγεται, ονομάζεται",
+				"example": "- I don’t know this game. - It’s called Pictionary!",
+				"audio": "L6P2.mp3"
+			}
+		]
+	},
+	"lesson7": {
+		"word": [
+			{
+				"lessonNumber": "7",
+				"order": "1.",
+				"english": "run (fast)",
+				"greek": "τρέχω (γρήγορα)",
+				"example": "Let’s run. We‘re late for school.",
+				"audio": "L7W2.mp3"
+			},
+			{
+				"lessonNumber": "7",
+				"order": "2.",
+				"english": "swim",
+				"greek": "κολυμπάω",
+				"example": "The children swim in the swimming pool.",
+				"audio": "L7W3.mp3"
+			},
+			{
+				"lessonNumber": "7",
+				"order": "3.",
+				"english": "dance",
+				"greek": "χορεύω",
+				"example": "Linda and Pedro can dance the Samba.",
+				"audio": "L7W4.mp3"
+			},
+			{
+				"lessonNumber": "7",
+				"order": "4.",
+				"english": "draw",
+				"greek": "ζωγραφίζω, σχεδιάζω",
+				"example": "The children draw with pencils and markers.",
+				"audio": "L7W5.mp3"
+			},
+			{
+				"lessonNumber": "7",
+				"order": "5.",
+				"english": "speak English",
+				"greek": "μιλάω αγγλικά",
+				"example": "Mario can speak English and Italian.",
+				"audio": "L7W6.mp3"
+			},
+			{
+				"lessonNumber": "7",
+				"order": "6.",
+				"english": "ride a bike",
+				"greek": "κάνω ποδήλατο",
+				"example": "We ride our bikes in the park every Sunday.",
+				"audio": "L7W7.mp3"
+			},
+			{
+				"lessonNumber": "7",
+				"order": "7.",
+				"english": "drive a car",
+				"greek": "οδηγώ αυτοκίνητο",
+				"example": "Ethan is 12 years old. He can’t drive a car.",
+				"audio": "L7W8.mp3"
+			},
+			{
+				"lessonNumber": "7",
+				"order": "8.",
+				"english": "special",
+				"greek": "ιδιαίτερος",
+				"example": "My birthday is a special day.",
+				"audio": "L7GW1.mp3"
+			},
+			{
+				"lessonNumber": "7",
+				"order": "9.",
+				"english": "talent",
+				"greek": "ταλέντο",
+				"example": "You swim very fast! You’ve got a special talent.",
+				"audio": "L7GW2.mp3"
+			},
+			{
+				"lessonNumber": "7",
+				"order": "10.",
+				"english": "some",
+				"greek": "μερικοί / λίγος",
+				"example": "There are some new students in my class this year. / Let’s play some music!",
+				"audio": "L7GW3.mp3"
+			},
+			{
+				"lessonNumber": "7",
+				"order": "11.",
+				"english": "musician",
+				"greek": "μουσικός",
+				"example": "My cousin is a musician. He can play the guitar and the violin.",
+				"audio": "L7GW4.mp3"
+			},
+			{
+				"lessonNumber": "7",
+				"order": "12.",
+				"english": "well",
+				"greek": "καλά / λοιπόν",
+				"example": "Mary can’t walk very well because she is a baby. / - All the children are in the classroom, Mr. Davis. - Well, let’s start the lesson!",
+				"audio": "L7GW5.mp3"
+			},
+			{
+				"lessonNumber": "7",
+				"order": "13.",
+				"english": "write",
+				"greek": "γράφω",
+				"example": "Children learn how to read and write at school.",
+				"audio": "L7GW6.mp3"
+			},
+			{
+				"lessonNumber": "7",
+				"order": "14.",
+				"english": "wheelchair",
+				"greek": "αναπηρικό καροτσάκι",
+				"example": "Mr. Scott is in a wheelchair because he can’t walk.",
+				"audio": "L7GW7.mp3"
+			},
+			{
+				"lessonNumber": "7",
+				"order": "15.",
+				"english": "walk",
+				"greek": "περπατάω",
+				"example": "I walk to school every day.",
+				"audio": "L7GW8.mp3"
+			},
+			{
+				"lessonNumber": "7",
+				"order": "16.",
+				"english": "singer",
+				"greek": "τραγουδιστής, -ίστρια",
+				"example": "Beyonce is a fantastic singer.",
+				"audio": "L7GW9.mp3"
+			},
+			{
+				"lessonNumber": "7",
+				"order": "17.",
+				"english": "hear",
+				"greek": "ακούω",
+				"example": "My grandma is old and can’t hear very well.",
+				"audio": "L7GW10.mp3"
+			},
+			{
+				"lessonNumber": "7",
+				"order": "18.",
+				"english": "sometimes",
+				"greek": "μερικές φορές",
+				"example": "I am sometimes late for school.",
+				"audio": "L7GW11.mp3"
+			}
+		],
+		"phrase": [
+			{
+				"lessonNumber": "7",
+				"order": "•",
+				"english": "Don’t you agree?",
+				"greek": "Δε συμφωνείς;",
+				"example": "This new film is great! Don’t you agree?",
+				"audio": "L7P1.mp3"
+			}
+		]
+	},
+	"lesson8": {
+		"word": [
+			{
+				"lessonNumber": "8",
+				"order": "1.",
+				"english": "get up",
+				"greek": "σηκώνομαι από το κρεβάτι, ξυπνάω",
+				"example": "Emily gets up for school at 7:00 in the morning.",
+				"audio": "L8W2.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "2.",
+				"english": "brush my teeth",
+				"greek": "βουρτσίζω τα δόντια μου",
+				"example": "Jack always brushes his teeth in the evening.",
+				"audio": "L8W3.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "3.",
+				"english": "have breakfast/lunch/dinner",
+				"greek": "τρώω πρωινό/μεσημεριανό/βραδινό",
+				"example": "At weekends we have breakfast/lunch/dinner at grandma’s house.",
+				"audio": "L8W4.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "4.",
+				"english": "do my homework",
+				"greek": "κάνω τα μαθήματά μου",
+				"example": "My sister often does her homework in the library.",
+				"audio": "L8W5.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "5.",
+				"english": "go to bed",
+				"greek": "πηγαίνω για ύπνο",
+				"example": "I usually go to bed late in the evening.",
+				"audio": "L8W6.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "6.",
+				"english": "busy",
+				"greek": "απασχολημένος",
+				"example": "My parents are often very busy in the morning.",
+				"audio": "L8GW1.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "7.",
+				"english": "friend",
+				"greek": "φίλος, -η",
+				"example": "My friend Betty is a very nice girl.",
+				"audio": "L8GW2.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "8.",
+				"english": "dear",
+				"greek": "αγαπητός",
+				"example": "- Are you ok my dear? -Yes, I’m fine!",
+				"audio": "L8GW3.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "9.",
+				"english": "sorry",
+				"greek": "συγγνώμη",
+				"example": "MySorry, I can’t come with you today.",
+				"audio": "L8GW4.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "10.",
+				"english": "send",
+				"greek": "στέλνω",
+				"example": "Today people sometimes send letters, but they usually send e-mails.",
+				"audio": "L8GW5.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "11.",
+				"english": "early",
+				"greek": "νωρίς",
+				"example": "The baby always sleeps early in the evening.",
+				"audio": "L8GW6.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "12.",
+				"english": "then",
+				"greek": "μετά / τότε",
+				"example": "Lisa always does her homework first, and then she has dinner. / Mr Miller can’t see you at 10.00. He’s busy then.",
+				"audio": "L8GW7.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "13.",
+				"english": "live",
+				"greek": "μένω, ζω",
+				"example": "My cousins are from Greece but they live in Italy.",
+				"audio": "L8GW8.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "14.",
+				"english": "near",
+				"greek": "κοντά σε",
+				"example": "There is a beautiful park near our house.",
+				"audio": "L8GW9.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "15.",
+				"english": "help",
+				"greek": "βοηθάω / βοήθεια",
+				"example": "Dad usually helps Mum tidy the house. / I sometimes ask for help when I do my homework. ",
+				"audio": "L8GW10.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "16.",
+				"english": "feed",
+				"greek": "ταΐζω",
+				"example": "Grandma feeds her cats twice a day.",
+				"audio": "L8GW11.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "17.",
+				"english": "tidy",
+				"greek": "τακτοποιώ, συμμαζεύω",
+				"example": "I tidy my bedroom every afternoon.",
+				"audio": "L8GW12.mp3"
+			}
+		],
+		"phrase": [
+			{
+				"lessonNumber": "8",
+				"order": "•",
+				"english": "thanks for",
+				"greek": "ευχαριστώ για",
+				"example": "Thanks for the beautiful flowers!",
+				"audio": "L8P1.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "•",
+				"english": "o’ clock",
+				"greek": "ακριβώς (για ώρα)",
+				"example": "We have breakfast at 8 o’ clock every day.",
+				"audio": "L8P2.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "•",
+				"english": "time for bed",
+				"greek": "ώρα για ύπνο",
+				"example": "Time for bed kids! It’s very late!",
+				"audio": "L8P3.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "•",
+				"english": "What about …?",
+				"greek": "Και …;",
+				"example": "- I’m from Greece. What about you? - I’m from England.",
+				"audio": "L8P4.mp3"
+			},
+			{
+				"lessonNumber": "8",
+				"order": "•",
+				"english": "Write back soon!",
+				"greek": "Γράψε μου σύντομα!",
+				"example": "Write back soon! Bye for now!",
+				"audio": "L8P5.mp3"
+			}
+		]
+	},
+	"lesson9": {
+		"word": [
+			{
+				"lessonNumber": "9",
+				"order": "1.",
+				"english": "tennis",
+				"greek": "τένις",
+				"example": "Raphael Nadal is my favourite tennis player.",
+				"audio": "L9W2.mp3"
+			},
+			{
+				"lessonNumber": "9",
+				"order": "2.",
+				"english": "karate",
+				"greek": "καράτε",
+				"example": "Karate is a sport from Japan.",
+				"audio": "L9W3.mp3"
+			},
+			{
+				"lessonNumber": "9",
+				"order": "3.",
+				"english": "swimming",
+				"greek": "κολύμβηση",
+				"example": "We never go swimming in the winter. The sea is very cold.",
+				"audio": "L9W4.mp3"
+			},
+			{
+				"lessonNumber": "9",
+				"order": "4.",
+				"english": "skiing",
+				"greek": "σκι",
+				"example": "My family and I often go skiing in the Alps.",
+				"audio": "L9W5.mp3"
+			},
+			{
+				"lessonNumber": "9",
+				"order": "5.",
+				"english": "gymnastics",
+				"greek": "ενόργανη γυμναστική",
+				"example": "My sister does gymnastics every week. She can dance with a ball on her hands.",
+				"audio": "L9W6.mp3"
+			},
+			{
+				"lessonNumber": "9",
+				"order": "6.",
+				"english": "everybody",
+				"greek": "όλοι",
+				"example": "Everybody has fun at Jim’s parties.",
+				"audio": "L9GW1.mp3"
+			},
+			{
+				"lessonNumber": "9",
+				"order": "7.",
+				"english": "interview",
+				"greek": "συνέντευξη",
+				"example": "Singers usually give interviews to magazines.",
+				"audio": "L9GW2.mp3"
+			},
+			{
+				"lessonNumber": "9",
+				"order": "8.",
+				"english": "only",
+				"greek": "μόνο",
+				"example": "This gym is for women only.",
+				"audio": "L9GW3.mp3"
+			},
+			{
+				"lessonNumber": "9",
+				"order": "9.",
+				"english": "think (that)",
+				"greek": "πιστεύω, νομίζω (ότι)",
+				"example": "A lot of people think that the sun is yellow, but it is white.",
+				"audio": "L9GW4.mp3"
+			},
+			{
+				"lessonNumber": "9",
+				"order": "10.",
+				"english": "team",
+				"greek": "ομάδα",
+				"example": "Barcelona FC is a great football team.",
+				"audio": "L9GW5.mp3"
+			},
+			{
+				"lessonNumber": "9",
+				"order": "11.",
+				"english": "train",
+				"greek": "προπονούμαι",
+				"example": "Liam is an athlete and trains hard every day.",
+				"audio": "L9GW6.mp3"
+			},
+			{
+				"lessonNumber": "9",
+				"order": "12.",
+				"english": "training",
+				"greek": "προπόνηση",
+				"example": "Keith always does his homework after training at the gym.",
+				"audio": "L9GW7.mp3"
+			},
+			{
+				"lessonNumber": "9",
+				"order": "13.",
+				"english": "any",
+				"greek": "καθόλου",
+				"example": "I haven’t got any free time this week. I’m very busy.",
+				"audio": "L9GW8.mp3"
+			},
+			{
+				"lessonNumber": "9",
+				"order": "14.",
+				"english": "after",
+				"greek": "μετά (από)",
+				"example": "We always have dinner after 7 o’clock in the evening.",
+				"audio": "L9GW9.mp3"
+			},
+			{
+				"lessonNumber": "9",
+				"order": "15.",
+				"english": "difficult",
+				"greek": "δύσκολος",
+				"example": "This maths problem is very difficult. Mums help me, please!",
+				"audio": "L9GW10.mp3"
+			},
+			{
+				"lessonNumber": "9",
+				"order": "16.",
+				"english": "other",
+				"greek": "άλλος",
+				"example": "-What other sports do you do? - I play tennis and volleyball.",
+				"audio": "L9GW11.mp3"
+			}
+		],
+		"phrase": [
+			{
+				"lessonNumber": "9",
+				"order": "•",
+				"english": "have fun",
+				"greek": "διασκεδάζω",
+				"example": "Have fun at the party, children!",
+				"audio": "L9P1.mp3"
+			},
+			{
+				"lessonNumber": "9",
+				"order": "•",
+				"english": "free time",
+				"greek": "ελεύθερος χρόνος",
+				"example": "In my free time I read books.",
+				"audio": "L9P2.mp3"
+			},
+			{
+				"lessonNumber": "9",
+				"order": "•",
+				"english": "- Thank you very much! - You’re welcome!",
+				"greek": "- Ευχαριστώ πάρα πολύ! - Παρακαλώ!",
+				"example": "- Thank you very much for your help! - You’re welcome!",
+				"audio": "L9P3.mp3"
+			}
+		]
+	},
+	"lesson10": {
+		"word": [
+			{
+				"lessonNumber": "10",
+				"order": "1.",
+				"english": "past",
+				"greek": "και",
+				"example": "It’s ten past seven.",
+				"audio": "L10W2.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "2.",
+				"english": "to",
+				"greek": "παρά",
+				"example": "It’s ten to seven.",
+				"audio": "L10W3.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "3.",
+				"english": "(a) quarter past",
+				"greek": "και τέταρτο",
+				"example": "It’s a quarter past seven.",
+				"audio": "L10W4.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "4.",
+				"english": "(a) quarter to",
+				"greek": "παρά τέταρτο",
+				"example": "It’s a quarter to seven.",
+				"audio": "L10W5.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "5.",
+				"english": "half past",
+				"greek": "και μισή",
+				"example": "It’s half past seven.",
+				"audio": "L10W6.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "6.",
+				"english": "escape (from)",
+				"greek": "δραπετεύω (από)",
+				"example": "Zebras run fast and sometimes escape from lions.",
+				"audio": "L10GW1.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "7.",
+				"english": "key",
+				"greek": "κλειδί",
+				"example": "-Where are my car keys, dear? - I think they’re on the table.",
+				"audio": "L10GW2.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "8.",
+				"english": "note",
+				"greek": "σημείωμα",
+				"example": "I always write little notes to help me remember.",
+				"audio": "L10GW3.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "9.",
+				"english": "minute",
+				"greek": "λεπτό",
+				"example": "The film starts at 9:30 and now it’s 9:15. We’ve got only 15 minutes!",
+				"audio": "L10GW4.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "10.",
+				"english": "printer",
+				"greek": "εκτυπωτής",
+				"example": "There is a printer next to my computer.",
+				"audio": "L10GW5.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "11.",
+				"english": "wear",
+				"greek": "φοράω",
+				"example": "Everybody wears shorts and T-shirts in the summer.",
+				"audio": "L10GW6.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "12.",
+				"english": "jacket",
+				"greek": "σακάκι / μπουφάν",
+				"example": "I wear my blue jacket every day in winter.",
+				"audio": "L10GW7.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "13.",
+				"english": "pocket",
+				"greek": "τσέπη",
+				"example": "It isn’t nice to always have your hands in your pockets.",
+				"audio": "L10GW8.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "14.",
+				"english": "say",
+				"greek": "λέω",
+				"example": "I can’t hear what you say.",
+				"audio": "L10GW9.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "15.",
+				"english": "use",
+				"greek": "χρησιμοποιώ",
+				"example": "Megan can’t walk. She uses a wheelchair.",
+				"audio": "L10GW10.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "16.",
+				"english": "tell",
+				"greek": "λέω",
+				"example": "Our teacher tells us to exercise often.",
+				"audio": "L10GW11.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "17.",
+				"english": "clock",
+				"greek": "ρολόι (τοίχου ή ξυπνητήρι)",
+				"example": "My clock says it’s 9 o’clock.",
+				"audio": "L10GW12.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "18.",
+				"english": "board game",
+				"greek": "επιτραπέζιο παιχνίδι",
+				"example": "Taboo is my favourite board game.",
+				"audio": "L10GW13.mp3"
+			}
+		],
+		"phrase": [
+			{
+				"lessonNumber": "10",
+				"order": "•",
+				"english": "Hurry (up)!",
+				"greek": "Βιάσου!",
+				"example": "You’re always late! Hurry up, please!",
+				"audio": "L10P1.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "•",
+				"english": "What time is it?",
+				"greek": "Τι ώρα είναι;",
+				"example": "- What time is it? - It’s ten to two.",
+				"audio": "L10P2.mp3"
+			},
+			{
+				"lessonNumber": "10",
+				"order": "•",
+				"english": "Good job!",
+				"greek": "Μπράβο!",
+				"example": "These photos are great! Good job! ",
+				"audio": "L10P3.mp3"
+			}
+		]
+	},
+	"lesson11": {
+		"word": [
+			{
+				"lessonNumber": "11",
+				"order": "1.",
+				"english": "cartoon",
+				"greek": "κινούμενα σχέδια",
+				"example": "Disney creates fantastic cartoons.",
+				"audio": "L11W2.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "2.",
+				"english": "the news",
+				"greek": "ειδήσεις",
+				"example": "My dad reads the news on the Internet every morning.",
+				"audio": "L11W3.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "3.",
+				"english": "film",
+				"greek": "ταινία",
+				"example": "We want to see this new film at the cinema.",
+				"audio": "L11W4.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "4.",
+				"english": "documentary",
+				"greek": "ντοκιμαντέρ",
+				"example": "I love documentaries about lions and tigers.",
+				"audio": "L11W5.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "5.",
+				"english": "TV series",
+				"greek": "τηλεοπτική σειρά",
+				"example": "Today is the ninth episode of my favourite TV series.",
+				"audio": "L11W6.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "6.",
+				"english": "talent show",
+				"greek": "διαγωνισμός ταλέντων",
+				"example": "I like the songs from that from that TV talent show.",
+				"audio": "L11W7.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "7.",
+				"english": "football match",
+				"greek": "ποδοσφαιρικός αγώνας",
+				"example": "My friends and I watch football matches every Sunday.",
+				"audio": "L11W8.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "8.",
+				"english": "today",
+				"greek": "σήμερα",
+				"example": "Mr. Lewis can’t meet you today. What about next Monday?",
+				"audio": "L11GW1.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "9.",
+				"english": "choose (to)",
+				"greek": "επιλέγω, διαλέγω (να)",
+				"example": "You can choose the blue car or the green one.",
+				"audio": "L11GW2.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "10.",
+				"english": "watch",
+				"greek": "βλέπω, παρακολουθώ",
+				"example": "Let’s sit on the sofa and watch TV.",
+				"audio": "L11GW3.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "11.",
+				"english": "episode",
+				"greek": "επεισόδιο",
+				"example": "Grandma’s favourite TV series has got 300 episodes!",
+				"audio": "L11GW4.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "12.",
+				"english": "animal",
+				"greek": "ζώο",
+				"example": "Alice loves animals! She’s got two cats, a dog and a rabbit!",
+				"audio": "L11GW5.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "13.",
+				"english": "world",
+				"greek": "κόσμος",
+				"example": "There is a big map of the world on the classroom wall.",
+				"audio": "L11GW6.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "14.",
+				"english": "travel",
+				"greek": "ταξιδεύω",
+				"example": "Mr. Scott is a pilot and travels around the world.",
+				"audio": "L11GW7.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "15.",
+				"english": "learn",
+				"greek": "μαθαίνω",
+				"example": "It’s easy for me to learn Italian because I speak Spanish.",
+				"audio": "L11GW8.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "16.",
+				"english": "thing",
+				"greek": "πράγμα",
+				"example": "My sister always takes my things.",
+				"audio": "L11GW9.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "17.",
+				"english": "surprise",
+				"greek": "έκπληξη",
+				"example": "We’ve got a surprise for Lisa’s birthday.",
+				"audio": "L11GW10.mp3"
+			}
+		],
+		"phrase": [
+			{
+				"lessonNumber": "11",
+				"order": "•",
+				"english": "What’s on TV?",
+				"greek": "Τι έχει στην τηλεόραση;",
+				"example": "- Let’s sit in the living room. - What’s on TV?",
+				"audio": "L11P1.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "•",
+				"english": "Don’t miss it!",
+				"greek": "Τι ώρα είναι;",
+				"example": "There’s a great film on TV this weekend. Don’t miss it!",
+				"audio": "L11P2.mp3"
+			},
+			{
+				"lessonNumber": "11",
+				"order": "•",
+				"english": "What’s on next?",
+				"greek": "Τι έχει μετά;",
+				"example": "- What’s on next? -There’s a new film at 7 o’clock.",
+				"audio": "L11P3.mp3"
+			}
+		]
+	},
+	"lesson12": {
+		"word": [
+			{
+				"lessonNumber": "12",
+				"order": "1.",
+				"english": "listen to music",
+				"greek": "ακούω μουσική",
+				"example": "My mum loves listening to music on the radio.",
+				"audio": "L12W2.mp3"
+			},
+			{
+				"lessonNumber": "12",
+				"order": "2.",
+				"english": "do puzzles",
+				"greek": "κάνω παζλ",
+				"example": "I like doing puzzles with my little sister.",
+				"audio": "L12W3.mp3"
+			},
+			{
+				"lessonNumber": "12",
+				"order": "3.",
+				"english": "play chess",
+				"greek": "παίζω σκάκι",
+				"example": "Rosie enjoys playing chess and other board games.",
+				"audio": "L12W4.mp3"
+			},
+			{
+				"lessonNumber": "12",
+				"order": "4.",
+				"english": "meet my friends",
+				"greek": "συναντώ τους φίλους μου",
+				"example": "At weekends, I meet my friends and we play basketball.",
+				"audio": "L12W5.mp3"
+			},
+			{
+				"lessonNumber": "12",
+				"order": "5.",
+				"english": "collect stickers",
+				"greek": "συλλέγω αυτοκόλλητα",
+				"example": "Toby’s favourite hobby is collecting stickers of football players.",
+				"audio": "L12W6.mp3"
+			},
+			{
+				"lessonNumber": "12",
+				"order": "6.",
+				"english": "chat",
+				"greek": "συνομιλία / συνομιλώ",
+				"example": "I’ve got some free time now. Let’s have a chat. / My sister likes chatting on the phone with her friends.",
+				"audio": "L12GW1.mp3"
+			},
+			{
+				"lessonNumber": "12",
+				"order": "7.",
+				"english": "classmate",
+				"greek": "συμμαθητής, -ήτρια",
+				"example": "- Do you know that girl? - She’s Erin. We’re classmates at schools.",
+				"audio": "L12GW2.mp3"
+			},
+			{
+				"lessonNumber": "12",
+				"order": "8.",
+				"english": "want (to)",
+				"greek": "θέλω (να)",
+				"example": "I want to send an e-mail. Can you help me, please?",
+				"audio": "L12GW3.mp3"
+			},
+			{
+				"lessonNumber": "12",
+				"order": "9.",
+				"english": "idea",
+				"greek": "ιδέα",
+				"example": "- Let’s go skiing! - That’s an amazing idea!",
+				"audio": "L12GW4.mp3"
+			},
+			{
+				"lessonNumber": "12",
+				"order": "10.",
+				"english": "album",
+				"greek": "άλμπουμ",
+				"example": "This is a photo album of my first birthday!",
+				"audio": "L12GW5.mp3"
+			},
+			{
+				"lessonNumber": "12",
+				"order": "11.",
+				"english": "make",
+				"greek": "φτιάχνω",
+				"example": "Rosie often makes a chocolate cake on Saturdays.",
+				"audio": "L12GW6.mp3"
+			},
+			{
+				"lessonNumber": "12",
+				"order": "12.",
+				"english": "famous",
+				"greek": "διάσημος",
+				"example": "Everybody knows Adele! She’s a famous singer!",
+				"audio": "L12GW7.mp3"
+			},
+			{
+				"lessonNumber": "12",
+				"order": "13.",
+				"english": "building",
+				"greek": "κτίριο",
+				"example": "This building has got 25 floors!",
+				"audio": "L12GW8.mp3"
+			},
+			{
+				"lessonNumber": "12",
+				"order": "14.",
+				"english": "amazing",
+				"greek": "καταπληκτικός",
+				"example": "That restaurant has got amazing food.",
+				"audio": "L12GW9.mp3"
+			},
+			{
+				"lessonNumber": "12",
+				"order": "15.",
+				"english": "talk (about)",
+				"greek": "μιλάω (για)",
+				"example": "I like talking about art and music with my friends.",
+				"audio": "L12GW10.mp3"
+			}
+		],
+		"phrase": [
+			{
+				"lessonNumber": "12",
+				"order": "•",
+				"english": "You can try it!",
+				"greek": "Μπορείς να το δοκιμάσεις!",
+				"example": "-This burger is great!  You can try it!",
+				"audio": "L12P1.mp3"
+			}
+		]
+	},
+	"lesson13": {
+		"word": [
+			{
+				"lessonNumber": "13",
+				"order": "1.",
+				"english": "mother / mum",
+				"greek": "μητέρα / μαμά",
+				"example": "Mum feeds the baby five times a day.",
+				"audio": "L13W2.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "2.",
+				"english": "father / dad",
+				"greek": "πατέρας / μπαμπάς",
+				"example": "Dad always helps me with maths.",
+				"audio": "L13W3.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "3.",
+				"english": "brother",
+				"greek": "αδελφός",
+				"example": "I’ve got a big brother. He’s 18 years old.",
+				"audio": "L13W4.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "4.",
+				"english": "sister",
+				"greek": "αδελφή",
+				"example": "Look at this family photo! This girl is my sister Tina.",
+				"audio": "L13W5.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "5.",
+				"english": "grandfather / grandpa",
+				"greek": "παππούς",
+				"example": "My grandpa is 70 years old and has got grey hair.",
+				"audio": "L13W6.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "6.",
+				"english": "grandmother / grandma",
+				"greek": "γιαγιά",
+				"example": "My grandma is old and she can’t walk. She uses a wheelchair.",
+				"audio": "L13W7.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "7.",
+				"english": "grandparents",
+				"greek": "παππούδες",
+				"example": "We usually visit our grandparents at weekends.",
+				"audio": "L13W8.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "8.",
+				"english": "aunt",
+				"greek": "θεία",
+				"example": "This is Aunt Sarah, my mother’s sister.",
+				"audio": "L13W9.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "9.",
+				"english": "uncle",
+				"greek": "θείος",
+				"example": "My dad’s brother, Uncle Tom, can play the drums!",
+				"audio": "L13W10.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "10.",
+				"english": "cousin",
+				"greek": "ξάδελφος / ξαδέλφη",
+				"example": "I love playing with my cousins at our grandparents’ house.",
+				"audio": "L13W11.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "11.",
+				"english": "together",
+				"greek": "μαζί",
+				"example": "Every Sunday we have lunch all together.",
+				"audio": "L13GW1.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "12.",
+				"english": "mobile phone",
+				"greek": "κινητό τηλέφωνο",
+				"example": "Can I use your mobile phone to talk to Jonathan?",
+				"audio": "L13GW2.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "13.",
+				"english": "cook",
+				"greek": "μαγειρεύω",
+				"example": "Sam is cooking in the kitchen right now.",
+				"audio": "L13GW3.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "14.",
+				"english": "chips",
+				"greek": "πατάτες τηγανητές",
+				"example": "When I go to England, I always eat fish and chips.",
+				"audio": "L13GW4.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "15.",
+				"english": "really",
+				"greek": "πραγματικά",
+				"example": "I like this film. It’s really nice.",
+				"audio": "L13GW5.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "16.",
+				"english": "sleep",
+				"greek": "κοιμάμαι",
+				"example": "Be quiet! My parents are sleeping at the moment.",
+				"audio": "L13GW6.mp3"
+			}
+		],
+		"phrase": [
+			{
+				"lessonNumber": "13",
+				"order": "•",
+				"english": "Guess what!",
+				"greek": "Μάντεψε!",
+				"example": "Guess what! We are having a baby!",
+				"audio": "L13P1.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "•",
+				"english": "take photos",
+				"greek": "βγάζω φωτογραφίες",
+				"example": "I can take great photos with my new camera!",
+				"audio": "L13P2.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "•",
+				"english": "set the table",
+				"greek": "στρώνω το τραπέζι",
+				"example": "Can you set the table, dear? It’s time for lunch.",
+				"audio": "L13P3.mp3"
+			},
+			{
+				"lessonNumber": "13",
+				"order": "•",
+				"english": "Take care!",
+				"greek": "Να προσέχεις!",
+				"example": "See you soon, Amy! Take care!",
+				"audio": "L13P4.mp3"
+			}
+		]
+	},
+	"lesson14": {
+		"word": [
+			{
+				"lessonNumber": "14",
+				"order": "1.",
+				"english": "I’m angry",
+				"greek": "είμαι θυμωμένος",
+				"example": "I’m really angry because she always takes my things.",
+				"audio": "L14W2.mp3"
+			},
+			{
+				"lessonNumber": "14",
+				"order": "2.",
+				"english": "I’m bored",
+				"greek": "βαριέμαι",
+				"example": "This lesson is not interesting. I’m bored!",
+				"audio": "L14W3.mp3"
+			},
+			{
+				"lessonNumber": "14",
+				"order": "3.",
+				"english": "I’m tired",
+				"greek": "είμαι κουρασμένος",
+				"example": "Sofia is usually tired because she trains every day.",
+				"audio": "L14W4.mp3"
+			},
+			{
+				"lessonNumber": "14",
+				"order": "4.",
+				"english": "I’m scared",
+				"greek": "φοβάμαι",
+				"example": "My little sister is scared of witches.",
+				"audio": "L14W5.mp3"
+			},
+			{
+				"lessonNumber": "14",
+				"order": "5.",
+				"english": "I’m hungry",
+				"greek": "πεινάω",
+				"example": "I’m hungry, Mum! Let’s make a pizza.",
+				"audio": "L14W6.mp3"
+			},
+			{
+				"lessonNumber": "14",
+				"order": "6.",
+				"english": "I’m thirsty",
+				"greek": "διψάω",
+				"example": "I’m very thirsty right now! I want a glass of water.",
+				"audio": "L14W7.mp3"
+			},
+			{
+				"lessonNumber": "14",
+				"order": "7.",
+				"english": "try",
+				"greek": "προσπαθώ / δοκιμάζω",
+				"example": "- I can’t ride my bike very well, Dad! - We can try together! / This food is very tasty! Let’s try it!",
+				"audio": "L14GW1.mp3"
+			},
+			{
+				"lessonNumber": "14",
+				"order": "8.",
+				"english": "first",
+				"greek": "πρώτα / πρώτος",
+				"example": "- Can we have lunch now, Mum? - Wash your hands first, please! / The baby is scared because it’s his first time at the doctor’s.",
+				"audio": "L14GW2.mp3"
+			},
+			{
+				"lessonNumber": "14",
+				"order": "9.",
+				"english": "word",
+				"greek": "λέξη",
+				"example": "The word ‘family’ has got six letters.",
+				"audio": "L14GW3.mp3"
+			},
+			{
+				"lessonNumber": "14",
+				"order": "10.",
+				"english": "guess",
+				"greek": "μαντεύω",
+				"example": "When I don’t know the correct answer I often guess it.",
+				"audio": "L14GW4.mp3"
+			},
+			{
+				"lessonNumber": "14",
+				"order": "11.",
+				"english": "cry",
+				"greek": "κλαίω",
+				"example": "The baby sometimes cries at night because she’s hungry.",
+				"audio": "L14GW5.mp3"
+			},
+			{
+				"lessonNumber": "14",
+				"order": "12.",
+				"english": "tear",
+				"greek": "δάκρυ",
+				"example": "Are these tears? Why are you crying?",
+				"audio": "L14GW6.mp3"
+			},
+			{
+				"lessonNumber": "14",
+				"order": "13.",
+				"english": "so",
+				"greek": "άρα, οπότε",
+				"example": "I’m not very well. So I’m not coming to the party.",
+				"audio": "L14GW7.mp3"
+			},
+			{
+				"lessonNumber": "14",
+				"order": "14.",
+				"english": "know",
+				"greek": "ξέρω, γνωρίζω",
+				"example": "Linda reads very much so she knows a lot of things.",
+				"audio": "L14GW8.mp3"
+			},
+			{
+				"lessonNumber": "14",
+				"order": "15.",
+				"english": "scream",
+				"greek": "ουρλιάζω",
+				"example": "- Why are you screaming? - There is a mouse under my bed!",
+				"audio": "L14GW9.mp3"
+			}
+		],
+		"phrase": [
+			{
+				"lessonNumber": "14",
+				"order": "•",
+				"english": "have a good time",
+				"greek": "περνάω καλά",
+				"example": "When I play board games with my friends, we always have a good time.",
+				"audio": "L14P1.mp3"
+			},
+			{
+				"lessonNumber": "14",
+				"order": "•",
+				"english": "Don’t worry!",
+				"greek": "Μην ανησυχείς!",
+				"example": "- I can’t find my umbrella. - Don’t worry! I’ve got one.",
+				"audio": "L14P2.mp3"
+			},
+			{
+				"lessonNumber": "14",
+				"order": "•",
+				"english": "pick a card",
+				"greek": "τραβάω/παίρνω μία κάρτα",
+				"example": "- Let’s start the game! - Pick a card!",
+				"audio": "L14P3.mp3"
+			},
+			{
+				"lessonNumber": "14",
+				"order": "•",
+				"english": "It’s your turn.",
+				"greek": "Είναι η σειρά σου.",
+				"example": "I always cook dinner. Today it’s your turn.",
+				"audio": "L14P4.mp3"
+			}
+		]
+	},
+	"lesson15": {
+		"word": [
+			{
+				"lessonNumber": "15",
+				"order": "1.",
+				"english": "funny",
+				"greek": "αστείος",
+				"example": "I love cartoons. They’re really funny!",
+				"audio": "L15W2.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "2.",
+				"english": "serious",
+				"greek": "σοβαρός",
+				"example": "Our teacher is always serious. He never tells jokes.",
+				"audio": "L15W3.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "3.",
+				"english": "creative",
+				"greek": "δημιουργικός",
+				"example": "Victoria enjoys making new things. She’s very creative.",
+				"audio": "L15W4.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "4.",
+				"english": "smart",
+				"greek": "έξυπνος",
+				"example": "This idea is amazing! Well done Tina! You’re very smart!",
+				"audio": "L15W5.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "5.",
+				"english": "friendly",
+				"greek": "φιλικός",
+				"example": "Miranda is very nice and friendly to everyone.",
+				"audio": "L15W6.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "6.",
+				"english": "shy",
+				"greek": "ντροπαλός",
+				"example": "I’m very shy and quiet around people I don’t know.",
+				"audio": "L15W7.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "7.",
+				"english": "type",
+				"greek": "τύπος",
+				"example": "- What type of sports do you like? - I like team sports.",
+				"audio": "L15GW1.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "8.",
+				"english": "quiz",
+				"greek": "ερωτηματολόγιο, κουίζ",
+				"example": "There’s a history quiz in this magazine. Let’s do it.",
+				"audio": "L15GW2.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "9.",
+				"english": "find out",
+				"greek": "μαθαίνω, ανακαλύπτω",
+				"example": "We can read this article and find out the answer to the question.",
+				"audio": "L15GW3.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "10.",
+				"english": "buy",
+				"greek": "αγοράζω",
+				"example": "William is buying some milk at the supermarket right now.",
+				"audio": "L15GW4.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "11.",
+				"english": "T-shirt",
+				"greek": "κοντομάνικο μπλουζάκι",
+				"example": "My brother usually wears T-shirts and jeans.",
+				"audio": "L15GW5.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "12.",
+				"english": "colourful",
+				"greek": "πολύχρωμος",
+				"example": "Georgia doesn’t like black. She always wears colourful clothes.",
+				"audio": "L15GW6.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "13.",
+				"english": "funfair",
+				"greek": "λούνα παρκ",
+				"example": "Children enjoy going to the funfair because they can play and eat ice cream.",
+				"audio": "L15GW7.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "14.",
+				"english": "museum",
+				"greek": "μουσείο",
+				"example": "Brad likes going to museums and learning about history.",
+				"audio": "L15GW8.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "15.",
+				"english": "present",
+				"greek": "δώρο",
+				"example": "It’s Mother’s Day, Mum! This present is for you.",
+				"audio": "L15GW9.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "16.",
+				"english": "birthday",
+				"greek": "γενέθλια",
+				"example": "My birthday is on 16th May.",
+				"audio": "L15GW10.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "17.",
+				"english": "more",
+				"greek": "περισσότερος",
+				"example": "Can I have more cake, please?",
+				"audio": "L15GW11.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "18.",
+				"english": "person",
+				"greek": "άτομο",
+				"example": "The only person I know here is you.",
+				"audio": "L15GW12.mp3"
+			}
+		],
+		"phrase": [
+			{
+				"lessonNumber": "15",
+				"order": "•",
+				"english": "spend time (with)",
+				"greek": "περνάω χρόνο (με)",
+				"example": "I love spending time with my family.",
+				"audio": "L15P1.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "•",
+				"english": "tell jokes",
+				"greek": "λέω αστεία",
+				"example": "My uncle always tells jokes. He is very funny!",
+				"audio": "L15P2.mp3"
+			},
+			{
+				"lessonNumber": "15",
+				"order": "•",
+				"english": "my best friend",
+				"greek": "ο καλύτερός μου φίλος",
+				"example": "My best friend and I spend a lot of time together.",
+				"audio": "L15P3.mp3"
+			}
+		]
+	},
+	"lesson16": {
+		"word": [
+			{
+				"lessonNumber": "16",
+				"order": "1.",
+				"english": "tablet",
+				"greek": "τάμπλετ",
+				"example": "Ron enjoys watching videos and playing games on his new tablet.",
+				"audio": "L16W2.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "2.",
+				"english": "smartwatch",
+				"greek": "σμάρτγουοτς (ρολόι σαν κινητό τηλέφωνο)",
+				"example": "I wear my smartwatch every day because I can tell the time and also call my friends with it.",
+				"audio": "L16W3.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "3.",
+				"english": "drone",
+				"greek": "ντρόουν (τηλεκατευθυνόμενο ελικοπτεράκι με κάμερα)",
+				"example": "Look! A drone is in the air and is taking a video.",
+				"audio": "L16W4.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "4.",
+				"english": "camera",
+				"greek": "φωτογραφική μηχανή",
+				"example": "Lily’s new camera takes amazing photos and videos.",
+				"audio": "L16W5.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "5.",
+				"english": "laptop",
+				"greek": "λάπτοπ (φορητός υπολογιστής)",
+				"example": "When I want to watch a film or do a school project, I use my laptop.",
+				"audio": "L16W6.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "6.",
+				"english": "kid",
+				"greek": "παιδί",
+				"example": "My brother thinks that cartoons are only for kids.",
+				"audio": "L16GW1.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "7.",
+				"english": "price",
+				"greek": "τιμή",
+				"example": "The price of this book is £15.",
+				"audio": "L16GW2.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "8.",
+				"english": "comment",
+				"greek": "σχόλιο",
+				"example": "My friends always write nice comments under my profile picture.",
+				"audio": "L16GW3.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "9.",
+				"english": "practical",
+				"greek": "πρακτικός",
+				"example": "This car is fast but it’s small. It isn’t very practical.",
+				"audio": "L16GW4.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "10.",
+				"english": "just",
+				"greek": "μόνο / μόλις",
+				"example": "This isn’t just a sofa. It is also a bed. / - What are you doing right now? - I’m just starting training at the gym.",
+				"audio": "L16GW5.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "11.",
+				"english": "watch",
+				"greek": "ρολόι (χειρός)",
+				"example": "- What time is it? - I don’t know. I can’t find my watch.",
+				"audio": "L16GW6.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "12.",
+				"english": "call",
+				"greek": "τηλεφωνώ / κλήση",
+				"example": "Can you call Susan? I need to talk to her. / You’ve got a call from your brother, Mr. Smith.",
+				"audio": "L16GW7.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "13.",
+				"english": "message",
+				"greek": "μήνυμα",
+				"example": "Ken doesn’t like talking on the phone but he enjoys sending messages.",
+				"audio": "L16GW8.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "14.",
+				"english": "screen",
+				"greek": "οθόνη",
+				"example": "My mobile phone has got a big screen, so I can watch videos on it.",
+				"audio": "L16GW9.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "15.",
+				"english": "fly",
+				"greek": "πετάω",
+				"example": "Do you know that some birds can’t fly?",
+				"audio": "L16GW10.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "16.",
+				"english": "sky",
+				"greek": "ουρανός",
+				"example": "Look at the stars in the sky! They’re beautiful!",
+				"audio": "L16GW11.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "17.",
+				"english": "expensive",
+				"greek": "ακριβός",
+				"example": "- The price of this dress is £500. - I can’t buy it, it’s very expensive.",
+				"audio": "L16GW12.mp3"
+			}
+		],
+		"phrase": [
+			{
+				"lessonNumber": "16",
+				"order": "•",
+				"english": "How much do they cost?",
+				"greek": "Πόσο κοστίζουν;",
+				"example": "- I like these shoes! How much do they cost? - £50.",
+				"audio": "L16P1.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "•",
+				"english": "surf the Net",
+				"greek": "σερφάρω στο Ίντερνετ",
+				"example": "When I’m bored, I usually surf the Net on my laptop.",
+				"audio": "L16P2.mp3"
+			},
+			{
+				"lessonNumber": "16",
+				"order": "•",
+				"english": "easy to use",
+				"greek": "εύκολο να χρησιμοποιηθεί",
+				"example": "My mum doesn’t like difficult gadgets, so her new tablet is very easy to use.",
+				"audio": "L16P3.mp3"
+			}
+		]
+	}
+}

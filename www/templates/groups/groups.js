@@ -501,6 +501,7 @@ angular.module("bookbuilder2")
 
                         if ($scope.savedLessonButtonsArray[lesson.id].downloaded) {
 
+                          console.log("lesson is already downloaded!");
                           downloadLessonAssets(lesson, function (response) {
                             if (response) {
                               console.log("Success on downloading Lesson");
@@ -516,6 +517,8 @@ angular.module("bookbuilder2")
                           });
 
                         } else {
+
+                          console.log("lesson is NOT downloaded!");
 
                           var confirmPopup = $ionicPopup.confirm({
                             title: 'Download ' + lesson.title,
@@ -693,11 +696,19 @@ angular.module("bookbuilder2")
     };
 
     var downloadLessonAssets = function (lesson, callback) {
+
+      if (!window.cordova || window.cordova.platformId !== "browser") {
+        return callback(true);
+      }
+
+
       $scope.totalFilesLessonAssets = 3;
       $scope.downloadingLessonAsset = 0;
       var lessonSpecificFiles = ["lesson.json", "lessonassets.json", "background_image_icon.png"];
 
       $ionicLoading.show();
+
+      console.log("downloadLessonAssets from cdn ", $scope.cdnUrl);
 
       $rootScope.assets(lessonSpecificFiles, $scope.rootDir, $scope.cdnUrl, "data/lessons", lesson.id, function (response) {
         console.log(lesson.id + " downloaded basic lesson file lesson.json and lessonassets.json ", response);

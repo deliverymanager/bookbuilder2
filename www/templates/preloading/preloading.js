@@ -153,7 +153,8 @@ angular.module("bookbuilder2")
         //engrlikeenglishb1-3-0
         //engrenglish3
         //RUN ON BROWSER FOR DEVELOPING https://s3-eu-west-1.amazonaws.com/bookbuilder2/index.html
-        $scope.rootDir = "https://s3-eu-west-1.amazonaws.com/engrlikeenglishb1-3-0/";
+        //$scope.rootDir = "https://s3-eu-west-1.amazonaws.com/engrlikeenglishb1-3-0/";
+        $scope.rootDir = "";
         window.localStorage.setItem("rootDir", $scope.rootDir);
         $rootScope.navigate("groups");
       }
@@ -167,12 +168,16 @@ angular.module("bookbuilder2")
 
         $cordovaFile.checkFile(rootDir + prefolder + "/" + folder + "/", file)
           .then(function (success) {
+            console.log("asset success", cdnUrl + prefolder + "/" + folder + "/" + file, rootDir + prefolder + "/" + folder + "/" + file);
             callback(true);
           }, function (error) {
             $cordovaFileTransfer.download(cdnUrl + prefolder + "/" + folder + "/" + file, rootDir + prefolder + "/" + folder + "/" + file, {}, true)
               .then(function (result) {
+                console.log("asset error", cdnUrl + prefolder + "/" + folder + "/" + file, rootDir + prefolder + "/" + folder + "/" + file);
+                console.log("Sucessufully downloaded!");
                 callback(true);
               }, function (error) {
+                console.log("asset error", cdnUrl + prefolder + "/" + folder + "/" + file, rootDir + prefolder + "/" + folder + "/" + file);
                 console.log(error);
                 callback(false);
               }, function (progress) {

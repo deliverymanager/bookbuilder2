@@ -9736,7 +9736,15 @@ a.button {
   position: absolute;
   top: 10px; }
 
+.searchPopupForm .popup {
+  width: 320px;
+  position: absolute;
+  bottom: 10px; }
+
 .resultsPopupForm .popup .popup-head {
+  padding: 0px; }
+
+.searchPopupForm .popup .popup-head {
   padding: 0px; }
 
 .transparentBar {

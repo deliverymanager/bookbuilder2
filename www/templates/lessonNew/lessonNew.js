@@ -221,7 +221,7 @@ angular.module("bookbuilder2")
               var lessonImage = new createjs.Bitmap($scope.rootDir + "data/lessons/" + $scope.selectedLessonId + "/background_image_icon.png");
               lessonImage.scaleX = lessonImage.scaleY = 0.85;
               lessonImage.x = 320;
-              lessonImage.y = 170;
+              lessonImage.y = 150;
               $scope.mainContainer.addChild(lessonImage);
             });
 
@@ -311,22 +311,37 @@ angular.module("bookbuilder2")
                 });
             });//end of _.each(selectedGroupLessons)
 
-            async.waterfall(waterfallFunctions, function (callback) {
+            async.waterfall(waterfallFunctions, function (err, result) {
               console.log("Buttons of activities are inserted...");
-              $http.get($scope.rootDir + "data/assets/lesson_end_button_sprite.json")
+
+              console.log("book.wordlist", $scope.book.wordlist);
+              var resultsSprite = $scope.rootDir + "data/assets/lesson_end_button_sprite.json";
+              if ($scope.book.wordlist) {
+                resultsSprite = $scope.rootDir + "data/assets/scoreBtn.json";
+              }
+
+              $http.get(resultsSprite)
                 .success(function (response) {
                   response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
                   var resultsButtonSpriteSheet = new createjs.SpriteSheet(response);
                   var resultsButton = new createjs.Sprite(resultsButtonSpriteSheet, "normal");
-                  resultsButton.x = ($scope.selectedLesson.activitiesMenu.length > 9 ? 450 : 100);
+                  if (!$scope.book.wordlist) {
+                    resultsButton.x = ($scope.selectedLesson.activitiesMenu.length > 9 ? 450 : 100);
+                  } else {
+                    resultsButton.x = ($scope.selectedLesson.activitiesMenu.length > 9 ? 450 : 155);
+                  }
                   resultsButton.y = 620;
-                  resultsButton.scaleX = resultsButton.scaleY = 0.6;
+                  if (!$scope.book.wordlist) {
+                    resultsButton.scaleX = resultsButton.scaleY = 0.6;
+                  }
                   $scope.mainContainer.addChild(resultsButton);
 
-                  var endText = new createjs.Text("RESULTS", "30px Arial", $scope.book.resultsColor ? $scope.book.resultsColor : 'white');
-                  endText.x = ($scope.selectedLesson.activitiesMenu.length > 9 ? 490 : 140);
-                  endText.y = 607;
-                  $scope.mainContainer.addChild(endText);
+                  if (!$scope.book.wordlist) {
+                    var endText = new createjs.Text("RESULTS", "30px Arial", $scope.book.resultsColor ? $scope.book.resultsColor : 'white');
+                    endText.x = ($scope.selectedLesson.activitiesMenu.length > 9 ? 490 : 140);
+                    endText.y = 607;
+                    $scope.mainContainer.addChild(endText);
+                  }
 
                   resultsButton.addEventListener("mousedown", function (event) {
                     console.log("mousedown event on a button !");
@@ -343,6 +358,64 @@ angular.module("bookbuilder2")
                 .error(function (error) {
                   console.error("Error on getting json for results button...", error);
                 });
+
+              if ($scope.book.wordlist) {
+
+                $http.get($scope.rootDir + "data/assets/wordlistBtn.json")
+                  .success(function (response) {
+                    response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
+                    var wordlistButtonSpriteSheet = new createjs.SpriteSheet(response);
+                    var wordlistButton = new createjs.Sprite(wordlistButtonSpriteSheet, "normal");
+                    wordlistButton.x = ($scope.selectedLesson.activitiesMenu.length > 9 ? 450 : 155);
+                    wordlistButton.y = 570;
+                    $scope.mainContainer.addChild(wordlistButton);
+
+                    wordlistButton.addEventListener("mousedown", function (event) {
+                      console.log("mousedown event on a button !");
+                      wordlistButton.gotoAndPlay("onSelection");
+                      $scope.stage.update();
+                    });
+                    wordlistButton.addEventListener("pressup", function (event) {
+                      console.log("pressup event!");
+                      wordlistButton.gotoAndPlay("normal");
+                      $scope.stage.update();
+                      $rootScope.navigate("wordlist");
+                    });
+                  })
+                  .error(function (error) {
+                    console.error("Error on getting json for wordlist button...", error);
+                  });
+
+
+                $http.get($scope.rootDir + "data/assets/letsPlayTechBtn.json")
+                  .success(function (response) {
+                    response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
+                    var letsPlayTechButtonSpriteSheet = new createjs.SpriteSheet(response);
+                    var letsPlayTechButton = new createjs.Sprite(letsPlayTechButtonSpriteSheet, "normal");
+                    letsPlayTechButton.x = 850;
+                    letsPlayTechButton.y = 630;
+                    letsPlayTechButton.scaleX = letsPlayTechButton.scaleY = 0.6;
+                    $scope.mainContainer.addChild(letsPlayTechButton);
+
+                    letsPlayTechButton.addEventListener("mousedown", function (event) {
+                      console.log("mousedown event on a button !");
+                      letsPlayTechButton.gotoAndPlay("onSelection");
+                      $scope.stage.update();
+                    });
+                    letsPlayTechButton.addEventListener("pressup", function (event) {
+                      console.log("pressup event!");
+                      letsPlayTechButton.gotoAndPlay("normal");
+                      $scope.stage.update();
+                      //$rootScope.navigate("letsPlayTech");
+                      Toast.show("Coming soon...");
+                    });
+                  })
+                  .error(function (error) {
+                    console.error("Error on getting json for letsPlayTech button...", error);
+                  });
+
+
+              }
 
               creatingActivitiesSubMenu();
             });

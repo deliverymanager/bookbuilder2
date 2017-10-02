@@ -90,11 +90,11 @@ angular.module('bookbuilder2', ['ionic', 'ionic.cloud', 'ngCordova', 'ngSanitize
         templateUrl: "templates/reading/reading.html",
         controller: "ReadingController"
       }).state('readingNew', {
-        cache: false,
-        url: "/readingNew",
-        templateUrl: "templates/readingNew/readingNew.html",
-        controller: "ReadingNewController"
-      })
+      cache: false,
+      url: "/readingNew",
+      templateUrl: "templates/readingNew/readingNew.html",
+      controller: "ReadingNewController"
+    })
       .state('multiple', {
         cache: false,
         url: "/multiple",
@@ -250,6 +250,12 @@ angular.module('bookbuilder2', ['ionic', 'ionic.cloud', 'ngCordova', 'ngSanitize
         url: "/results",
         templateUrl: "templates/results/results.html",
         controller: "ResultsController"
+      })
+      .state('wordlist', {
+        cache: false,
+        url: "/wordlist",
+        templateUrl: "templates/wordlist/wordlist.html",
+        controller: "WordlistController"
       });
 
     $urlRouterProvider.otherwise('/preloading');

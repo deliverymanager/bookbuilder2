@@ -1,0 +1,10 @@
+<div class="bar bar-header item-input-inset">
+  <label class="item-input-wrapper">
+    <i class="icon ion-ios-search placeholder-icon"></i>
+    <input ng-change="searchFilter()" ng-model="dataSearch.text"
+           type="search" placeholder="Search">
+  </label>
+  <button ng-click="dataSearch.text = ''" class="button button-clear">
+    Cancel
+  </button>
+</div>
