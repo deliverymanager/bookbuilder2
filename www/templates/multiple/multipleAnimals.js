@@ -203,7 +203,7 @@ angular.module("bookbuilder2")
                   restart();
                 });
                 returnButton.scaleX = returnButton.scaleY = $scope.scale;
-                returnButton.x = backgroundPosition.x + (backgroundPosition.width / 2);
+                returnButton.x = backgroundPosition.x + (backgroundPosition.width / 1.5);
                 returnButton.y = backgroundPosition.y + (backgroundPosition.height / 1.069);
                 $scope.stage.addChild(returnButton);
                 callback();
@@ -322,7 +322,7 @@ angular.module("bookbuilder2")
                     }
                   });
                   $scope.checkButton.scaleX = $scope.checkButton.scaleY = $scope.scale;
-                  $scope.checkButton.x = backgroundPosition.x + (backgroundPosition.width / 1.7);
+                  $scope.checkButton.x = backgroundPosition.x + (backgroundPosition.width / 2.4);
                   $scope.checkButton.y = backgroundPosition.y + (backgroundPosition.height / 1.096);
                   $scope.stage.addChild($scope.checkButton);
                   callback();

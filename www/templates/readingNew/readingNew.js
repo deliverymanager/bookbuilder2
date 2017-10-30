@@ -173,6 +173,7 @@ angular.module("bookbuilder2")
 
         var init = function () {
 
+          console.log("init");
           $scope.currentSoundPlaying = $scope.activityData.slides[0].slide;
 
           $scope.mainContainer = new createjs.Container();
@@ -204,13 +205,18 @@ angular.module("bookbuilder2")
                 $scope.stopButton.visible = true;
                 $scope.stage.update();
 
+
+                console.log("PLAY BUTTON", $scope.currentSoundPlaying);
                 $scope.sounds[$scope.activityData.slides[_.findIndex($scope.activityData.slides, {
                   "slide": $scope.currentSoundPlaying
                 })].slide].play();
 
-                $scope.sounds[$scope.activityData.slides[_.findIndex($scope.activityData.slides, {
-                  "slide": $scope.currentSoundPlaying
-                })].slide].soundPlaying = true;
+                $timeout(function () {
+                  $scope.sounds[$scope.activityData.slides[_.findIndex($scope.activityData.slides, {
+                    "slide": $scope.currentSoundPlaying
+                  })].slide].soundPlaying = true;
+                }, 2000);
+
 
               });
               $scope.playButton.scaleX = $scope.playButton.scaleY = 1.5;
@@ -340,21 +346,21 @@ angular.module("bookbuilder2")
                 resolveLocalFileSystemURL($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/reading/" + slide.slide + ".mp3", function (entry) {
                   console.log(entry);
                   $scope.sounds[slide.slide] = new Media(entry.toInternalURL(), function () {
-                    console.log("Sound success");
+                    console.log("Sound success", slide.slide);
                   }, function (err) {
-                    console.log("Sound error", err);
+                    console.log("Sound error", slide.slide, err);
                   }, function (status) {
-                    console.log("Sound status", status);
+                    console.log("Sound status", slide.slide, status);
                   });
                   parallelCallback();
                 });
               } else if (window.cordova) {
                 $scope.sounds[slide.slide] = new Media($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/reading/" + slide.slide + ".mp3", function () {
-                  console.log("Sound success");
+                  console.log("Sound success", slide.slide);
                 }, function (err) {
-                  console.log("Sound error", err);
+                  console.log("Sound error", slide.slide, err);
                 }, function (status) {
-                  console.log("Sound status", status);
+                  console.log("Sound status", slide.slide, status);
                 });
                 parallelCallback();
               } else {
@@ -365,11 +371,12 @@ angular.module("bookbuilder2")
 
           });
 
-          async.parallel(parallelFunctions, function (err, response) {
+          async.waterfall(parallelFunctions, function (err, response) {
 
             console.log("Title: ", $scope.selectedLesson.title);
             var title = new createjs.Text($scope.selectedLesson.lessonTitle + " - " + $scope.selectedLesson.title, "27px Arial", "white");
             title.textAlign = "center";
+            title.maxWidth = 400;
             title.x = $scope.mainContainer.width / 2;
             title.y = 35;
             $scope.mainContainer.addChild(title);

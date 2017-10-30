@@ -5,7 +5,6 @@ angular.module("bookbuilder2")
     $scope.rootDir = window.localStorage.getItem("rootDir");
     $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
     $scope.book = JSON.parse(window.localStorage.getItem("book"));
-    $scope.book = JSON.parse(window.localStorage.getItem("book"));
 
     $scope.backgroundView = {
       "background": "url(" + $scope.rootDir + "data/assets/lesson_background_image.png) no-repeat center top",
@@ -766,7 +765,7 @@ angular.module("bookbuilder2")
                 $scope.titleContainer.x = backgroundPosition.x + (backgroundPosition.width / 4);
                 $scope.titleContainer.y = backgroundPosition.y + (backgroundPosition.height / 35);
 
-                $scope.title = new createjs.Text("Listen, say and learn.", "25px Arial", "white");
+                $scope.title = new createjs.Text($scope.book.vocabularyTitle, "25px Arial", "white");
                 $scope.titleContainer.scaleX = $scope.titleContainer.scaleY = $scope.scale;
                 $scope.title.textAlign = "center";
                 $scope.title.x = 260;

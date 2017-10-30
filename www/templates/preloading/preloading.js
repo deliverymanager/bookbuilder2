@@ -155,6 +155,7 @@ angular.module("bookbuilder2")
         //RUN ON BROWSER FOR DEVELOPING https://s3-eu-west-1.amazonaws.com/bookbuilder2/index.html
         //$scope.rootDir = "https://s3-eu-west-1.amazonaws.com/engrlikeenglishb1-3-0/";
         $scope.rootDir = "";
+        $rootScope.developerMode = true;
         window.localStorage.setItem("rootDir", $scope.rootDir);
         $rootScope.navigate("groups");
       }

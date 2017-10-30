@@ -469,6 +469,7 @@ angular.module("bookbuilder2")
               $scope.scoreText = new createjs.Text("Score:  " + "0" + " / " + $scope.activityData.questions.length, "30px Arial", "white");
               $scope.scoreText.x = 100;
               $scope.scoreText.y = 550;
+              $scope.activityData.score = 0;
               $scope.mainContainer.addChild($scope.scoreText);
 
               initWaterfallCallback(null);
@@ -626,7 +627,7 @@ angular.module("bookbuilder2")
             //Building the candies
             function (initWaterfallCallback) {
 
-              _.each(new Array(10), function (word, key, list) {
+              _.each($scope.activityData.questions, function (word, key, list) {
 
                 //Creating the word sprite
                 $scope.wordsSprites[key] = new createjs.Sprite($scope.wordsSpriteSheet, "pink");

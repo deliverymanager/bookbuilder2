@@ -223,10 +223,10 @@ angular.module("bookbuilder2")
         $scope.mainContainer.addChild($scope.wordsContainer);
 
         //wordsContainer Background
-       /* var wordsContainerGraphic = new createjs.Graphics().beginFill("orange").drawRect(0, 0, $scope.wordsContainer.width, $scope.wordsContainer.height);
-        var wordsContainerBackground = new createjs.Shape(wordsContainerGraphic);
-        wordsContainerBackground.alpha = 0.5;
-        $scope.wordsContainer.addChild(wordsContainerBackground);*/
+        /* var wordsContainerGraphic = new createjs.Graphics().beginFill("orange").drawRect(0, 0, $scope.wordsContainer.width, $scope.wordsContainer.height);
+         var wordsContainerBackground = new createjs.Shape(wordsContainerGraphic);
+         wordsContainerBackground.alpha = 0.5;
+         $scope.wordsContainer.addChild(wordsContainerBackground);*/
 
 
         $http.get($scope.rootDir + "data/assets/head_menu_button_sprite.json")
@@ -309,8 +309,8 @@ angular.module("bookbuilder2")
 
           /*Adding page title and description $scope.activityData.title*/
           $scope.pageActivity = new createjs.Text(_.findWhere($scope.selectedLesson.activitiesMenu, {
-              activityFolder: $scope.activityFolder
-            }).name + " " + ($scope.activityData.revision ? "- " + $scope.activityData.revision : ""), "18px Arial", "white");
+            activityFolder: $scope.activityFolder
+          }).name + " " + ($scope.activityData.revision ? "- " + $scope.activityData.revision : ""), "18px Arial", "white");
           $scope.pageActivity.x = 85;
           $scope.pageActivity.y = 620;
           $scope.pageActivity.maxWidth = 300;
@@ -444,6 +444,24 @@ angular.module("bookbuilder2")
                   });
                 });
 
+                if ($scope.activityData.extraImageBackground) {
+
+                  loadingBitmaps.push(function (seriesCallback) {
+
+                    var imageLoader = new createjs.ImageLoader(new createjs.LoadItem().set({
+                      src: $scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/" + $scope.activityFolder + "/extraImageBackground.png"
+                    }));
+
+                    imageLoader.load();
+
+                    imageLoader.on("complete", function (r) {
+                      $timeout(function () {
+                        seriesCallback();
+                      });
+                    });
+                  });
+                }
+
                 async.series(loadingBitmaps, function (err, response) {
                   /*** 2. Creating the words list ***/
                   /*The greek equivalents of the missing words*/
@@ -451,10 +469,27 @@ angular.module("bookbuilder2")
 
                   console.log("Words to be found: ", $scope.activityData.questions);
 
+                  if ($scope.activityData.extraImageBackground) {
+                    $scope.extraImageBackground = new createjs.Bitmap($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/" + $scope.activityFolder + "/extraImageBackground.png");
+                    $scope.extraImageBackground.x =  $scope.activityData.extraImageBackgroundPositionX;
+                    $scope.extraImageBackground.y =  $scope.activityData.extraImageBackgroundPositionY;
+                    $scope.extraImageBackground.scaleX = $scope.extraImageBackground.scaleY = $scope.activityData.extraImageBackgroundScale;
+                    $scope.wordsContainer.addChild($scope.extraImageBackground);
+                  }
+
                   _.each($scope.activityData.questions, function (word, key, list) {
                     $scope.greekWords[key] = new createjs.Bitmap($scope.rootDir + "data/lessons/" + $scope.selectedLesson.id + "/" + $scope.activityFolder + "/" + (key + 1) + ".png");
-                    $scope.greekWords[key].x = key % 2 ? $scope.wordsContainer.width / 2 : 0;
-                    $scope.greekWords[key].y = key % 2 ? $scope.greekWords[key - 1].y : key / 2 * 125;
+                    if (word.positionX) {
+                      $scope.greekWords[key].x = word.positionX;
+                    } else {
+                      $scope.greekWords[key].x = key % 2 ? $scope.wordsContainer.width / 2 : 0;
+                    }
+
+                    if (word.positionY) {
+                      $scope.greekWords[key].y = word.positionY;
+                    } else {
+                      $scope.greekWords[key].y = key % 2 ? $scope.greekWords[key - 1].y : key / 2 * 125;
+                    }
                     $scope.greekWords[key].scaleX = $scope.greekWords[key].scaleY = 0.6;
                     $scope.wordsContainer.addChild($scope.greekWords[key]);
                   });
@@ -808,11 +843,11 @@ angular.module("bookbuilder2")
                   console.log("Selection is valid!!!");
                   if ($scope.selectedLettersArray.length > 1) {
                     if (($scope.letterContainers[letterIndex].x === $scope.letterContainers[$scope.selectedLettersArray[$scope.selectedLettersArray.length - 2].index].x
-                      || $scope.letterContainers[letterIndex].y === $scope.letterContainers[$scope.selectedLettersArray[$scope.selectedLettersArray.length - 2].index].y)
+                        || $scope.letterContainers[letterIndex].y === $scope.letterContainers[$scope.selectedLettersArray[$scope.selectedLettersArray.length - 2].index].y)
                       && ($scope.letterContainers[letterIndex].x === $scope.letterContainers[$scope.selectedLettersArray[$scope.selectedLettersArray.length - 1].index].x
-                      || $scope.letterContainers[letterIndex].y === $scope.letterContainers[$scope.selectedLettersArray[$scope.selectedLettersArray.length - 1].index].y)
+                        || $scope.letterContainers[letterIndex].y === $scope.letterContainers[$scope.selectedLettersArray[$scope.selectedLettersArray.length - 1].index].y)
                       && (($scope.letterContainers[letterIndex].x > $scope.letterContainers[$scope.selectedLettersArray[$scope.selectedLettersArray.length - 1].index].x)
-                      || ($scope.letterContainers[letterIndex].y > $scope.letterContainers[$scope.selectedLettersArray[$scope.selectedLettersArray.length - 1].index].y))) {
+                        || ($scope.letterContainers[letterIndex].y > $scope.letterContainers[$scope.selectedLettersArray[$scope.selectedLettersArray.length - 1].index].y))) {
                       console.log("Going to the right direction!");
 
                       /*Checking for distant selection, if there is one checks if it's valid and selects the valid letters between the selections*/
@@ -1032,8 +1067,8 @@ angular.module("bookbuilder2")
             } else {
               console.log("Activity is not the last one");
               console.log("index", _.findIndex($scope.selectedLesson.activitiesMenu, {
-                  activityFolder: $scope.activityFolder
-                }) + 1);
+                activityFolder: $scope.activityFolder
+              }) + 1);
               console.log("activities", $scope.selectedLesson.activitiesMenu.length);
             }
 

@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-  .controller("WordlistController", function ($scope, $ionicPlatform, $timeout, $http, _, $rootScope, $ionicPopup, $interval) {
+  .controller("WordlistController", function ($scope, $ionicPlatform, $timeout, $http, _, $rootScope, $ionicPopup, $interval, $cordovaFile, Toast) {
 
     console.log("WordlistController loaded!");
     $scope.rootDir = window.localStorage.getItem("rootDir");
@@ -179,6 +179,7 @@ angular.module("bookbuilder2")
               $scope.wordlistPlayButton.visible = false;
               $scope.wordlistStopButton.visible = true;
 
+              playWord();
               $scope.stage.update();
             });
 
@@ -708,25 +709,36 @@ angular.module("bookbuilder2")
 
           $scope.wordTextContainers[i].addEventListener("mousedown", function (event) {
             console.log("Mouse down event on Menu button !", i);
-            $scope.wordTextContainersBg[i].alpha = 0.5;
-            $scope.stage.update();
-            _.each($scope.wordTextContainersBg, function (bg, bgkey, l) {
-              if (bgkey !== i) {
-                $scope.wordTextContainersBg[bgkey].visible = false;
-              } else {
-                $scope.wordTextContainersBg[i].visible = true;
-              }
-            });
-            $scope.stage.update();
 
+            if (!_.findWhere($scope.sounds, {
+                soundPlaying: true
+              }) && $scope.wordlist[i]) {
+              $scope.wordTextContainersBg[i].alpha = 0.5;
+              $scope.stage.update();
+              _.each($scope.wordTextContainersBg, function (bg, bgkey, l) {
+                if (bgkey !== i) {
+                  $scope.wordTextContainersBg[bgkey].visible = false;
+                } else {
+                  $scope.wordTextContainersBg[i].visible = true;
+                }
+              });
+              $scope.stage.update();
+            }
           });
 
           $scope.wordTextContainers[i].addEventListener("pressup", function (event) {
             console.log("Press up event on Menu event!", i);
-            $scope.wordTextContainersBg[i].alpha = 1;
-            $scope.stage.update();
-            $scope.currentWord = $scope.wordlist[i];
-            playWord();
+
+            if (!_.findWhere($scope.sounds, {
+                soundPlaying: true
+              })) {
+              $scope.wordTextContainersBg[i].alpha = 1;
+              $scope.stage.update();
+
+              $scope.currentWord = $scope.wordlist[i];
+              playWord();
+            }
+
           });
 
           $scope.wordTextContainers[i].addChild($scope.wordTextContainersBg[i]);
@@ -1066,7 +1078,8 @@ angular.module("bookbuilder2")
               console.log("position", position);
               if (position < 0) {
                 $scope.sounds[key].soundPlaying = false;
-
+                $scope.wordlistPlayButton.visible = true;
+                $scope.wordlistStopButton.visible = false;
               }
             },
             function (e) {
@@ -1081,11 +1094,14 @@ angular.module("bookbuilder2")
     var playWord = function () {
 
       console.log("$scope.currentWord", $scope.currentWord);
+      if (!$scope.currentWord) {
+        return;
+      }
 
       $scope.exampleText.text = $scope.currentWord.example;
       $scope.translationText.text = $scope.currentWord[($scope.translationType === "english" ? "greek" : "english")];
 
-      if ($scope.currentWord && window.cordova && window.cordova.platformId !== "browser") {
+      if ($scope.currentWord && $scope.currentWord.downloaded && window.cordova && window.cordova.platformId !== "browser") {
 
         $scope.sounds[$scope.currentWord.audio.split(".")[0]].play();
         $scope.wordlistPlayButton.visible = false;
@@ -1094,6 +1110,8 @@ angular.module("bookbuilder2")
         $timeout(function () {
           $scope.sounds[$scope.currentWord.audio.split(".")[0]].soundPlaying = true;
         }, 500);
+      } else {
+        //Toast.show("Lesson is not downloaded!");
       }
 
     };
@@ -1105,16 +1123,16 @@ angular.module("bookbuilder2")
 
       if (upDown === "down") {
 
-        if ($scope.wordlistFull.length > 11 && $scope.currentWordIndex + 6 < $scope.wordlistFull.length - 1) {
+        if ($scope.wordlistFull.length > 11 && $scope.currentWordIndex + 10 < $scope.wordlistFull.length - 1) {
 
-          $scope.currentWordIndex += 5;
+          $scope.currentWordIndex += 11;
 
         }
 
       } else if (upDown === "up") {
 
         if ($scope.wordlistFull.length > 0 && $scope.wordlist[0] !== $scope.wordlistFull[0]) {
-          $scope.currentWordIndex -= 5;
+          $scope.currentWordIndex -= 11;
         }
 
       }
@@ -1135,6 +1153,7 @@ angular.module("bookbuilder2")
           waterFallFunctions.push(function (waterFallCallback) {
 
             if (!$scope.allWordlist[lesson.id]) {
+              console.log("lesson does not exist!", lesson.id);
               return waterFallCallback();
             }
 
@@ -1159,8 +1178,7 @@ angular.module("bookbuilder2")
 
               $scope.allWordlist[lesson.id].downloaded = res;
 
-
-              _.each($scope.allWordlist[lesson.id].words, function (word, key, li) {
+              _.each($scope.allWordlist[lesson.id].word, function (word, key, li) {
                 $scope.allWordlist[lesson.id].word[key].downloaded = $scope.allWordlist[lesson.id].downloaded;
               });
 
@@ -1191,12 +1209,12 @@ angular.module("bookbuilder2")
               var parallelFunctions = [];
               _.each(activities["wordlist"], function (file, k, l) {
                 parallelFunctions.push(function (parallelCallback) {
-                  $cordovaFile.checkFile($scope.rootDir + "data/lessons/" + lesson.id + "/" + key + "/", file)
+                  $cordovaFile.checkFile($scope.rootDir + "data/lessons/" + lesson.id + "/wordlist/", file)
                     .then(function (success) {
                       parallelCallback(null);
                     }, function (error) {
                       console.log(error);
-                      parallelCallback(key + "/" + file);
+                      parallelCallback("wordlist/" + file);
                     });
                 });
               });
@@ -1263,6 +1281,8 @@ angular.module("bookbuilder2")
 
       $scope.wordlistFull = [];
 
+      console.log("$scope.lessonNumber", $scope.lessonNumber);
+
       if ($scope.lessonNumber === "all") {
 
         _.each($scope.allWordlist, function (lesson) {
@@ -1272,15 +1292,18 @@ angular.module("bookbuilder2")
         });
 
       } else if (!$scope.lessonNumber) {
+        console.log(" $scope.selectedLesson.id", $scope.selectedLesson.id);
         $scope.lessonNumber = $scope.selectedLesson.id;
         $scope.wordlistFull = _.sortBy($scope.allWordlist[$scope.lessonNumber][$scope.phraseOrWord], function (word) {
           return word[$scope.translationType].toLowerCase();
         });
 
       } else {
+
         $scope.wordlistFull = _.sortBy($scope.allWordlist[$scope.lessonNumber][$scope.phraseOrWord], function (word) {
           return word[$scope.translationType].toLowerCase();
         });
+
       }
 
       console.log("$scope.dataSearch.text", $scope.dataSearch.text);

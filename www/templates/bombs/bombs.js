@@ -182,6 +182,8 @@ angular.module("bookbuilder2")
               _.each($scope.activityData.questions, function (question, key, list) {
                 //Filling activityData with questionWords
                 $scope.activityData.questions[key].questionWords = $scope.activityData.questions[key].questionPhrase.split("$");
+                $scope.activityData.questions[key].questionWords[$scope.activityData.questions[key].questionWords.length - 1] += " ";
+
                 //Filling activityData with userChoices
                 $scope.activityData.questions[key].userChoices = [];
               });
@@ -206,8 +208,8 @@ angular.module("bookbuilder2")
 
           /*Adding page title and description $scope.activityData.title*/
           $scope.pageActivity = new createjs.Text(_.findWhere($scope.selectedLesson.activitiesMenu, {
-              activityFolder: $scope.activityFolder
-            }).name + " " + ($scope.activityData.revision ? "- " + $scope.activityData.revision : ""), "18px Arial", "white");
+            activityFolder: $scope.activityFolder
+          }).name + " " + ($scope.activityData.revision ? "- " + $scope.activityData.revision : ""), "18px Arial", "white");
           $scope.pageActivity.x = 85;
           $scope.pageActivity.y = 610;
           $scope.pageActivity.maxWidth = 300;
@@ -721,12 +723,6 @@ angular.module("bookbuilder2")
                         $scope.endText.visible = true;
                         $scope.nextButton.visible = false;
 
-                      } else {
-                        console.log("Activity is not the last one");
-                        console.log("index", _.findIndex($scope.selectedLesson.activitiesMenu, {
-                            activityFolder: $scope.activityFolder
-                          }) + 1);
-                        console.log("activities", $scope.selectedLesson.activitiesMenu.length);
                       }
 
                       save();
@@ -794,6 +790,9 @@ angular.module("bookbuilder2")
                 if ($scope.activityData.activeQuestionIndex === $scope.activityData.questions.length - 1
                   && $scope.activityData.questions[$scope.activityData.questions.length - 1].userChoices.length === $scope.activityData.questions[$scope.activityData.questions.length - 1].questionWords.length) {
                   openResultsTotalContainer();
+                  $scope.resultsButton.visible = true;
+                  $scope.endText.visible = true;
+                  $scope.nextButton.visible = false;
                   updateScore();
                 } else {
                   loadQuestion();

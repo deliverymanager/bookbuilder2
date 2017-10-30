@@ -627,7 +627,7 @@ angular.module("bookbuilder2")
             }
             var collisionDetectedQuestion = collision(evt.stageX / $scope.scale - $scope.mainContainer.x / $scope.scale, evt.stageY / $scope.scale - $scope.mainContainer.y / $scope.scale);
 
-            if (collisionDetectedQuestion !== -1) {
+            if (collisionDetectedQuestion !== -1 && !$scope.currentQuestions[collisionDetectedQuestion].userAnswer) {
               placeAnswer(key, collisionDetectedQuestion);
             } else {
               createjs.Tween.get(this, {loop: false})

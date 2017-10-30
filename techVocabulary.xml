@@ -1,342 +1,350 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TechItEasy1>
 
-  <lesson lessonNumber="1">
+	<lesson lessonNumber="1">
 
-    <word wordNumber="1">
-      <wordOrder>*</wordOrder>
-      <wordEnglish>Face &amp; body</wordEnglish>
-      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
-      <wordExample>W1</wordExample>
-      <wordAudio>L1W1.mp3</wordAudio>
-    </word>
+		<word wordNumber="1">
+			<wordOrder>*</wordOrder>
+			<wordEnglish>Face &amp; body</wordEnglish>
+			<wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+			<wordExample>W1</wordExample>
+			<wordAudio>L1W1.mp3</wordAudio>
+		</word>
 
-    <word wordNumber="2">
-      <wordOrder>1.</wordOrder>
-      <wordEnglish>head</wordEnglish>
-      <wordGreek>κεφάλι</wordGreek>
-      <wordExample>The panda has got a white head but black legs.</wordExample>
-      <wordAudio>L1W2.mp3</wordAudio>
-    </word>
+		<word wordNumber="2">
+			<wordOrder>1.</wordOrder>
+			<wordEnglish>head</wordEnglish>
+			<wordGreek>κεφάλι</wordGreek>
+			<wordExample>The panda has got a white head but black legs.</wordExample>
+			<wordAudio>L1W2.mp3</wordAudio>
+		</word>
 
-    <word wordNumber="3">
-      <wordOrder>2.</wordOrder>
-      <wordEnglish>hair</wordEnglish>
-      <wordGreek>μαλλιά</wordGreek>
-      <wordExample>Mary has got long brown hair.</wordExample>
-      <wordAudio>L1W3.mp3</wordAudio>
-    </word>
+		<word wordNumber="3">
+			<wordOrder>2.</wordOrder>
+			<wordEnglish>hair</wordEnglish>
+			<wordGreek>μαλλιά</wordGreek>
+			<wordExample>Mary has got long brown hair.</wordExample>
+			<wordAudio>L1W3.mp3</wordAudio>
+		</word>
 
-    <word wordNumber="4">
-      <wordOrder>3.</wordOrder>
-      <wordEnglish>mouth</wordEnglish>
-      <wordGreek>στόμα</wordGreek>
-      <wordExample>I have got thirty-two teeth in my mouth.</wordExample>
-      <wordAudio>L1W4.mp3</wordAudio>
-    </word>
+		<word wordNumber="4">
+			<wordOrder>3.</wordOrder>
+			<wordEnglish>mouth</wordEnglish>
+			<wordGreek>στόμα</wordGreek>
+			<wordExample>I have got thirty-two teeth in my mouth.</wordExample>
+			<wordAudio>L1W4.mp3</wordAudio>
+		</word>
 
-    <word wordNumber="5">
-      <wordOrder>4.</wordOrder>
-      <wordEnglish>arm</wordEnglish>
-      <wordGreek>χέρι</wordGreek>
-      <wordExample>Tech has got short arms, but long legs.</wordExample>
-      <wordAudio>L1W5.mp3</wordAudio>
-    </word>
+		<word wordNumber="5">
+			<wordOrder>4.</wordOrder>
+			<wordEnglish>arm</wordEnglish>
+			<wordGreek>χέρι</wordGreek>
+			<wordExample>Tech has got long arms but short legs.</wordExample>
+			<wordAudio>L1W5.mp3</wordAudio>
+		</word>
 
-    <word wordNumber="6">
-      <wordOrder>5.</wordOrder>
-      <wordEnglish>hand</wordEnglish>
-      <wordGreek>χέρι(παλάμη)</wordGreek>
-      <wordExample>- What have you got in your hands? - Cherries!</wordExample>
-      <wordAudio>L1W6.mp3</wordAudio>
-    </word>
+		<word wordNumber="6">
+			<wordOrder>5.</wordOrder>
+			<wordEnglish>hand</wordEnglish>
+			<wordGreek>χέρι (παλάμη)</wordGreek>
+			<wordExample>- What have you got in your hands? - Cherries!</wordExample>
+			<wordAudio>L1W6.mp3</wordAudio>
+		</word>
 
-    <word wordNumber="7">
-      <wordOrder>6.</wordOrder>
-      <wordEnglish>finger</wordEnglish>
-      <wordGreek>δάχτυλο χεριού</wordGreek>
-      <wordExample>I have got ten fingers on my hands.</wordExample>
-      <wordAudio>L1W7.mp3</wordAudio>
-    </word>
+		<word wordNumber="7">
+			<wordOrder>6.</wordOrder>
+			<wordEnglish>finger</wordEnglish>
+			<wordGreek>δάχτυλο χεριού</wordGreek>
+			<wordExample>I have got ten fingers on my hands.</wordExample>
+			<wordAudio>L1W7.mp3</wordAudio>
+		</word>
 
-    <word wordNumber="8">
-      <wordOrder>7.</wordOrder>
-      <wordEnglish>leg</wordEnglish>
-      <wordGreek>πόδι</wordGreek>
-      <wordExample>Cats have got four legs.</wordExample>
-      <wordAudio>L1W8.mp3</wordAudio>
-    </word>
+		<word wordNumber="8">
+			<wordOrder>7.</wordOrder>
+			<wordEnglish>leg</wordEnglish>
+			<wordGreek>πόδι</wordGreek>
+			<wordExample>Cats have got four legs.</wordExample>
+			<wordAudio>L1W8.mp3</wordAudio>
+		</word>
 
-    <word wordNumber="9">
-      <wordOrder>8.</wordOrder>
-      <wordEnglish>foot</wordEnglish>
-      <wordGreek>πόδι (πατούσα)</wordGreek>
-      <wordExample>The red shoes are too small for my feet.</wordExample>
-      <wordAudio>L1W9.mp3</wordAudio>
-    </word>
+		<word wordNumber="9">
+			<wordOrder>8.</wordOrder>
+			<wordEnglish>foot</wordEnglish>
+			<wordGreek>πόδι (πατούσα)</wordGreek>
+			<wordExample>The red shoes are too small for my feet.</wordExample>
+			<wordAudio>L1W9.mp3</wordAudio>
+		</word>
 
-    <word wordNumber="10">
-      <wordOrder>9.</wordOrder>
-      <wordEnglish>toe</wordEnglish>
-      <wordGreek>δάχτυλο ποδιού</wordGreek>
-      <wordExample>I have got ten toes on my feet.</wordExample>
-      <wordAudio>L1W10.mp3</wordAudio>
-    </word>
+		<word wordNumber="10">
+			<wordOrder>9.</wordOrder>
+			<wordEnglish>toe</wordEnglish>
+			<wordGreek>δάχτυλο ποδιού</wordGreek>
+			<wordExample>I have got ten toes on my feet.</wordExample>
+			<wordAudio>L1W10.mp3</wordAudio>
+		</word>
 
-    <generalWord generalWordNumber="1">
-      <generalWordOrder>10.</generalWordOrder>
-      <generalWordEnglish>create</generalWordEnglish>
-      <generalWordGreek>δημιουργώ</generalWordGreek>
-      <generalWordExample>Let's create a story with kings and queens.</generalWordExample>
-      <generalWordAudio>L1GW1.mp3</generalWordAudio>
-    </generalWord>
+		<generalWord generalWordNumber="1">
+			<generalWordOrder>10.</generalWordOrder>
+			<generalWordEnglish>create</generalWordEnglish>
+			<generalWordGreek>δημιουργώ</generalWordGreek>
+			<generalWordExample>Let's create a story with kings and queens.</generalWordExample>
+			<generalWordAudio>L1GW1.mp3</generalWordAudio>
+		</generalWord>
 
-    <generalWord generalWordNumber="2">
-      <generalWordOrder>11.</generalWordOrder>
-      <generalWordEnglish>player</generalWordEnglish>
-      <generalWordGreek>παίκτης, -τρια</generalWordGreek>
-      <generalWordExample>Messi is a very good football player.</generalWordExample>
-      <generalWordAudio>L1GW2.mp3</generalWordAudio>
-    </generalWord>
+		<generalWord generalWordNumber="2">
+			<generalWordOrder>11.</generalWordOrder>
+			<generalWordEnglish>player</generalWordEnglish>
+			<generalWordGreek>παίκτης, -τρια</generalWordGreek>
+			<generalWordExample>Messi is a very good football player.</generalWordExample>
+			<generalWordAudio>L1GW2.mp3</generalWordAudio>
+		</generalWord>
 
-    <generalWord generalWordNumber="3">
-      <generalWordOrder>12.</generalWordOrder>
-      <generalWordEnglish>like</generalWordEnglish>
-      <generalWordGreek>σαν, όπως</generalWordGreek>
-      <generalWordExample>My sister is like my mother, with black hair and green eyes.</generalWordExample>
-      <generalWordAudio>L1GW3.mp3</generalWordAudio>
-    </generalWord>
+		<generalWord generalWordNumber="3">
+			<generalWordOrder>12.</generalWordOrder>
+			<generalWordEnglish>like</generalWordEnglish>
+			<generalWordGreek>σαν, όπως</generalWordGreek>
+			<generalWordExample>My sister is like my mother, with black hair and green eyes.</generalWordExample>
+			<generalWordAudio>L1GW3.mp3</generalWordAudio>
+		</generalWord>
+		
+		<generalWord generalWordNumber="4">
+			<generalWordOrder>13.</generalWordOrder>
+			<generalWordEnglish>also</generalWordEnglish>
+			<generalWordGreek>επίσης</generalWordGreek>
+			<generalWordExample>Mr Gardner has got sheep on his farm. He has also got horses.</generalWordExample>
+			<generalWordAudio>L1GW4.mp3</generalWordAudio>
+		</generalWord>
+		
+		<generalWord generalWordNumber="5">
+			<generalWordOrder>14.</generalWordOrder>
+			<generalWordEnglish>trendy</generalWordEnglish>
+			<generalWordGreek>μοδάτος</generalWordGreek>
+			<generalWordExample>Your jeans are very trendy.</generalWordExample>
+			<generalWordAudio>L1GW5.mp3</generalWordAudio>
+		</generalWord>
+		
+		<generalWord generalWordNumber="6">
+			<generalWordOrder>15.</generalWordOrder>
+			<generalWordEnglish>but</generalWordEnglish>
+			<generalWordGreek>αλλά</generalWordGreek>
+			<generalWordExample>I have got a tablet but I haven’t got a laptop.</generalWordExample>
+			<generalWordAudio>L1GW6.mp3</generalWordAudio>
+		</generalWord>
+		
+		<generalWord generalWordNumber="7">
+			<generalWordOrder>16.</generalWordOrder>
+			<generalWordEnglish>any</generalWordEnglish>
+			<generalWordGreek>καθόλου</generalWordGreek>
+			<generalWordExample>Have we got any apples?</generalWordExample>
+			<generalWordAudio>L1GW7.mp3</generalWordAudio>
+		</generalWord>
+		
+		<generalWord generalWordNumber="8">
+			<generalWordOrder>17.</generalWordOrder>
+			<generalWordEnglish>blonde</generalWordEnglish>
+			<generalWordGreek>ξανθός</generalWordGreek>
+			<generalWordExample>My doll has got long blonde hair.</generalWordExample>
+			<generalWordAudio>L1GW8.mp3</generalWordAudio>
+		</generalWord>
 
-    <generalWord generalWordNumber="4">
-      <generalWordOrder>13.</generalWordOrder>
-      <generalWordEnglish>also</generalWordEnglish>
-      <generalWordGreek>επίσης</generalWordGreek>
-      <generalWordExample>Mr Gardner has got sheep on his farm. He has also got horses.</generalWordExample>
-      <generalWordAudio>L1GW4.mp3</generalWordAudio>
-    </generalWord>
+		<phrase phraseNumber="1">
+			<phraseWordOrder>•</phraseWordOrder>
+			<phraseEnglish>Well done!</phraseEnglish>
+			<phraseGreek>Μπράβο!</phraseGreek>
+			<phraseExample>You are a very good student. Well done!</phraseExample>
+			<phraseAudio>L1P1.mp3</phraseAudio>
+		</phrase>
 
-    <generalWord generalWordNumber="5">
-      <generalWordOrder>14.</generalWordOrder>
-      <generalWordEnglish>trendy</generalWordEnglish>
-      <generalWordGreek>μοδάτος</generalWordGreek>
-      <generalWordExample>Your jeans are very trendy.</generalWordExample>
-      <generalWordAudio>L1GW5.mp3</generalWordAudio>
-    </generalWord>
+		<phrase phraseNumber="2">
+			<phraseWordOrder>•</phraseWordOrder>
+			<phraseEnglish>Level complete!</phraseEnglish>
+			<phraseGreek>Το επίπεδο ολοκληρώθηκε!</phraseGreek>
+			<phraseExample>Level 1 complete! Let’s go to Level 2!</phraseExample>
+			<phraseAudio>L1P2.mp3</phraseAudio>
+		</phrase>
 
-    <generalWord generalWordNumber="6">
-      <generalWordOrder>15.</generalWordOrder>
-      <generalWordEnglish>but</generalWordEnglish>
-      <generalWordGreek>αλλά</generalWordGreek>
-      <generalWordExample>I have got a tablet but I haven’t got a laptop.</generalWordExample>
-      <generalWordAudio>L1GW6.mp3</generalWordAudio>
-    </generalWord>
+	</lesson>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<lesson lessonNumber="2">
 
-    <generalWord generalWordNumber="7">
-      <generalWordOrder>16.</generalWordOrder>
-      <generalWordEnglish>any</generalWordEnglish>
-      <generalWordGreek>καθόλου</generalWordGreek>
-      <generalWordExample>Have we got any apples?</generalWordExample>
-      <generalWordAudio>L1GW7.mp3</generalWordAudio>
-    </generalWord>
+		<word wordNumber="1">
+			<wordOrder>*</wordOrder>
+			<wordEnglish>Face &amp; body</wordEnglish>
+			<wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+			<wordExample>W1</wordExample>
+			<wordAudio>L2W1.mp3</wordAudio>
+		</word>
 
-    <generalWord generalWordNumber="8">
-      <generalWordOrder>17.</generalWordOrder>
-      <generalWordEnglish>blonde</generalWordEnglish>
-      <generalWordGreek>ξανθός</generalWordGreek>
-      <generalWordExample>My doll has got long blonde hair.</generalWordExample>
-      <generalWordAudio>L1GW8.mp3</generalWordAudio>
-    </generalWord>
+		<word wordNumber="2">
+			<wordOrder>1.</wordOrder>
+			<wordEnglish>bedroom</wordEnglish>
+			<wordGreek>υπνοδωμάτιο</wordGreek>
+			<wordExample>My toys are in my bedroom.</wordExample>
+			<wordAudio>L2W2.mp3</wordAudio>
+		</word>
 
-    <phrase phraseNumber="1">
-      <phraseWordOrder>•</phraseWordOrder>
-      <phraseEnglish>Well done!</phraseEnglish>
-      <phraseGreek>Μπράβο!</phraseGreek>
-      <phraseExample>You are a very good student. Well done!</phraseExample>
-      <phraseAudio>L1P1.mp3</phraseAudio>
-    </phrase>
+		<word wordNumber="3">
+			<wordOrder>2.</wordOrder>
+			<wordEnglish>bathroom</wordEnglish>
+			<wordGreek>μπάνιο</wordGreek>
+			<wordExample>There is a toilet in the bathroom.</wordExample>
+			<wordAudio>L2W3.mp3</wordAudio>
+		</word>
 
-    <phrase phraseNumber="2">
-      <phraseWordOrder>•</phraseWordOrder>
-      <phraseEnglish>Level complete!</phraseEnglish>
-      <phraseGreek>Το επίπεδο ολοκληρώθηκε!</phraseGreek>
-      <phraseExample>Level 1 complete! Let’s go to level 2!</phraseExample>
-      <phraseAudio>L1P2.mp3</phraseAudio>
-    </phrase>
+		<word wordNumber="4">
+			<wordOrder>3.</wordOrder>
+			<wordEnglish>kitchen</wordEnglish>
+			<wordGreek>κουζίνα</wordGreek>
+			<wordExample>We cook in the kitchen.</wordExample>
+			<wordAudio>L2W4.mp3</wordAudio>
+		</word>
 
-  </lesson>
+		<word wordNumber="5">
+			<wordOrder>4.</wordOrder>
+			<wordEnglish>living room</wordEnglish>
+			<wordGreek>σαλόνι</wordGreek>
+			<wordExample>There is a big TV in the living room.</wordExample>
+			<wordAudio>L2W5.mp3</wordAudio>
+		</word>
 
+		<word wordNumber="6">
+			<wordOrder>5.</wordOrder>
+			<wordEnglish>balcony</wordEnglish>
+			<wordGreek>μπαλκόνι</wordGreek>
+			<wordExample>In the summer, we sit on the balcony.</wordExample>
+			<wordAudio>L2W6.mp3</wordAudio>
+		</word>
 
+		<word wordNumber="7">
+			<wordOrder>6.</wordOrder>
+			<wordEnglish>garden</wordEnglish>
+			<wordGreek>κήπος</wordGreek>
+			<wordExample>My house has got a garden with flowers and trees.</wordExample>
+			<wordAudio>L2W7.mp3</wordAudio>
+		</word>
+		
+		<word wordNumber="8">
+			<wordOrder>7.</wordOrder>
+			<wordEnglish>garage</wordEnglish>
+			<wordGreek>γκαράζ</wordGreek>
+			<wordExample>Dad's car is in the garage.</wordExample>
+			<wordAudio>L2W8.mp3</wordAudio>
+		</word>
 
+		<generalWord generalWordNumber="1">
+			<generalWordOrder>8.</generalWordOrder>
+			<generalWordEnglish>project</generalWordEnglish>
+			<generalWordGreek>σχολική εργασία</generalWordGreek>
+			<generalWordExample>I have got an English project for school.</generalWordExample>
+			<generalWordAudio>L2GW1.mp3</generalWordAudio>
+		</generalWord>
 
+		<generalWord generalWordNumber="2">
+			<generalWordOrder>9.</generalWordOrder>
+			<generalWordEnglish>favourite</generalWordEnglish>
+			<generalWordGreek>αγαπημένος</generalWordGreek>
+			<generalWordExample>Pizza is my favourite food.</generalWordExample>
+			<generalWordAudio>L2GW2.mp3</generalWordAudio>
+		</generalWord>
 
+		<generalWord generalWordNumber="3">
+			<generalWordOrder>10.</generalWordOrder>
+			<generalWordEnglish>place</generalWordEnglish>
+			<generalWordGreek>μέρος</generalWordGreek>
+			<generalWordExample>Santorini is a beautiful place.</generalWordExample>
+			<generalWordAudio>L2GW3.mp3</generalWordAudio>
+		</generalWord>
+		
+		<generalWord generalWordNumber="4">
+			<generalWordOrder>11.</generalWordOrder>
+			<generalWordEnglish>room</generalWordEnglish>
+			<generalWordGreek>δωμάτιο / αίθουσα</generalWordGreek>
+			<generalWordExample>There are six rooms in my house.</generalWordExample>
+			<generalWordAudio>L2GW4.mp3</generalWordAudio>
+		</generalWord>
+		
+		<generalWord generalWordNumber="5">
+			<generalWordOrder>12.</generalWordOrder>
+			<generalWordEnglish>parents</generalWordEnglish>
+			<generalWordGreek>γονείς</generalWordGreek>
+			<generalWordExample>My parents’ names are Olivia and Harry.</generalWordExample>
+			<generalWordAudio>L2GW5.mp3</generalWordAudio>
+		</generalWord>
+		
+		<generalWord generalWordNumber="6">
+			<generalWordOrder>13.</generalWordOrder>
+			<generalWordEnglish>very</generalWordEnglish>
+			<generalWordGreek>πολύ</generalWordGreek>
+			<generalWordExample>Basketball players are very tall.</generalWordExample>
+			<generalWordAudio>L2GW6.mp3</generalWordAudio>
+		</generalWord>
+		
+		<generalWord generalWordNumber="7">
+			<generalWordOrder>14.</generalWordOrder>
+			<generalWordEnglish>modern</generalWordEnglish>
+			<generalWordGreek>μοντέρνος</generalWordGreek>
+			<generalWordExample>Grandma's house is old. It isn't modern.</generalWordExample>
+			<generalWordAudio>L2GW7.mp3</generalWordAudio>
+		</generalWord>
+		
+		<generalWord generalWordNumber="8">
+			<generalWordOrder>15.</generalWordOrder>
+			<generalWordEnglish>nice</generalWordEnglish>
+			<generalWordGreek>ωραίος / καλός</generalWordGreek>
+			<generalWordExample>I like your T-shirt! It’s nice! / Miss White is a very nice teacher!</generalWordExample>
+			<generalWordAudio>L2GW8.mp3</generalWordAudio>
+		</generalWord>
 
+		<generalWord generalWordNumber="9">
+			<generalWordOrder>16.</generalWordOrder>
+			<generalWordEnglish>beautiful</generalWordEnglish>
+			<generalWordGreek>όμορφος</generalWordGreek>
+			<generalWordExample>Anna has got beautiful big blue eyes.</generalWordExample>
+			<generalWordAudio>L2GW9.mp3</generalWordAudio>
+		</generalWord>
+		
+		<generalWord generalWordNumber="10">
+			<generalWordOrder>17.</generalWordOrder>
+			<generalWordEnglish>flower</generalWordEnglish>
+			<generalWordGreek>λουλούδι</generalWordGreek>
+			<generalWordExample>Tulips are my favourite flowers.</generalWordExample>
+			<generalWordAudio>L2GW10.mp3</generalWordAudio>
+		</generalWord>
+		
+		<generalWord generalWordNumber="11">
+			<generalWordOrder>18.</generalWordOrder>
+			<generalWordEnglish>comfortable</generalWordEnglish>
+			<generalWordGreek>άνετος, αναπαυτικός</generalWordGreek>
+			<generalWordExample>My bed is very comfortable.</generalWordExample>
+			<generalWordAudio>L2GW11.mp3</generalWordAudio>
+		</generalWord>
+		
+		<phrase phraseNumber="1">
+			<phraseWordOrder>•</phraseWordOrder>
+			<phraseEnglish>I like it!</phraseEnglish>
+			<phraseGreek>Μου αρέσει!</phraseGreek>
+			<phraseExample>Monopoly is a great game. I like it!</phraseExample>
+			<phraseAudio>L2P1.mp3</phraseAudio>
+		</phrase>
 
-
-
-
-  <lesson lessonNumber="2">
-
-    <word wordNumber="1">
-      <wordOrder>*</wordOrder>
-      <wordEnglish>Face &amp; body</wordEnglish>
-      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
-      <wordExample>W1</wordExample>
-      <wordAudio>L2W1.mp3</wordAudio>
-    </word>
-
-    <word wordNumber="2">
-      <wordOrder>1.</wordOrder>
-      <wordEnglish>bedroom</wordEnglish>
-      <wordGreek>υπνοδωμάτιο</wordGreek>
-      <wordExample>My toys are in my bedroom.</wordExample>
-      <wordAudio>L2W2.mp3</wordAudio>
-    </word>
-
-    <word wordNumber="3">
-      <wordOrder>2.</wordOrder>
-      <wordEnglish>bathroom</wordEnglish>
-      <wordGreek>μπάνιο</wordGreek>
-      <wordExample>There is a toilet in my bathroom.</wordExample>
-      <wordAudio>L2W3.mp3</wordAudio>
-    </word>
-
-    <word wordNumber="4">
-      <wordOrder>3.</wordOrder>
-      <wordEnglish>kitchen</wordEnglish>
-      <wordGreek>κουζίνα</wordGreek>
-      <wordExample>We cook in the kitchen.</wordExample>
-      <wordAudio>L2W4.mp3</wordAudio>
-    </word>
-
-    <word wordNumber="5">
-      <wordOrder>4.</wordOrder>
-      <wordEnglish>living room</wordEnglish>
-      <wordGreek>σαλόνι</wordGreek>
-      <wordExample>There is a big TV in the living room.</wordExample>
-      <wordAudio>L2W5.mp3</wordAudio>
-    </word>
-
-    <word wordNumber="6">
-      <wordOrder>5.</wordOrder>
-      <wordEnglish>balcony</wordEnglish>
-      <wordGreek>μπαλκόνι</wordGreek>
-      <wordExample>In the summer, we sit on the balcony.</wordExample>
-      <wordAudio>L2W6.mp3</wordAudio>
-    </word>
-
-    <word wordNumber="7">
-      <wordOrder>6.</wordOrder>
-      <wordEnglish>garden</wordEnglish>
-      <wordGreek>κήπος</wordGreek>
-      <wordExample>My house has got a garden with flowers and trees.</wordExample>
-      <wordAudio>L2W7.mp3</wordAudio>
-    </word>
-
-    <generalWord generalWordNumber="1">
-      <generalWordOrder>7.</generalWordOrder>
-      <generalWordEnglish>project</generalWordEnglish>
-      <generalWordGreek>σχολική εργασία</generalWordGreek>
-      <generalWordExample>I have got an English project for school.</generalWordExample>
-      <generalWordAudio>L2GW1.mp3</generalWordAudio>
-    </generalWord>
-
-    <generalWord generalWordNumber="2">
-      <generalWordOrder>8.</generalWordOrder>
-      <generalWordEnglish>favourite</generalWordEnglish>
-      <generalWordGreek>αγαπημένος</generalWordGreek>
-      <generalWordExample>Pizza is my favourite food.</generalWordExample>
-      <generalWordAudio>L2GW2.mp3</generalWordAudio>
-    </generalWord>
-
-    <generalWord generalWordNumber="3">
-      <generalWordOrder>9.</generalWordOrder>
-      <generalWordEnglish>place</generalWordEnglish>
-      <generalWordGreek>μέρος</generalWordGreek>
-      <generalWordExample>Santorini is a beautiful place.</generalWordExample>
-      <generalWordAudio>L2GW3.mp3</generalWordAudio>
-    </generalWord>
-
-    <generalWord generalWordNumber="4">
-      <generalWordOrder>10.</generalWordOrder>
-      <generalWordEnglish>room</generalWordEnglish>
-      <generalWordGreek>δωμάτιο / αίθουσα</generalWordGreek>
-      <generalWordExample>There are six rooms in my house.</generalWordExample>
-      <generalWordAudio>L2GW4.mp3</generalWordAudio>
-    </generalWord>
-
-    <generalWord generalWordNumber="5">
-      <generalWordOrder>11.</generalWordOrder>
-      <generalWordEnglish>parents</generalWordEnglish>
-      <generalWordGreek>γονείς</generalWordGreek>
-      <generalWordExample>My parents’ names are Olivia and Harry.</generalWordExample>
-      <generalWordAudio>L2GW5.mp3</generalWordAudio>
-    </generalWord>
-
-    <generalWord generalWordNumber="6">
-      <generalWordOrder>12.</generalWordOrder>
-      <generalWordEnglish>very</generalWordEnglish>
-      <generalWordGreek>πολύ</generalWordGreek>
-      <generalWordExample>Basketball players are very tall.</generalWordExample>
-      <generalWordAudio>L2GW6.mp3</generalWordAudio>
-    </generalWord>
-
-    <generalWord generalWordNumber="7">
-      <generalWordOrder>13.</generalWordOrder>
-      <generalWordEnglish>modern</generalWordEnglish>
-      <generalWordGreek>μοντέρνος</generalWordGreek>
-      <generalWordExample>Grandma's house is old. It isn't modern.</generalWordExample>
-      <generalWordAudio>L2GW7.mp3</generalWordAudio>
-    </generalWord>
-
-    <generalWord generalWordNumber="8">
-      <generalWordOrder>14.</generalWordOrder>
-      <generalWordEnglish>nice</generalWordEnglish>
-      <generalWordGreek>ωραίος / καλός</generalWordGreek>
-      <generalWordExample>I like your T-shirt! It’s nice!</generalWordExample>
-      <generalWordAudio>L2GW8.mp3</generalWordAudio>
-    </generalWord>
-
-    <generalWord generalWordNumber="9">
-      <generalWordOrder>15.</generalWordOrder>
-      <generalWordEnglish>beautiful</generalWordEnglish>
-      <generalWordGreek>όμορφος</generalWordGreek>
-      <generalWordExample>Anna has got beautiful big blue eyes.</generalWordExample>
-      <generalWordAudio>L2GW9.mp3</generalWordAudio>
-    </generalWord>
-
-    <generalWord generalWordNumber="10">
-      <generalWordOrder>16.</generalWordOrder>
-      <generalWordEnglish>flower</generalWordEnglish>
-      <generalWordGreek>λουλούδι</generalWordGreek>
-      <generalWordExample>Tulips are my favourite flowers.</generalWordExample>
-      <generalWordAudio>L2GW10.mp3</generalWordAudio>
-    </generalWord>
-
-    <generalWord generalWordNumber="11">
-      <generalWordOrder>17.</generalWordOrder>
-      <generalWordEnglish>comfortable</generalWordEnglish>
-      <generalWordGreek>άνετος, αναπαυτικός</generalWordGreek>
-      <generalWordExample>My bed is very comfortable.</generalWordExample>
-      <generalWordAudio>L2GW11.mp3</generalWordAudio>
-    </generalWord>
-
-    <phrase phraseNumber="1">
-      <phraseWordOrder>•</phraseWordOrder>
-      <phraseEnglish>I like it!</phraseEnglish>
-      <phraseGreek>Μου αρέσει!</phraseGreek>
-      <phraseExample>Monopoly is a great game. I like it!</phraseExample>
-      <phraseAudio>L2P1.mp3</phraseAudio>
-    </phrase>
-
-  </lesson>
+	</lesson>
 
 
 
 
 
-
-
-
+  
+  
+  
 
 
 
@@ -370,7 +378,7 @@
       <wordOrder>3.</wordOrder>
       <wordEnglish>table</wordEnglish>
       <wordGreek>τραπέζι</wordGreek>
-      <wordExample>WeThere are some bananas on the kitchen table.</wordExample>
+      <wordExample>There are some bananas on the kitchen table.</wordExample>
       <wordAudio>L3W4.mp3</wordAudio>
     </word>
 
@@ -402,7 +410,7 @@
       <wordOrder>7.</wordOrder>
       <wordEnglish>wardrobe</wordEnglish>
       <wordGreek>ντουλάπα</wordGreek>
-      <wordExample>My sister has got five dresses in the wardrobe.</wordExample>
+      <wordExample>My sister has got five dresses in her wardrobe.</wordExample>
       <wordAudio>L3W8.mp3</wordAudio>
     </word>
 
@@ -482,7 +490,7 @@
       <phraseWordOrder>•</phraseWordOrder>
       <phraseEnglish>Let’s start!</phraseEnglish>
       <phraseGreek>Ας ξεκινήσουμε!</phraseGreek>
-      <phraseExample>-Good morning children! Let’s start the lesson.</phraseExample>
+      <phraseExample>Good morning, children! Let’s start the lesson.</phraseExample>
       <phraseAudio>L3P1.mp3</phraseAudio>
     </phrase>
 
@@ -504,18 +512,18 @@
 
   </lesson>
 
-
-
-
-
-
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <lesson lessonNumber="4">
 
     <word wordNumber="1">
@@ -650,7 +658,7 @@
       <generalWordOrder>16.</generalWordOrder>
       <generalWordEnglish>fun</generalWordEnglish>
       <generalWordGreek>διασκεδαστικός</generalWordGreek>
-      <generalWordExample>MyI play basketball because it’s fun!</generalWordExample>
+      <generalWordExample>I play basketball because it’s fun!</generalWordExample>
       <generalWordAudio>L4GW9.mp3</generalWordAudio>
     </generalWord>
 
@@ -682,23 +690,23 @@
       <phraseWordOrder>•</phraseWordOrder>
       <phraseEnglish>Nice to meet you!</phraseEnglish>
       <phraseGreek>Χαίρω πολύ!</phraseGreek>
-      <phraseExample>- Hello, my name is Nick! - Nice to meet you!</phraseExample>
+      <phraseExample>- Hello! My name is Nick! - Nice to meet you!</phraseExample>
       <phraseAudio>L4P3.mp3</phraseAudio>
     </phrase>
 
   </lesson>
 
-
-
-
-
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <lesson lessonNumber="5">
 
     <word wordNumber="1">
@@ -729,7 +737,7 @@
       <wordOrder>3.</wordOrder>
       <wordEnglish>gym</wordEnglish>
       <wordGreek>γυμναστήριο</wordGreek>
-      <wordExample>-Where is the PE teacher? - He's in the gym.</wordExample>
+      <wordExample>- Where is the PE teacher? - He's in the gym.</wordExample>
       <wordAudio>L5W4.mp3</wordAudio>
     </word>
 
@@ -753,7 +761,7 @@
       <wordOrder>6.</wordOrder>
       <wordEnglish>toilets</wordEnglish>
       <wordGreek>τουαλέτες</wordGreek>
-      <wordExample>The teachers’ toilets are on the first floor.</wordExample>
+      <wordExample>The teachers’ toilets are next to the teachers’ room.</wordExample>
       <wordAudio>L5W7.mp3</wordAudio>
     </word>
 
@@ -809,7 +817,7 @@
       <phraseWordOrder>•</phraseWordOrder>
       <phraseEnglish>on your left</phraseEnglish>
       <phraseGreek>στα αριστερά σου</phraseGreek>
-      <phraseExample>-Where is the bathroom, please? – It’s the second door on your left.</phraseExample>
+      <phraseExample>- Where is the bathroom, please? – It’s the second door on your left.</phraseExample>
       <phraseAudio>L5P1.mp3</phraseAudio>
     </phrase>
 
@@ -825,7 +833,7 @@
       <phraseWordOrder>•</phraseWordOrder>
       <phraseEnglish>See you later!</phraseEnglish>
       <phraseGreek>Τα λέμε αργότερα!</phraseGreek>
-      <phraseExample>- Bye Eric! - Goodbye Andy! See you later!</phraseExample>
+      <phraseExample>- Bye, Eric! - Goodbye, Andy! See you later!</phraseExample>
       <phraseAudio>L5P3.mp3</phraseAudio>
     </phrase>
 
@@ -901,7 +909,7 @@
       <generalWordOrder>6.</generalWordOrder>
       <generalWordEnglish>article</generalWordEnglish>
       <generalWordGreek>άρθρο</generalWordGreek>
-      <generalWordExample>My dad reads articles about sports.</generalWordExample>
+      <generalWordExample>My dad reads sports articles every day.</generalWordExample>
       <generalWordAudio>L6GW1.mp3</generalWordAudio>
     </generalWord>
 
@@ -917,7 +925,7 @@
       <generalWordOrder>8.</generalWordOrder>
       <generalWordEnglish>pupil</generalWordEnglish>
       <generalWordGreek>μαθητής, -ήτρια</generalWordGreek>
-      <generalWordExample>ThisThere are ninety-three pupils in our school.</generalWordExample>
+      <generalWordExample>There are ninety-three pupils in our school.</generalWordExample>
       <generalWordAudio>L6GW3.mp3</generalWordAudio>
     </generalWord>
 
@@ -997,7 +1005,7 @@
       <phraseWordOrder>•</phraseWordOrder>
       <phraseEnglish>around the world</phraseEnglish>
       <phraseGreek>σε όλον τον κόσμο</phraseGreek>
-      <phraseExample>I have got friends from all around the world.</phraseExample>
+      <phraseExample>This is an article about school bags around the world.</phraseExample>
       <phraseAudio>L6P1.mp3</phraseAudio>
     </phrase>
 
@@ -1118,7 +1126,7 @@
       <generalWordOrder>12.</generalWordOrder>
       <generalWordEnglish>well</generalWordEnglish>
       <generalWordGreek>καλά / λοιπόν</generalWordGreek>
-      <generalWordExample>Mary can’t walk very well because she is a baby. / - All the children are in the classroom, Mr. Davis. - Well, let’s start the lesson!</generalWordExample>
+      <generalWordExample>Mary can’t walk very well because she is a baby. / - All the children are in the classroom, Mr Davis. - Well, let’s start the lesson!</generalWordExample>
       <generalWordAudio>L7GW5.mp3</generalWordAudio>
     </generalWord>
 
@@ -1134,7 +1142,7 @@
       <generalWordOrder>14.</generalWordOrder>
       <generalWordEnglish>wheelchair</generalWordEnglish>
       <generalWordGreek>αναπηρικό καροτσάκι</generalWordGreek>
-      <generalWordExample>Mr. Scott is in a wheelchair because he can’t walk.</generalWordExample>
+      <generalWordExample>Mr Scott is in a wheelchair because he can’t walk.</generalWordExample>
       <generalWordAudio>L7GW7.mp3</generalWordAudio>
     </generalWord>
 
@@ -1257,7 +1265,7 @@
       <generalWordOrder>8.</generalWordOrder>
       <generalWordEnglish>dear</generalWordEnglish>
       <generalWordGreek>αγαπητός</generalWordGreek>
-      <generalWordExample>- Are you ok my dear? -Yes, I’m fine!</generalWordExample>
+      <generalWordExample>- Are you OK my dear? -Yes, I’m fine!</generalWordExample>
       <generalWordAudio>L8GW3.mp3</generalWordAudio>
     </generalWord>
 
@@ -1265,7 +1273,7 @@
       <generalWordOrder>9.</generalWordOrder>
       <generalWordEnglish>sorry</generalWordEnglish>
       <generalWordGreek>συγγνώμη</generalWordGreek>
-      <generalWordExample>MySorry, I can’t come with you today.</generalWordExample>
+      <generalWordExample>Sorry, I can’t come with you today.</generalWordExample>
       <generalWordAudio>L8GW4.mp3</generalWordAudio>
     </generalWord>
 
@@ -1374,15 +1382,15 @@
     </phrase>
 
   </lesson>
-
-
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <lesson lessonNumber="9">
 
     <word wordNumber="1">
@@ -1509,7 +1517,7 @@
       <generalWordOrder>15.</generalWordOrder>
       <generalWordEnglish>difficult</generalWordEnglish>
       <generalWordGreek>δύσκολος</generalWordGreek>
-      <generalWordExample>This maths problem is very difficult. Mums help me, please!</generalWordExample>
+      <generalWordExample>This maths problem is very difficult. Mum help me, please!</generalWordExample>
       <generalWordAudio>L9GW10.mp3</generalWordAudio>
     </generalWord>
 
@@ -1517,7 +1525,7 @@
       <generalWordOrder>16.</generalWordOrder>
       <generalWordEnglish>other</generalWordEnglish>
       <generalWordGreek>άλλος</generalWordGreek>
-      <generalWordExample>-What other sports do you do? - I play tennis and volleyball.</generalWordExample>
+      <generalWordExample>- What other sports do you do? - I play tennis and volleyball.</generalWordExample>
       <generalWordAudio>L9GW11.mp3</generalWordAudio>
     </generalWord>
 
@@ -1547,24 +1555,24 @@
     </phrase>
 
   </lesson>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <lesson lessonNumber="10">
 
     <word wordNumber="1">
@@ -1627,7 +1635,7 @@
       <generalWordOrder>7.</generalWordOrder>
       <generalWordEnglish>key</generalWordEnglish>
       <generalWordGreek>κλειδί</generalWordGreek>
-      <generalWordExample>-Where are my car keys, dear? - I think they’re on the table.</generalWordExample>
+      <generalWordExample>- Where are my car keys, dear? - I think they’re on the table.</generalWordExample>
       <generalWordAudio>L10GW2.mp3</generalWordAudio>
     </generalWord>
 
@@ -1702,16 +1710,16 @@
       <generalWordExample>Our teacher tells us to exercise often.</generalWordExample>
       <generalWordAudio>L10GW11.mp3</generalWordAudio>
     </generalWord>
-
-    <generalWord generalWordNumber="12">
+	
+	<generalWord generalWordNumber="12">
       <generalWordOrder>17.</generalWordOrder>
       <generalWordEnglish>clock</generalWordEnglish>
       <generalWordGreek>ρολόι (τοίχου ή ξυπνητήρι)</generalWordGreek>
       <generalWordExample>My clock says it’s 9 o’clock.</generalWordExample>
       <generalWordAudio>L10GW12.mp3</generalWordAudio>
     </generalWord>
-
-    <generalWord generalWordNumber="13">
+	
+	<generalWord generalWordNumber="13">
       <generalWordOrder>18.</generalWordOrder>
       <generalWordEnglish>board game</generalWordEnglish>
       <generalWordGreek>επιτραπέζιο παιχνίδι</generalWordGreek>
@@ -1744,14 +1752,14 @@
     </phrase>
 
   </lesson>
-
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
+  
   <lesson lessonNumber="11">
 
     <word wordNumber="1">
@@ -1801,16 +1809,16 @@
       <wordExample>Today is the ninth episode of my favourite TV series.</wordExample>
       <wordAudio>L11W6.mp3</wordAudio>
     </word>
-
-    <word wordNumber="7">
+	
+	<word wordNumber="7">
       <wordOrder>6.</wordOrder>
       <wordEnglish>talent show</wordEnglish>
       <wordGreek>διαγωνισμός ταλέντων</wordGreek>
-      <wordExample>I like the songs from that from that TV talent show.</wordExample>
+      <wordExample>I like the songs from that TV talent show.</wordExample>
       <wordAudio>L11W7.mp3</wordAudio>
     </word>
-
-    <word wordNumber="8">
+	
+	<word wordNumber="8">
       <wordOrder>7.</wordOrder>
       <wordEnglish>football match</wordEnglish>
       <wordGreek>ποδοσφαιρικός αγώνας</wordGreek>
@@ -1822,7 +1830,7 @@
       <generalWordOrder>8.</generalWordOrder>
       <generalWordEnglish>today</generalWordEnglish>
       <generalWordGreek>σήμερα</generalWordGreek>
-      <generalWordExample>Mr. Lewis can’t meet you today. What about next Monday?</generalWordExample>
+      <generalWordExample>Mr Lewis can’t meet you today. What about next Monday?</generalWordExample>
       <generalWordAudio>L11GW1.mp3</generalWordAudio>
     </generalWord>
 
@@ -1870,7 +1878,7 @@
       <generalWordOrder>14.</generalWordOrder>
       <generalWordEnglish>travel</generalWordEnglish>
       <generalWordGreek>ταξιδεύω</generalWordGreek>
-      <generalWordExample>Mr. Scott is a pilot and travels around the world.</generalWordExample>
+      <generalWordExample>Mr Scott is a pilot and travels around the world.</generalWordExample>
       <generalWordAudio>L11GW7.mp3</generalWordAudio>
     </generalWord>
 
@@ -1909,7 +1917,7 @@
     <phrase phraseNumber="2">
       <phraseWordOrder>•</phraseWordOrder>
       <phraseEnglish>Don’t miss it!</phraseEnglish>
-      <phraseGreek>Τι ώρα είναι;</phraseGreek>
+      <phraseGreek>Μην το χάσεις/χάσετε!</phraseGreek>
       <phraseExample>There’s a great film on TV this weekend. Don’t miss it!</phraseExample>
       <phraseAudio>L11P2.mp3</phraseAudio>
     </phrase>
@@ -1923,8 +1931,8 @@
     </phrase>
 
   </lesson>
-
-
+  
+  
   <lesson lessonNumber="12">
 
     <word wordNumber="1">
@@ -1987,7 +1995,7 @@
       <generalWordOrder>7.</generalWordOrder>
       <generalWordEnglish>classmate</generalWordEnglish>
       <generalWordGreek>συμμαθητής, -ήτρια</generalWordGreek>
-      <generalWordExample>- Do you know that girl? - She’s Erin. We’re classmates at schools.</generalWordExample>
+      <generalWordExample>- Do you know that girl? - She’s Erin. We’re classmates at school.</generalWordExample>
       <generalWordAudio>L12GW2.mp3</generalWordAudio>
     </generalWord>
 
@@ -2059,20 +2067,20 @@
       <phraseWordOrder>•</phraseWordOrder>
       <phraseEnglish>You can try it!</phraseEnglish>
       <phraseGreek>Μπορείς να το δοκιμάσεις!</phraseGreek>
-      <phraseExample>-This burger is great!  You can try it!</phraseExample>
+      <phraseExample>This burger is great! You can try it!</phraseExample>
       <phraseAudio>L12P1.mp3</phraseAudio>
     </phrase>
 
   </lesson>
-
-
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <lesson lessonNumber="13">
 
     <word wordNumber="1">
@@ -2122,40 +2130,40 @@
       <wordExample>My grandpa is 70 years old and has got grey hair.</wordExample>
       <wordAudio>L13W6.mp3</wordAudio>
     </word>
-
-    <word wordNumber="7">
+	
+	<word wordNumber="7">
       <wordOrder>6.</wordOrder>
       <wordEnglish>grandmother / grandma</wordEnglish>
       <wordGreek>γιαγιά</wordGreek>
       <wordExample>My grandma is old and she can’t walk. She uses a wheelchair.</wordExample>
       <wordAudio>L13W7.mp3</wordAudio>
     </word>
-
-    <word wordNumber="8">
+	
+	<word wordNumber="8">
       <wordOrder>7.</wordOrder>
       <wordEnglish>grandparents</wordEnglish>
       <wordGreek>παππούδες</wordGreek>
       <wordExample>We usually visit our grandparents at weekends.</wordExample>
       <wordAudio>L13W8.mp3</wordAudio>
     </word>
-
-    <word wordNumber="9">
+	
+	<word wordNumber="9">
       <wordOrder>8.</wordOrder>
       <wordEnglish>aunt</wordEnglish>
       <wordGreek>θεία</wordGreek>
       <wordExample>This is Aunt Sarah, my mother’s sister.</wordExample>
       <wordAudio>L13W9.mp3</wordAudio>
     </word>
-
-    <word wordNumber="10">
+	
+	<word wordNumber="10">
       <wordOrder>9.</wordOrder>
       <wordEnglish>uncle</wordEnglish>
       <wordGreek>θείος</wordGreek>
       <wordExample>My dad’s brother, Uncle Tom, can play the drums!</wordExample>
       <wordAudio>L13W10.mp3</wordAudio>
     </word>
-
-    <word wordNumber="11">
+	
+	<word wordNumber="11">
       <wordOrder>10.</wordOrder>
       <wordEnglish>cousin</wordEnglish>
       <wordGreek>ξάδελφος / ξαδέλφη</wordGreek>
@@ -2218,24 +2226,24 @@
       <phraseExample>Guess what! We are having a baby!</phraseExample>
       <phraseAudio>L13P1.mp3</phraseAudio>
     </phrase>
-
-    <phrase phraseNumber="2">
+	
+	<phrase phraseNumber="2">
       <phraseWordOrder>•</phraseWordOrder>
       <phraseEnglish>take photos</phraseEnglish>
       <phraseGreek>βγάζω φωτογραφίες</phraseGreek>
       <phraseExample>I can take great photos with my new camera!</phraseExample>
       <phraseAudio>L13P2.mp3</phraseAudio>
     </phrase>
-
-    <phrase phraseNumber="3">
+	
+	<phrase phraseNumber="3">
       <phraseWordOrder>•</phraseWordOrder>
       <phraseEnglish>set the table</phraseEnglish>
       <phraseGreek>στρώνω το τραπέζι</phraseGreek>
       <phraseExample>Can you set the table, dear? It’s time for lunch.</phraseExample>
       <phraseAudio>L13P3.mp3</phraseAudio>
     </phrase>
-
-    <phrase phraseNumber="4">
+	
+	<phrase phraseNumber="4">
       <phraseWordOrder>•</phraseWordOrder>
       <phraseEnglish>Take care!</phraseEnglish>
       <phraseGreek>Να προσέχεις!</phraseGreek>
@@ -2244,14 +2252,14 @@
     </phrase>
 
   </lesson>
-
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
+  
   <lesson lessonNumber="14">
 
     <word wordNumber="1">
@@ -2301,8 +2309,8 @@
       <wordExample>I’m hungry, Mum! Let’s make a pizza.</wordExample>
       <wordAudio>L14W6.mp3</wordAudio>
     </word>
-
-    <word wordNumber="7">
+	
+	<word wordNumber="7">
       <wordOrder>6.</wordOrder>
       <wordEnglish>I’m thirsty</wordEnglish>
       <wordGreek>διψάω</wordGreek>
@@ -2357,24 +2365,24 @@
       <generalWordExample>Are these tears? Why are you crying?</generalWordExample>
       <generalWordAudio>L14GW6.mp3</generalWordAudio>
     </generalWord>
-
-    <generalWord generalWordNumber="7">
+	
+	<generalWord generalWordNumber="7">
       <generalWordOrder>13.</generalWordOrder>
       <generalWordEnglish>so</generalWordEnglish>
       <generalWordGreek>άρα, οπότε</generalWordGreek>
       <generalWordExample>I’m not very well. So I’m not coming to the party.</generalWordExample>
       <generalWordAudio>L14GW7.mp3</generalWordAudio>
     </generalWord>
-
-    <generalWord generalWordNumber="8">
+	
+	<generalWord generalWordNumber="8">
       <generalWordOrder>14.</generalWordOrder>
       <generalWordEnglish>know</generalWordEnglish>
       <generalWordGreek>ξέρω, γνωρίζω</generalWordGreek>
       <generalWordExample>Linda reads very much so she knows a lot of things.</generalWordExample>
       <generalWordAudio>L14GW8.mp3</generalWordAudio>
     </generalWord>
-
-    <generalWord generalWordNumber="9">
+	
+	<generalWord generalWordNumber="9">
       <generalWordOrder>15.</generalWordOrder>
       <generalWordEnglish>scream</generalWordEnglish>
       <generalWordGreek>ουρλιάζω</generalWordGreek>
@@ -2389,24 +2397,24 @@
       <phraseExample>When I play board games with my friends, we always have a good time.</phraseExample>
       <phraseAudio>L14P1.mp3</phraseAudio>
     </phrase>
-
-    <phrase phraseNumber="2">
+	
+	<phrase phraseNumber="2">
       <phraseWordOrder>•</phraseWordOrder>
       <phraseEnglish>Don’t worry!</phraseEnglish>
       <phraseGreek>Μην ανησυχείς!</phraseGreek>
       <phraseExample>- I can’t find my umbrella. - Don’t worry! I’ve got one.</phraseExample>
       <phraseAudio>L14P2.mp3</phraseAudio>
     </phrase>
-
-    <phrase phraseNumber="3">
+	
+	<phrase phraseNumber="3">
       <phraseWordOrder>•</phraseWordOrder>
       <phraseEnglish>pick a card</phraseEnglish>
       <phraseGreek>τραβάω/παίρνω μία κάρτα</phraseGreek>
       <phraseExample>- Let’s start the game! - Pick a card!</phraseExample>
       <phraseAudio>L14P3.mp3</phraseAudio>
     </phrase>
-
-    <phrase phraseNumber="4">
+	
+	<phrase phraseNumber="4">
       <phraseWordOrder>•</phraseWordOrder>
       <phraseEnglish>It’s your turn.</phraseEnglish>
       <phraseGreek>Είναι η σειρά σου.</phraseGreek>
@@ -2415,16 +2423,16 @@
     </phrase>
 
   </lesson>
-
-
-
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <lesson lessonNumber="15">
 
     <word wordNumber="1">
@@ -2474,8 +2482,8 @@
       <wordExample>Miranda is very nice and friendly to everyone.</wordExample>
       <wordAudio>L15W6.mp3</wordAudio>
     </word>
-
-    <word wordNumber="7">
+	
+	<word wordNumber="7">
       <wordOrder>6.</wordOrder>
       <wordEnglish>shy</wordEnglish>
       <wordGreek>ντροπαλός</wordGreek>
@@ -2530,48 +2538,48 @@
       <generalWordExample>Georgia doesn’t like black. She always wears colourful clothes.</generalWordExample>
       <generalWordAudio>L15GW6.mp3</generalWordAudio>
     </generalWord>
-
-    <generalWord generalWordNumber="7">
+	
+	<generalWord generalWordNumber="7">
       <generalWordOrder>13.</generalWordOrder>
       <generalWordEnglish>funfair</generalWordEnglish>
       <generalWordGreek>λούνα παρκ</generalWordGreek>
       <generalWordExample>Children enjoy going to the funfair because they can play and eat ice cream.</generalWordExample>
       <generalWordAudio>L15GW7.mp3</generalWordAudio>
     </generalWord>
-
-    <generalWord generalWordNumber="8">
+	
+	<generalWord generalWordNumber="8">
       <generalWordOrder>14.</generalWordOrder>
       <generalWordEnglish>museum</generalWordEnglish>
       <generalWordGreek>μουσείο</generalWordGreek>
       <generalWordExample>Brad likes going to museums and learning about history.</generalWordExample>
       <generalWordAudio>L15GW8.mp3</generalWordAudio>
     </generalWord>
-
-    <generalWord generalWordNumber="9">
+	
+	<generalWord generalWordNumber="9">
       <generalWordOrder>15.</generalWordOrder>
       <generalWordEnglish>present</generalWordEnglish>
       <generalWordGreek>δώρο</generalWordGreek>
       <generalWordExample>It’s Mother’s Day, Mum! This present is for you.</generalWordExample>
       <generalWordAudio>L15GW9.mp3</generalWordAudio>
     </generalWord>
-
-    <generalWord generalWordNumber="10">
+	
+	<generalWord generalWordNumber="10">
       <generalWordOrder>16.</generalWordOrder>
       <generalWordEnglish>birthday</generalWordEnglish>
       <generalWordGreek>γενέθλια</generalWordGreek>
       <generalWordExample>My birthday is on 16th May.</generalWordExample>
       <generalWordAudio>L15GW10.mp3</generalWordAudio>
     </generalWord>
-
-    <generalWord generalWordNumber="11">
+	
+	<generalWord generalWordNumber="11">
       <generalWordOrder>17.</generalWordOrder>
       <generalWordEnglish>more</generalWordEnglish>
       <generalWordGreek>περισσότερος</generalWordGreek>
       <generalWordExample>Can I have more cake, please?</generalWordExample>
       <generalWordAudio>L15GW11.mp3</generalWordAudio>
     </generalWord>
-
-    <generalWord generalWordNumber="12">
+	
+	<generalWord generalWordNumber="12">
       <generalWordOrder>18.</generalWordOrder>
       <generalWordEnglish>person</generalWordEnglish>
       <generalWordGreek>άτομο</generalWordGreek>
@@ -2586,16 +2594,16 @@
       <phraseExample>I love spending time with my family.</phraseExample>
       <phraseAudio>L15P1.mp3</phraseAudio>
     </phrase>
-
-    <phrase phraseNumber="2">
+	
+	<phrase phraseNumber="2">
       <phraseWordOrder>•</phraseWordOrder>
       <phraseEnglish>tell jokes</phraseEnglish>
       <phraseGreek>λέω αστεία</phraseGreek>
       <phraseExample>My uncle always tells jokes. He is very funny!</phraseExample>
       <phraseAudio>L15P2.mp3</phraseAudio>
     </phrase>
-
-    <phrase phraseNumber="3">
+	
+	<phrase phraseNumber="3">
       <phraseWordOrder>•</phraseWordOrder>
       <phraseEnglish>my best friend</phraseEnglish>
       <phraseGreek>ο καλύτερός μου φίλος</phraseGreek>
@@ -2604,14 +2612,14 @@
     </phrase>
 
   </lesson>
-
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
+  
   <lesson lessonNumber="16">
 
     <word wordNumber="1">
@@ -2709,48 +2717,48 @@
       <generalWordExample>- What time is it? - I don’t know. I can’t find my watch.</generalWordExample>
       <generalWordAudio>L16GW6.mp3</generalWordAudio>
     </generalWord>
-
-    <generalWord generalWordNumber="7">
+	
+	<generalWord generalWordNumber="7">
       <generalWordOrder>12.</generalWordOrder>
       <generalWordEnglish>call</generalWordEnglish>
       <generalWordGreek>τηλεφωνώ / κλήση</generalWordGreek>
-      <generalWordExample>Can you call Susan? I need to talk to her. / You’ve got a call from your brother, Mr. Smith.</generalWordExample>
+      <generalWordExample>Can you call Susan? I need to talk to her. / You’ve got a call from your brother, Mr Smith.</generalWordExample>
       <generalWordAudio>L16GW7.mp3</generalWordAudio>
     </generalWord>
-
-    <generalWord generalWordNumber="8">
+	
+	<generalWord generalWordNumber="8">
       <generalWordOrder>13.</generalWordOrder>
       <generalWordEnglish>message</generalWordEnglish>
       <generalWordGreek>μήνυμα</generalWordGreek>
       <generalWordExample>Ken doesn’t like talking on the phone but he enjoys sending messages.</generalWordExample>
       <generalWordAudio>L16GW8.mp3</generalWordAudio>
     </generalWord>
-
-    <generalWord generalWordNumber="9">
+	
+	<generalWord generalWordNumber="9">
       <generalWordOrder>14.</generalWordOrder>
       <generalWordEnglish>screen</generalWordEnglish>
       <generalWordGreek>οθόνη</generalWordGreek>
       <generalWordExample>My mobile phone has got a big screen, so I can watch videos on it.</generalWordExample>
       <generalWordAudio>L16GW9.mp3</generalWordAudio>
     </generalWord>
-
-    <generalWord generalWordNumber="10">
+	
+	<generalWord generalWordNumber="10">
       <generalWordOrder>15.</generalWordOrder>
       <generalWordEnglish>fly</generalWordEnglish>
       <generalWordGreek>πετάω</generalWordGreek>
       <generalWordExample>Do you know that some birds can’t fly?</generalWordExample>
       <generalWordAudio>L16GW10.mp3</generalWordAudio>
     </generalWord>
-
-    <generalWord generalWordNumber="11">
+	
+	<generalWord generalWordNumber="11">
       <generalWordOrder>16.</generalWordOrder>
       <generalWordEnglish>sky</generalWordEnglish>
       <generalWordGreek>ουρανός</generalWordGreek>
       <generalWordExample>Look at the stars in the sky! They’re beautiful!</generalWordExample>
       <generalWordAudio>L16GW11.mp3</generalWordAudio>
     </generalWord>
-
-    <generalWord generalWordNumber="12">
+	
+	<generalWord generalWordNumber="12">
       <generalWordOrder>17.</generalWordOrder>
       <generalWordEnglish>expensive</generalWordEnglish>
       <generalWordGreek>ακριβός</generalWordGreek>
@@ -2765,16 +2773,16 @@
       <phraseExample>- I like these shoes! How much do they cost? - £50.</phraseExample>
       <phraseAudio>L16P1.mp3</phraseAudio>
     </phrase>
-
-    <phrase phraseNumber="2">
+	
+	<phrase phraseNumber="2">
       <phraseWordOrder>•</phraseWordOrder>
       <phraseEnglish>surf the Net</phraseEnglish>
       <phraseGreek>σερφάρω στο Ίντερνετ</phraseGreek>
       <phraseExample>When I’m bored, I usually surf the Net on my laptop.</phraseExample>
       <phraseAudio>L16P2.mp3</phraseAudio>
     </phrase>
-
-    <phrase phraseNumber="3">
+	
+	<phrase phraseNumber="3">
       <phraseWordOrder>•</phraseWordOrder>
       <phraseEnglish>easy to use</phraseEnglish>
       <phraseGreek>εύκολο να χρησιμοποιηθεί</phraseGreek>
@@ -2786,4 +2794,3568 @@
 
 
 
+
+
+
+
+
+
+  <lesson lessonNumber="17">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L17W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>shirt</wordEnglish>
+      <wordGreek>πουκάμισο</wordGreek>
+      <wordExample>My dad can’t wear T-shirts at work. He always wears shirts.</wordExample>
+      <wordAudio>L17W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>trousers</wordEnglish>
+      <wordGreek>παντελόνι</wordGreek>
+      <wordExample>Wear you black trousers and new T-shirt for the party.</wordExample>
+      <wordAudio>L17W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>jeans</wordEnglish>
+      <wordGreek>τζιν</wordGreek>
+      <wordExample>I never wear jeans for PE. I always wear sports clothes.</wordExample>
+      <wordAudio>L17W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>trainers</wordEnglish>
+      <wordGreek>αθλητικά παπούτσια</wordGreek>
+      <wordExample>I always wear my favourite trainers when I go jogging.</wordExample>
+      <wordAudio>L17W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>dress</wordEnglish>
+      <wordGreek>φόρεμα</wordGreek>
+      <wordExample>It is Violet’s birthday party today and she is wearing a beautiful dress.</wordExample>
+      <wordAudio>L17W6.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="7">
+      <wordOrder>6.</wordOrder>
+      <wordEnglish>skirt</wordEnglish>
+      <wordGreek>φούστα</wordGreek>
+      <wordExample>My grandma wears only skirts. She never wears trousers.</wordExample>
+      <wordAudio>L17W7.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="8">
+      <wordOrder>7.</wordOrder>
+      <wordEnglish>jumper</wordEnglish>
+      <wordGreek>μπλούζα, πουλόβερ</wordGreek>
+      <wordExample>Dan always wears his favourite red jumper at Christmas.</wordExample>
+      <wordAudio>L17W8.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="9">
+      <wordOrder>8.</wordOrder>
+      <wordEnglish>shoe</wordEnglish>
+      <wordGreek>παπούτσι</wordGreek>
+      <wordExample>My mum always matches her shoes with her bags.</wordExample>
+      <wordAudio>L17W9.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="10">
+      <wordOrder>9.</wordOrder>
+      <wordEnglish>boot</wordEnglish>
+      <wordGreek>μπότα</wordGreek>
+      <wordExample>I can’t walk in these boots. They’re not comfortable.</wordExample>
+      <wordAudio>L17W10.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="11">
+      <wordOrder>10.</wordOrder>
+      <wordEnglish>sock</wordEnglish>
+      <wordGreek>κάλτσα</wordGreek>
+      <wordExample>I want to play football with my friends but I can’t find my long white socks.</wordExample>
+      <wordAudio>L17W11.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>dress</generalWordEnglish>
+      <generalWordGreek>ντύνω</generalWordGreek>
+      <generalWordExample>Diana likes dressing her dolls in pink skirts and dresses.</generalWordExample>
+      <generalWordAudio>L17GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>need</generalWordEnglish>
+      <generalWordGreek>χρειάζομαι</generalWordGreek>
+      <generalWordExample>This maths problem is difficult. I need help.</generalWordExample>
+      <generalWordAudio>L17GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>ugly</generalWordEnglish>
+      <generalWordGreek>άσχημος</generalWordGreek>
+      <generalWordExample>This witch has got a big nose and she’s very ugly!</generalWordExample>
+      <generalWordAudio>L17GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>change</generalWordEnglish>
+      <generalWordGreek>αλλάζω / αλλαγή</generalWordGreek>
+      <generalWordExample>I always change my clothes when I come back from the gym. / I want to make a change to my hair.</generalWordExample>
+      <generalWordAudio>L17GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>fantastic</generalWordEnglish>
+      <generalWordGreek>φανταστικός</generalWordGreek>
+      <generalWordExample>This book is fantastic! I love reading it.</generalWordExample>
+      <generalWordAudio>L17GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>16.</generalWordOrder>
+      <generalWordEnglish>wear</generalWordEnglish>
+      <generalWordGreek>φοράω</generalWordGreek>
+      <generalWordExample>- What are you wearing for the party? - My favourite purple skirt.</generalWordExample>
+      <generalWordAudio>L17GW6.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>it doesn’t look good</phraseEnglish>
+      <phraseGreek>δε δείχνει ωραίο</phraseGreek>
+      <phraseExample>- Do you like my new hat? - No, I don’t. It doesn’t look good on you.</phraseExample>
+      <phraseAudio>L17P1.mp3</phraseAudio>
+    </phrase>
+
+    <phrase phraseNumber="2">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>You’re right!</phraseEnglish>
+      <phraseGreek>Έχεις δίκιο!</phraseGreek>
+      <phraseExample>- This drone is very expensive! - You’re right! We can’t buy it.</phraseExample>
+      <phraseAudio>L17P2.mp3</phraseAudio>
+    </phrase>
+
+    <phrase phraseNumber="3">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>in the beginning</phraseEnglish>
+      <phraseGreek>στην αρχή</phraseGreek>
+      <phraseExample>- What does the story say in the beginning? - Well, it starts with the big bad wolf.</phraseExample>
+      <phraseAudio>L17P3.mp3</phraseAudio>
+    </phrase>
+
+    <phrase phraseNumber="4">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>in the end</phraseEnglish>
+      <phraseGreek>στο τέλος</phraseGreek>
+      <phraseExample>In the end, the mouse runs and escapes from the cat.</phraseExample>
+      <phraseAudio>L17P4.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+
+
+
+
+
+
+
+  <lesson lessonNumber="18">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L18W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>supermarket</wordEnglish>
+      <wordGreek>σουπερμάρκετ</wordGreek>
+      <wordExample>Let’s go to the supermarket to buy some milk and tomatoes.</wordExample>
+      <wordAudio>L18W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>greengrocer’s</wordEnglish>
+      <wordGreek>μανάβικο</wordGreek>
+      <wordExample>- We haven’t got any fruit, Dad. - Let’s go to the greengrocer’s, then.</wordExample>
+      <wordAudio>L18W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>baker’s</wordEnglish>
+      <wordGreek>φούρνος</wordGreek>
+      <wordExample>That cake from the baker’s is very tasty!</wordExample>
+      <wordAudio>L18W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>bookshop</wordEnglish>
+      <wordGreek>βιβλιοπωλείο</wordGreek>
+      <wordExample>I’m going to the bookshop because I haven’t got any books to read.</wordExample>
+      <wordAudio>L18W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>clothes shop</wordEnglish>
+      <wordGreek>κατάστημα ρούχων</wordGreek>
+      <wordExample>This clothes shop has got trendy trousers and shirts.</wordExample>
+      <wordAudio>L18W6.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="7">
+      <wordOrder>6.</wordOrder>
+      <wordEnglish>toy shop</wordEnglish>
+      <wordGreek>κατάστημα παιχνιδιών</wordGreek>
+      <wordExample>- Has this toy shop got computer games, too? - No, it hasn’t. It’s only got toys.</wordExample>
+      <wordAudio>L18W7.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="8">
+      <wordOrder>7.</wordOrder>
+      <wordEnglish>pet shop</wordEnglish>
+      <wordGreek>κατάστημα με κατοικίδια</wordGreek>
+      <wordExample>Mark needs some dog food, so he’s going to the pet shop.</wordExample>
+      <wordAudio>L18W8.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>8.</generalWordOrder>
+      <generalWordEnglish>visit</generalWordEnglish>
+      <generalWordGreek>επισκέπτομαι / επίσκεψη</generalWordGreek>
+      <generalWordExample>Next summer, we are visiting Italy. / Let’s go to our grandparents’ house for a visit this afternoon!</generalWordExample>
+      <generalWordAudio>L18GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>9.</generalWordOrder>
+      <generalWordEnglish>list</generalWordEnglish>
+      <generalWordGreek>λίστα</generalWordGreek>
+      <generalWordExample>Let’s make a shopping list of the things we need from the supermarket.</generalWordExample>
+      <generalWordAudio>L18GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>10.</generalWordOrder>
+      <generalWordEnglish>milk</generalWordEnglish>
+      <generalWordGreek>γάλα</generalWordGreek>
+      <generalWordExample>The baby is crying because he wants to drink milk.</generalWordExample>
+      <generalWordAudio>L18GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>ring</generalWordEnglish>
+      <generalWordGreek>χτυπάω (για τηλέφωνο/κουδούνι)</generalWordGreek>
+      <generalWordExample>- Listen! Your phone is ringing. - Oh, my mum is calling.</generalWordExample>
+      <generalWordAudio>L18GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>again</generalWordEnglish>
+      <generalWordGreek>ξανά, πάλι</generalWordGreek>
+      <generalWordExample>- Let’s see one of the Harry Potter films! - Not again! I want to see Batman.</generalWordExample>
+      <generalWordAudio>L18GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>cheese</generalWordEnglish>
+      <generalWordGreek>τυρί</generalWordGreek>
+      <generalWordExample>Can I have some more cheese on my spaghetti, please?</generalWordExample>
+      <generalWordAudio>L18GW6.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="7">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>home</generalWordEnglish>
+      <generalWordGreek>σπίτι</generalWordGreek>
+      <generalWordExample>I’m really tired. Let’s go home, please!</generalWordExample>
+      <generalWordAudio>L18GW7.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="8">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>bread</generalWordEnglish>
+      <generalWordGreek>ψωμί</generalWordGreek>
+      <generalWordExample>I’m going to the baker’s to buy some bread.</generalWordExample>
+      <generalWordAudio>L18GW8.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="9">
+      <generalWordOrder>16.</generalWordOrder>
+      <generalWordEnglish>stop</generalWordEnglish>
+      <generalWordGreek>σταματάω</generalWordGreek>
+      <generalWordExample>We’re all very tired because the baby never stops crying.</generalWordExample>
+      <generalWordAudio>L18GW9.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="10">
+      <generalWordOrder>17.</generalWordOrder>
+      <generalWordEnglish>turn off</generalWordEnglish>
+      <generalWordGreek>κλείνω, σβήνω (συσκευή)</generalWordGreek>
+      <generalWordExample>I always turn off my computer before I go to bed.</generalWordExample>
+      <generalWordAudio>L18GW10.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>go shopping</phraseEnglish>
+      <phraseGreek>πηγαίνω για ψώνια</phraseGreek>
+      <phraseExample>I need some new clothes. Let’s go shopping in the afternoon, then.</phraseExample>
+      <phraseAudio>L18P1.mp3</phraseAudio>
+    </phrase>
+
+    <phrase phraseNumber="2">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>What is it?</phraseEnglish>
+      <phraseGreek>Τι είναι;</phraseGreek>
+      <phraseExample>Why are you calling again, Dad? What is it?</phraseExample>
+      <phraseAudio>L18P2.mp3</phraseAudio>
+    </phrase>
+
+    <phrase phraseNumber="3">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>That’s it!</phraseEnglish>
+      <phraseGreek>Αυτό ήταν! / Ως εδώ!</phraseGreek>
+      <phraseExample>OK! That’s it! I’m telling Mum that you aren’t doing your homework!</phraseExample>
+      <phraseAudio>L18P3.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+
+
+
+
+
+
+
+
+
+
+  <lesson lessonNumber="19">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L19W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>Greece - Greek</wordEnglish>
+      <wordGreek>Ελλάδα - Έλληνας</wordGreek>
+      <wordExample>One day I want to visit the Acropolis and other places in Greece. I also want to see all my Greek friends again.</wordExample>
+      <wordAudio>L19W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>England - English</wordEnglish>
+      <wordGreek>Αγγλία -Άγγλος</wordGreek>
+      <wordExample>We travel to England very often because my grandparents are English.</wordExample>
+      <wordAudio>L19W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>Cyprus - Cypriot</wordEnglish>
+      <wordGreek>Κύπρος - Κύπριος</wordGreek>
+      <wordExample>My cousin is flying to Nicosia, Cyprus, tomorrow. He is visiting his Cypriot cousins.</wordExample>
+      <wordAudio>L19W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>Spain - Spanish</wordEnglish>
+      <wordGreek>Ισπανία - Ισπανός</wordGreek>
+      <wordExample>Gerard Piqué is a famous football player from Spain. Other Spanish football players I like are Sergio Ramos and David Silva.</wordExample>
+      <wordAudio>L19W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>Italy - Italian</wordEnglish>
+      <wordGreek>Ιταλία - Ιταλός</wordGreek>
+      <wordExample>Look at the map! Italy looks like a boot! Italian pupils go to school six days a week.</wordExample>
+      <wordAudio>L19W6.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="7">
+      <wordOrder>6.</wordOrder>
+      <wordEnglish>Germany - German</wordEnglish>
+      <wordGreek>Γερμανία - Γερμανός</wordGreek>
+      <wordExample>The famous model Heidi Klum is from Germany but she has two nationalities. She is German and American, too.</wordExample>
+      <wordAudio>L19W7.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="8">
+      <wordOrder>7.</wordOrder>
+      <wordEnglish>France - French</wordEnglish>
+      <wordGreek>Γαλλία - Γάλλος</wordGreek>
+      <wordExample>This June, I am going to a summer school in France. There are French, English and German students there.</wordExample>
+      <wordAudio>L19W8.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="9">
+      <wordOrder>8.</wordOrder>
+      <wordEnglish>Albania - Albanian</wordEnglish>
+      <wordGreek>Αλβανία - Αλβανός</wordGreek>
+      <wordExample>Uncle Sergio lives in Tirana, Albania, but he isn’t Albanian. He’s Italian.</wordExample>
+      <wordAudio>L19W9.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>9.</generalWordOrder>
+      <generalWordEnglish>rule</generalWordEnglish>
+      <generalWordGreek>κανόνας</generalWordGreek>
+      <generalWordExample>We mustn’t use our mobile phones at school. It’s a rule.</generalWordExample>
+      <generalWordAudio>L19GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>10.</generalWordOrder>
+      <generalWordEnglish>late</generalWordEnglish>
+      <generalWordGreek>αργοπορημένος / αργά</generalWordGreek>
+      <generalWordExample>Sarah is sometimes late for school because she doesn’t go to bed early at night. / It’s half past ten. It’s late, children! Time for bed!</generalWordExample>
+      <generalWordAudio>L19GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>uniform</generalWordEnglish>
+      <generalWordGreek>στολή (σχολείου)</generalWordGreek>
+      <generalWordExample>My sister must wear a uniform at school. She wears a black skirt and a white shirt every day.</generalWordExample>
+      <generalWordAudio>L19GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>different</generalWordEnglish>
+      <generalWordGreek>διαφορετικός</generalWordGreek>
+      <generalWordExample>Pierre is French and Alex is German. They are from different countries.</generalWordExample>
+      <generalWordAudio>L19GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>(lunch) break</generalWordEnglish>
+      <generalWordGreek>διάλειμμα (για μεσημεριανό)</generalWordGreek>
+      <generalWordExample>It’s time for our lunch break! Let’s go to the canteen.</generalWordExample>
+      <generalWordAudio>L19GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>stay</generalWordEnglish>
+      <generalWordGreek>μένω</generalWordGreek>
+      <generalWordExample>You don’t look very well, dear. You must stay in bed today.</generalWordExample>
+      <generalWordAudio>L19GW6.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="7">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>come back</generalWordEnglish>
+      <generalWordGreek>επιστρέφω</generalWordGreek>
+      <generalWordExample>My dad comes back from work at 5.00 every day.</generalWordExample>
+      <generalWordAudio>L19GW7.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="8">
+      <generalWordOrder>16.</generalWordOrder>
+      <generalWordEnglish>important</generalWordEnglish>
+      <generalWordGreek>σημαντικός</generalWordGreek>
+      <generalWordExample>It is very important to eat breakfast every day.</generalWordExample>
+      <generalWordAudio>L19GW8.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>for example</phraseEnglish>
+      <phraseGreek>για παράδειγμα</phraseGreek>
+      <phraseExample>We have very interesting subjects this year, for example, IT and science.</phraseExample>
+      <phraseAudio>L19P1.mp3</phraseAudio>
+    </phrase>
+
+    <phrase phraseNumber="2">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>as well</phraseEnglish>
+      <phraseGreek>επίσης</phraseGreek>
+      <phraseExample>Betty usually wears trousers or jeans, but she sometimes wears skirts, as well.</phraseExample>
+      <phraseAudio>L19P2.mp3</phraseAudio>
+    </phrase>
+
+    <phrase phraseNumber="3">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>in most schools</phraseEnglish>
+      <phraseGreek>στα περισσότερα σχολεία</phraseGreek>
+      <phraseExample>In most schools in Greece, pupils don’t wear uniforms.</phraseExample>
+      <phraseAudio>L19P3.mp3</phraseAudio>
+    </phrase>
+
+    <phrase phraseNumber="4">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>from … to …</phraseEnglish>
+      <phraseGreek>από … μέχρι …</phraseGreek>
+      <phraseExample>Susan usually does her homework from 4.00 to 6.00 in the afternoon.</phraseExample>
+      <phraseAudio>L19P4.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+
+
+
+
+
+
+
+
+  <lesson lessonNumber="20">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L20W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>it’s sunny</wordEnglish>
+      <wordGreek>έχει ήλιο</wordGreek>
+      <wordExample>It’s sunny today! Let’s wear our hats!</wordExample>
+      <wordAudio>L20W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>it’s rainy</wordEnglish>
+      <wordGreek>βρέχει</wordGreek>
+      <wordExample>You must take your umbrella with you because it’s rainy.</wordExample>
+      <wordAudio>L20W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>it’s foggy</wordEnglish>
+      <wordGreek>έχει ομίχλη</wordGreek>
+      <wordExample>It’s very foggy! Don’t drive fast, please.</wordExample>
+      <wordAudio>L20W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>it’s cloudy</wordEnglish>
+      <wordGreek>έχει συννεφιά</wordGreek>
+      <wordExample>We can’t see the stars in the sky because it’s cloudy tonight.</wordExample>
+      <wordAudio>L20W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>it’s snowy</wordEnglish>
+      <wordGreek>χιονίζει</wordGreek>
+      <wordExample>Look! It’s snowy and everything is white!</wordExample>
+      <wordAudio>L20W6.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="7">
+      <wordOrder>6.</wordOrder>
+      <wordEnglish>it’s windy</wordEnglish>
+      <wordGreek>έχει αέρα</wordGreek>
+      <wordExample>It’s very windy today, so we can’t fly our drone.</wordExample>
+      <wordAudio>L20W7.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="8">
+      <wordOrder>7.</wordOrder>
+      <wordEnglish>hot</wordEnglish>
+      <wordGreek>ζεστός, καυτός</wordGreek>
+      <wordExample>The sun is really hot, so please sit under the umbrella, kids.</wordExample>
+      <wordAudio>L20W8.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="9">
+      <wordOrder>8.</wordOrder>
+      <wordEnglish>warm</wordEnglish>
+      <wordGreek>ζεστός</wordGreek>
+      <wordExample>Bob is wearing warm clothes today because it’s snowy.</wordExample>
+      <wordAudio>L20W9.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="10">
+      <wordOrder>9.</wordOrder>
+      <wordEnglish>cool</wordEnglish>
+      <wordGreek>δροσερός</wordGreek>
+      <wordExample>In summer, I really like drinking cool lemonade.</wordExample>
+      <wordAudio>L20W10.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="11">
+      <wordOrder>10.</wordOrder>
+      <wordEnglish>cold</wordEnglish>
+      <wordGreek>κρύος</wordGreek>
+      <wordExample>Close the window, please! It’s cold.</wordExample>
+      <wordAudio>L20W11.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>city</generalWordEnglish>
+      <generalWordGreek>πόλη</generalWordGreek>
+      <generalWordExample>New York and Los Angeles are two big cities in the USA.</generalWordExample>
+      <generalWordAudio>L20GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>before</generalWordEnglish>
+      <generalWordGreek>πριν</generalWordGreek>
+      <generalWordExample>We must brush our teeth before we go to bed.</generalWordExample>
+      <generalWordAudio>L20GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>forget</generalWordEnglish>
+      <generalWordGreek>ξεχνώ</generalWordGreek>
+      <generalWordExample>Dad sometimes forgets his keys and, then, he can’t open the door.</generalWordExample>
+      <generalWordAudio>L20GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>take</generalWordEnglish>
+      <generalWordGreek>παίρνω</generalWordGreek>
+      <generalWordExample>Don’t forget to take your lunchboxes with you, children!</generalWordExample>
+      <generalWordAudio>L20GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>when</generalWordEnglish>
+      <generalWordGreek>όταν</generalWordGreek>
+      <generalWordExample>Mum never talks on the phone when she is driving.</generalWordExample>
+      <generalWordAudio>L20GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>16.</generalWordOrder>
+      <generalWordEnglish>anything</generalWordEnglish>
+      <generalWordGreek>τίποτα</generalWordGreek>
+      <generalWordExample>Do you need anything from the supermarket?</generalWordExample>
+      <generalWordAudio>L20GW6.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="7">
+      <generalWordOrder>17.</generalWordOrder>
+      <generalWordEnglish>aquarium</generalWordEnglish>
+      <generalWordGreek>ενυδρείο</generalWordGreek>
+      <generalWordExample>I really want to visit the aquarium and see colourful fish from around the world.</generalWordExample>
+      <generalWordAudio>L20GW7.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>travel tip</phraseEnglish>
+      <phraseGreek>συμβουλή για ταξίδια</phraseGreek>
+      <phraseExample>Let’s read some travel tips for our visit to Paris next month.</phraseExample>
+      <phraseAudio>L20P1.mp3</phraseAudio>
+    </phrase>
+
+    <phrase phraseNumber="2">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>What’s the weather like?</phraseEnglish>
+      <phraseGreek>Τι καιρό κάνει;</phraseGreek>
+      <phraseExample>- What’s the weather like in England? - It’s often rainy and foggy.</phraseExample>
+      <phraseAudio>L20P2.mp3</phraseAudio>
+    </phrase>
+
+    <phrase phraseNumber="3">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>tour bus</phraseEnglish>
+      <phraseGreek>τουριστικό λεωφορείο</phraseGreek>
+      <phraseExample>Let’s take a tour bus and see all the famous buildings in the city.</phraseExample>
+      <phraseAudio>L20P3.mp3</phraseAudio>
+    </phrase>
+
+    <phrase phraseNumber="4">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>Get ready!</phraseEnglish>
+      <phraseGreek>Ετοιμάσου! / Ετοιμαστείτε!</phraseGreek>
+      <phraseExample>Hurry up, get ready fast! The film starts in fifteen minutes!</phraseExample>
+      <phraseAudio>L20P4.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+
+
+
+
+
+
+
+  <lesson lessonNumber="21">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L21W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>sunglasses</wordEnglish>
+      <wordGreek>γυαλιά ηλίου</wordGreek>
+      <wordExample>When it’s sunny, Tina always wears her sunglasses and her hat.</wordExample>
+      <wordAudio>L21W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>toothbrush</wordEnglish>
+      <wordGreek>οδοντόβουρτσα</wordGreek>
+      <wordExample>The baby hasn’t got a toothbrush because he hasn’t got any teeth.</wordExample>
+      <wordAudio>L21W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>toothpaste</wordEnglish>
+      <wordGreek>οδοντόκρεμα</wordGreek>
+      <wordExample>I’ve got a toothbrush, but I haven’t got any toothpaste with me. Can I use yours?</wordExample>
+      <wordAudio>L21W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>shampoo</wordEnglish>
+      <wordGreek>σαμπουάν</wordGreek>
+      <wordExample>Emily loves this new shampoo and she always washes her hair with it!</wordExample>
+      <wordAudio>L21W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>postcard</wordEnglish>
+      <wordGreek>καρτ ποστάλ</wordGreek>
+      <wordExample>I always send postcards of the places I visit to my friends.</wordExample>
+      <wordAudio>L21W6.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="7">
+      <wordOrder>6.</wordOrder>
+      <wordEnglish>souvenir</wordEnglish>
+      <wordGreek>σουβενίρ, ενθύμιο</wordGreek>
+      <wordExample>Aunt Clara often buys souvenirs of famous buildings and places.</wordExample>
+      <wordAudio>L21W7.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="8">
+      <wordOrder>7.</wordOrder>
+      <wordEnglish>passport</wordEnglish>
+      <wordGreek>διαβατήριο</wordGreek>
+      <wordExample>When you travel to another country, you must always have your passport with you.</wordExample>
+      <wordAudio>L21W8.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>8.</generalWordOrder>
+      <generalWordEnglish>problem</generalWordEnglish>
+      <generalWordGreek>πρόβλημα</generalWordGreek>
+      <generalWordExample>This maths problem is very difficult. Can you help me, please?</generalWordExample>
+      <generalWordAudio>L21GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>9.</generalWordOrder>
+      <generalWordEnglish>hotel</generalWordEnglish>
+      <generalWordGreek>ξενοδοχείο</generalWordGreek>
+      <generalWordExample>This is a five-star hotel. It’s got an amazing swimming pool!  </generalWordExample>
+      <generalWordAudio>L21GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>10.</generalWordOrder>
+      <generalWordEnglish>out</generalWordEnglish>
+      <generalWordGreek>έξω</generalWordGreek>
+      <generalWordExample>When the weather is sunny, my dog wants to go out.</generalWordExample>
+      <generalWordAudio>L21GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>around</generalWordEnglish>
+      <generalWordGreek>γύρω (από)</generalWordGreek>
+      <generalWordExample>There are six chairs around our kitchen table.</generalWordExample>
+      <generalWordAudio>L21GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>flag</generalWordEnglish>
+      <generalWordGreek>σημαία</generalWordGreek>
+      <generalWordExample>The flag of the USA has got fifty white stars on it.</generalWordExample>
+      <generalWordAudio>L21GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>the UK</generalWordEnglish>
+      <generalWordGreek>Ηνωμένο Βασίλειο</generalWordGreek>
+      <generalWordExample>England, Scotland, Wales and Northern Ireland are in the UK.</generalWordExample>
+      <generalWordAudio>L21GW6.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="7">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>lost</generalWordEnglish>
+      <generalWordGreek>χαμένος</generalWordGreek>
+      <generalWordExample>- We’re lost! - Don’t worry, I’ve got a map.</generalWordExample>
+      <generalWordAudio>L21GW7.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="8">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>imagine</generalWordEnglish>
+      <generalWordGreek>φαντάζομαι</generalWordGreek>
+      <generalWordExample>Close your eyes and imagine you are flying.</generalWordExample>
+      <generalWordAudio>L21GW8.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>I’m afraid (that)</phraseEnglish>
+      <phraseGreek>Φοβάμαι (ότι)</phraseGreek>
+      <phraseExample>I’m afraid that I can’t buy this dress. It’s very expensive.</phraseExample>
+      <phraseAudio>L21P1.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+
+
+
+
+
+
+
+
+
+  <lesson lessonNumber="22">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L22W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>sausage</wordEnglish>
+      <wordGreek>λουκάνικο</wordGreek>
+      <wordExample>Germany is famous for its tasty sausages.</wordExample>
+      <wordAudio>L22W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>bacon</wordEnglish>
+      <wordGreek>μπέικον</wordGreek>
+      <wordExample>Mum usually makes her pizza with tomatoes, cheese and bacon.</wordExample>
+      <wordAudio>L22W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>bean</wordEnglish>
+      <wordGreek>φασόλι</wordGreek>
+      <wordExample>Today, we’re having bean soup and bread for lunch.</wordExample>
+      <wordAudio>L22W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>toast</wordEnglish>
+      <wordGreek>φρυγανισμένο ψωμί</wordGreek>
+      <wordExample>Today, there is toast with jam for breakfast.</wordExample>
+      <wordAudio>L22W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>tea</wordEnglish>
+      <wordGreek>τσάι</wordGreek>
+      <wordExample>When it’s cold, my mother drinks a cup of tea in the afternoon.</wordExample>
+      <wordAudio>L22W6.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="7">
+      <wordOrder>6.</wordOrder>
+      <wordEnglish>croissant</wordEnglish>
+      <wordGreek>κρουασάν</wordGreek>
+      <wordExample>My favourite breakfast is coffee and French croissants.</wordExample>
+      <wordAudio>L22W7.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="8">
+      <wordOrder>7.</wordOrder>
+      <wordEnglish>jam</wordEnglish>
+      <wordGreek>μαρμελάδα</wordGreek>
+      <wordExample>My grandma makes cherry jam every summer.</wordExample>
+      <wordAudio>L22W8.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="9">
+      <wordOrder>8.</wordOrder>
+      <wordEnglish>honey</wordEnglish>
+      <wordGreek>μέλι</wordGreek>
+      <wordExample>Sarah always has bread with honey in the morning.</wordExample>
+      <wordAudio>L22W9.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="10">
+      <wordOrder>9.</wordOrder>
+      <wordEnglish>cake</wordEnglish>
+      <wordGreek>κέικ / τούρτα</wordGreek>
+      <wordExample>- Is there any cake in the kitchen? - There is only one slice.</wordExample>
+      <wordAudio>L22W10.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="11">
+      <wordOrder>10.</wordOrder>
+      <wordEnglish>juice</wordEnglish>
+      <wordGreek>χυμός</wordGreek>
+      <wordExample>Mum is buying some oranges to make some juice for me to drink.</wordExample>
+      <wordAudio>L22W11.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="12">
+      <wordOrder>11.</wordOrder>
+      <wordEnglish>coffee</wordEnglish>
+      <wordGreek>καφές</wordGreek>
+      <wordExample>My parents always drink a cup of coffee before work.</wordExample>
+      <wordAudio>L22W12.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="13">
+      <wordOrder>12.</wordOrder>
+      <wordEnglish>pancake</wordEnglish>
+      <wordGreek>τηγανίτα</wordGreek>
+      <wordExample>- How do you like your pancakes? - With jam or honey.</wordExample>
+      <wordAudio>L22W13.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="14">
+      <wordOrder>13.</wordOrder>
+      <wordEnglish>cereal</wordEnglish>
+      <wordGreek>δημητριακά</wordGreek>
+      <wordExample>Amy and her brother usually have a big bowl of cereal for breakfast.</wordExample>
+      <wordAudio>L22W14.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="15">
+      <wordOrder>14.</wordOrder>
+      <wordEnglish>ham</wordEnglish>
+      <wordGreek>ζαμπόν</wordGreek>
+      <wordExample>I want a sandwich with ham, cheese and tomato, please.</wordExample>
+      <wordAudio>L22W15.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>sweet</generalWordEnglish>
+      <generalWordGreek>γλυκός</generalWordGreek>
+      <generalWordExample>I like sweet croissants with jam or butter.</generalWordExample>
+      <generalWordAudio>L22GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>16.</generalWordOrder>
+      <generalWordEnglish>give</generalWordEnglish>
+      <generalWordGreek>δίνω</generalWordGreek>
+      <generalWordExample>Every year on my birthday, my classmates give me great presents.</generalWordExample>
+      <generalWordAudio>L22GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>17.</generalWordOrder>
+      <generalWordEnglish>energy</generalWordEnglish>
+      <generalWordGreek>ενέργεια</generalWordGreek>
+      <generalWordExample>I’m very tired and I haven’t got any energy, so I’m not going to the gym.</generalWordExample>
+      <generalWordAudio>L22GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>18.</generalWordOrder>
+      <generalWordEnglish>eat</generalWordEnglish>
+      <generalWordGreek>τρώω</generalWordGreek>
+      <generalWordExample>- We’re hungry, Mum! - Let’s go to a restaurant and eat our favourite food.</generalWordExample>
+      <generalWordAudio>L22GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>19.</generalWordOrder>
+      <generalWordEnglish>drink</generalWordEnglish>
+      <generalWordGreek>πίνω / ποτό</generalWordGreek>
+      <generalWordExample>Mario drinks coffee with milk. / Lucy’s favourite drink is apple juice.</generalWordExample>
+      <generalWordAudio>L22GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>20.</generalWordOrder>
+      <generalWordEnglish>American</generalWordEnglish>
+      <generalWordGreek>αμερικάνικος / Αμερικάνος</generalWordGreek>
+      <generalWordExample>The donut is a famous sweet American snack. / Jason lives in New York but he’s not American. He’s German.</generalWordExample>
+      <generalWordAudio>L22GW6.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>would like (to)</phraseEnglish>
+      <phraseGreek>θα ήθελα (να)</phraseGreek>
+      <phraseExample>- What would you like to drink? - A glass of cold lemonade, please.</phraseExample>
+      <phraseAudio>L22P1.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+
+
+
+
+
+
+
+
+  <lesson lessonNumber="23">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L23W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>flour</wordEnglish>
+      <wordGreek>αλεύρι</wordGreek>
+      <wordExample>I want to make some bread but I haven’t got any flour.</wordExample>
+      <wordAudio>L23W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>sugar</wordEnglish>
+      <wordGreek>ζάχαρη</wordGreek>
+      <wordExample>- Would you like sugar in your tea? - No, but I would like some honey.</wordExample>
+      <wordAudio>L23W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>butter</wordEnglish>
+      <wordGreek>βούτυρο</wordGreek>
+      <wordExample>We usually put butter on hot toast.</wordExample>
+      <wordAudio>L23W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>salt</wordEnglish>
+      <wordGreek>αλάτι</wordGreek>
+      <wordExample>Grandma sometimes forgets to use salt when she cooks, so her food isn’t tasty.</wordExample>
+      <wordAudio>L23W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>pepper</wordEnglish>
+      <wordGreek>πιπέρι / πιπεριά</wordGreek>
+      <wordExample>Don’t put a lot of pepper in the soup because I hate hot food. / I don’t like green peppers on my pizza.</wordExample>
+      <wordAudio>L23W6.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="7">
+      <wordOrder>6.</wordOrder>
+      <wordEnglish>chocolate</wordEnglish>
+      <wordGreek>σοκολάτα</wordGreek>
+      <wordExample>- Why isn’t this chocolate sweet? - Because there isn’t any sugar in it.</wordExample>
+      <wordAudio>L23W7.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="8">
+      <wordOrder>7.</wordOrder>
+      <wordEnglish>add</wordEnglish>
+      <wordGreek>προσθέτω</wordGreek>
+      <wordExample>When you add five to four, it makes nine.</wordExample>
+      <wordAudio>L23W8.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="9">
+      <wordOrder>8.</wordOrder>
+      <wordEnglish>mix</wordEnglish>
+      <wordGreek>ανακατεύω</wordGreek>
+      <wordExample>Mix the flour with milk and then add the eggs.</wordExample>
+      <wordAudio>L23W9.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="10">
+      <wordOrder>9.</wordOrder>
+      <wordEnglish>fry</wordEnglish>
+      <wordGreek>τηγανίζω</wordGreek>
+      <wordExample>Fry the eggs with the potatoes for five minutes and your omelette is ready.</wordExample>
+      <wordAudio>L23W10.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="11">
+      <wordOrder>10.</wordOrder>
+      <wordEnglish>flip</wordEnglish>
+      <wordGreek>αναποδογυρίζω</wordGreek>
+      <wordExample>Then, you flip the pancakes and they’re ready to eat!</wordExample>
+      <wordAudio>L23W11.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="12">
+      <wordOrder>11.</wordOrder>
+      <wordEnglish>serve</wordEnglish>
+      <wordGreek>σερβίρω</wordGreek>
+      <wordExample>Our school canteen serves great food.</wordExample>
+      <wordAudio>L23W12.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>look</generalWordEnglish>
+      <generalWordGreek>φαίνομαι / κοιτάζω</generalWordGreek>
+      <generalWordExample>You look funny in those colourful trousers! / Look at this postcard from London! This is Big Ben.</generalWordExample>
+      <generalWordAudio>L23GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>recipe</generalWordEnglish>
+      <generalWordGreek>συνταγή</generalWordGreek>
+      <generalWordExample>Have you got the recipe for the cake, Susan?</generalWordExample>
+      <generalWordAudio>L23GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>follow</generalWordEnglish>
+      <generalWordGreek>ακολουθώ</generalWordGreek>
+      <generalWordExample>My dog always follows me around the house.</generalWordExample>
+      <generalWordAudio>L23GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>step</generalWordEnglish>
+      <generalWordGreek>βήμα</generalWordGreek>
+      <generalWordExample>Look! The baby is making her first steps!</generalWordExample>
+      <generalWordAudio>L23GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>16.</generalWordOrder>
+      <generalWordEnglish>fridge</generalWordEnglish>
+      <generalWordGreek>ψυγείο</generalWordGreek>
+      <generalWordExample>There isn’t any milk in the fridge, so we can’t make crepes.</generalWordExample>
+      <generalWordAudio>L23GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>17.</generalWordOrder>
+      <generalWordEnglish>put</generalWordEnglish>
+      <generalWordGreek>βάζω</generalWordGreek>
+      <generalWordExample>Put a bottle of water and four glasses on the table, please.</generalWordExample>
+      <generalWordAudio>L23GW6.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="7">
+      <generalWordOrder>18.</generalWordOrder>
+      <generalWordEnglish>tablespoon</generalWordEnglish>
+      <generalWordGreek>κουτάλι (σούπας)</generalWordGreek>
+      <generalWordExample>Theresa is adding a tablespoon of flour to the soup.</generalWordExample>
+      <generalWordAudio>L23GW7.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="8">
+      <generalWordOrder>19.</generalWordOrder>
+      <generalWordEnglish>pan</generalWordEnglish>
+      <generalWordGreek>τηγάνι</generalWordGreek>
+      <generalWordExample>Mum often fries potatoes in the pan at weekends because chips are our favourite food.</generalWordExample>
+      <generalWordAudio>L23GW8.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="9">
+      <generalWordOrder>20.</generalWordOrder>
+      <generalWordEnglish>mixture</generalWordEnglish>
+      <generalWordGreek>μείγμα</generalWordGreek>
+      <generalWordExample>When the omelette mixture is ready, put it in a pan and fry it.</generalWordExample>
+      <generalWordAudio>L23GW9.mp3</generalWordAudio>
+    </generalWord>
+
+  </lesson>
+
+
+
+
+
+
+
+
+  <lesson lessonNumber="24">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L24W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>peach</wordEnglish>
+      <wordGreek>ροδάκινο</wordGreek>
+      <wordExample>My favourite summer fruit is the peach.</wordExample>
+      <wordAudio>L24W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>cherry</wordEnglish>
+      <wordGreek>κεράσι</wordGreek>
+      <wordExample>In summer, Jamie’s favourite afternoon snack is a bowl of cherries.</wordExample>
+      <wordAudio>L24W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>pear</wordEnglish>
+      <wordGreek>αχλάδι</wordGreek>
+      <wordExample>Tom likes apples but he doesn’t like pears.</wordExample>
+      <wordAudio>L24W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>strawberry</wordEnglish>
+      <wordGreek>φράουλα</wordGreek>
+      <wordExample>I really love strawberry ice cream.</wordExample>
+      <wordAudio>L24W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>melon</wordEnglish>
+      <wordGreek>πεπόνι</wordGreek>
+      <wordExample>- Would you like a slice of melon? - Yes, please.</wordExample>
+      <wordAudio>L24W6.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="7">
+      <wordOrder>6.</wordOrder>
+      <wordEnglish>watermelon</wordEnglish>
+      <wordGreek>καρπούζι</wordGreek>
+      <wordExample>Let’s buy a watermelon from the greengrocer’s.</wordExample>
+      <wordAudio>L24W7.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="8">
+      <wordOrder>7.</wordOrder>
+      <wordEnglish>lettuce</wordEnglish>
+      <wordGreek>μαρούλι</wordGreek>
+      <wordExample>There is a lettuce and some tomatoes in the kitchen. Why don’t we make a salad?</wordExample>
+      <wordAudio>L24W8.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="9">
+      <wordOrder>8.</wordOrder>
+      <wordEnglish>cucumber</wordEnglish>
+      <wordGreek>αγγούρι</wordGreek>
+      <wordExample>A Greek salad has got tomatoes, cucumber, peppers and a little feta cheese.</wordExample>
+      <wordAudio>L24W9.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>9.</generalWordOrder>
+      <generalWordEnglish>healthy</generalWordEnglish>
+      <generalWordGreek>υγιεινός</generalWordGreek>
+      <generalWordExample>We must exercise often to stay healthy.</generalWordExample>
+      <generalWordAudio>L24GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>10.</generalWordOrder>
+      <generalWordEnglish>unhealthy</generalWordEnglish>
+      <generalWordGreek>ανθυγιεινός</generalWordGreek>
+      <generalWordExample>I think it’s unhealthy to eat burgers and chips every day.</generalWordExample>
+      <generalWordAudio>L24GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>diet</generalWordEnglish>
+      <generalWordGreek>διατροφή</generalWordGreek>
+      <generalWordExample>Jean’s diet is very healthy. She eats fruit and vegetables every day.</generalWordExample>
+      <generalWordAudio>L24GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>online</generalWordEnglish>
+      <generalWordGreek>στο Ίντερνετ</generalWordGreek>
+      <generalWordExample>Kim uses her tablet to chat online with her friends in the afternoon.</generalWordExample>
+      <generalWordAudio>L24GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>meal</generalWordEnglish>
+      <generalWordGreek>γεύμα</generalWordGreek>
+      <generalWordExample>To have a healthy diet, you must eat five small meals every day.</generalWordExample>
+      <generalWordAudio>L24GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>order</generalWordEnglish>
+      <generalWordGreek>παραγγέλνω / παραγγελία</generalWordGreek>
+      <generalWordExample>Let’s order a pizza and watch our favourite film! / Your order is ready and it costs £8.50.</generalWordExample>
+      <generalWordAudio>L24GW6.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="7">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>restaurant</generalWordEnglish>
+      <generalWordGreek>εστιατόριο</generalWordGreek>
+      <generalWordExample>We often go to the restaurant in my neighbourhood because it’s got very tasty food.</generalWordExample>
+      <generalWordAudio>L24GW7.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="8">
+      <generalWordOrder>16.</generalWordOrder>
+      <generalWordEnglish>pasta</generalWordEnglish>
+      <generalWordGreek>ζυμαρικά</generalWordGreek>
+      <generalWordExample>Italians are famous for food like pasta and pizza.</generalWordExample>
+      <generalWordAudio>L24GW8.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="9">
+      <generalWordOrder>17.</generalWordOrder>
+      <generalWordEnglish>mushroom</generalWordEnglish>
+      <generalWordGreek>μανιτάρι</generalWordGreek>
+      <generalWordExample>John doesn’t like mushrooms, so let’s make a pizza with only ham, tomato and cheese.</generalWordExample>
+      <generalWordAudio>L24GW9.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="10">
+      <generalWordOrder>18.</generalWordOrder>
+      <generalWordEnglish>careful</generalWordEnglish>
+      <generalWordGreek>προσεκτικός</generalWordGreek>
+      <generalWordExample>You must be very careful when you drive a car and it's foggy.</generalWordExample>
+      <generalWordAudio>L24GW10.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>fruit salad</phraseEnglish>
+      <phraseGreek>φρουτοσαλάτα</phraseGreek>
+      <phraseExample>We can make a fruit salad with peaches, a melon and some cherries.</phraseExample>
+      <phraseAudio>L24P1.mp3</phraseAudio>
+    </phrase>
+
+    <phrase phraseNumber="2">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>fruit jelly</phraseEnglish>
+      <phraseGreek>ζελέ φρούτων</phraseGreek>
+      <phraseExample>Fruit jelly is easy to make. You just put this mixture in the fridge for 45 minutes.</phraseExample>
+      <phraseAudio>L24P2.mp3</phraseAudio>
+    </phrase>
+
+    <phrase phraseNumber="3">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>a bit</phraseEnglish>
+      <phraseGreek>λίγο</phraseGreek>
+      <phraseExample>Ian doesn’t like talking to people he doesn’t know well because he’s a bit shy.</phraseExample>
+      <phraseAudio>L24P3.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+  
+  
+  
+  
+  
+  
+  
+  
+  <lesson lessonNumber="25">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L25W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>balloon</wordEnglish>
+      <wordGreek>μπαλόνι</wordGreek>
+      <wordExample>At Amanda’s party there were pink, red and purple balloons.</wordExample>
+      <wordAudio>L25W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>banner</wordEnglish>
+      <wordGreek>πανό</wordGreek>
+      <wordExample>There is a banner on the wall that says "Happy Birthday".</wordExample>
+      <wordAudio>L25W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>candle</wordEnglish>
+      <wordGreek>κερί</wordGreek>
+      <wordExample>There is only one candle on the baby’s cake because it’s his first birthday.</wordExample>
+      <wordAudio>L25W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>invitation</wordEnglish>
+      <wordGreek>πρόσκληση</wordGreek>
+      <wordExample>The invitation says the party is at 7 o’clock.</wordExample>
+      <wordAudio>L25W5.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>5.</generalWordOrder>
+      <generalWordEnglish>diary</generalWordEnglish>
+      <generalWordGreek>ημερολόγιο</generalWordGreek>
+      <generalWordExample>My sister writes about her day in her diary.</generalWordExample>
+      <generalWordAudio>L25GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>6.</generalWordOrder>
+      <generalWordEnglish>everything</generalWordEnglish>
+      <generalWordGreek>όλα, τα πάντα</generalWordGreek>
+      <generalWordExample>- Do you have everything with you? - Yes, we are ready to go.</generalWordExample>
+      <generalWordAudio>L25GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>7.</generalWordOrder>
+      <generalWordEnglish>perfect</generalWordEnglish>
+      <generalWordGreek>τέλειος</generalWordGreek>
+      <generalWordExample>Thank you for dinner last night. It was perfect!</generalWordExample>
+      <generalWordAudio>L25GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>8.</generalWordOrder>
+      <generalWordEnglish>decoration</generalWordEnglish>
+      <generalWordGreek>διακοσμητικό στολίδι / διακόσμηση</generalWordGreek>
+      <generalWordExample>- I can help you with the house decorations. - Great! Just put this banner on the wall. / I love the decoration of your living room. It’s so trendy!</generalWordExample>
+      <generalWordAudio>L25GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>9.</generalWordOrder>
+      <generalWordEnglish>guest</generalWordEnglish>
+      <generalWordGreek>καλεσμένος, -η</generalWordGreek>
+      <generalWordExample>There were a lot of guests at Fay’s party yesterday.</generalWordExample>
+      <generalWordAudio>L25GW5.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="6">
+      <generalWordOrder>10.</generalWordOrder>
+      <generalWordEnglish>delicious</generalWordEnglish>
+      <generalWordGreek>νόστιμος</generalWordGreek>
+      <generalWordExample>This cake is delicious! I want some more!</generalWordExample>
+      <generalWordAudio>L25GW6.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="7">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>crisps</generalWordEnglish>
+      <generalWordGreek>πατατάκια</generalWordGreek>
+      <generalWordExample>When we go to the cinema, we usually eat crisps or popcorn.</generalWordExample>
+      <generalWordAudio>L25GW7.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="8">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>sandwich</generalWordEnglish>
+      <generalWordGreek>σάντουιτς</generalWordGreek>
+      <generalWordExample>I always have a sandwich with me in my lunchbox.</generalWordExample>
+      <generalWordAudio>L25GW8.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="9">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>PS</generalWordEnglish>
+      <generalWordGreek>ΥΓ (υστερόγραφο)</generalWordGreek>
+      <generalWordExample>Yours, John. PS: You don’t need to buy any presents.</generalWordExample>
+      <generalWordAudio>L25GW9.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="10">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>hope</generalWordEnglish>
+      <generalWordGreek>ελπίζω</generalWordGreek>
+      <generalWordExample>I hope that you are well and you’re coming back soon.</generalWordExample>
+      <generalWordAudio>L25GW10.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="11">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>get</generalWordEnglish>
+      <generalWordGreek>παίρνω / αγοράζω</generalWordGreek>
+      <generalWordExample>Can you get some bread from the baker’s when you go out?</generalWordExample>
+      <generalWordAudio>L25GW11.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>all over (the house)</phraseEnglish>
+      <phraseGreek>σε όλο (το σπίτι)</phraseGreek>
+      <phraseExample>The children’s toys are all over the house.</phraseExample>
+      <phraseAudio>L25P1.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="2">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>the best thing</phraseEnglish>
+      <phraseGreek>το καλύτερο πράγμα</phraseGreek>
+      <phraseExample>The best thing about travelling is that you can meet a lot of different people.</phraseExample>
+      <phraseAudio>L25P2.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="3">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>be on a trip</phraseEnglish>
+      <phraseGreek>είμαι σε ταξίδι</phraseGreek>
+      <phraseExample>Aunt Helen isn’t here at the moment. She’s on a trip to Spain.</phraseExample>
+      <phraseAudio>L25P3.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+  
+  
+  
+  
+  
+  
+  
+  <lesson lessonNumber="26">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L26W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>costume</wordEnglish>
+      <wordGreek>στολή (αποκριάτικη, παραδοσιακή)</wordGreek>
+      <wordExample>In this photo, my cousin is wearing a Superman costume.</wordExample>
+      <wordAudio>L26W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>parade</wordEnglish>
+      <wordGreek>παρέλαση</wordGreek>
+      <wordExample>Children enjoy watching the parade on St Patrick’s Day every year.</wordExample>
+      <wordAudio>L26W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>band</wordEnglish>
+      <wordGreek>μπάντα, μουσικό συγκρότημα</wordGreek>
+      <wordExample>- What’s your favourite band, Grandpa? - The Beatles.</wordExample>
+      <wordAudio>L26W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>firework</wordEnglish>
+      <wordGreek>πυροτέχνημα</wordGreek>
+      <wordExample>Those colourful fireworks in the sky were amazing but my dog was afraid of them.</wordExample>
+      <wordAudio>L26W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>mask</wordEnglish>
+      <wordGreek>μάσκα</wordGreek>
+      <wordExample>Zorro wears a black mask on his face.</wordExample>
+      <wordAudio>L26W6.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>6.</generalWordOrder>
+      <generalWordEnglish>St / saint</generalWordEnglish>
+      <generalWordGreek>άγιος, αγία</generalWordGreek>
+      <generalWordExample>St Patrick’s Day is on 17th March.</generalWordExample>
+      <generalWordAudio>L26GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>7.</generalWordOrder>
+      <generalWordEnglish>celebrate</generalWordEnglish>
+      <generalWordGreek>γιορτάζω</generalWordGreek>
+      <generalWordExample>Let’s make a special dinner to celebrate Father’s Day this Sunday.</generalWordExample>
+      <generalWordAudio>L26GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>8.</generalWordOrder>
+      <generalWordEnglish>Ireland - Irish</generalWordEnglish>
+      <generalWordGreek>Ιρλανδία - Ιρλανδός</generalWordGreek>
+      <generalWordExample>My cousin is working in Dublin, Ireland, at the moment. Bono is a famous Irish singer.</generalWordExample>
+      <generalWordAudio>L26GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>9.</generalWordOrder>
+      <generalWordEnglish>remember</generalWordEnglish>
+      <generalWordGreek>θυμάμαι</generalWordGreek>
+      <generalWordExample>I can remember all the places we visited on our last trip to Italy.</generalWordExample>
+      <generalWordAudio>L26GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>10.</generalWordOrder>
+      <generalWordEnglish>decorate</generalWordEnglish>
+      <generalWordGreek>διακοσμώ</generalWordGreek>
+      <generalWordExample>Eva is decorating her new house. She is also changing the colour of the walls.</generalWordExample>
+      <generalWordAudio>L26GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>shamrock</generalWordEnglish>
+      <generalWordGreek>τριφύλλι</generalWordGreek>
+      <generalWordExample>The shamrock has got three green leaves.</generalWordExample>
+      <generalWordAudio>L26GW6.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="7">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>symbol</generalWordEnglish>
+      <generalWordGreek>σύμβολο</generalWordGreek>
+      <generalWordExample>Plus (+) and minus (–) are maths symbols.</generalWordExample>
+      <generalWordAudio>L26GW7.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="8">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>street</generalWordEnglish>
+      <generalWordGreek>δρόμος</generalWordGreek>
+      <generalWordExample>You can find a lot of clothes shops in Oxford Street.</generalWordExample>
+      <generalWordAudio>L26GW8.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="9">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>full (of)</generalWordEnglish>
+      <generalWordGreek>γεμάτος (από/με)</generalWordGreek>
+      <generalWordExample>The cinema was full of children last night because Frozen was on.</generalWordExample>
+      <generalWordAudio>L26GW9.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="10">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>dressed</generalWordEnglish>
+      <generalWordGreek>ντυμένος</generalWordGreek>
+      <generalWordExample>All the girls are dressed in nice clothes for the school dance.</generalWordExample>
+      <generalWordAudio>L26GW10.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="11">
+      <generalWordOrder>16.</generalWordOrder>
+      <generalWordEnglish>even</generalWordEnglish>
+      <generalWordGreek>μάλιστα, ακόμα</generalWordGreek>
+      <generalWordExample>He likes drinking cold water even in winter.</generalWordExample>
+      <generalWordAudio>L26GW11.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="12">
+      <generalWordOrder>17.</generalWordOrder>
+      <generalWordEnglish>bagpipes</generalWordEnglish>
+      <generalWordGreek>γκάιντα</generalWordGreek>
+      <generalWordExample>My Irish grandfather can play the bagpipes.</generalWordExample>
+      <generalWordAudio>L26GW12.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="13">
+      <generalWordOrder>18.</generalWordOrder>
+      <generalWordEnglish>taste</generalWordEnglish>
+      <generalWordGreek>γεύομαι, δοκιμάζω φαγητό</generalWordGreek>
+      <generalWordExample>Do you want to taste my banana cake?</generalWordExample>
+      <generalWordAudio>L26GW13.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="14">
+      <generalWordOrder>19.</generalWordOrder>
+      <generalWordEnglish>beef</generalWordEnglish>
+      <generalWordGreek>μοσχαρίσιο/βοδινό κρέας</generalWordGreek>
+      <generalWordExample>Ruth is making soup with vegetables and beef right now.</generalWordExample>
+      <generalWordAudio>L26GW14.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>of course</phraseEnglish>
+      <phraseGreek>φυσικά</phraseGreek>
+      <phraseExample>- Can I call my brother from your mobile phone? - Of course you can.</phraseExample>
+      <phraseAudio>L26P1.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="2">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>can’t wait</phraseEnglish>
+      <phraseGreek>ανυπομονώ</phraseGreek>
+      <phraseExample>Ted can’t wait to meet his friends tonight.</phraseExample>
+      <phraseAudio>L26P2.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+  
+  
+  
+  
+  
+  
+  
+  <lesson lessonNumber="27">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L27W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>playground</wordEnglish>
+      <wordGreek>παιδική χαρά</wordGreek>
+      <wordExample>It’s sunny today, so let’s play in the playground.</wordExample>
+      <wordAudio>L27W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>theatre</wordEnglish>
+      <wordGreek>θέατρο</wordGreek>
+      <wordExample>Mum is going to the theatre this Saturday to watch her favourite show, Cats.</wordExample>
+      <wordAudio>L27W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>theme park</wordEnglish>
+      <wordGreek>θεματικό πάρκο</wordGreek>
+      <wordExample>That theme park has got some great rides. Let’s try them all!</wordExample>
+      <wordAudio>L27W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>stadium</wordEnglish>
+      <wordGreek>στάδιο, γήπεδο</wordGreek>
+      <wordExample>Uncle Kevin often goes to the stadium to watch his favourite football team.</wordExample>
+      <wordAudio>L27W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>water park</wordEnglish>
+      <wordGreek>υδάτινο πάρκο</wordGreek>
+      <wordExample>It’s really hot, Dad! Can we go to a water park to swim and have fun?</wordExample>
+      <wordAudio>L27W6.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>6.</generalWordOrder>
+      <generalWordEnglish>study</generalWordEnglish>
+      <generalWordGreek>μελετάω, διαβάζω</generalWordGreek>
+      <generalWordExample>Lisa and Betty have got a school project next week, so they must study at the weekend.</generalWordExample>
+      <generalWordAudio>L27GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>7.</generalWordOrder>
+      <generalWordEnglish>sight</generalWordEnglish>
+      <generalWordGreek>αξιοθέατο</generalWordGreek>
+      <generalWordExample>On our last trip to London, we visited many famous sights, like the London Eye and Big Ben.</generalWordExample>
+      <generalWordAudio>L27GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>8.</generalWordOrder>
+      <generalWordEnglish>play</generalWordEnglish>
+      <generalWordGreek>θεατρικό έργο</generalWordGreek>
+      <generalWordExample>Pam’s favourite play is Romeo and Juliet.</generalWordExample>
+      <generalWordAudio>L27GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>9.</generalWordOrder>
+      <generalWordEnglish>sound</generalWordEnglish>
+      <generalWordGreek>ακούγομαι / ήχος</generalWordGreek>
+      <generalWordExample>- Why don’t we play a board game? - That sounds great! / - What’s that sound? - It’s our neighbours’ new car.</generalWordExample>
+      <generalWordAudio>L27GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>10.</generalWordOrder>
+      <generalWordEnglish>musical</generalWordEnglish>
+      <generalWordGreek>μιούζικαλ (μουσική θεατρική παράσταση)</generalWordGreek>
+      <generalWordExample>Yesterday we watched the musical Mamma Mia.</generalWordExample>
+      <generalWordAudio>L27GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>actor</generalWordEnglish>
+      <generalWordGreek>ηθοποιός</generalWordGreek>
+      <generalWordExample>Ben Affleck is a famous actor. He played Batman in the 2016 film.</generalWordExample>
+      <generalWordAudio>L27GW6.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="7">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>huge</generalWordEnglish>
+      <generalWordGreek>τεράστιος</generalWordGreek>
+      <generalWordExample>This building is huge! It’s got 60 floors.</generalWordExample>
+      <generalWordAudio>L27GW7.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="8">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>dangerous</generalWordEnglish>
+      <generalWordGreek>επικίνδυνος</generalWordGreek>
+      <generalWordExample>You mustn’t talk on the phone when you drive. It’s dangerous.</generalWordExample>
+      <generalWordAudio>L27GW8.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="9">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>ride</generalWordEnglish>
+      <generalWordGreek>παιχνίδι σε λούνα παρκ</generalWordGreek>
+      <generalWordExample>I can’t try this ride. I’m scared!</generalWordExample>
+      <generalWordAudio>L27GW9.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="10">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>live</generalWordEnglish>
+      <generalWordGreek>ζωντανά</generalWordGreek>
+      <generalWordExample>George watched his favourite band live in the park yesterday.</generalWordExample>
+      <generalWordAudio>L27GW10.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="11">
+      <generalWordOrder>16.</generalWordOrder>
+      <generalWordEnglish>loudly</generalWordEnglish>
+      <generalWordGreek>δυνατά (για ήχο)</generalWordGreek>
+      <generalWordExample>Philip is singing very loudly and I can’t sleep.</generalWordExample>
+      <generalWordAudio>L27GW11.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>The Lion King</phraseEnglish>
+      <phraseGreek>Ο Βασιλιάς των Λιονταριών</phraseGreek>
+      <phraseExample>The actors in The Lion King are all dressed like animals.</phraseExample>
+      <phraseAudio>L27P1.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="2">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>all day long</phraseEnglish>
+      <phraseGreek>όλη μέρα</phraseGreek>
+      <phraseExample>It was very hot yesterday, so we stayed at the beach all day long.</phraseExample>
+      <phraseAudio>L27P2.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="3">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>score a goal</phraseEnglish>
+      <phraseGreek>βάζω γκολ</phraseGreek>
+      <phraseExample>Messi takes the ball and he scores a goal!</phraseExample>
+      <phraseAudio>L27P3.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+  
+  
+  
+  
+  
+  
+  
+  <lesson lessonNumber="28">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L28W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>drums</wordEnglish>
+      <wordGreek>ντραμς, τύμπανα</wordGreek>
+      <wordExample>Rob plays the drums in our school band.</wordExample>
+      <wordAudio>L28W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>trumpet</wordEnglish>
+      <wordGreek>τρομπέτα</wordGreek>
+      <wordExample>My sister plays the trumpet. She’s a great musician.</wordExample>
+      <wordAudio>L28W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>violin</wordEnglish>
+      <wordGreek>βιολί</wordGreek>
+      <wordExample>Mozart knew how to play the violin when he was only five years old.</wordExample>
+      <wordAudio>L28W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>guitar</wordEnglish>
+      <wordGreek>κιθάρα</wordGreek>
+      <wordExample>I can play the piano and my brother can play the guitar.</wordExample>
+      <wordAudio>L28W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>saxophone</wordEnglish>
+      <wordGreek>σαξόφωνο</wordGreek>
+      <wordExample>- Do you like jazz music? - Yes, I do. I love the sound of the saxophone.</wordExample>
+      <wordAudio>L28W6.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>6.</generalWordOrder>
+      <generalWordEnglish>match</generalWordEnglish>
+      <generalWordGreek>αντιστοιχίζω, ταιριάζω</generalWordGreek>
+      <generalWordExample>Match the answers to these questions. / These socks don’t match. One is yellow and the other is brown. </generalWordExample>
+      <generalWordAudio>L28GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>7.</generalWordOrder>
+      <generalWordEnglish>correct</generalWordEnglish>
+      <generalWordGreek>σωστός</generalWordGreek>
+      <generalWordExample>I think that the correct answer is B.</generalWordExample>
+      <generalWordAudio>L28GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>8.</generalWordOrder>
+      <generalWordEnglish>part</generalWordEnglish>
+      <generalWordGreek>μέρος, τμήμα</generalWordGreek>
+      <generalWordExample>Which part of the film did you like, Helen?</generalWordExample>
+      <generalWordAudio>L28GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>9.</generalWordOrder>
+      <generalWordEnglish>story</generalWordEnglish>
+      <generalWordGreek>ιστορία</generalWordGreek>
+      <generalWordExample>When we were kids, our grandma read us stories in the evening.</generalWordExample>
+      <generalWordAudio>L28GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>10.</generalWordOrder>
+      <generalWordEnglish>donkey</generalWordEnglish>
+      <generalWordGreek>γάιδαρος</generalWordGreek>
+      <generalWordExample>In some places, people used donkeys to travel from place to place because they didn’t have cars.</generalWordExample>
+      <generalWordAudio>L28GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>rooster</generalWordEnglish>
+      <generalWordGreek>κόκορας</generalWordGreek>
+      <generalWordExample>My grandma gets up in the morning when she hears the rooster.</generalWordExample>
+      <generalWordAudio>L28GW6.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="7">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>leave</generalWordEnglish>
+      <generalWordGreek>φεύγω (από) / αφήνω</generalWordGreek>
+      <generalWordExample>The train leaves at 6 o’clock. Hurry up! / Can you leave some cake for me, please?</generalWordExample>
+      <generalWordAudio>L28GW7.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="8">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>decide (to)</generalWordEnglish>
+      <generalWordGreek>αποφασίζω (να)</generalWordGreek>
+      <generalWordExample>Mary didn’t have time to cook so she decided to order a sandwich for lunch.</generalWordExample>
+      <generalWordAudio>L28GW8.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="9">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>feel</generalWordEnglish>
+      <generalWordGreek>αισθάνομαι, νιώθω</generalWordGreek>
+      <generalWordExample>I don’t feel very well today so I’m not going to work.</generalWordExample>
+      <generalWordAudio>L28GW9.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="10">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>thief</generalWordEnglish>
+      <generalWordGreek>κλέφτης</generalWordGreek>
+      <generalWordExample>Last night, a thief took my bag and my mobile phone.</generalWordExample>
+      <generalWordAudio>L28GW10.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="11">
+      <generalWordOrder>16.</generalWordOrder>
+      <generalWordEnglish>scare</generalWordEnglish>
+      <generalWordGreek>τρομάζω, φοβίζω</generalWordGreek>
+      <generalWordExample>Why are you wearing that mask? You scared me!</generalWordExample>
+      <generalWordAudio>L28GW11.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="12">
+      <generalWordOrder>17.</generalWordOrder>
+      <generalWordEnglish>jump</generalWordEnglish>
+      <generalWordGreek>πηδάω</generalWordGreek>
+      <generalWordExample>Mike enjoys jumping up and down on his bed.</generalWordExample>
+      <generalWordAudio>L28GW12.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>The Musicians of Bremen</phraseEnglish>
+      <phraseGreek>Οι Μουσικοί της Βρέμης</phraseGreek>
+      <phraseExample>In the story, The Musicians of Bremen, a donkey, a dog, a cat and a rooster decide to leave their farms.</phraseExample>
+      <phraseAudio>L28P1.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="2">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>Once upon a time ...</phraseEnglish>
+      <phraseGreek>θαΜια φορά κι έναν καιρό ...</phraseGreek>
+      <phraseExample>Once upon a time, there was a cat with black boots.</phraseExample>
+      <phraseAudio>L28P2.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="3">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>on the way to</phraseEnglish>
+      <phraseGreek>στον δρόμο για</phraseGreek>
+      <phraseExample>I met my friend Peter on the way to work yesterday.</phraseExample>
+      <phraseAudio>L28P3.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="4">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>they lived happily ever after</phraseEnglish>
+      <phraseGreek>κι έζησαν αυτοί καλά κι εμείς καλύτερα</phraseGreek>
+      <phraseExample>In the end, the wolf never came back and they lived happily ever after.</phraseExample>
+      <phraseAudio>L28P4.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+  
+  
+  
+  
+  
+  
+  
+  
+  <lesson lessonNumber="29">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L29W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>seat</wordEnglish>
+      <wordGreek>θέση, κάθισμα</wordGreek>
+      <wordExample>This stadium is really big! It’s got 30,000 seats.</wordExample>
+      <wordAudio>L29W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>ticket</wordEnglish>
+      <wordGreek>εισιτήριο</wordGreek>
+      <wordExample>Did you buy tickets for the football match last week?</wordExample>
+      <wordAudio>L29W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>popcorn</wordEnglish>
+      <wordGreek>ποπκόρν</wordGreek>
+      <wordExample>Sam and Kelly love eating popcorn when they watch their favourite films.</wordExample>
+      <wordAudio>L29W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>actor/actress</wordEnglish>
+      <wordGreek>ο/η ηθοποιός</wordGreek>
+      <wordExample>Who was the actor in the film Spiderman? / My sister is an actress and she is working at a theatre in London now.</wordExample>
+      <wordAudio>L29W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>character</wordEnglish>
+      <wordGreek>χαρακτήρας (ταινίας, βιβλίου)</wordGreek>
+      <wordExample>My favourite character in this book is Tech.</wordExample>
+      <wordAudio>L29W6.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>6.</generalWordOrder>
+      <generalWordEnglish>animated film</generalWordEnglish>
+      <generalWordGreek>ταινία κινουμένων σχεδίων</generalWordGreek>
+      <generalWordExample>My baby brother loves watching animated films.</generalWordExample>
+      <generalWordAudio>L29GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>7.</generalWordOrder>
+      <generalWordEnglish>voice</generalWordEnglish>
+      <generalWordGreek>φωνή</generalWordGreek>
+      <generalWordExample>You’ve got an amazing voice. You can be a singer one day.</generalWordExample>
+      <generalWordAudio>L29GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>8.</generalWordOrder>
+      <generalWordEnglish>celebrity</generalWordEnglish>
+      <generalWordGreek>διασημότητα</generalWordGreek>
+      <generalWordExample>Aunt Lisa likes reading magazines about celebrities.</generalWordExample>
+      <generalWordAudio>L29GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>9.</generalWordOrder>
+      <generalWordEnglish>about</generalWordEnglish>
+      <generalWordGreek>περίπου</generalWordGreek>
+      <generalWordExample>- How much time do we need to make the cake? - About thirty minutes.</generalWordExample>
+      <generalWordAudio>L29GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>10.</generalWordOrder>
+      <generalWordEnglish>so</generalWordEnglish>
+      <generalWordGreek>τόσο / άρα, οπότε</generalWordGreek>
+      <generalWordExample>This food is so tasty! I would like the recipe, please. / I’m taking a test tomorrow so I must study today.</generalWordExample>
+      <generalWordAudio>L29GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>hero</generalWordEnglish>
+      <generalWordGreek>ήρωας</generalWordGreek>
+      <generalWordExample>Wonder Woman is my favourite comic hero.</generalWordExample>
+      <generalWordAudio>L29GW6.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="7">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>group</generalWordEnglish>
+      <generalWordGreek>ομάδα, γκρουπ</generalWordGreek>
+      <generalWordExample>The first group of students is the Red Team and the second group is the Blue Team.</generalWordExample>
+      <generalWordAudio>L29GW7.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="8">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>arrive</generalWordEnglish>
+      <generalWordGreek>φτάνω</generalWordGreek>
+      <generalWordExample>The taxi is arriving at our house in five minutes.</generalWordExample>
+      <generalWordAudio>L29GW8.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="9">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>loud</generalWordEnglish>
+      <generalWordGreek>δυνατός (για ήχο)</generalWordGreek>
+      <generalWordExample>I can’t study when the music is so loud! Please turn off the radio.</generalWordExample>
+      <generalWordAudio>L29GW9.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>It's me.</phraseEnglish>
+      <phraseGreek>Εγώ είμαι.</phraseGreek>
+      <phraseExample>Hello, Martha! It’s me again!</phraseExample>
+      <phraseAudio>L29P1.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="2">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>look like</phraseEnglish>
+      <phraseGreek>μοιάζω με</phraseGreek>
+      <phraseExample>Aunt Kelly looks like my grandma.</phraseExample>
+      <phraseAudio>L29P2.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="3">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>Really?</phraseEnglish>
+      <phraseGreek>Αλήθεια;</phraseGreek>
+      <phraseExample>- My cousin Derek visited 11 countries last year. - Really?</phraseExample>
+      <phraseAudio>L29P3.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="4">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>it takes (four years)</phraseEnglish>
+      <phraseGreek>χρειάζεται (τέσσερα χρόνια)</phraseGreek>
+      <phraseExample>It takes about twelve years to complete school in my country.</phraseExample>
+      <phraseAudio>L29P4.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="5">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>this is why</phraseEnglish>
+      <phraseGreek>γι' αυτό</phraseGreek>
+      <phraseExample>Ben works really hard and this is why he hasn’t got much free time.</phraseExample>
+      <phraseAudio>L29P5.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+  
+  
+  
+  
+  
+  
+  
+  <lesson lessonNumber="30">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L30W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>painter</wordEnglish>
+      <wordGreek>ζωγράφος</wordGreek>
+      <wordExample>Do you know anything about Picasso, the famous Spanish painter?</wordExample>
+      <wordAudio>L30W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>writer</wordEnglish>
+      <wordGreek>συγγραφέας</wordGreek>
+      <wordExample>Hans Christian Andersen was a great writer of children’s stories.</wordExample>
+      <wordAudio>L30W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>dancer</wordEnglish>
+      <wordGreek>χορευτής, χορεύτρια</wordGreek>
+      <wordExample>In a musical, there are usually actors, singers and dancers.</wordExample>
+      <wordAudio>L30W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>graffiti artist</wordEnglish>
+      <wordGreek>καλλιτέχνης γκράφιτι</wordGreek>
+      <wordExample>Graffiti artists decorate the buildings of the city with their paintings.</wordExample>
+      <wordAudio>L30W5.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>5.</generalWordOrder>
+      <generalWordEnglish>kind (of)</generalWordEnglish>
+      <generalWordGreek>είδος</generalWordGreek>
+      <generalWordExample>- What kind of music do you like? - Hip hop.</generalWordExample>
+      <generalWordAudio>L30GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>6.</generalWordOrder>
+      <generalWordEnglish>art</generalWordEnglish>
+      <generalWordGreek>τέχνη</generalWordGreek>
+      <generalWordExample>We visited a museum of modern art last week.</generalWordExample>
+      <generalWordAudio>L30GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>7.</generalWordOrder>
+      <generalWordEnglish>fact</generalWordEnglish>
+      <generalWordGreek>πληροφορία / γεγονός</generalWordGreek>
+      <generalWordExample>Do you know any fun facts about animals? / It is a fact that cats can see very well at night.</generalWordExample>
+      <generalWordAudio>L30GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>8.</generalWordOrder>
+      <generalWordEnglish>come from</generalWordEnglish>
+      <generalWordGreek>κατάγομαι από</generalWordGreek>
+      <generalWordExample>We visit the UK every year because my father comes from Liverpool.</generalWordExample>
+      <generalWordAudio>L30GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>9.</generalWordOrder>
+      <generalWordEnglish>paint</generalWordEnglish>
+      <generalWordGreek>ζωγραφίζω, βάφω</generalWordGreek>
+      <generalWordExample>Lucy painted a beautiful picture for Grandma. / Let’s paint our bedroom green and yellow.</generalWordExample>
+      <generalWordAudio>L30GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>10.</generalWordOrder>
+      <generalWordEnglish>become</generalWordEnglish>
+      <generalWordGreek>γίνομαι</generalWordGreek>
+      <generalWordExample>Ron is really good at playing the piano. He can become a musician.</generalWordExample>
+      <generalWordAudio>L30GW6.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="7">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>mime</generalWordEnglish>
+      <generalWordGreek>μιμούμαι</generalWordGreek>
+      <generalWordExample>When you mime, you play a character or you tell a story without words.</generalWordExample>
+      <generalWordAudio>L30GW7.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="8">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>moustache</generalWordEnglish>
+      <generalWordGreek>μουστάκι</generalWordGreek>
+      <generalWordExample>The famous painter, Salvador Dali, had a very long moustache.</generalWordExample>
+      <generalWordAudio>L30GW8.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="9">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>quickly</generalWordEnglish>
+      <generalWordGreek>γρήγορα</generalWordGreek>
+      <generalWordExample>I’ve got a problem. Please come here quickly!</generalWordExample>
+      <generalWordAudio>L30GW9.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="10">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>Denmark</generalWordEnglish>
+      <generalWordGreek>Δανία</generalWordGreek>
+      <generalWordExample>A famous sight in Denmark is The Little Mermaid in Copenhagen.</generalWordExample>
+      <generalWordAudio>L30GW10.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="11">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>birth</generalWordEnglish>
+      <generalWordGreek>γέννηση</generalWordGreek>
+      <generalWordExample>The Millers can’t wait for the birth of their first child.</generalWordExample>
+      <generalWordAudio>L30GW11.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="12">
+      <generalWordOrder>16.</generalWordOrder>
+      <generalWordEnglish>act</generalWordEnglish>
+      <generalWordGreek>παίζω (ρόλο)</generalWordGreek>
+      <generalWordExample>Maggy acted in a lot of plays when she was at school.</generalWordExample>
+      <generalWordAudio>L30GW12.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>I was born</phraseEnglish>
+      <phraseGreek>γεννήθηκα</phraseGreek>
+      <phraseExample>Albert Einstein was born in Germany in 1879.</phraseExample>
+      <phraseAudio>L30P1.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="2">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>be good at</phraseEnglish>
+      <phraseGreek>είμαι καλός στο (να)</phraseGreek>
+      <phraseExample>Daisy is very smart and she’s really good at maths and science.</phraseExample>
+      <phraseAudio>L30P2.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="3">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>The Ugly Duckling</phraseEnglish>
+      <phraseGreek>Το Ασχημόπαπο</phraseGreek>
+      <phraseExample>My favourite story is Christian Andersen’s The Ugly Duckling.</phraseExample>
+      <phraseAudio>L30P3.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="4">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>The Little Mermaid</phraseEnglish>
+      <phraseGreek>Η Μικρή Γοργόνα</phraseGreek>
+      <phraseExample>The Little Mermaid is an old story and it’s also a great animated film.</phraseExample>
+      <phraseAudio>L30P4.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+  
+  
+  
+  
+  
+  
+  
+  
+  <lesson lessonNumber="31">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L31W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>rabbit</wordEnglish>
+      <wordGreek>κουνέλι</wordGreek>
+      <wordExample>Rabbits have got long ears and small eyes.</wordExample>
+      <wordAudio>L31W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>puppy</wordEnglish>
+      <wordGreek>κουτάβι</wordGreek>
+      <wordExample>Our neighbour’s dog, Ruby, has got six small puppies.</wordExample>
+      <wordAudio>L31W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>kitten</wordEnglish>
+      <wordGreek>γατάκι</wordGreek>
+      <wordExample>Yesterday, I found a beautiful kitten in front of my house and I gave it some milk.</wordExample>
+      <wordAudio>L31W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>hamster</wordEnglish>
+      <wordGreek>χάμστερ</wordGreek>
+      <wordExample>Hamsters look like mice but they are friendlier than them.</wordExample>
+      <wordAudio>L31W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>goldfish</wordEnglish>
+      <wordGreek>χρυσόψαρο</wordGreek>
+      <wordExample>The cat is looking at the goldfish because she’s hungry.</wordExample>
+      <wordAudio>L31W6.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="7">
+      <wordOrder>6.</wordOrder>
+      <wordEnglish>parrot</wordEnglish>
+      <wordGreek>παπαγάλος</wordGreek>
+      <wordExample>Henry's parrot is colourful and he can also talk! He can say "Hello!"</wordExample>
+      <wordAudio>L31W7.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="8">
+      <wordOrder>7.</wordOrder>
+      <wordEnglish>turtle</wordEnglish>
+      <wordGreek>χελώνα</wordGreek>
+      <wordExample>Turtles live for many years. They can swim very well.</wordExample>
+      <wordAudio>L31W8.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>8.</generalWordOrder>
+      <generalWordEnglish>adopt</generalWordEnglish>
+      <generalWordGreek>υιοθετώ</generalWordGreek>
+      <generalWordExample>- Do you have a pet? - No, but I would like to adopt a puppy.</generalWordExample>
+      <generalWordAudio>L31GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>9.</generalWordOrder>
+      <generalWordEnglish>prefer</generalWordEnglish>
+      <generalWordGreek>προτιμώ</generalWordGreek>
+      <generalWordExample>What kind of pets do you prefer? Dogs or cats?</generalWordExample>
+      <generalWordAudio>L31GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>10.</generalWordOrder>
+      <generalWordEnglish>playful</generalWordEnglish>
+      <generalWordGreek>παιχνιδιάρης</generalWordGreek>
+      <generalWordExample>Our dog Bruno is really playful! He always jumps up and down and plays with his toys.</generalWordExample>
+      <generalWordAudio>L31GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>noisy</generalWordEnglish>
+      <generalWordGreek>θορυβώδης</generalWordGreek>
+      <generalWordExample>I live in a noisy neighbourhood and I can’t sleep well at night.</generalWordExample>
+      <generalWordAudio>L31GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>quiet</generalWordEnglish>
+      <generalWordGreek>ήσυχος</generalWordGreek>
+      <generalWordExample>Please be quiet because my brother is doing his homework.</generalWordExample>
+      <generalWordAudio>L31GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>clean</generalWordEnglish>
+      <generalWordGreek>καθαρός / καθαρίζω</generalWordGreek>
+      <generalWordExample>I washed my car yesterday so it is clean now. / Mary always helps her mother clean the house.</generalWordExample>
+      <generalWordAudio>L31GW6.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="7">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>agree (with)</generalWordEnglish>
+      <generalWordGreek>συμφωνώ (με)</generalWordGreek>
+      <generalWordExample>- PE is easier than science. - Yes, I agree with you!</generalWordExample>
+      <generalWordAudio>L31GW7.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="8">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>break</generalWordEnglish>
+      <generalWordGreek>σπάω / διάλειμμα</generalWordGreek>
+      <generalWordExample>Be careful! Don’t break the eggs! / I need a break because I’m very tired right now.</generalWordExample>
+      <generalWordAudio>L31GW8.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="9">
+      <generalWordOrder>16.</generalWordOrder>
+      <generalWordEnglish>space</generalWordEnglish>
+      <generalWordGreek>χώρος</generalWordGreek>
+      <generalWordExample>Our house is very small.  We need a bigger space to have a party.</generalWordExample>
+      <generalWordAudio>L31GW9.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="10">
+      <generalWordOrder>17.</generalWordOrder>
+      <generalWordEnglish>confused</generalWordEnglish>
+      <generalWordGreek>μπερδεμένος</generalWordGreek>
+      <generalWordExample>- Can you tell me what to do? - I’m a bit confused.</generalWordExample>
+      <generalWordAudio>L31GW10.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>animal shelter</phraseEnglish>
+      <phraseGreek>καταφύγιο ζώων</phraseGreek>
+      <phraseExample>There’s an animal shelter in our city that helps cats and dogs.</phraseExample>
+      <phraseAudio>L31P1.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="2">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>That's true.</phraseEnglish>
+      <phraseGreek>Αυτό είναι αλήθεια.</phraseGreek>
+      <phraseExample>- I think that dogs are great friends for people. - That’s true.</phraseExample>
+      <phraseAudio>L31P2.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+  
+  
+  
+  
+  
+  
+  
+  <lesson lessonNumber="32">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L32W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>mountain</wordEnglish>
+      <wordGreek>βουνό</wordGreek>
+      <wordExample>Please don’t go skiing on that mountain, Paul. It’s dangerous.</wordExample>
+      <wordAudio>L32W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>river</wordEnglish>
+      <wordGreek>ποτάμι</wordGreek>
+      <wordExample>The Nile is the longest river in the world.</wordExample>
+      <wordAudio>L32W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>desert</wordEnglish>
+      <wordGreek>έρημος</wordGreek>
+      <wordExample>Let’s visit the pyramids in the Sahara Desert!</wordExample>
+      <wordAudio>L32W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>island</wordEnglish>
+      <wordGreek>νησί</wordGreek>
+      <wordExample>Great Britain is the biggest island in Europe.</wordExample>
+      <wordAudio>L32W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>sea</wordEnglish>
+      <wordGreek>θάλασσα</wordGreek>
+      <wordExample>Peter enjoys swimming the sea every summer.</wordExample>
+      <wordAudio>L32W6.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="7">
+      <wordOrder>6.</wordOrder>
+      <wordEnglish>forest</wordEnglish>
+      <wordGreek>δάσος</wordGreek>
+      <wordExample>Foxes and wolves live in the forest.</wordExample>
+      <wordAudio>L32W7.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="8">
+      <wordOrder>7.</wordOrder>
+      <wordEnglish>lake</wordEnglish>
+      <wordGreek>λίμνη</wordGreek>
+      <wordExample>Loch Ness is a famous lake in Scotland.</wordExample>
+      <wordAudio>L32W8.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>8.</generalWordOrder>
+      <generalWordEnglish>high</generalWordEnglish>
+      <generalWordGreek>ψηλός (όχι για άνθρωπο/ζώο)</generalWordGreek>
+      <generalWordExample>The Empire State Building is very high. It’s got 102 floors.</generalWordExample>
+      <generalWordAudio>L32GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>9.</generalWordOrder>
+      <generalWordEnglish>Asia</generalWordEnglish>
+      <generalWordGreek>Ασία</generalWordGreek>
+      <generalWordExample>Japan is a country in Asia.</generalWordExample>
+      <generalWordAudio>L32GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>10.</generalWordOrder>
+      <generalWordEnglish>climb</generalWordEnglish>
+      <generalWordGreek>ανεβαίνω, σκαρφαλώνω</generalWordGreek>
+      <generalWordExample>Monkeys climb trees to get bananas.</generalWordExample>
+      <generalWordAudio>L32GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>Africa</generalWordEnglish>
+      <generalWordGreek>Αφρική</generalWordGreek>
+      <generalWordExample>My friend Abeba comes from Africa. She lives in Ethiopia.</generalWordExample>
+      <generalWordAudio>L32GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>go through</generalWordEnglish>
+      <generalWordGreek>διασχίζω</generalWordGreek>
+      <generalWordExample>We must go through the forest to arrive at Grandma’s house.</generalWordExample>
+      <generalWordAudio>L32GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>life</generalWordEnglish>
+      <generalWordGreek>ζωή</generalWordGreek>
+      <generalWordExample>This documentary is about the life of the giraffe.</generalWordExample>
+      <generalWordAudio>L32GW6.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="7">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>plant</generalWordEnglish>
+      <generalWordGreek>φυτό / φυτεύω</generalWordGreek>
+      <generalWordExample>Elephants only eat plants. / Mum planted some flowers in our garden yesterday.</generalWordExample>
+      <generalWordAudio>L32GW7.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="8">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>crocodile</generalWordEnglish>
+      <generalWordGreek>κροκόδειλος</generalWordGreek>
+      <generalWordExample>Crocodiles live in rivers and lakes and eat other animals.</generalWordExample>
+      <generalWordAudio>L32GW8.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="9">
+      <generalWordOrder>16.</generalWordOrder>
+      <generalWordEnglish>large</generalWordEnglish>
+      <generalWordGreek>μεγάλος</generalWordGreek>
+      <generalWordExample>We are a very large family. I’ve got three sisters and two brothers.</generalWordExample>
+      <generalWordAudio>L32GW9.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="10">
+      <generalWordOrder>17.</generalWordOrder>
+      <generalWordEnglish>dry</generalWordEnglish>
+      <generalWordGreek>ξερός</generalWordGreek>
+      <generalWordExample>The desert is a very dry place because it doesn’t rain very often there.</generalWordExample>
+      <generalWordAudio>L32GW10.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="11">
+      <generalWordOrder>18.</generalWordOrder>
+      <generalWordEnglish>camel</generalWordEnglish>
+      <generalWordGreek>καμήλα</generalWordGreek>
+      <generalWordExample>Camels live in the desert and they don’t drink much water.</generalWordExample>
+      <generalWordAudio>L32GW11.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="12">
+      <generalWordOrder>19.</generalWordOrder>
+      <generalWordEnglish>without</generalWordEnglish>
+      <generalWordGreek>χωρίς</generalWordGreek>
+      <generalWordExample>I would like a burger without lettuce, please.</generalWordExample>
+      <generalWordAudio>L32GW12.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>world records</phraseEnglish>
+      <phraseGreek>παγκόσμια ρεκόρ</phraseGreek>
+      <phraseExample>You can find R. Wadlow in the Guiness Book of World Records because he was the tallest man in history.</phraseExample>
+      <phraseAudio>L32P1.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="2">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>Mount Everest</phraseEnglish>
+      <phraseGreek>Όρος Έβερεστ</phraseGreek>
+      <phraseExample>Mount Everest is the highest mountain in the world.</phraseExample>
+      <phraseAudio>L32P2.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="3">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>up there</phraseEnglish>
+      <phraseGreek>εκεί πάνω</phraseGreek>
+      <phraseExample>My cat is in that tree! How did she climb up there?</phraseExample>
+      <phraseAudio>L32P3.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+  
+  
+  
+  
+  
+  
+  
+  
+  <lesson lessonNumber="33">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L33W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>hippo</wordEnglish>
+      <wordGreek>ιπποπόταμος</wordGreek>
+      <wordExample>Hippos can sleep under the water.</wordExample>
+      <wordAudio>L33W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>zebra</wordEnglish>
+      <wordGreek>ζέβρα</wordGreek>
+      <wordExample>Zebras look like horses but they’re black and white.</wordExample>
+      <wordAudio>L33W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>elephant</wordEnglish>
+      <wordGreek>ελέφαντας</wordGreek>
+      <wordExample>The African elephant is bigger than the Asian elephant.</wordExample>
+      <wordAudio>L33W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>lion</wordEnglish>
+      <wordGreek>λιοντάρι</wordGreek>
+      <wordExample>In many stories, the lion is the king of all the animals.</wordExample>
+      <wordAudio>L33W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>giraffe</wordEnglish>
+      <wordGreek>καμηλοπάρδαλη</wordGreek>
+      <wordExample>Giraffes have got long legs but their ears are small.</wordExample>
+      <wordAudio>L33W6.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="7">
+      <wordOrder>6.</wordOrder>
+      <wordEnglish>tiger</wordEnglish>
+      <wordGreek>τίγρης</wordGreek>
+      <wordExample>Tigers look like cats but they are large and dangerous animals.</wordExample>
+      <wordAudio>L33W7.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="8">
+      <wordOrder>7.</wordOrder>
+      <wordEnglish>snake</wordEnglish>
+      <wordGreek>φίδι</wordGreek>
+      <wordExample>Yesterday, I saw a snake in the forest and I was very scared.</wordExample>
+      <wordAudio>L33W8.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>8.</generalWordOrder>
+      <generalWordEnglish>clearly</generalWordEnglish>
+      <generalWordGreek>καθαρά</generalWordGreek>
+      <generalWordExample>Oh no, I can’t see clearly! It’s very foggy!</generalWordExample>
+      <generalWordAudio>L33GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>9.</generalWordOrder>
+      <generalWordEnglish>quickly</generalWordEnglish>
+      <generalWordGreek>γρήγορα</generalWordGreek>
+      <generalWordExample>Let’s do our homework quickly so we can go out and play.</generalWordExample>
+      <generalWordAudio>L33GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>10.</generalWordOrder>
+      <generalWordEnglish>grass</generalWordEnglish>
+      <generalWordGreek>χορτάρι, γρασίδι</generalWordGreek>
+      <generalWordExample>Let’s sit on the grass and have a picnic.</generalWordExample>
+      <generalWordAudio>L33GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>horse</generalWordEnglish>
+      <generalWordGreek>άλογο</generalWordGreek>
+      <generalWordExample>Uncle Kevin likes riding his horse on his farm.</generalWordExample>
+      <generalWordAudio>L33GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>stripe</generalWordEnglish>
+      <generalWordGreek>ρίγα</generalWordGreek>
+      <generalWordExample>There are stars and stripes on the American flag.</generalWordExample>
+      <generalWordAudio>L33GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>leaf</generalWordEnglish>
+      <generalWordGreek>φύλλο</generalWordGreek>
+      <generalWordExample>In winter, there aren’t any leaves on these trees.</generalWordExample>
+      <generalWordAudio>L33GW6.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="7">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>way</generalWordEnglish>
+      <generalWordGreek>τρόπος</generalWordGreek>
+      <generalWordExample>I like the way you dance! It’s cool!</generalWordExample>
+      <generalWordAudio>L33GW7.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="8">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>show</generalWordEnglish>
+      <generalWordGreek>δείχνω</generalWordGreek>
+      <generalWordExample>Can you show me how to make this cake?</generalWordExample>
+      <generalWordAudio>L33GW8.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="9">
+      <generalWordOrder>16.</generalWordOrder>
+      <generalWordEnglish>something</generalWordEnglish>
+      <generalWordGreek>κάτι</generalWordGreek>
+      <generalWordExample>I’ve got something important to tell you.</generalWordExample>
+      <generalWordAudio>L33GW9.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="10">
+      <generalWordOrder>17.</generalWordOrder>
+      <generalWordEnglish>slowly</generalWordEnglish>
+      <generalWordGreek>αργά</generalWordGreek>
+      <generalWordExample>Drive more slowly because a lot of kids play in this street.</generalWordExample>
+      <generalWordAudio>L33GW10.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>go on a safari</phraseEnglish>
+      <phraseGreek>πηγαίνω για σαφάρι</phraseGreek>
+      <phraseExample>On our holidays in Africa, we went on a safari.</phraseExample>
+      <phraseAudio>L33P1.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="2">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>(16 hours) a day</phraseEnglish>
+      <phraseGreek>(16 ώρες) την ημέρα</phraseGreek>
+      <phraseExample>My mother works eight hours a day.</phraseExample>
+      <phraseAudio>L33P2.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="3">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>over there</phraseEnglish>
+      <phraseGreek>εκεί πέρα</phraseGreek>
+      <phraseExample>- Where can I put this glass? - Over there on the table, please.</phraseExample>
+      <phraseAudio>L33P3.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+  
+  
+  
+  
+  
+  
+  
+  <lesson lessonNumber="34">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L34W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>underground</wordEnglish>
+      <wordGreek>μετρό</wordGreek>
+      <wordExample>Most people in large cities use the underground because it is the fastest means of transport.</wordExample>
+      <wordAudio>L34W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>(aero)plane</wordEnglish>
+      <wordGreek>αεροπλάνο</wordGreek>
+      <wordExample>Next month, I’m travelling to the USA by plane.</wordExample>
+      <wordAudio>L34W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>ship</wordEnglish>
+      <wordGreek>πλοίο</wordGreek>
+      <wordExample>I always travel by ship in summer because I love the sea.</wordExample>
+      <wordAudio>L34W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>helicopter</wordEnglish>
+      <wordGreek>ελικόπτερο</wordGreek>
+      <wordExample>Helicopters are smaller and travel more slowly than planes.</wordExample>
+      <wordAudio>L34W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>bicycle/bike</wordEnglish>
+      <wordGreek>ποδήλατο</wordGreek>
+      <wordExample>Why don’t we go to the park to ride our bicycles/bikes?</wordExample>
+      <wordAudio>L34W6.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="7">
+      <wordOrder>6.</wordOrder>
+      <wordEnglish>motorbike</wordEnglish>
+      <wordGreek>μηχανή, μοτοσικλέτα</wordGreek>
+      <wordExample>John's afraid to ride a motorbike because he can’t even ride a bike.</wordExample>
+      <wordAudio>L34W7.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>7.</generalWordOrder>
+      <generalWordEnglish>future</generalWordEnglish>
+      <generalWordGreek>μελλοντικός / μέλλον</generalWordGreek>
+      <generalWordExample>Future cars will fly. / In the future, robots will help us tidy the house.</generalWordExample>
+      <generalWordAudio>L34GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>8.</generalWordOrder>
+      <generalWordEnglish>scientist</generalWordEnglish>
+      <generalWordGreek>επιστήμονας</generalWordGreek>
+      <generalWordExample>Leonardo da Vinci was a great painter and he was a scientist, too.</generalWordExample>
+      <generalWordAudio>L34GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>9.</generalWordOrder>
+      <generalWordEnglish>safe</generalWordEnglish>
+      <generalWordGreek>ασφαλής</generalWordGreek>
+      <generalWordExample>It is not safe for children to play out in the street.</generalWordExample>
+      <generalWordAudio>L34GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>10.</generalWordOrder>
+      <generalWordEnglish>take (sb)</generalWordEnglish>
+      <generalWordGreek>πηγαίνω (κπ) κάπου</generalWordGreek>
+      <generalWordExample>Can you take me to school today? I’m tired, I can’t walk.</generalWordExample>
+      <generalWordAudio>L34GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>everywhere</generalWordEnglish>
+      <generalWordGreek>παντού</generalWordGreek>
+      <generalWordExample>I looked everywhere but my keys were lost.</generalWordExample>
+      <generalWordAudio>L34GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>driver</generalWordEnglish>
+      <generalWordGreek>οδηγός</generalWordGreek>
+      <generalWordExample>The bus driver always says "Good morning!" to us.</generalWordExample>
+      <generalWordAudio>L34GW6.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="7">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>backpack</generalWordEnglish>
+      <generalWordGreek>σακίδιο πλάτης</generalWordGreek>
+      <generalWordExample>A backpack is more practical than a suitcase when you go walking in the mountains.</generalWordExample>
+      <generalWordAudio>L34GW7.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="8">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>actually</generalWordEnglish>
+      <generalWordGreek>στην πραγματικότητα</generalWordGreek>
+      <generalWordExample>Everybody thinks that tomatoes are vegetables but they’re actually fruit.</generalWordExample>
+      <generalWordAudio>L34GW8.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="9">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>space</generalWordEnglish>
+      <generalWordGreek>διάστημα / διαστημικός</generalWordGreek>
+      <generalWordExample>People first travelled into space in 1961. / I would like to make a space trip around the Earth one day.</generalWordExample>
+      <generalWordAudio>L34GW9.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="10">
+      <generalWordOrder>16.</generalWordOrder>
+      <generalWordEnglish>the Earth</generalWordEnglish>
+      <generalWordGreek>η Γη</generalWordGreek>
+      <generalWordExample>The Earth circles the sun in 365 days.</generalWordExample>
+      <generalWordAudio>L34GW10.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="11">
+      <generalWordOrder>17.</generalWordOrder>
+      <generalWordEnglish>view</generalWordEnglish>
+      <generalWordGreek>θέα</generalWordGreek>
+      <generalWordExample>This house has got an amazing view of the sea.</generalWordExample>
+      <generalWordAudio>L34GW11.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="12">
+      <generalWordOrder>18.</generalWordOrder>
+      <generalWordEnglish>sure</generalWordEnglish>
+      <generalWordGreek>σίγουρος</generalWordGreek>
+      <generalWordExample>I’m sure he’ll come back soon. He’s never late.</generalWordExample>
+      <generalWordAudio>L34GW12.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>as fast as</phraseEnglish>
+      <phraseGreek>τόσο γρήγορος όσο</phraseGreek>
+      <phraseExample>A hippo can’t run as fast as a zebra.</phraseExample>
+      <phraseAudio>L34P1.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="2">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>go for a ride</phraseEnglish>
+      <phraseGreek>πηγαίνω βόλτα (με όχημα)</phraseGreek>
+      <phraseExample>Dad bought a new car yesterday. Let’s go for a ride!</phraseExample>
+      <phraseAudio>L34P2.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+  
+  
+  
+  
+  
+  
+  
+  
+  <lesson lessonNumber="35">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L35W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>hospital</wordEnglish>
+      <wordGreek>νοσοκομείο</wordGreek>
+      <wordExample>My grandma didn’t feel well so we took her to hospital.</wordExample>
+      <wordAudio>L35W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>sports centre</wordEnglish>
+      <wordGreek>αθλητικό κέντρο</wordGreek>
+      <wordExample>Let’s go training at the new sports centre in our neighbourhood.</wordExample>
+      <wordAudio>L35W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>bank</wordEnglish>
+      <wordGreek>τράπεζα</wordGreek>
+      <wordExample>This bank is open from 8.00 to 2.00 every day.</wordExample>
+      <wordAudio>L35W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>church</wordEnglish>
+      <wordGreek>εκκλησία</wordGreek>
+      <wordExample>My grandparents go to church every Sunday.</wordExample>
+      <wordAudio>L35W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>police station</wordEnglish>
+      <wordGreek>αστυνομικό τμήμα</wordGreek>
+      <wordExample>They found the thief and took him to the police station last night.</wordExample>
+      <wordAudio>L35W6.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="7">
+      <wordOrder>6.</wordOrder>
+      <wordEnglish>post office</wordEnglish>
+      <wordGreek>ταχυδρομείο</wordGreek>
+      <wordExample>I must go to the post office because I want to send this letter to my friend in Mexico.</wordExample>
+      <wordAudio>L35W7.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>7.</generalWordOrder>
+      <generalWordEnglish>mayor</generalWordEnglish>
+      <generalWordGreek>δήμαρχος</generalWordGreek>
+      <generalWordExample>The new mayor, Mr Stevenson, is going to help the animal shelters of our city.</generalWordExample>
+      <generalWordAudio>L35GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>8.</generalWordOrder>
+      <generalWordEnglish>ask</generalWordEnglish>
+      <generalWordGreek>ζητάω / ρωτάω</generalWordGreek>
+      <generalWordExample>Justin asked his mum to make a cake for his birthday party. / You can always ask when you don’t know something.</generalWordExample>
+      <generalWordAudio>L35GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>9.</generalWordOrder>
+      <generalWordEnglish>topic</generalWordEnglish>
+      <generalWordGreek>θέμα</generalWordGreek>
+      <generalWordExample>The topic of this article is technology.</generalWordExample>
+      <generalWordAudio>L35GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>10.</generalWordOrder>
+      <generalWordEnglish>build</generalWordEnglish>
+      <generalWordGreek>χτίζω</generalWordGreek>
+      <generalWordExample>Dad is building a dog house for little Roxy.</generalWordExample>
+      <generalWordAudio>L35GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>free</generalWordEnglish>
+      <generalWordGreek>δωρεάν</generalWordGreek>
+      <generalWordExample>The ice cream at that shop usually costs £3 but today, it’s free!</generalWordExample>
+      <generalWordAudio>L35GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>sick</generalWordEnglish>
+      <generalWordGreek>άρρωστος</generalWordGreek>
+      <generalWordExample>Tina didn’t come to work today because she felt a bit sick.</generalWordExample>
+      <generalWordAudio>L35GW6.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="7">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>duck</generalWordEnglish>
+      <generalWordGreek>πάπια</generalWordGreek>
+      <generalWordExample>There are brown and white ducks swimming on that lake.</generalWordExample>
+      <generalWordAudio>L35GW7.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="8">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>outside</generalWordEnglish>
+      <generalWordGreek>έξω (από)</generalWordGreek>
+      <generalWordExample>It’s sunny! Let’s go outside and play.</generalWordExample>
+      <generalWordAudio>L35GW8.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="9">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>tourist</generalWordEnglish>
+      <generalWordGreek>τουρίστας, -στρια</generalWordGreek>
+      <generalWordExample>Tourists in London usually visit Big Ben, the London Eye and the British Museum.</generalWordExample>
+      <generalWordAudio>L35GW9.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="10">
+      <generalWordOrder>16.</generalWordOrder>
+      <generalWordEnglish>organise</generalWordEnglish>
+      <generalWordGreek>οργανώνω</generalWordGreek>
+      <generalWordExample>My friends and I are organising a trip to Manchester next weekend.</generalWordExample>
+      <generalWordAudio>L35GW10.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="11">
+      <generalWordOrder>17.</generalWordOrder>
+      <generalWordEnglish>recycling</generalWordEnglish>
+      <generalWordGreek>ανακύκλωση</generalWordGreek>
+      <generalWordExample>Fay collects boxes and bottles for recycling.</generalWordExample>
+      <generalWordAudio>L35GW11.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="12">
+      <generalWordOrder>18.</generalWordOrder>
+      <generalWordEnglish>item</generalWordEnglish>
+      <generalWordGreek>αντικείμενο</generalWordGreek>
+      <generalWordExample>I have usually got three items in my bag, my mobile phone, my wallet and my keys.</generalWordExample>
+      <generalWordAudio>L35GW12.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="13">
+      <generalWordOrder>19.</generalWordOrder>
+      <generalWordEnglish>inform</generalWordEnglish>
+      <generalWordGreek>ενημερώνω, πληροφορώ</generalWordGreek>
+      <generalWordExample>I would like to inform you that you mustn’t take pictures in the museum.</generalWordExample>
+      <generalWordAudio>L35GW13.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>in the city centre</phraseEnglish>
+      <phraseGreek>στο κέντρο της πόλης</phraseGreek>
+      <phraseExample>There are a lot of shops and restaurants in the city centre.</phraseExample>
+      <phraseAudio>L35P1.mp3</phraseAudio>
+    </phrase>
+	
+	<phrase phraseNumber="2">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>this way</phraseEnglish>
+      <phraseGreek>με αυτόν τον τρόπο</phraseGreek>
+      <phraseExample>Jim studies very hard because this way, he will get an ‘A’ in the test.</phraseExample>
+      <phraseAudio>L35P2.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+  
+  
+  
+  
+  
+  
+  
+  
+  <lesson lessonNumber="36">
+
+    <word wordNumber="1">
+      <wordOrder>*</wordOrder>
+      <wordEnglish>Face &amp; body</wordEnglish>
+      <wordGreek>Πρόσωπο &amp; σώμα</wordGreek>
+      <wordExample>W1</wordExample>
+      <wordAudio>L36W1.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="2">
+      <wordOrder>1.</wordOrder>
+      <wordEnglish>doctor</wordEnglish>
+      <wordGreek>γιατρός</wordGreek>
+      <wordExample>Ryan is a doctor and he works in that big hospital.</wordExample>
+      <wordAudio>L36W2.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="3">
+      <wordOrder>2.</wordOrder>
+      <wordEnglish>mechanic</wordEnglish>
+      <wordGreek>μηχανικός (οχημάτων)</wordGreek>
+      <wordExample>There was a problem with our car so my dad called a mechanic.</wordExample>
+      <wordAudio>L36W3.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="4">
+      <wordOrder>3.</wordOrder>
+      <wordEnglish>pilot</wordEnglish>
+      <wordGreek>πιλότος</wordGreek>
+      <wordExample>Edward is a pilot so he travels to a lot of different places in the world.</wordExample>
+      <wordAudio>L36W4.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="5">
+      <wordOrder>4.</wordOrder>
+      <wordEnglish>astronaut</wordEnglish>
+      <wordGreek>αστροναύτης</wordGreek>
+      <wordExample>Astronauts travel into space to explore it.</wordExample>
+      <wordAudio>L36W5.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="6">
+      <wordOrder>5.</wordOrder>
+      <wordEnglish>chef</wordEnglish>
+      <wordGreek>σεφ</wordGreek>
+      <wordExample>The chef at that restaurant is great! His food is delicious.</wordExample>
+      <wordAudio>L36W6.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="7">
+      <wordOrder>6.</wordOrder>
+      <wordEnglish>athlete</wordEnglish>
+      <wordGreek>αθλητής, -ήτρια</wordGreek>
+      <wordExample>My cousin Virginia trains every day because she is an athlete.</wordExample>
+      <wordAudio>L36W7.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="8">
+      <wordOrder>7.</wordOrder>
+      <wordEnglish>farmer</wordEnglish>
+      <wordGreek>αγρότης, -ισσα</wordGreek>
+      <wordExample>Grandpa is a farmer and he has got a lot of sheep and horses on his farm.</wordExample>
+      <wordAudio>L36W8.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="9">
+      <wordOrder>8.</wordOrder>
+      <wordEnglish>vet</wordEnglish>
+      <wordGreek>κτηνίατρος</wordGreek>
+      <wordExample>My cat was sick so I took her to the vet yesterday.</wordExample>
+      <wordAudio>L36W9.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="10">
+      <wordOrder>9.</wordOrder>
+      <wordEnglish>shop assistant</wordEnglish>
+      <wordGreek>πωλητής, -ήτρια</wordGreek>
+      <wordExample>Erin asked the shop assistant to bring her a different dress.</wordExample>
+      <wordAudio>L36W10.mp3</wordAudio>
+    </word>
+
+    <word wordNumber="11">
+      <wordOrder>10.</wordOrder>
+      <wordEnglish>police officer</wordEnglish>
+      <wordGreek>αστυνομικός</wordGreek>
+      <wordExample>Police officers in London usually ride bikes or horses.</wordExample>
+      <wordAudio>L36W11.mp3</wordAudio>
+    </word>
+
+    <generalWord generalWordNumber="1">
+      <generalWordOrder>11.</generalWordOrder>
+      <generalWordEnglish>ideal</generalWordEnglish>
+      <generalWordGreek>ιδανικός</generalWordGreek>
+      <generalWordExample>This car is large so it’s ideal for a big family.</generalWordExample>
+      <generalWordAudio>L36GW1.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="2">
+      <generalWordOrder>12.</generalWordOrder>
+      <generalWordEnglish>website</generalWordEnglish>
+      <generalWordGreek>ιστοσελίδα</generalWordGreek>
+      <generalWordExample>To learn more about us, visit our website: www.cityofflowers.com.</generalWordExample>
+      <generalWordAudio>L36GW2.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="3">
+      <generalWordOrder>13.</generalWordOrder>
+      <generalWordEnglish>planet</generalWordEnglish>
+      <generalWordGreek>πλανήτης</generalWordGreek>
+      <generalWordExample>I love documentaries about space and planets.</generalWordExample>
+      <generalWordAudio>L36GW3.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="4">
+      <generalWordOrder>14.</generalWordOrder>
+      <generalWordEnglish>solve</generalWordEnglish>
+      <generalWordGreek>λύνω</generalWordGreek>
+      <generalWordExample>I can’t solve this exercise! It’s really difficult!</generalWordExample>
+      <generalWordAudio>L36GW4.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="5">
+      <generalWordOrder>15.</generalWordOrder>
+      <generalWordEnglish>puzzle</generalWordEnglish>
+      <generalWordGreek>γρίφος</generalWordGreek>
+      <generalWordExample>My cousin is very smart. He can solve puzzles very easily.</generalWordExample>
+      <generalWordAudio>L36GW5.mp3</generalWordAudio>
+    </generalWord>
+
+    <generalWord generalWordNumber="6">
+      <generalWordOrder>16.</generalWordOrder>
+      <generalWordEnglish>explore</generalWordEnglish>
+      <generalWordGreek>εξερευνώ</generalWordGreek>
+      <generalWordExample>Kim loves travelling and exploring different countries.</generalWordExample>
+      <generalWordAudio>L36GW6.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="7">
+      <generalWordOrder>17.</generalWordOrder>
+      <generalWordEnglish>fix</generalWordEnglish>
+      <generalWordGreek>επισκευάζω</generalWordGreek>
+      <generalWordExample>Ben asked the mechanic to fix his motorbike.</generalWordExample>
+      <generalWordAudio>L36GW7.mp3</generalWordAudio>
+    </generalWord>
+	
+	<generalWord generalWordNumber="8">
+      <generalWordOrder>18.</generalWordOrder>
+      <generalWordEnglish>grow up</generalWordEnglish>
+      <generalWordGreek>μεγαλώνω</generalWordGreek>
+      <generalWordExample>What would you like to be when you grow up?</generalWordExample>
+      <generalWordAudio>L36GW8.mp3</generalWordAudio>
+    </generalWord>
+
+    <phrase phraseNumber="1">
+      <phraseWordOrder>•</phraseWordOrder>
+      <phraseEnglish>the Olympic Games</phraseEnglish>
+      <phraseGreek>οι Ολυμπιακοί Αγώνες</phraseGreek>
+      <phraseExample>Derek is an athlete and he’s training for the next Olympic Games in Tokyo.</phraseExample>
+      <phraseAudio>L36P1.mp3</phraseAudio>
+    </phrase>
+
+  </lesson>
+
+
+
+
+
+  
+  
 </TechItEasy1>

@@ -705,8 +705,8 @@ angular.module("bookbuilder2")
                               }) + 1 === $scope.selectedLesson.activitiesMenu.length) {
 
                               console.log("resultsButton", $scope.resultsButton);
-                              $scope.resultsButton.visible = true;
-                              $scope.endText.visible = true;
+                              $scope.resultsButton.visible = false;
+                              $scope.endText.visible = false;
                               $scope.nextButton.visible = false;
 
                             }

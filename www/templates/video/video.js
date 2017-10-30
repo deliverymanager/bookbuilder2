@@ -8,8 +8,11 @@ angular.module('bookbuilder2')
       $scope.selectedLesson = JSON.parse(window.localStorage.getItem("selectedLesson"));
       $scope.activityFolder = window.localStorage.getItem("activityFolder");
 
-      $scope.showBackButton = true;
-      $scope.gameCompleted = false;
+      $scope.data = {
+        "showBackButton": true,
+        "gameCompleted": false
+      };
+
 
       console.log("$scope.rootDir", $scope.rootDir);
       console.log("$scope.scale", $scope.scale);
@@ -49,25 +52,26 @@ angular.module('bookbuilder2')
 
       $scope.updatedVideoState = function () {
 
-        if ($scope.gameCompleted) {
+        if ($scope.data.gameCompleted) {
+          $scope.data.gameCompleted = false;
 
-          $scope.showBackButton = true;
-          $scope.gameCompleted = false;
-
+          $timeout(function () {
+            $scope.data.showBackButton = true;
+          });
         } else {
-
-          $scope.showBackButton = !$scope.showBackButton;
+          $timeout(function () {
+            $scope.data.showBackButton = !$scope.data.showBackButton;
+          });
 
         }
-
-        console.log("gameCompleted", $scope.gameCompleted);
-        console.log("showBackButton", $scope.showBackButton);
+        console.log("gameCompleted", $scope.data.gameCompleted);
+        console.log("showBackButton", $scope.data.showBackButton);
 
       };
 
 
       $scope.completedActivity = function () {
-        $scope.gameCompleted = true;
+        $scope.data.gameCompleted = true;
         console.log("Completed Activity!");
         $scope.activityData.completed = true;
         $scope.activityData.attempts += 1;

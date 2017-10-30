@@ -214,8 +214,8 @@ angular.module("bookbuilder2")
 
                 /*Adding page title and description $scope.activityData.title*/
                 $scope.pageActivity = new createjs.Text(_.findWhere($scope.selectedLesson.activitiesMenu, {
-                    activityFolder: $scope.activityFolder
-                  }).name + " " + ($scope.activityData.revision ? "- " + $scope.activityData.revision : ""), "18px Arial", "white");
+                  activityFolder: $scope.activityFolder
+                }).name + " " + ($scope.activityData.revision ? "- " + $scope.activityData.revision : ""), "18px Arial", "white");
                 $scope.pageActivity.x = 85;
                 $scope.pageActivity.y = 610;
                 $scope.pageActivity.maxWidth = 250;
@@ -299,9 +299,9 @@ angular.module("bookbuilder2")
                     var duckSpriteSheet = new createjs.SpriteSheet(response);
 
                     //Calculating the positions
-                    var intervalBarXStep = $scope.internalContainer.width / 11;
+                    var intervalBarXStep = $scope.internalContainer.width / ($scope.activityData.questions.length + 1);
                     console.warn("intervalBarXStep: ", intervalBarXStep);
-                    var intervalBarXPositions = new Array(11);
+                    var intervalBarXPositions = new Array($scope.activityData.questions.length + 1);
                     _.each(intervalBarXPositions, function (step, key, list) {
                       intervalBarXPositions[key] = key * intervalBarXStep;
                     });
@@ -896,7 +896,7 @@ angular.module("bookbuilder2")
 
           createjs.Tween.get($scope.internalContainer, {loop: false})
             .to({
-              x: $scope.internalContainer.x > -1000 ? -1670 : -150,
+              x: ($scope.internalContainer.x > -1000) ? -1670 : -150,
               y: $scope.internalContainer.y
             }, 17000, createjs.Ease.getPowInOut(1))
             .call(function () {
@@ -916,7 +916,7 @@ angular.module("bookbuilder2")
             .to({
               x: -1670,
               y: $scope.internalContainer.y
-            }, -(-1670 - ($scope.internalContainer.x)) * 4, createjs.Ease.getPowInOut(1));
+            }, -(-1670 - $scope.internalContainer.x) * 4, createjs.Ease.getPowInOut(1));
 
         }
 
@@ -969,8 +969,7 @@ angular.module("bookbuilder2")
         //Function that opens questionResults window
         function openQuestionResults() {
           $scope.greekWordText.text = "";
-          $scope.questionResultText.text = $scope.activityData.questions[$scope.activityData.activeQuestionIndex].greekWord + " = "
-            + $scope.activityData.questions[$scope.activityData.activeQuestionIndex].userChoice;
+          $scope.questionResultText.text = $scope.activityData.questions[$scope.activityData.activeQuestionIndex].greekWord + " " + ($scope.activityData.matchSymbol ? $scope.activityData.matchSymbol : "=") + " " + $scope.activityData.questions[$scope.activityData.activeQuestionIndex].userChoice;
           $scope.questionResultContainer.visible = true;
           $scope.stage.update();
         }
@@ -988,7 +987,7 @@ angular.module("bookbuilder2")
         function openResultsTotalContainer() {
           $scope.resultsTotalContainer.visible = true;
           _.each($scope.activityData.questions, function (question, key, list) {
-            $scope.userAnswersTexts[key].text = key + 1 + ". " + $scope.activityData.questions[key].greekWord + " = " + $scope.activityData.questions[key].userChoice;
+            $scope.userAnswersTexts[key].text = key + 1 + ". " + $scope.activityData.questions[key].greekWord + " " + ($scope.activityData.matchSymbol ? $scope.activityData.matchSymbol : "=") + " " + $scope.activityData.questions[key].userChoice;
           });
         }
 
@@ -1030,7 +1029,7 @@ angular.module("bookbuilder2")
           var rightAnswers = 0;
           _.each($scope.activityData.questions, function (question, key, list) {
 
-            $scope.userAnswersTexts[key].text = $scope.activityData.questions[key].greekWord + " = " + $scope.activityData.questions[key].userChoice;
+            $scope.userAnswersTexts[key].text = $scope.activityData.questions[key].greekWord + " " + ($scope.activityData.matchSymbol ? $scope.activityData.matchSymbol : "=") + " " + $scope.activityData.questions[key].userChoice;
             $scope.rightAnswersTexts[key].text = $scope.activityData.questions[key].englishWord;
             if ($scope.activityData.questions[key].userChoice === $scope.activityData.questions[key].englishWord) {
               rightAnswers++;

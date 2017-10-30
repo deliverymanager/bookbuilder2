@@ -2,17 +2,20 @@
 <ion-view>
   <img
     style="top: -15px; left: -5px; -webkit-transform-origin-x: 0; -webkit-transform-origin-y: 0; z-index: 10; position: absolute; -webkit-transform: scale3d({{scale / ratio}},{{scale / ratio}},{{scale / ratio}})"
-    ng-show="showBackButton"
+    ng-show="data.showBackButton"
     ng-src="{{rootDir + 'data/assets/video_head_menu_button.png'}}"
     ng-click="backButton()">
-  <button ng-if="interface.showFooter" ng-style="{'color': color}" style="float: right; z-index: 10;" class="button button-icon icon ion-chatbubbles"
+  <button ng-if="interface.showFooter" ng-style="{'color': color}" style="float: right; z-index: 10;"
+          class="button button-icon icon ion-chatbubbles"
           ng-click="toggleShowDialogs()"></button>
   <ion-content has-bouncing="false" scroll="false">
-    <videogular style="position: absolute" vg-theme="config.theme" vg-player-ready="startVideoCheck($API)" vg-complete="completedActivity()"
+    <videogular vg-plays-inline="'true'" vg-native-fullscreen="'false'" style="position: absolute"
+                vg-theme="config.theme" vg-player-ready="startVideoCheck($API)" vg-complete="completedActivity()"
                 vg-update-state="updatedVideoState()">
       <vg-media vg-src="config.sources" vg-tracks="config.tracks">
       </vg-media>
-      <vg-controls style="z-index: 12;" vg-autohide='config.autohide' vg-autohide-time='config.autohideTime'>
+      <vg-controls ng-if="interface.showFooter" style="z-index: 12;" vg-autohide='config.autohide'
+                   vg-autohide-time='config.autohideTime'>
         <vg-scrub-bar>
           <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
         </vg-scrub-bar>
@@ -22,9 +25,10 @@
     </videogular>
   </ion-content>
 
-  <ion-footer-bar ng-if="interface.showFooter" class="transparentBar">
-    <div class="title"><span style="background:rgba(0, 0, 0, 0.5); padding-left: 10px; padding-right: 10px;"
-                             ng-if="interface.showDialogs && interface.subtitle">{{interface.subtitle}}</span>
+  <ion-footer-bar ng-if="interface.showFooter" style="height: 90px;" class="transparentBar">
+    <div style="white-space: initial; height: 100%;" class="title"><span
+      style="background:rgba(0, 0, 0, 0.5); padding-left: 10px; padding-right: 10px;"
+      ng-if="interface.showDialogs && interface.subtitle">{{interface.subtitle}}</span>
     </div>
   </ion-footer-bar>
 </ion-view>

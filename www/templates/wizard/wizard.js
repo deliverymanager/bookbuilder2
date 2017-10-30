@@ -292,7 +292,7 @@ angular.module("bookbuilder2")
                     }
                   });
 
-                  $scope.checkButton.x = 240;
+                  $scope.checkButton.x = 90;
                   $scope.checkButton.y = 555;
                   $scope.mainContainer.addChild($scope.checkButton);
                   initCallback();
@@ -328,7 +328,7 @@ angular.module("bookbuilder2")
                     //Action when restart button is pressed
                     restartActivity();
                   });
-                  $scope.restartButton.x = 150;
+                  $scope.restartButton.x = 300;
                   $scope.restartButton.y = 570;
                   $scope.mainContainer.addChild($scope.restartButton);
                   initCallback();

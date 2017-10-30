@@ -204,8 +204,8 @@ angular.module("bookbuilder2")
               $scope.mainContainer.addChild(titleImage);
 
               var lessonTitle = new createjs.Text($scope.selectedLesson.lessonTitle + " - " + $scope.selectedLesson.title, "27px Arial", "white");
-              lessonTitle.x = 490;
-              lessonTitle.y = 105;
+              lessonTitle.x = $scope.book.lessonTitleX ? $scope.book.lessonTitleX : 490;
+              lessonTitle.y = $scope.book.lessonTitleY ? $scope.book.lessonTitleY : 105;
               lessonTitle.maxWidth = 450;
               $scope.mainContainer.addChild(lessonTitle);
             });
@@ -387,32 +387,34 @@ angular.module("bookbuilder2")
                   });
 
 
-                $http.get($scope.rootDir + "data/assets/letsPlayTechBtn.json")
-                  .success(function (response) {
-                    response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
-                    var letsPlayTechButtonSpriteSheet = new createjs.SpriteSheet(response);
-                    var letsPlayTechButton = new createjs.Sprite(letsPlayTechButtonSpriteSheet, "normal");
-                    letsPlayTechButton.x = 850;
-                    letsPlayTechButton.y = 630;
-                    letsPlayTechButton.scaleX = letsPlayTechButton.scaleY = 0.6;
-                    $scope.mainContainer.addChild(letsPlayTechButton);
+                if ($scope.selectedLesson.showLetsPlayTechBtn) {
+                  $http.get($scope.rootDir + "data/assets/letsPlayTechBtn.json")
+                    .success(function (response) {
+                      response.images[0] = $scope.rootDir + "data/assets/" + response.images[0];
+                      var letsPlayTechButtonSpriteSheet = new createjs.SpriteSheet(response);
+                      var letsPlayTechButton = new createjs.Sprite(letsPlayTechButtonSpriteSheet, "normal");
+                      letsPlayTechButton.x = 850;
+                      letsPlayTechButton.y = 630;
+                      letsPlayTechButton.scaleX = letsPlayTechButton.scaleY = 0.6;
+                      $scope.mainContainer.addChild(letsPlayTechButton);
 
-                    letsPlayTechButton.addEventListener("mousedown", function (event) {
-                      console.log("mousedown event on a button !");
-                      letsPlayTechButton.gotoAndPlay("onSelection");
-                      $scope.stage.update();
+                      letsPlayTechButton.addEventListener("mousedown", function (event) {
+                        console.log("mousedown event on a button !");
+                        letsPlayTechButton.gotoAndPlay("onSelection");
+                        $scope.stage.update();
+                      });
+                      letsPlayTechButton.addEventListener("pressup", function (event) {
+                        console.log("pressup event!");
+                        letsPlayTechButton.gotoAndPlay("normal");
+                        $scope.stage.update();
+                        //$rootScope.navigate("letsPlayTech");
+                        Toast.show("Coming soon...");
+                      });
+                    })
+                    .error(function (error) {
+                      console.error("Error on getting json for letsPlayTech button...", error);
                     });
-                    letsPlayTechButton.addEventListener("pressup", function (event) {
-                      console.log("pressup event!");
-                      letsPlayTechButton.gotoAndPlay("normal");
-                      $scope.stage.update();
-                      //$rootScope.navigate("letsPlayTech");
-                      Toast.show("Coming soon...");
-                    });
-                  })
-                  .error(function (error) {
-                    console.error("Error on getting json for letsPlayTech button...", error);
-                  });
+                }
 
 
               }
@@ -478,6 +480,7 @@ angular.module("bookbuilder2")
 
                       if (!activity.active) {
                         Toast.show("Coming soon...");
+                        console.log("developerMode", $rootScope.developerMode);
                         if (!$rootScope.developerMode) {
                           return;
                         }

@@ -472,11 +472,12 @@ async.waterfall([
 
   }, function (waterfallCallback) {
 
+    return waterfallCallback();
+
     prepareConfigXML("24", waterfallCallback);
 
   }, function (waterfallCallback) {
 
-    return waterfallCallback();
 
     prepareConfigXML("16", waterfallCallback);
 

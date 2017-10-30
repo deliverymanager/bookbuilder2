@@ -285,49 +285,79 @@ angular.module("bookbuilder2")
                       return word.soundFileName;
                     });
 
-                    if ($scope.currentWord && _.findIndex(wordsWithSounds, {
+                    if ($scope.currentWord && _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                         name: $scope.currentWord
-                      }) < wordsWithSounds.length - 1) {
-
+                      }) < $scope.activityData[$scope.selectedVocabularySection].length - 1) {
 
                       console.log("$scope.currentScroll", $scope.currentScroll);
                       console.log("current word index", _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                         name: $scope.currentWord
                       }));
 
+                      var firstLimit;
+                      if (_.filter(_.first($scope.activityData[$scope.selectedVocabularySection], 9), {
+                          soundFileName: false
+                        }).length === 2) {
+
+                        firstLimit = 8;
+
+                      } else if (_.filter(_.first($scope.activityData[$scope.selectedVocabularySection], 10), {
+                          soundFileName: false
+                        }).length === 2) {
+
+                        firstLimit = 7;
+
+                      } else {
+
+                        firstLimit = 8;
+
+                      }
+
+                      var secondLimit = 10 + 9 - _.filter(_.first(_.rest($scope.activityData[$scope.selectedVocabularySection], 9), 10), {
+                        soundFileName: false
+                      }).length;
+
+                      var thirdLimit = 20 + 9 - _.filter(_.first(_.rest($scope.activityData[$scope.selectedVocabularySection], 19), 10), {
+                        soundFileName: false
+                      }).length;
+
+                      console.log("firstLimit", firstLimit);
+                      console.log("secondLimit", secondLimit);
+                      console.log("thirdLimit", thirdLimit);
+
                       if ($scope.currentScroll === 10 && _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                           name: $scope.currentWord
-                        }) > 8) {
+                        }) > firstLimit) {
                         $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10;
                         $scope.currentScroll = 20;
                       } else if ($scope.currentScroll === 20 && _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                           name: $scope.currentWord
-                        }) > 18) {
-                        $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                        }) > secondLimit) {
+                        $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10 * 2;
                         $scope.currentScroll = 30;
                       } else if ($scope.currentScroll === 30 && _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                           name: $scope.currentWord
-                        }) > 28) {
-                        $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                        }) > thirdLimit) {
+                        $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10 * 3;
                         $scope.currentScroll = 40;
                       } else {
 
                         if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                             name: $scope.currentWord
-                          }) > 28) {
-                          $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                          }) > thirdLimit) {
+                          $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10 * 3;
                           $scope.currentScroll = 40;
 
                         } else if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                             name: $scope.currentWord
-                          }) > 18) {
+                          }) > secondLimit) {
 
-                          $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                          $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10 * 2;
                           $scope.currentScroll = 30;
 
                         } else if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                             name: $scope.currentWord
-                          }) > 8) {
+                          }) > firstLimit) {
                           $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10;
                           $scope.currentScroll = 20;
                         } else {
@@ -376,7 +406,11 @@ angular.module("bookbuilder2")
               var vocMenuBackground = new createjs.Bitmap($scope.rootDir + "data/assets/vocabulary_menu_background.png");
               $scope.phrasesContainer.addChild(vocMenuBackground);
 
-              $scope.phrasesButton = new createjs.Text("Phrases", "25px Arial", $scope.book.vocabularyColorTitles ? $scope.book.vocabularyColorTitles : 'black');
+              var phrasesWithSounds = _.filter($scope.activityData["phrases"], function (word) {
+                return word.soundFileName;
+              });
+
+              $scope.phrasesButton = new createjs.Text(phrasesWithSounds.length > 1 ? "Phrases" : "Phrase", "25px Arial", $scope.book.vocabularyColorTitles ? $scope.book.vocabularyColorTitles : 'black');
 
               $scope.phrasesButton.x = $scope.book.vocabularyTitlesPositionX ? $scope.book.vocabularyTitlesPositionX : 80;
               $scope.phrasesButton.y = $scope.book.vocabularyTitlesPositionY ? $scope.book.vocabularyTitlesPositionY : 0;
@@ -393,6 +427,7 @@ angular.module("bookbuilder2")
                 $scope.phrasesContainer.alpha = 1;
                 loadPage("phrases");
               });
+
 
               $scope.phrasesContainer.scaleX = $scope.phrasesContainer.scaleY = $scope.scale;
               $scope.phrasesContainer.x = backgroundPosition.x + (backgroundPosition.width / 1.55);
@@ -418,6 +453,11 @@ angular.module("bookbuilder2")
                 $scope.wordsContainer.alpha = 1;
                 loadPage("words");
               });
+
+              if (phrasesWithSounds.length === 0) {
+                $scope.wordsContainer.visible = false;
+                $scope.phrasesContainer.visible = false;
+              }
 
               $scope.wordsContainer.scaleX = $scope.wordsContainer.scaleY = $scope.scale;
               $scope.wordsContainer.x = backgroundPosition.x + (backgroundPosition.width / 5.2);
@@ -530,19 +570,25 @@ angular.module("bookbuilder2")
                   }
 
                   waterFallFunctions.push(function (waterfallCallback) {
+                    console.log("word", word);
                     if (ionic.Platform.isIOS() && window.cordova) {
-                      resolveLocalFileSystemURL(assetPath + word.name + ".mp3", function (entry) {
-                        console.log(entry);
-                        $scope.sounds[word.name] = new Media(entry.toInternalURL(), function () {
-                          console.log("Sound success");
-                        }, function (err) {
-                          console.log("Sound error: ", err);
-                        }, function (status) {
-                          console.log("Sound status: ", status);
+
+                      $timeout(function () {
+                        resolveLocalFileSystemURL(assetPath + word.name + ".mp3", function (entry) {
+                          console.log(entry);
+                          console.log(assetPath + word.name + ".mp3", entry.toInternalURL());
+                          $scope.sounds[word.name] = new Media(entry.toInternalURL(), function () {
+                            console.log("Sound success");
+                          }, function (err) {
+                            console.log("Sound error: ", err);
+                          }, function (status) {
+                            console.log("Sound status: ", status);
+                          });
+                          $scope.sounds[word.name].soundWasPlayed = false;
+                          waterfallCallback();
                         });
-                        $scope.sounds[word.name].soundWasPlayed = false;
-                        waterfallCallback();
-                      });
+                      }, 100);
+
                     } else {
                       if (window.cordova && window.cordova.platformId !== "browser") {
                         $scope.sounds[word.name] = new Media(assetPath + word.name + ".mp3", function () {
@@ -610,10 +656,10 @@ angular.module("bookbuilder2")
                           $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10;
                           $scope.currentScroll = 20;
                         } else if ($scope.currentScroll === 20 && $scope.activityData[$scope.selectedVocabularySection].length > 20) {
-                          $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                          $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10 * 2;
                           $scope.currentScroll = 30;
                         } else if ($scope.currentScroll === 30 && $scope.activityData[$scope.selectedVocabularySection].length > 30) {
-                          $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                          $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10 * 3;
                           $scope.currentScroll = 40;
                         }
 
@@ -632,6 +678,38 @@ angular.module("bookbuilder2")
                       });
 
                       $scope.scrollUp.addEventListener("pressup", function (event) {
+
+                        var firstLimit;
+                        if (_.filter(_.first($scope.activityData[$scope.selectedVocabularySection], 9), {
+                            soundFileName: false
+                          }).length === 2) {
+
+                          firstLimit = 8;
+
+                        } else if (_.filter(_.first($scope.activityData[$scope.selectedVocabularySection], 10), {
+                            soundFileName: false
+                          }).length === 2) {
+
+                          firstLimit = 7;
+
+                        } else {
+
+                          firstLimit = 8;
+
+                        }
+
+                        var secondLimit = 10 + 9 - _.filter(_.first(_.rest($scope.activityData[$scope.selectedVocabularySection], 9), 10), {
+                          soundFileName: false
+                        }).length;
+
+                        var thirdLimit = 20 + 9 - _.filter(_.first(_.rest($scope.activityData[$scope.selectedVocabularySection], 19), 10), {
+                          soundFileName: false
+                        }).length;
+
+                        console.log("firstLimit", firstLimit);
+                        console.log("secondLimit", secondLimit);
+                        console.log("thirdLimit", thirdLimit);
+
                         $scope.scrollUp.alpha = 1;
 
                         if ($scope.currentScroll === 20) {
@@ -647,20 +725,20 @@ angular.module("bookbuilder2")
 
                           if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                               name: $scope.currentWord
-                            }) > 28) {
-                            $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                            }) > thirdLimit) {
+                            $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10 * 3;
                             $scope.currentScroll = 40;
 
                           } else if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                               name: $scope.currentWord
-                            }) > 18) {
+                            }) > secondLimit) {
 
-                            $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                            $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10 * 2;
                             $scope.currentScroll = 30;
 
                           } else if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                               name: $scope.currentWord
-                            }) > 8) {
+                            }) > firstLimit) {
                             $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10;
                             $scope.currentScroll = 20;
                           } else {
@@ -731,7 +809,7 @@ angular.module("bookbuilder2")
                 $scope.titleContainer.x = backgroundPosition.x + (backgroundPosition.width / 4);
                 $scope.titleContainer.y = backgroundPosition.y + (backgroundPosition.height / 35);
 
-                $scope.title = new createjs.Text($scope.selectedLesson.lessonTitle + " - Listen, say and learn.", "25px Arial", "white");
+                $scope.title = new createjs.Text($scope.selectedLesson.lessonTitle + " - " + $scope.book.vocabularyTitle, "25px Arial", "white");
                 $scope.titleContainer.scaleX = $scope.titleContainer.scaleY = $scope.scale;
                 $scope.title.textAlign = "center";
                 $scope.title.x = 260;
@@ -756,6 +834,10 @@ angular.module("bookbuilder2")
                 });
               }], function (err, response) {
                 async.waterfall(waterFallFunctions, function (err, response) {
+                  if (err) {
+                    console.log("err", err);
+                  }
+                  console.log("Finished laoding sounds");
                   loadPage("words");
                 });
               });
@@ -770,11 +852,12 @@ angular.module("bookbuilder2")
 
 
         $scope.playSoundIntervalPromise = $interval(function () {
+
           _.each($scope.sounds, function (sound, key, list) {
             if ($scope.sounds[key].soundPlaying) {
               $scope.sounds[key].getCurrentPosition(
                 function (position) {
-                  console.log("position", position);
+                  //console.log("position", position);
                   if (position < 0) {
                     soundIsFinishedPlaying(key);
                   }
@@ -785,6 +868,7 @@ angular.module("bookbuilder2")
               );
             }
           });
+
         }, 500, 0, true);
 
         function soundIsFinishedPlaying(name) {
@@ -809,49 +893,83 @@ angular.module("bookbuilder2")
               name: $scope.currentWord
             })) {
 
-            if (_.findIndex(wordsWithSounds, {
+            if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                 name: $scope.currentWord
-              }) < wordsWithSounds.length - 1) {
-
+              }) < $scope.activityData[$scope.selectedVocabularySection].length - 1) {
 
               console.log("$scope.currentScroll", $scope.currentScroll);
               console.log("current word index", _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                 name: $scope.currentWord
               }));
 
+              var firstLimit;
+              if (_.filter(_.first($scope.activityData[$scope.selectedVocabularySection], 9), {
+                  soundFileName: false
+                }).length === 2) {
+
+                firstLimit = 8;
+
+              } else if (_.filter(_.first($scope.activityData[$scope.selectedVocabularySection], 10), {
+                  soundFileName: false
+                }).length === 2) {
+
+                firstLimit = 7;
+
+              } else {
+
+                firstLimit = 8;
+
+              }
+
+              var secondLimit = 10 + 9 - _.filter(_.first(_.rest($scope.activityData[$scope.selectedVocabularySection], 9), 10), {
+                soundFileName: false
+              }).length;
+
+              var thirdLimit = 20 + 9 - _.filter(_.first(_.rest($scope.activityData[$scope.selectedVocabularySection], 19), 10), {
+                soundFileName: false
+              }).length;
+
+              console.log("firstLimit", firstLimit);
+              console.log("secondLimit", secondLimit);
+              console.log("thirdLimit", thirdLimit);
+
               if ($scope.currentScroll === 10 && _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                   name: $scope.currentWord
-                }) > 8) {
+                }) > firstLimit) {
                 $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10;
                 $scope.currentScroll = 20;
               } else if ($scope.currentScroll === 20 && _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                   name: $scope.currentWord
-                }) > 18) {
-                $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                }) > secondLimit) {
+                $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10 * 2;
                 $scope.currentScroll = 30;
+                console.log("$scope.mainContainer.y", $scope.mainContainer.y);
+
               } else if ($scope.currentScroll === 30 && _.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                   name: $scope.currentWord
-                }) > 28) {
-                $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                }) > thirdLimit) {
+                $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10 * 3;
                 $scope.currentScroll = 40;
               } else {
 
+                console.log("else");
                 if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                     name: $scope.currentWord
-                  }) > 28) {
-                  $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                  }) > thirdLimit) {
+                  $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10 * 3;
                   $scope.currentScroll = 40;
 
                 } else if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                     name: $scope.currentWord
-                  }) > 18) {
+                  }) > secondLimit) {
 
-                  $scope.mainContainer.y = $scope.mainContainer.y - $scope.wordContainersHeight * $scope.scale * 10;
+                  $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10 * 2;
                   $scope.currentScroll = 30;
+                  console.log("$scope.mainContainer.y", $scope.mainContainer.y);
 
                 } else if (_.findIndex($scope.activityData[$scope.selectedVocabularySection], {
                     name: $scope.currentWord
-                  }) > 8) {
+                  }) > firstLimit) {
                   $scope.mainContainer.y = backgroundPosition.y + backgroundPosition.height / 8 - $scope.wordContainersHeight * $scope.scale * 10;
                   $scope.currentScroll = 20;
                 } else {
@@ -863,7 +981,6 @@ angular.module("bookbuilder2")
               playWordSound(wordsWithSounds[_.findIndex(wordsWithSounds, {
                 name: $scope.currentWord
               }) + 1]);
-
 
             } else {
               console.log("This is the last sound from the section ", $scope.selectedVocabularySection);
@@ -994,6 +1111,8 @@ angular.module("bookbuilder2")
 
 
         function loadPage(vocabularySection) {
+          console.log("loadPage");
+
           $scope.mainContainer.y = backgroundPosition.y + (backgroundPosition.height / 8);
           $scope.selectedVocabularySection = vocabularySection;
           $scope.playAll = false;
@@ -1120,8 +1239,13 @@ angular.module("bookbuilder2")
 
         var showAllPlayButtons = function () {
 
-          $scope.wordsContainer.visible = true;
-          $scope.phrasesContainer.visible = true;
+          var phrasesWithSounds = _.filter($scope.activityData["phrases"], function (word) {
+            return word.soundFileName;
+          });
+          if (phrasesWithSounds.length > 0) {
+            $scope.wordsContainer.visible = true;
+            $scope.phrasesContainer.visible = true;
+          }
 
           _.each($scope.activityData[$scope.selectedVocabularySection], function (word, k, list) {
             if (!word.soundFileName) {
@@ -1161,7 +1285,7 @@ angular.module("bookbuilder2")
               return;
             }
 
-            var wordIndex = new createjs.Text(word.wordNumber + ".", "25px Arial", $scope.book.vocabularyIndexEnglishColor ? $scope.book.vocabularyIndexEnglishColor : 'white');
+            var wordIndex = new createjs.Text($scope.selectedVocabularySection === "words" ? word.wordNumber + "." : " ", "25px Arial", $scope.book.vocabularyIndexEnglishColor ? $scope.book.vocabularyIndexEnglishColor : 'white');
             $timeout(function () {
               wordIndex.x = $scope.indexContainer.indexSubContainers[word.name].width / 2;
               wordIndex.y = $scope.indexContainer.indexSubContainers[word.name].height / 2;
@@ -1185,7 +1309,7 @@ angular.module("bookbuilder2")
             $scope.englishWordsBitmaps[word.name] = new createjs.Text(!word.onlyTitle ? word.leftWord : word.onlyTitle, (word.isTitle ? "28px" : "20px") + " Arial", $scope.book.vocabularyEnglishColor ? $scope.book.vocabularyEnglishColor : 'white');
             $scope.englishWordsBitmaps[word.name].y = $scope.englishWordsContainer.englishSubContainers[word.name].height / 2;
             $scope.englishWordsBitmaps[word.name].textBaseline = "middle";
-            $scope.englishWordsBitmaps[word.name].maxWidth = $scope.englishWordsContainer.englishSubContainers[word.name].width;
+            $scope.englishWordsBitmaps[word.name].maxWidth = $scope.englishWordsContainer.englishSubContainers[word.name].width - 10;
             $scope.englishWordsContainer.englishSubContainers[word.name].addChild($scope.englishWordsBitmaps[word.name]);
 
           });
@@ -1200,7 +1324,7 @@ angular.module("bookbuilder2")
             $scope.greekWordsBitmaps[word.name] = new createjs.Text(!word.onlyTitle ? word.rightWord : "", (word.isTitle ? "28px" : "20px") + " Arial", $scope.book.vocabularyColor ? $scope.book.vocabularyColor : 'white');
             $scope.greekWordsBitmaps[word.name].y = $scope.greekWordsContainer.greekWordsSubContainers[word.name].height / 2;
             $scope.greekWordsBitmaps[word.name].textBaseline = "middle";
-            $scope.greekWordsBitmaps[word.name].maxWidth = $scope.greekWordsContainer.greekWordsSubContainers[word.name].width;
+            $scope.greekWordsBitmaps[word.name].maxWidth = $scope.greekWordsContainer.greekWordsSubContainers[word.name].width - 10;
             $scope.greekWordsContainer.greekWordsSubContainers[word.name].addChild($scope.greekWordsBitmaps[word.name]);
 
           });

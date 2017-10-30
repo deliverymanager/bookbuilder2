@@ -887,7 +887,7 @@ angular.module("bookbuilder2")
                 lessonTitle.textAlign = "center";
                 $scope.stage.addChild(lessonTitle);
 
-                var descriptionText = new createjs.Text("Listen, say and learn.", "18px Arial", "white");
+                var descriptionText = new createjs.Text($scope.book.vocabularyTitle, "18px Arial", "white");
                 descriptionText.scaleX = descriptionText.scaleY = $scope.scale;
                 descriptionText.x = backgroundPosition.x + (backgroundPosition.width / 1.4);
                 descriptionText.y = backgroundPosition.y + (backgroundPosition.height / 8.7);

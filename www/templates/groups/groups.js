@@ -497,7 +497,9 @@ angular.module("bookbuilder2")
                       $scope.selectedLessonId = lesson.id;
                       window.localStorage.setItem("selectedLessonId", $scope.selectedLessonId);
 
-                      if (lesson.active) {
+
+
+                      if (lesson.active || $rootScope.developerMode) {
 
                         if ($scope.savedLessonButtonsArray[lesson.id].downloaded) {
 
@@ -667,6 +669,7 @@ angular.module("bookbuilder2")
 
 
     var showDownloadingError = function (lesson) {
+
       var confirmPopup = $ionicPopup.confirm({
         title: 'Assets are missing!',
         template: 'Restart the dowloading process?'
@@ -693,14 +696,14 @@ angular.module("bookbuilder2")
           }
         }
       });
+
     };
 
     var downloadLessonAssets = function (lesson, callback) {
 
-      if (!window.cordova || window.cordova.platformId !== "browser") {
+      if (!window.cordova || window.cordova.platformId === "browser") {
         return callback(true);
       }
-
 
       $scope.totalFilesLessonAssets = 3;
       $scope.downloadingLessonAsset = 0;

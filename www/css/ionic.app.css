@@ -9739,7 +9739,7 @@ a.button {
 .searchPopupForm .popup {
   width: 320px;
   position: absolute;
-  bottom: 10px; }
+  top: 10px; }
 
 .resultsPopupForm .popup .popup-head {
   padding: 0px; }

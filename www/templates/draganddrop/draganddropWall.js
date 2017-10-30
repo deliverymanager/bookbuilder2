@@ -197,8 +197,8 @@ angular.module("bookbuilder2")
 
           /*Adding page title and description $scope.activityData.title*/
           $scope.pageActivity = new createjs.Text(_.findWhere($scope.selectedLesson.activitiesMenu, {
-              activityFolder: $scope.activityFolder
-            }).name + " " + ($scope.activityData.revision ? "- " + $scope.activityData.revision : ""), "18px Arial", "white");
+            activityFolder: $scope.activityFolder
+          }).name + " " + ($scope.activityData.revision ? "- " + $scope.activityData.revision : ""), "18px Arial", "white");
           $scope.pageActivity.x = 85;
           $scope.pageActivity.y = 610;
           $scope.pageActivity.maxWidth = 300;
@@ -252,7 +252,7 @@ angular.module("bookbuilder2")
                   $scope.questionTextBackgroundsContainers[key] = new createjs.Container();
                   $scope.questionTextBackgroundsContainers[key].height = $scope.questionTextBackground.image.height;
                   $scope.questionTextBackgroundsContainers[key].width = $scope.questionsContainer.width;
-                  $scope.questionTextBackgroundsContainers[key].y = key * 81;
+                  $scope.questionTextBackgroundsContainers[key].y = (question.yPosition ? question.yPosition : key * 81);
                   $scope.questionTextBackgroundsContainers[key].addChild($scope.questionTextBackground);
 
 
@@ -272,7 +272,7 @@ angular.module("bookbuilder2")
                   $scope.questionRowContainers[key].height = $scope.questionImages[key].image.height + 10;
                   $scope.questionRowContainers[key].width = $scope.questionImages[key].image.width + 10;
                   $scope.questionRowContainers[key].x = 275;
-                  $scope.questionRowContainers[key].y = key * 81;
+                  $scope.questionRowContainers[key].y = question.yPosition ? question.yPosition : key * 81;
                   $scope.questionRowContainers[key].startingPointX = $scope.questionRowContainers[key].x;
                   $scope.questionRowContainers[key].startingPointY = $scope.questionRowContainers[key].y;
                   $scope.questionsContainer.addChild($scope.questionRowContainers[key]);
@@ -395,7 +395,7 @@ angular.module("bookbuilder2")
                   $scope.answerRowContainers[key].width = 160;
                   $scope.answerRowContainers[key].height = 30;
                   $scope.answerRowContainers[key].x = $scope.answersContainer.width / 2;
-                  $scope.answerRowContainers[key].y = 15 + key * 81;
+                  $scope.answerRowContainers[key].y = 15 + (answer.yPosition ? answer.yPosition : key * 81);
 
                   $scope.answerRowContainers[key].startingPointX = $scope.answerRowContainers[key].x;
                   $scope.answerRowContainers[key].startingPointY = $scope.answerRowContainers[key].y;
@@ -489,31 +489,28 @@ angular.module("bookbuilder2")
                     $scope.answerPieces[key].gotoAndPlay("normal");
 
                   });
-                  $scope.answerPieces[key].x = 0;
+                  $scope.answerPieces[key].x = -10;
                   $scope.answerPieces[key].y = 0;
+                  $scope.answerPieces[key].width = 180;
                   $scope.answerRowContainers[key].addChild($scope.answerPieces[key]);
-
 
                   /*Adding the answer text after answerPiece has loaded*/
                   $scope.answerRowContainers[key].answerText = new createjs.Text(answer.text, "16px Arial", "white");
-                  $scope.answerRowContainers[key].answerText.x = $scope.answerPieces[key].width / 2;
-                  $scope.answerRowContainers[key].answerText.y = $scope.answerPieces[key].height / 2 - 7;
                   $scope.answerRowContainers[key].answerText.textAlign = "center";
-                  $scope.answerRowContainers[key].answerText.capitalized =  answer.capitalized;
+                  $scope.answerRowContainers[key].answerText.capitalized = answer.capitalized;
                   $scope.answerRowContainers[key].answerText.maxWidth = $scope.answerPieces[key].width;
                   $scope.answerRowContainers[key].addChild($scope.answerRowContainers[key].answerText);
 
 
                   $scope.questionTextWrong[key] = new createjs.Text("", "18px Arial", "red");
-                  $scope.questionTextWrong[key].x = $scope.answerRowContainers[key].x
-                  $scope.questionTextWrong[key].y = $scope.answerRowContainers[key].y
+                  $scope.questionTextWrong[key].x = $scope.answerRowContainers[key].x;
+                  $scope.questionTextWrong[key].y = $scope.answerRowContainers[key].y;
                   $scope.questionTextWrong[key].textAlign = "center";
                   $scope.questionTextWrong[key].visible = false;
                   $scope.questionTextWrong[key].maxWidth = $scope.answerPieces[key].width;
                   $scope.answersContainer.addChild($scope.questionTextWrong[key]);
 
                   waterfallCallback();
-
 
                 });
               });
@@ -833,8 +830,8 @@ angular.module("bookbuilder2")
           } else {
             console.log("Activity is not the last one");
             console.log("index", _.findIndex($scope.selectedLesson.activitiesMenu, {
-                activityFolder: $scope.activityFolder
-              }) + 1);
+              activityFolder: $scope.activityFolder
+            }) + 1);
             console.log("activities", $scope.selectedLesson.activitiesMenu.length);
           }
 
@@ -855,7 +852,7 @@ angular.module("bookbuilder2")
 
             createjs.Tween.get($scope.answerRowContainers[rightAnswerIndex], {loop: false})
               .to({
-                x: ($scope.questionRowContainers[key].x + $scope.questionsContainer.x - $scope.answersContainer.x) + 96,
+                x: ($scope.questionRowContainers[key].x + $scope.questionsContainer.x - $scope.answersContainer.x) + 106,
                 y: ($scope.questionRowContainers[key].y + $scope.questionsContainer.y - $scope.answersContainer.y) + 20
               }, 500, createjs.Ease.getPowIn(2));
             $scope.stage.update()
@@ -868,7 +865,7 @@ angular.module("bookbuilder2")
           /*There is no answer*/
           if ($scope.activityData.questions[questionKey].userAnswer === "") {
             $scope.activityData.questions[questionKey].userAnswer = $scope.activityData.answers[answerKey].answer;
-            $scope.answerRowContainers[answerKey].x = ($scope.questionRowContainers[questionKey].x + $scope.questionsContainer.x - $scope.answersContainer.x) + 93;
+            $scope.answerRowContainers[answerKey].x = ($scope.questionRowContainers[questionKey].x + $scope.questionsContainer.x - $scope.answersContainer.x) + 103;
             $scope.answerRowContainers[answerKey].y = ($scope.questionRowContainers[questionKey].y + $scope.questionsContainer.y - $scope.answersContainer.y) + 20;
             $scope.questionText[questionKey].color = "black";
             window.localStorage.setItem(activityNameInLocalStorage, JSON.stringify($scope.activityData));
