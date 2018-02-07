@@ -56,9 +56,5 @@
     "gulp": "^3.9.1",
     "gulp-util": "^2.2.14",
     "shelljs": "^0.3.0"
-  },
-  "cordovaPlatforms": [
-    "android",
-    "ios"
-  ]
+  }
 }
