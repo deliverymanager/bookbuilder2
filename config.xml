@@ -1,8 +1,7 @@
-<?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="16000000" id="gr.dwhite.engrtechiteasy" version="0.0.0"
-        xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-  <name>Tech it Easy</name>
-  <description>Tech it Easy by www.supercourse.gr</description>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<widget android-versionCode="245000000" id="gr.dwhite.enGrEnglish1" version="5.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+  <name>I Like English 1</name>
+  <description>I Like English 1 by www.supercourse.gr</description>
   <author email="apps@dwhite.gr" href="http://dwhite.gr">
     www.dwhite.gr
   </author>
@@ -12,7 +11,7 @@
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>
-  <preference name="android-minSdkVersion" value="16"/>
+  <preference name="android-minSdkVersion" value="24"/>
   <preference name="BackupWebStorage" value="none"/>
   <preference name="SplashScreen" value="screen"/>
   <preference name="AutoHideSplashScreen" value="false"/>
