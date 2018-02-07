@@ -202,7 +202,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
     async.waterfall([
       function (callback) {
 
-        exec("cd " + groupDirectory + "; ionic doctor check; ionic cordova platform add android@" + androidVersion + " --save;  ionic cordova resources ios --icon --force; ionic cordova resources ios --splash --force;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+        exec("cd " + groupDirectory + "; ionic doctor check; ionic cordova platform add android@" + androidVersion + " --save;  ionic cordova resources android --icon --force; ionic cordova resources android --splash --force;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
           if (error) {
             console.log(error);
@@ -262,7 +262,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
 
     async.waterfall([
       function (callback) {
-        exec("cd " + groupDirectory + "; ionic doctor check; ionic cordova platform add android@" + androidVersion + " --save;  ionic cordova resources ios --icon --force; ionic cordova resources ios --splash --force;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+        exec("cd " + groupDirectory + "; ionic doctor check; ionic cordova platform add android@" + androidVersion + " --save;  ionic cordova resources android --icon --force; ionic cordova resources android --splash --force;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
           if (error) {
             console.log(error);
