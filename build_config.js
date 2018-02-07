@@ -157,18 +157,6 @@ var prepareConfigXML = function (minSdkVersion, callback) {
     });
 
 
-  }, function () {
-
-    fs.createReadStream(groupDirectory + "/splashWhite.png").pipe(fs.createWriteStream(groupDirectory + '/resources/splash.png'));
-
-    exec("ionic config set integrations.cordova.enabled true; node hooks/scripts/removeAllPlugins.js;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
-
-      if (error) {
-        console.log("error", error);
-      }
-
-    }).stdout.pipe(process.stdout);
-
   }], function (err, result) {
 
     if (err) {
