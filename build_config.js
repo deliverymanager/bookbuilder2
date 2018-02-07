@@ -607,7 +607,7 @@ var sendEmailNotification = function (content, callback) {
     body: item
   }, function (error, response, body) {
 
-    if (!error && response.statusCode == 200) {
+    if (!error && response.statusCode === 200) {
 
       console.log(body);
       callback();
