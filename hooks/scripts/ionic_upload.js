@@ -60,7 +60,7 @@ async.waterfall([
       }
       console.log("www copied!");
       wcall();
-    });
+    }).stdout.pipe(process.stdout);
   }, function (wcall) {
 
     exec('cd ' + currentGitRepositoryAndIonicProApp + '; ls; git add .; git commit -m"created new build"; git push; git push ionic master', {
