@@ -453,7 +453,6 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
 
 var buildiOS = function (generalCallback) {
 
-
   async.waterfall([
 
     function (callback) {
