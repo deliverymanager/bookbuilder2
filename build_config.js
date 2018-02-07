@@ -147,7 +147,7 @@ var prepareConfigXML = function (minSdkVersion, callback) {
         fs.writeFileSync(__dirname + '/config.xml', xml);
         console.log("config.xml edited!");
 
-        fs.createReadStream('../' + group + '/icon.png').pipe(fs.createWriteStream(__dirname + '/resources/icon.png'));
+        fs.createReadStream(group + '/icon.png').pipe(fs.createWriteStream(__dirname + '/resources/icon.png'));
 
         setTimeout(function () {
           waterfallCallback();
