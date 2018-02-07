@@ -645,7 +645,6 @@ async.waterfall([
 
       if (error) {
         console.log(error);
-        return process.exit();
       }
       waterfallCallback();
     }).stdout.pipe(process.stdout);
