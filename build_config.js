@@ -214,6 +214,11 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
       },
       function (callback) {
 
+        androidIconsWithCurves(callback);
+
+      },
+      function (callback) {
+
         exec("cd " + groupDirectory + "; node hooks/scripts/add_plugins.js; ionic cordova prepare android -- --browserify; cordova plugins; ionic cordova build android -- --browserify;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
           if (error) {
@@ -270,6 +275,11 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
           }
           callback();
         }).stdout.pipe(process.stdout);
+
+      },
+      function (callback) {
+
+        androidIconsWithCurves(callback);
 
       },
       function (callback) {
@@ -498,6 +508,72 @@ var buildiOS = function (generalCallback) {
 };
 
 
+var androidIconsWithCurves = function (callback) {
+
+  var parallelFunctions = [];
+  var androidIcons = [
+    {
+      "file": "drawable-hdpi-icon.png",
+      "size": "72x72",
+      "curves": "7,7"
+    },
+    {
+      "file": "drawable-ldpi-icon.png",
+      "size": "36x36",
+      "curves": "3,3"
+    },
+    {
+      "file": "drawable-mdpi-icon.png",
+      "size": "48x48",
+      "curves": "5,5"
+    },
+    {
+      "file": "drawable-xhdpi-icon.png",
+      "size": "96x96",
+      "curves": "9,9"
+    },
+    {
+      "file": "drawable-xxhdpi-icon.png",
+      "size": "144x144",
+      "curves": "14,14"
+    },
+    {
+      "file": "drawable-xxxhdpi-icon.png",
+      "size": "192x192",
+      "curves": "19,19"
+    }];
+
+  _.each(androidIcons, function (icon, key, list) {
+
+    parallelFunctions.push(function (parallelCallback) {
+
+      exec("convert -size " + icon.size + " xc:none -fill white -draw 'roundRectangle 0,0 " + icon.size.replace("x", ",") + " " + icon.curves + "' " + groupDirectory + "/resources/android/icon/" + icon.file + " -compose SrcIn -composite " + groupDirectory + "/resources/android/icon/" + icon.file, {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+        if (error) {
+          console.log('error', error);
+          parallelCallback(error);
+        }
+        console.log("androidIconsWithCurves");
+        parallelCallback();
+      });
+
+    });
+
+  });
+
+  async.parallel(parallelFunctions, function (err, result) {
+    if (err) {
+      console.log('error', error);
+      callback(error);
+    }
+
+    callback();
+
+  });
+
+
+};
+
+
 var sendEmailNotification = function (content, callback) {
   var item = {};
   item.credentialUsername = "domvris";
@@ -557,7 +633,6 @@ async.waterfall([
     prepareConfigXML("16", waterfallCallback);
 
   }, function (waterfallCallback) {
-
 
     exec("node hooks/scripts/ionic_upload.js;", {maxBuffer: 2000000000000}, function (error, stdout, stderr) {
 
