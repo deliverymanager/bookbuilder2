@@ -78,7 +78,7 @@ async.waterfall([
     }).stdout.pipe(process.stdout);
   }, function (wcall) {
 
-    exec('rm -Rf ' + currentGitRepositoryAndIonicProApp + '; git checkout config.xml;', {
+    exec('rm -Rf ' + currentGitRepositoryAndIonicProApp + ';', {
       cwd: process.cwd(),
       maxBuffer: 2048 * 500
     }, function (error, stdout, stderr) {
