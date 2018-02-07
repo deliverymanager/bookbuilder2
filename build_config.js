@@ -214,7 +214,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
     async.waterfall([
       function (callback) {
 
-        exec("cd " + groupDirectory + "; ionic doctor check; cordova platform remove browser --save; cordova platform remove ios --save; ionic cordova platform remove android --save; ionic cordova platform add android@" + androidVersion + " --save; ionic cordova resources android --splash --force;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+        exec("cd " + groupDirectory + "; ionic doctor check; cordova platform remove browser --save; cordova platform remove ios --save; ionic cordova platform remove android --save; ionic cordova platform add android@" + androidVersion + " --save;  ionic cordova resources ios --icon --force; ionic cordova resources ios --splash --force;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
           if (error) {
             console.log(error);
@@ -274,7 +274,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
 
     async.waterfall([
       function (callback) {
-        exec("cd " + groupDirectory + "; ionic doctor check; cordova platform remove browser --save; cordova platform remove android --save; cordova platform remove ios --save; ionic cordova platform add android@" + androidVersion + " --save; ionic cordova resources android --splash --force;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+        exec("cd " + groupDirectory + "; ionic doctor check; cordova platform remove browser --save; cordova platform remove android --save; cordova platform remove ios --save; ionic cordova platform add android@" + androidVersion + " --save;  ionic cordova resources ios --icon --force; ionic cordova resources ios --splash --force;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
           if (error) {
             console.log(error);
@@ -423,7 +423,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
               Bucket: "allgroups",
               Key: "supercourse/android/" + group + "_86_" + versionForVersionCode + ".apk",
               ACL: 'public-read',
-            fs.createReadStream(groupDirectory + platformAndroidPath + "release/" + group + "_86_" + versionForVersionCode + ".apk")
+              Body: fs.createReadStream(groupDirectory + platformAndroidPath + "release/" + group + "_86_" + versionForVersionCode + ".apk")
             },
             function (err, dataS3) {
               if (err) {
@@ -458,16 +458,54 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
 
 var buildiOS = function (generalCallback) {
 
-  exec("ionic platform add ios@" + iosVersion + "; ionic resources --icon;  ionic build ios;", {maxBuffer: 2000000000000}, function (error, stdout, stderr) {
 
-    if (error) {
-      console.log("ios build error", error);
-      return generalCallback(error);
-    }
+  async.waterfall([
 
-    generalCallback();
-  }).stdout.pipe(process.stdout);
+    function (callback) {
 
+      console.log("deleting platforms to build for ios");
+      exec("cd " + groupDirectory + "; ionic doctor check; cordova platform remove browser --save; cordova platform remove android --save; cordova platform remove ios --save; cordova plugins; cordova platforms; ionic cordova platform add ios@" + iosVersion + " --save; ionic cordova resources ios --icon --force; ionic cordova resources ios --splash --force;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+
+        if (error) {
+          console.log(error);
+          return callback(error);
+        }
+
+        callback();
+      }).stdout.pipe(process.stdout);
+
+
+    }, function (callback) {
+      console.log("adding plugins for ios");
+
+      exec("cd " + groupDirectory + "; node hooks/scripts/add_plugins.js;", {maxBuffer: 20480 * 500}, function (error, stdout, stderr) {
+
+        if (error) {
+          console.log(error);
+          return callback(error);
+        }
+
+        callback();
+      }).stdout.pipe(process.stdout);
+
+    }, function (callback) {
+      console.log("building app for ios");
+
+      exec("cd " + groupDirectory + "; ionic cordova prepare ios -- --browserify; cordova plugins; ionic cordova build ios --release -- --browserify;", {maxBuffer: 20480 * 500}, function (error, stdout, stderr) {
+
+        if (error) {
+          console.log(error);
+          return callback(error);
+        }
+
+        callback();
+      }).stdout.pipe(process.stdout);
+
+    }], function (err, result) {
+
+    return generalCallback();
+
+  });
 
 };
 
@@ -521,12 +559,12 @@ async.waterfall([
 
   }, function (waterfallCallback) {
 
-    return waterfallCallback();
 
     prepareConfigXML("24", waterfallCallback);
 
   }, function (waterfallCallback) {
 
+    return waterfallCallback();
 
     prepareConfigXML("16", waterfallCallback);
 
