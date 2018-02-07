@@ -17,10 +17,38 @@ var s3 = new AWS.S3();
 
 //READING THE GROUP FROM THE CMD e.g: node build_config.js enGrSuperJuniorAtoB 4.0.0 or 0.0.0
 
+
+var appleEmail = "apps@dwhite.gr";
+var team_id = "4TRRC9DR4F";
+//READING THE GROUP FROM THE CMD e.g: node build_config.js 4.0.0 or 0.0.0
 var group = process.argv[2];
 var version = process.argv[3];
+var skipBuilds = process.argv[4];
+var platformToBuild = process.argv[5];
+var groupApp = {};
+var token;
 
-var iosVersion = "4.4.0";
+var iosVersion = "4.5.4";
+var androidBuildVersion = "26.0.2";
+var groupDirectory = __dirname;
+var projectFolder = path.basename(__dirname);
+var buildsDirectory = process.env.HOME + "/builds/" + group + "/" + projectFolder;
+var platformAndroidPath = "/platforms/android/build/outputs/apk/";
+var appcerts = process.env.HOME + "/appcerts";
+if (!fs.existsSync(appcerts)) {
+  appcerts = process.env.HOME + "/Dropbox/Applications/Certificates";
+}
+var bundle_id = "gr.dwhite." + group;
+var zipalign = process.env.ANDROID_HOME + "build-tools/" + androidBuildVersion + "/";
+console.log("zipalign", zipalign);
+
+var keyPath = appcerts + "/ANDROID KEYSTORES/DWHITE/anestis/";
+
+if (!version) {
+  console.log("Δεν έχετε συμπληρώσει τη version!");
+  return;
+}
+
 var appsJson = jf.readFileSync(__dirname + '/apps.json');
 console.log(appsJson);
 
@@ -28,7 +56,6 @@ if (!group || !version) {
   console.log("Δεν έχετε συμπληρώσει το bundle_id ή τη version!");
   return;
 }
-var bundle_id = "gr.dwhite." + group;
 
 console.log("bundle_id", bundle_id);
 
@@ -71,7 +98,7 @@ var prepareConfigXML = function (minSdkVersion, callback) {
 
     console.log("\n\n\nremoveAllPlugins.js");
 
-    exec("node hooks/scripts/removeAllPlugins.js;", {maxBuffer: 2048 * 500}, function (error, stdout, stderr) {
+    exec("ionic config set integrations.cordova.enabled true; node hooks/scripts/removeAllPlugins.js;", {maxBuffer: 2000000000000}, function (error, stdout, stderr) {
 
       if (error) {
         console.log("error", error);
@@ -84,7 +111,7 @@ var prepareConfigXML = function (minSdkVersion, callback) {
   }, function (waterfallCallback) {
 
 
-    exec("rm -r " + __dirname + "/platforms; rm -r " + __dirname + "/plugins; ", {maxBuffer: 2048 * 500}, function (error, stdout, stderr) {
+    exec("cordova platform remove browser --save; cordova platform remove android --save; cordova platform remove ios --save; rm -r -f " + __dirname + "/platforms; rm -r -f " + __dirname + "/plugins; ", {maxBuffer: 2000000000000}, function (error, stdout, stderr) {
 
       console.log("\n\nRemoving All Platfrom and Plugins!!!\n\n");
 
@@ -130,16 +157,18 @@ var prepareConfigXML = function (minSdkVersion, callback) {
     });
 
 
-  }, function (waterfallCallback) {
-    exec("node hooks/scripts/add_plugins.js;", {maxBuffer: 2048 * 500}, function (error, stdout, stderr) {
+  }, function () {
+
+    fs.createReadStream(groupDirectory + "/splashWhite.png").pipe(fs.createWriteStream(groupDirectory + '/resources/splash.png'));
+
+    exec("ionic config set integrations.cordova.enabled true; node hooks/scripts/removeAllPlugins.js;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
       if (error) {
         console.log("error", error);
       }
 
-      waterfallCallback();
-
     }).stdout.pipe(process.stdout);
+
   }], function (err, result) {
 
     if (err) {
@@ -174,7 +203,7 @@ var prepareConfigXML = function (minSdkVersion, callback) {
 
 var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallback) {
 
-  var androidVersion = "6.2.3";
+  var androidVersion = "6.4.0";
 
   if (minSdkVersion === "14") {
     androidVersion = "5.2.2";
@@ -185,7 +214,19 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
     async.waterfall([
       function (callback) {
 
-        exec("ionic platform add android@" + androidVersion + "; ionic resources --icon;  ionic prepare android; ionic build android;", {maxBuffer: 2048 * 500}, function (error, stdout, stderr) {
+        exec("cd " + groupDirectory + "; ionic doctor check; cordova platform remove browser --save; cordova platform remove ios --save; ionic cordova platform remove android --save; ionic cordova platform add android@" + androidVersion + " --save; ionic cordova resources android --splash --force;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+
+          if (error) {
+            console.log(error);
+            return callback(error);
+          }
+          callback();
+        }).stdout.pipe(process.stdout);
+
+      },
+      function (callback) {
+
+        exec("cd " + groupDirectory + "; node hooks/scripts/add_plugins.js; ionic cordova prepare android -- --browserify; cordova plugins; ionic cordova build android -- --browserify;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
           if (error) {
             console.log(error);
@@ -233,28 +274,37 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
 
     async.waterfall([
       function (callback) {
-
-        exec("ionic platform add android@" + androidVersion + "; ionic resources --icon;  ionic prepare android; ionic build android --release;", {maxBuffer: 2048 * 500}, function (error, stdout, stderr) {
+        exec("cd " + groupDirectory + "; ionic doctor check; cordova platform remove browser --save; cordova platform remove android --save; cordova platform remove ios --save; ionic cordova platform add android@" + androidVersion + " --save; ionic cordova resources android --splash --force;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
           if (error) {
             console.log(error);
             return callback(error);
           }
-
-          console.log("\n\nAndroid Build finished!");
           callback();
         }).stdout.pipe(process.stdout);
 
       },
       function (callback) {
 
-        fs.createReadStream("/Users/anestis/Dropbox/Applications/Certificates/ANDROID KEYSTORES/DWHITE/anestis/my-release-key.keystore").pipe(fs.createWriteStream(__dirname + "/platforms/android/build/outputs/apk/my-release-key.keystore"));
+        exec("cd " + groupDirectory + "; node hooks/scripts/add_plugins.js; ionic cordova prepare android -- --browserify; cordova plugins; ionic cordova build android --release -- --browserify;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+
+          if (error) {
+            console.log(error);
+            return callback(error);
+          }
+          callback();
+        }).stdout.pipe(process.stdout);
+
+      },
+      function (callback) {
+
+        fs.createReadStream(keyPath + "my-release-key.keystore").pipe(fs.createWriteStream(groupDirectory + platformAndroidPath + "release/" + "my-release-key.keystore"));
 
         s3.upload({
             Bucket: "allgroups",
             Key: "supercourse/android/my-release-key.keystore",
             ACL: 'public-read',
-            Body: fs.createReadStream("/Users/anestis/Dropbox/Applications/Certificates/ANDROID KEYSTORES/DWHITE/anestis/my-release-key.keystore")
+            Body: fs.createReadStream(keyPath + "my-release-key.keystore")
           },
           function (err, dataS3) {
             if (err) {
@@ -263,7 +313,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
             }
 
             if (minSdkVersion !== "24") {
-              exec("cd platforms/android/build/outputs/apk; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore android-armv7-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 2048 * 500}, function (error, stdout, stderr) {
+              exec("cd " + groupDirectory + platformAndroidPath + "release; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore android-armv7-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
                 if (error) {
                   console.log(error);
@@ -273,8 +323,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
               }).stdout.pipe(process.stdout);
 
             } else {
-
-              exec("cd platforms/android/build/outputs/apk; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore android-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 2048 * 500}, function (error, stdout, stderr) {
+              exec("cd " + groupDirectory + platformAndroidPath + "release; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore android-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
                 if (error) {
                   console.log(error);
@@ -291,7 +340,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
       function (callback) {
 
         if (minSdkVersion !== "24") {
-          exec("cd platforms/android/build/outputs/apk; rm " + group + "_" + versionForVersionCode + ".apk; /Users/anestis/adt-bundle-mac-x86_64-20140702/sdk/build-tools/22.0.1/zipalign -v 4 android-armv7-release-unsigned.apk " + group + "_" + versionForVersionCode + ".apk", {maxBuffer: 2048 * 500}, function (error, stdout, stderr) {
+          exec("cd " + groupDirectory + platformAndroidPath + "release; rm " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk;" + zipalign + "zipalign -v 4 android-armv7-release-unsigned.apk " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
             if (error) {
               console.log(error);
@@ -301,7 +350,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
           }).stdout.pipe(process.stdout);
         } else {
 
-          exec("cd platforms/android/build/outputs/apk; rm " + group + "_" + versionForVersionCode + ".apk; /Users/anestis/adt-bundle-mac-x86_64-20140702/sdk/build-tools/22.0.1/zipalign -v 4 android-release-unsigned.apk " + group + "_" + versionForVersionCode + ".apk", {maxBuffer: 2048 * 500}, function (error, stdout, stderr) {
+          exec("cd " + groupDirectory + platformAndroidPath + "release; rm " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk;" + zipalign + "zipalign -v 4 android-release-unsigned.apk " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
             if (error) {
               console.log(error);
@@ -314,7 +363,8 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
       }, function (callback) {
 
         if (minSdkVersion !== "24") {
-          exec("cd platforms/android/build/outputs/apk; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore android-x86-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 2048 * 500}, function (error, stdout, stderr) {
+
+          exec("cd " + groupDirectory + platformAndroidPath + "release; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore android-x86-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
             if (error) {
               console.log(error);
@@ -329,8 +379,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
       }, function (callback) {
 
         if (minSdkVersion !== "24") {
-
-          exec("cd platforms/android/build/outputs/apk; rm " + group + "_86_" + versionForVersionCode + ".apk; /Users/anestis/adt-bundle-mac-x86_64-20140702/sdk/build-tools/22.0.1/zipalign -v 4 android-x86-release-unsigned.apk " + group + "_86_" + versionForVersionCode + ".apk", {maxBuffer: 2048 * 500}, function (error, stdout, stderr) {
+          exec("cd " + groupDirectory + platformAndroidPath + "release; rm " + group + "_86_" + versionForVersionCode.replace(/\./g, '_') + ".apk;" + zipalign + "zipalign -v 4 android-x86-release-unsigned.apk " + group + "_86_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
             if (error) {
               console.log(error);
@@ -349,7 +398,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
             Bucket: "allgroups",
             Key: "supercourse/android/" + group + "_" + versionForVersionCode + ".apk",
             ACL: 'public-read',
-            Body: fs.createReadStream(__dirname + "/platforms/android/build/outputs/apk/" + group + "_" + versionForVersionCode + ".apk")
+            Body: fs.createReadStream(groupDirectory + platformAndroidPath + "release/" + group + "_" + versionForVersionCode + ".apk")
           },
           function (err, dataS3) {
             if (err) {
@@ -374,7 +423,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
               Bucket: "allgroups",
               Key: "supercourse/android/" + group + "_86_" + versionForVersionCode + ".apk",
               ACL: 'public-read',
-              Body: fs.createReadStream(__dirname + "/platforms/android/build/outputs/apk/" + group + "_86_" + versionForVersionCode + ".apk")
+            fs.createReadStream(groupDirectory + platformAndroidPath + "release/" + group + "_86_" + versionForVersionCode + ".apk")
             },
             function (err, dataS3) {
               if (err) {
@@ -409,7 +458,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
 
 var buildiOS = function (generalCallback) {
 
-  exec("ionic platform add ios@" + iosVersion + "; ionic resources --icon;  ionic build ios;", {maxBuffer: 2048 * 500}, function (error, stdout, stderr) {
+  exec("ionic platform add ios@" + iosVersion + "; ionic resources --icon;  ionic build ios;", {maxBuffer: 2000000000000}, function (error, stdout, stderr) {
 
     if (error) {
       console.log("ios build error", error);
@@ -490,7 +539,7 @@ async.waterfall([
         return process.exit();
       }
 
-      exec("node hooks/scripts/ionic_upload.js;", {maxBuffer: 2048 * 500}, function (error, stdout, stderr) {
+      exec("node hooks/scripts/ionic_upload.js;", {maxBuffer: 2000000000000}, function (error, stdout, stderr) {
 
         if (error) {
           console.log(error);
