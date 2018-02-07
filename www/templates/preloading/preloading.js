@@ -1,5 +1,5 @@
 angular.module("bookbuilder2")
-  .controller("PreloadingController", function (_, $ionicDeploy, $cordovaFileTransfer, $scope, $timeout, $interval, $ionicHistory, $ionicPlatform, $ionicPopup, $rootScope, $http, $state, $ionicLoading, $cordovaFile) {
+  .controller("PreloadingController", function (_, $cordovaFileTransfer, $scope, $timeout, $interval, $ionicHistory, $ionicPlatform, $ionicPopup, $rootScope, $http, $state, $ionicLoading, $cordovaFile) {
 
     console.log("PreloadingController loaded!");
 
@@ -52,14 +52,258 @@ angular.module("bookbuilder2")
     };
 
 
+    var installIonicUpdate = function () {//This is asynchronous so they should no be inside the destroy event!!!
+
+      $ionicLoading.show({
+        template: "DOWNLOADING APP UPDATE 0%"
+      });
+
+      IonicCordova.deploy.download(function (res) {
+
+        console.log("IonicCordova.deploy.download res", res);
+
+        if (res === 'true' || res === 'false') {
+
+          $ionicLoading.show({
+            template: "INSTALLING APP UPDATE 0%"
+          });
+
+          // We can unzip the latest version
+          IonicCordova.deploy.extract(function (result) {
+
+            console.log("IonicCordova.deploy.extract result", result);
+
+            if (result === 'done') {
+
+              $ionicLoading.show({
+                template: "RESTARTING APP ..."
+              });
+              // we're ready to load the new version
+              IonicCordova.deploy.redirect(function (done) {
+
+                console.log("IonicCordova.deploy.redirect success", done);
+
+              }, function (err) {
+                console.log("IonicCordova.deploy.redirect err", err);
+              });
+
+            } else {
+              $ionicLoading.show({
+                template: "INSTALLING APP UPDATE " + result + "%"
+              });
+            }
+
+          }, function (err) {
+            console.log("IonicCordova.deploy.extract err", err);
+
+          });
+        } else {
+          $ionicLoading.show({
+            template: "DOWNLOADING APP UPDATE " + res + "%"
+          });
+        }
+      }, function (err) {
+        console.log("IonicCordova.deploy.download err", err);
+      });
+    };
+
+    $rootScope.checkDeployUpdates = function (callback) {
+
+      if (!IonicCordova) {
+        console.log("The plugin IonicCordova does not exist!");
+        $scope.TempGroup = "demo";
+        $rootScope.developerMode = true;
+        return callback();
+      }
+
+      async.waterfall([
+          //Getting package name
+          function (preloadingCallback) {
+
+            IonicCordova.getAppInfo(function (data) {
+              console.log("IonicCordova getAppInfo", data);
+
+              if (data.bundleName.indexOf("gr.dwhite") === -1) {
+
+                if (data.bundleName === "io.ionic.devapp") {
+                  console.warn("we are inside the ionic dev app");
+                  $scope.TempGroup = "demo";
+                  $rootScope.packageName = data.bundleName;
+                  $rootScope.developerMode = true;
+                  return callback();
+                } else {
+
+                }
+
+              } else {
+                $scope.TempGroup = data.bundleName.split(".")[2];
+              }
+
+              console.log("TempGroup", $scope.TempGroup);
+              $rootScope.versionNumber = data.bundleVersion;
+
+              if ($scope.TempGroup === "enGrLikeEnglishB1") {
+                $scope.cdnUrl = "http://engrlikeenglishb1-3-0.s3-website-eu-west-1.amazonaws.com/";
+              } else {
+                $scope.cdnUrl = "http://" + $scope.TempGroup + ".s3-website-eu-west-1.amazonaws.com/";
+              }
+              window.localStorage.setItem("cdnUrl", $scope.cdnUrl);
+
+              if ($rootScope.cookieEnabled) {
+                window.localStorage.setItem("versionNumber", $rootScope.versionNumber);
+              }
+
+              console.log("$rootScope.versionNumber", $rootScope.versionNumber);
+
+              if ($rootScope.versionNumber === "0.0.0") {
+                $rootScope.developerMode = true;
+              } else {
+                $rootScope.developerMode = false;
+              }
+
+              console.log("Developer Mode: ", $rootScope.developerMode);
+
+              preloadingCallback(null);
+
+            }, function (err) {
+
+              console.error("There was an error on getting package name(The preloading continues!).  Error: ", err);
+              preloadingCallback(null);
+            });
+          },
+          function (preloadingCallback) {
+
+            IonicCordova.deploy.init({
+              appId: "5694d278", //This should only change if I have a new binary that uses a new app_id in ionic pro
+              channel: $rootScope.developerMode ? "Master" : "Production"
+            }, function (res) {
+              console.log("IonicCordova.deploy.iniτ success", res);
+
+              preloadingCallback();
+            }, function (err) {
+              console.log("IonicCordova.deploy.init err", err);
+              callback();
+            });
+          },
+          function (preloadingCallback) {
+
+            //Checking if the developerMode is enabled
+            if ($rootScope.developerMode) {
+
+              console.log("WE ARE IN DEVELOPER CHANNEL!!!");
+              $timeout(function () {//TImeout so that it has time to load the plugins
+                window.plugins.insomnia.keepAwake();
+              }, 3000);
+
+              preloadingCallback(null);
+
+            } else {
+
+              console.warn("WE ARE IN PRODUCTION CHANNEL!!!");
+              preloadingCallback(null);
+
+            }
+          },
+          function (preloadingCallback) {
+
+            //Here I will emit the IonicCordova app info to an api in order to see if there is a new bundle in the store
+
+            if ($rootScope.developerMode) {
+              console.warn("WE ARE IN DEVELOPER BUNDLE SO I DO NOT SEARCH FOR NEW BUNDLE IN THE STORE!!!");
+
+
+              preloadingCallback(null);
+
+            } else {
+
+              console.log("WE ARE IN PRODUCTION BUNDLE!!! I AM SEARCHING FOR A NEW BUNDLE IN THE STORE!");
+
+              preloadingCallback(null);
+
+            }
+          },
+
+          function (preloadingCallback) {
+
+            //Here I will emit the IonicCordova app info to an api in order to see if there is a new bundle in the store
+
+
+            if ($rootScope.developerMode) {
+
+              console.warn("WE ARE IN DEVELOPER BUNDLE !!!");
+
+              $scope.checkDeployInterval = $interval(function () {
+
+                IonicCordova.deploy.check(function (hasUpdate) {
+
+                  console.log("IonicCordova.deploy.check hasUpdate", hasUpdate);
+                  if (hasUpdate === 'true') {
+
+                    $interval.cancel($scope.checkDeployInterval);
+
+                    $ionicLoading.show({
+                      template: "DEVELOPER UPDATE ..."
+                    });
+
+                    installIonicUpdate();
+                  }
+                }, function (err) {
+                  console.log("IonicCordova.deploy.check err", err);
+                });
+              }, 8000, 0, true);
+
+              preloadingCallback(null);
+
+            } else {
+              console.log("WE ARE IN PRODUCTION BUNDLE!!!");
+
+              IonicCordova.deploy.check(function (hasUpdate) {
+
+                console.log("IonicCordova.deploy.check hasUpdate", hasUpdate);
+
+                if (hasUpdate === 'true') {
+
+                  $ionicLoading.show({
+                    template: "APP UPDATE ..."
+                  });
+
+                  if ($rootScope.cookieEnabled) {
+                    window.localStorage.removeItem("currentView");
+                  }
+
+                  installIonicUpdate();
+
+                } else {
+                  console.log("There is no update available right now!");
+                  preloadingCallback(null);
+                }
+              }, function (err) {
+                console.log("IonicCordova.deploy.check err", err);
+                preloadingCallback();
+              });
+            }
+          }
+        ],
+
+        //General Callback
+        function (error, result) {
+          if (error) {
+            console.error(error);
+          } else {
+            console.log("Update check done!");
+          }
+
+          callback();
+        });
+    };
+
+
     $ionicPlatform.ready(function () {
       console.log("bookbuilder2 ready!");
 
       if (window.cordova && window.cordova.platformId !== "browser") {
 
         window.plugins.insomnia.keepAwake();
-        console.log("hide SplashScreen");
-        navigator.splashscreen.hide();
 
         console.log("window.cordova.file.externalDataDirectory", window.cordova.file.externalDataDirectory);
         if (window.cordova.file.externalDataDirectory) {
@@ -72,79 +316,52 @@ angular.module("bookbuilder2")
         console.log("$scope.rootDir", $scope.rootDir);
 
         $timeout(function () {
-          window.cordova.getAppVersion.getPackageName(function (name) {
-            console.log(name);
-            var TempGroup = name.split(".");
+          $scope.totalFiles = 100;
+          $rootScope.downloading = 0;
 
-            window.cordova.getAppVersion.getVersionNumber(function (versionNumber) {
-              console.log("config.xml", versionNumber);
-              var savedVersionNumber = window.localStorage.getItem("versionNumber");
-              if (savedVersionNumber && (savedVersionNumber.split(".")[0] + "_" + savedVersionNumber.split(".")[1] ) === (versionNumber.split(".")[0] + "_" + versionNumber.split(".")[1])) {
-                console.log("savedVersionNumber", savedVersionNumber);
-                $rootScope.versionNumber = window.localStorage.getItem("versionNumber");
-              } else {
-                window.localStorage.setItem("versionNumber", versionNumber);
-                $rootScope.versionNumber = versionNumber;
+          $rootScope.checkDeployUpdates(function () {
+
+            $rootScope.checkDirOrCreate($scope.rootDir, "data", function (error) {
+
+              if (error) {
+                console.log("Error checkDirOrCreate data directory");
               }
 
-              if (TempGroup[2] === "enGrLikeEnglishB1") {
-                $scope.cdnUrl = "http://engrlikeenglishb1-3-0.s3-website-eu-west-1.amazonaws.com/";
-              } else {
-                $scope.cdnUrl = "http://" + TempGroup[2] + ".s3-website-eu-west-1.amazonaws.com/";
-              }
-              window.localStorage.setItem("cdnUrl", $scope.cdnUrl);
-              $scope.totalFiles = 100;
-              $rootScope.downloading = 0;
-
-
-              $rootScope.checkDirOrCreate($scope.rootDir, "data", function (error) {
+              $rootScope.checkDirOrCreate($scope.rootDir + "data", "book", function (error) {
 
                 if (error) {
-                  console.log("Error checkDirOrCreate data directory");
+                  console.log("Error checkDirOrCreate json directory");
                 }
 
-                $rootScope.checkDirOrCreate($scope.rootDir + "data", "book", function (error) {
 
-                  if (error) {
-                    console.log("Error checkDirOrCreate json directory");
-                  }
+                $rootScope.assets(["assets.json", "groups.json"], $scope.rootDir, $scope.cdnUrl, "data", "book", function (response) {
+                  console.log("response assets.json groups.json", response);
+                  if (response) {
 
+                    $http.get($scope.rootDir + "data/book/groups.json").success(function (book) {
 
-                  $rootScope.assets(["assets.json", "groups.json"], $scope.rootDir, $scope.cdnUrl, "data", "book", function (response) {
-                    console.log("response assets.json groups.json", response);
-                    if (response) {
+                      $scope.book = book;
+                      window.localStorage.setItem("book", JSON.stringify($scope.book));
 
-                      $http.get($scope.rootDir + "data/book/groups.json").success(function (book) {
+                      $http.get($scope.rootDir + "data/book/assets.json").success(function (assets) {
 
-                        $scope.book = book;
-                        window.localStorage.setItem("book", JSON.stringify($scope.book));
+                        $scope.totalFiles = 2 + assets.length;
+                        $rootScope.downloading = 2;
 
-                        $http.get($scope.rootDir + "data/book/assets.json").success(function (assets) {
+                        $rootScope.assets(assets, $scope.rootDir, $scope.cdnUrl, "data", "assets", function (response) {
 
-                          $scope.totalFiles = 2 + assets.length;
-                          $rootScope.downloading = 2;
-
-                          $rootScope.assets(assets, $scope.rootDir, $scope.cdnUrl, "data", "assets", function (response) {
-
-                            if (response) {
-
-                              checkDeployAndUpdate();
-
-                            } else {
-                              $rootScope.showPopup();
-                            }
-                          });
+                          if (!response) {
+                            $rootScope.showPopup();
+                          }
                         });
                       });
-                    } else {
-                      $rootScope.showPopup();
-                    }
-                  });
+                    });
+                  } else {
+                    $rootScope.showPopup();
+                  }
                 });
               });
             });
-          }, function (error) {
-            console.log(error);
           });
         }, 2000);
 
@@ -242,182 +459,5 @@ angular.module("bookbuilder2")
               callback(false);
             });
         });
-    };
-
-
-    var checkDeployAndUpdate = function () {
-
-      var deployChannel = "v" + $rootScope.versionNumber.split(".")[0] + "_" + $rootScope.versionNumber.split(".")[1] + "_0";
-      if (deployChannel === "v0_0_0") {
-        $rootScope.developerMode = true;
-      } else {
-        $rootScope.developerMode = false;
-      }
-
-      checkDownloadedSnapshotsAndDeleteUnused();
-
-      if ($rootScope.developerMode) {
-        $ionicDeploy.channel = "dev";
-
-        $scope.checkDeployInterval = $interval(function () {
-          $ionicDeploy.check().then(function (hasUpdate) {
-            if (hasUpdate) {
-              $interval.cancel($scope.checkDeployInterval);
-
-              $ionicLoading.show({
-                template: "DEVELOPER UPDATE ..."
-              });
-
-              $cordovaFile.removeRecursively($scope.rootDir, "data")
-                .then(function (success) {
-
-                  installIonicUpdate();
-
-                }, function (error) {
-                  console.log(error);
-                  $rootScope.navigate("groups");
-                });
-            }
-          });
-        }, 8000, 0, true);
-
-        $rootScope.navigate("groups");
-
-      } else {
-
-        $ionicDeploy.channel = deployChannel;
-        $ionicDeploy.check().then(function (hasUpdate) {
-
-          if (hasUpdate) {
-
-            $ionicDeploy.getMetadata().then(function (metadata) {
-              if (!metadata || !metadata.version) {
-                metadata = {
-                  version: ""
-                }
-              }
-
-              $scope.popupRegisterVar = $ionicPopup.show({
-                "template": 'Download and install the new version ' + metadata.version + '?',
-                'title': 'Update Available',
-                "scope": $scope,
-                "buttons": [
-                  {
-                    "text": 'NO',
-                    "type": "button-dark button-outline",
-                    "onTap": function (e) {
-                      $rootScope.navigate("groups");
-                    }
-                  },
-                  {
-                    "text": 'YES',
-                    "type": "button-dark",
-                    "onTap": function (e) {
-
-                      window.localStorage.setItem("versionNumber", metadata.version);
-                      if (window.localStorage.getItem("versionNumber")) {
-                        $rootScope.versionNumber = window.localStorage.getItem("versionNumber");
-                      }
-
-                      $cordovaFile.removeRecursively($scope.rootDir, "data")
-                        .then(function (success) {
-
-                          $ionicLoading.show({
-                            template: "APP UPDATE ..."
-                          });
-
-                          installIonicUpdate();
-
-                        }, function (error) {
-                          console.log(error);
-                          $rootScope.navigate("groups");
-                        });
-                    }
-                  }
-                ]
-              });
-            }, function (response) {
-              console.log("callback meta 1 ", response);
-              $rootScope.navigate("groups");
-            }, function (response) {
-              console.log("callback meta 2", response);
-              $rootScope.navigate("groups");
-            });
-
-          } else {
-            $rootScope.navigate("groups");
-          }
-        });
-      }
-    };
-
-    var checkDownloadedSnapshotsAndDeleteUnused = function () {
-
-      var snapshotsDownloaded = window.localStorage.getItem("snapshots");
-      if (snapshotsDownloaded) {
-        snapshotsDownloaded = JSON.parse(snapshotsDownloaded);
-      }
-
-      console.log("LocalStorage snapshots", snapshotsDownloaded);
-
-      if (snapshotsDownloaded && !_.isEmpty(snapshotsDownloaded)) {
-
-        $ionicDeploy.getSnapshots().then(function (snapshots) {
-          // snapshots will be an array of snapshot uuids
-          var newSnapshotsDownloaded = _.difference(snapshots, snapshotsDownloaded);
-          console.log("newSnapshotsDownloaded", newSnapshotsDownloaded);
-
-          if (newSnapshotsDownloaded && !_.isEmpty(newSnapshotsDownloaded)) {
-
-            _.each(_.difference(snapshots, newSnapshotsDownloaded), function (snapshot) {
-              console.log("deleting snapshots", snapshot);
-              $ionicDeploy.deleteSnapshot(snapshot);
-            });
-
-          }
-
-          $timeout(function () {
-            $ionicDeploy.getSnapshots().then(function (snapshots) {
-              console.log("snapshots", snapshots);
-              if (snapshots && !_.isEmpty(snapshots)) {
-                //Saving the already downloaded snapshots
-                window.localStorage.setItem("snapshots", JSON.stringify(snapshots));
-              }
-            });
-          }, 2000);
-
-        });
-
-      }
-    };
-
-
-    var installIonicUpdate = function () {
-
-      $ionicDeploy.getSnapshots().then(function (snapshots) {
-
-        // snapshots will be an array of snapshot uuids
-        console.warn("snapshots", snapshots);
-        if (snapshots && !_.isEmpty(snapshots)) {
-          //Saving the already downloaded snapshots
-          window.localStorage.setItem("snapshots", JSON.stringify(snapshots));
-        }
-
-        $ionicDeploy.download().then(function () {
-
-          $ionicLoading.show({
-            template: "INSTALLING APP UPDATE ..."
-          });
-
-          $ionicDeploy.extract().then(function () {
-            $ionicLoading.show({
-              template: "RESTARTING APP ..."
-            });
-
-            $ionicDeploy.load();
-          });
-        });
-      });
-
     };
   });

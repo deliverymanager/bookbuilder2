@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('bookbuilder2', ['ionic', 'ionic.cloud', 'ngCordova', 'ngSanitize', 'com.2fdevs.videogular', 'com.2fdevs.videogular.plugins.controls', 'com.2fdevs.videogular.plugins.overlayplay', 'com.2fdevs.videogular.plugins.poster'])
+angular.module('bookbuilder2', ['ionic', 'ngCordova', 'ngSanitize', 'com.2fdevs.videogular', 'com.2fdevs.videogular.plugins.controls', 'com.2fdevs.videogular.plugins.overlayplay', 'com.2fdevs.videogular.plugins.poster'])
 
   .run(function ($ionicPlatform, $timeout) {
     $ionicPlatform.ready(function () {
@@ -26,7 +26,7 @@ angular.module('bookbuilder2', ['ionic', 'ionic.cloud', 'ngCordova', 'ngSanitize
     });
   })
 
-  .config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider, $ionicCloudProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
     /*Disabling transition animation*/
     $ionicConfigProvider.views.transition('none');
@@ -34,12 +34,6 @@ angular.module('bookbuilder2', ['ionic', 'ionic.cloud', 'ngCordova', 'ngSanitize
     $ionicConfigProvider.views.swipeBackEnabled(false);
 
     $ionicConfigProvider.views.maxCache(0);
-
-    $ionicCloudProvider.init({
-      "core": {
-        "app_id": "f906f0bc"
-      }
-    });
 
     $stateProvider
       .state('preloading', {

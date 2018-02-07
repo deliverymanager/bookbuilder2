@@ -13,7 +13,7 @@ var jf = require('jsonfile');
 var ionicProjects = jf.readFileSync(process.cwd() + '/ionicProjects.json');
 console.log("all ionicProjects", ionicProjects);
 
-var platformToCopyFrom = "android/assets";
+var platformToCopyFrom = "android/assets"; // "browser" or "android/assets"
 var currentGitRepositoryAndIonicProApp = "book2builderbuild";
 //I also need to change the app_id IonicCordova.deploy.init inside preloading.js
 
@@ -60,7 +60,7 @@ async.waterfall([
       }
       console.log("www copied!");
       wcall();
-    }).stdout.pipe(process.stdout);
+    });
   }, function (wcall) {
 
     exec('cd ' + currentGitRepositoryAndIonicProApp + '; ls; git add .; git commit -m"created new build"; git push; git push ionic master', {
