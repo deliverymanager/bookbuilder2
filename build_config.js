@@ -330,10 +330,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
                 callback();
               }).stdout.pipe(process.stdout);
             }
-
-
           });
-
       },
       function (callback) {
 
@@ -458,6 +455,16 @@ var buildiOS = function (generalCallback) {
 
 
   async.waterfall([
+
+    function (callback) {
+
+      exec("convert " + groupDirectory + "/screenshots/icon.png -set colorspace sRGB " + groupDirectory + "/screenshots/icon.png;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+
+        return callback(error);
+
+      }).stdout.pipe(process.stdout);
+
+    },
 
     function (callback) {
 
