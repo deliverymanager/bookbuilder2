@@ -1,6 +1,6 @@
 {
   "name": "bookbuilder2",
-  "app_id": "f906f0bc",
+  "app_id": "b4f47212",
   "browsers": [
     {
       "platform": "android",
@@ -16,4 +16,23 @@
     "www/**/*",
     "!www/lib/**/*"
   ]
+}
+{
+  "name": "Mobile Order",
+  "app_id": "0e19a469",
+  "gulpStartupTasks": [
+    "sass",
+    "watch"
+  ],
+  "watchPatterns": [
+    "www/**/*",
+    "!www/lib/**/*"
+  ],
+  "integrations": {
+    "cordova": {
+      "enabled": true
+    },
+    "gulp": {}
+  },
+  "type": "ionic1"
 }
