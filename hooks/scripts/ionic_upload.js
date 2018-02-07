@@ -1,64 +1,99 @@
 #!/usr/bin/env node
+console.log("***************************  ionic_upload.js started...");
 
-/**
- * Remove specified plugins from specific platform
- */
-var fs = require('fs');
-var _ = require('underscore');
-var async = require('async');
-var path = require('path');
+var async = require('async')
+var fs = require('fs-extra');
 var exec = require('child_process').exec;
+process.stdin.resume();
+process.stdin.setEncoding('utf-8');
+process.stdout.pipe(process.stdout);
+process.setMaxListeners(0);
+var jf = require('jsonfile');
 
-console.log("Now I am uploading the app to ionic developer channel!");
+var ionicProjects = jf.readFileSync(process.cwd() + '/ionicProjects.json');
+console.log("all ionicProjects", ionicProjects);
 
-var xml2js = require('xml2js');
-var parser = new xml2js.Parser();
+var platformToCopyFrom = "android";
+var currentGitRepositoryAndIonicProApp = "book2builderbuild";
+//I also need to change the app_id IonicCordova.deploy.init inside preloading.js
 
-fs.readFile(process.cwd() + '/config.xml', function (err, data) {
+console.log("***************  UPLOADING TO IONIC PRO APP: ", currentGitRepositoryAndIonicProApp);
 
-  parser.parseString(data, function (err, result) {
+async.waterfall([
+  function (wcall) {
 
-    console.log("The current version is ", result.widget.$.version);
+    exec('git clone https://github.com/dmngr/' + currentGitRepositoryAndIonicProApp + '.git; git status;', {
+      cwd: process.cwd(),
+      maxBuffer: 2048 * 500
+    }, function (error, stdout, stderr) {
 
-    if (result.widget.$.version === "0.0.0") {
+      if (error) {
+        console.log(error);
+      }
+      console.log(stdout);
 
-      console.log("We are in DEVELOPER mode, uploading to dev channel");
+      console.log("cloned ", currentGitRepositoryAndIonicProApp);
+      wcall();
+    }).stdout.pipe(process.stdout);
+  }, function (wcall) {
 
-      exec('ionic upload --deploy=dev --email adomvris@gmail.com --password ane@@4033', {cwd: process.cwd()}, function (error, stdout, stderr) {
-        // if you also want to change current process working directory:
-        if (error) {
-          console.log(error);
-        }
-        console.log(stdout);
-      });
+    exec('cd ' + currentGitRepositoryAndIonicProApp + '; npm install; ionic git remote; rm -Rf www;', {
+      cwd: process.cwd(),
+      maxBuffer: 2048 * 500
+    }, function (error, stdout, stderr) {
 
-    } else {
+      if (error) {
+        console.log(error);
+      }
+      console.log(stdout);
+      console.log("npm install and removed www inside ", currentGitRepositoryAndIonicProApp);
 
-      console.log("We are in PRODUCTION mode, uploading to channel " + result.widget.$.version);
+      wcall();
+    }).stdout.pipe(process.stdout);
+  }, function (wcall) {
 
-      exec('ionic upload --note=' + result.widget.$.version + " --email adomvris@gmail.com --password ane@@4033", {cwd: process.cwd()}, function (error, stdout, stderr) {
-        // if you also want to change current process working directory:
-        if (error) {
-          console.log(error);
-        }
-        console.log(stdout);
-        console.log("NOW GO TO IONIC CLOUD SERVICES AND DEPLOY IT!");
+    fs.copy(process.cwd() + "/platforms/" + platformToCopyFrom + "/www", process.cwd() + "/" + currentGitRepositoryAndIonicProApp + "/www", function (err) {
 
-        console.log("We are in PRODUCTION but I am uploading to dev channel too!");
-        exec('ionic upload --deploy=dev', {cwd: process.cwd()}, function (error, stdout, stderr) {
-          // if you also want to change current process working directory:
-          if (error) {
-            console.log(error);
-          }
-          console.log(stdout);
-        });
-      });
+      if (err) {
+        console.log("err", err);
+        return process.exit();
+      }
+      console.log("www copied!");
+      wcall();
+    });
+  }, function (wcall) {
 
-    }
+    exec('cd ' + currentGitRepositoryAndIonicProApp + '; ls; git add .; git commit -m"created new build"; git push; git push ionic master', {
+      cwd: process.cwd(),
+      maxBuffer: 2048 * 500
+    }, function (error, stdout, stderr) {
+      // if you also want to change current process working directory:
+      if (error) {
+        console.log(error);
+      }
+      console.log(stdout);
 
-  });
+      wcall();
+
+    }).stdout.pipe(process.stdout);
+  }, function (wcall) {
+
+    exec('rm -Rf ' + currentGitRepositoryAndIonicProApp + '; git checkout config.xml;', {
+      cwd: process.cwd(),
+      maxBuffer: 2048 * 500
+    }, function (error, stdout, stderr) {
+      // if you also want to change current process working directory:
+      if (error) {
+        console.log(error);
+      }
+      console.log(stdout);
+
+      wcall();
+
+    }).stdout.pipe(process.stdout);
+  }], function (err, res) {
+
+  console.log("ionic_upload completed!");
+  process.exit();
 
 });
-
-
-

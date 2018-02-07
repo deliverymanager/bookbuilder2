@@ -37,7 +37,7 @@ fs.readFile(__dirname + '/../../config.xml', function (err, data) {
     var minSdkVersion = result.widget['preference'][indexPreference]['$'].value;
     console.log("\n\nminSdkVersion", minSdkVersion);
     //"cordova-custom-config", "cordova-ios-requires-fullscreen",
-    var removedPlugins = ["cordova-plugin-console", "cordova-plugin-device", "ionic-plugin-keyboard", "cordova-plugin-statusbar", "cordova-plugin-x-toast", "cordova-plugin-whitelist", "ionic-plugin-deploy", "cordova-plugin-insomnia", "cordova-plugin-app-version", "cordova-plugin-webserver", "cordova-plugin-splashscreen", "cordova-plugin-file", "cordova-plugin-file-transfer"];
+    var removedPlugins = ["cordova-plugin-console", "cordova-plugin-device", "ionic-plugin-keyboard", "cordova-plugin-statusbar", "cordova-plugin-x-toast", "cordova-plugin-whitelist", "cordova-plugin-proguard", "cordova-plugin-ionic", "cordova-plugin-insomnia", "cordova-plugin-app-version", "cordova-plugin-webserver", "cordova-plugin-file", "cordova-plugin-file-transfer"];
 
     if (minSdkVersion === "14") {
       removedPlugins.push("cordova-plugin-crosswalk-webview@1.8.0");
@@ -58,7 +58,16 @@ fs.readFile(__dirname + '/../../config.xml', function (err, data) {
       waterfallFunctions.push(function (callback) {
 
         console.log("Adding plugin: " + pluginToRemove);
-        exec("ionic plugin add " + pluginToRemove, function (error, stdout, stderr) {
+
+        if (pluginToRemove === "cordova-plugin-proguard") {
+          pluginToRemove = "https://github.com/dmngr/cordova-plugin-proguard.git";
+        }
+
+        if (pluginToRemove === "cordova-plugin-ionic") {
+          pluginToRemove = "https://github.com/deliverymanager/cordova-plugin-ionic.git --variable APP_ID='-' --variable UPDATE_METHOD='none' --variable CHANNEL_NAME='-'";
+        }
+
+        exec("ionic plugin add " + pluginToRemove + " --browserify --save", function (error, stdout, stderr) {
           console.log("Plugin added!");
           if (error) {
             console.log(error);
