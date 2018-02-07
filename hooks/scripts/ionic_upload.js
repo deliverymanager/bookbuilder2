@@ -13,7 +13,7 @@ var jf = require('jsonfile');
 var ionicProjects = jf.readFileSync(process.cwd() + '/ionicProjects.json');
 console.log("all ionicProjects", ionicProjects);
 
-var platformToCopyFrom = "android";
+var platformToCopyFrom = "android/assets";
 var currentGitRepositoryAndIonicProApp = "book2builderbuild";
 //I also need to change the app_id IonicCordova.deploy.init inside preloading.js
 
