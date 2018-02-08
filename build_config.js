@@ -460,7 +460,7 @@ var buildiOS = function (generalCallback) {
       fs.createReadStream(group + '/icon.png').pipe(fs.createWriteStream(__dirname + '/resources/icon.png'));
 
       setTimeout(function () {
-        exec("convert " + groupDirectory + "/resources/icon.png -set colorspace sRGB " + groupDirectory + "/resources/icon.png;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+        exec("convert " + groupDirectory + "/resources/icon.png -set colorspace sRGB -flatten -background 'white' " + groupDirectory + "/resources/icon.png;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
           return callback(error);
 
