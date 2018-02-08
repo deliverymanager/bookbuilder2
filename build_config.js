@@ -645,16 +645,6 @@ async.waterfall([
 
   }, function (waterfallCallback) {
 
-    exec("node hooks/scripts/ionic_upload.js;", {maxBuffer: 2000000000000}, function (error, stdout, stderr) {
-
-      if (error) {
-        console.log(error);
-      }
-      waterfallCallback();
-    }).stdout.pipe(process.stdout);
-
-  }, function (waterfallCallback) {
-
     buildiOS(function (error) {
 
       if (error) {
