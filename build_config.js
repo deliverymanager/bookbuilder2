@@ -457,11 +457,16 @@ var buildiOS = function (generalCallback) {
 
     function (callback) {
 
-      exec("convert " + groupDirectory + "/resources/icon.png -set colorspace sRGB " + groupDirectory + "/resources/icon.png;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+      fs.createReadStream(group + '/icon.png').pipe(fs.createWriteStream(__dirname + '/resources/icon.png'));
 
-        return callback(error);
+      setTimeout(function () {
+        exec("convert " + groupDirectory + "/resources/icon.png -set colorspace sRGB " + groupDirectory + "/resources/icon.png;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
-      }).stdout.pipe(process.stdout);
+          return callback(error);
+
+        }).stdout.pipe(process.stdout);
+
+      }, 2000);
 
     },
 
