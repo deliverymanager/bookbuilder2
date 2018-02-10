@@ -37,17 +37,21 @@ fs.readFile(__dirname + '/../../config.xml', function (err, data) {
     var minSdkVersion = result.widget['preference'][indexPreference]['$'].value;
     console.log("\n\nminSdkVersion", minSdkVersion);
     //"cordova-custom-config", "cordova-ios-requires-fullscreen",
-    var removedPlugins = ["cordova-plugin-console", "cordova-plugin-device", "ionic-plugin-keyboard", "cordova-plugin-statusbar", "cordova-plugin-x-toast", "cordova-plugin-whitelist", "cordova-plugin-proguard", "cordova-plugin-ionic", "cordova-plugin-insomnia", "cordova-plugin-app-version", "cordova-plugin-webserver", "cordova-plugin-file", "cordova-plugin-file-transfer"];
+    var removedPlugins = ["cordova-plugin-console", "cordova-plugin-device", "ionic-plugin-keyboard", "cordova-plugin-statusbar", "cordova-plugin-x-toast", "cordova-plugin-whitelist", "cordova-plugin-proguard", "cordova-plugin-ionic", "cordova-plugin-insomnia", "cordova-plugin-app-version", "cordova-plugin-webserver"];
 
     if (minSdkVersion === "14") {
       removedPlugins.push("cordova-plugin-crosswalk-webview@1.8.0");
       removedPlugins.push("cordova-plugin-media@2.4.1");
+      removedPlugins.push("cordova-plugin-file@4.3.3");
+      removedPlugins.push("cordova-plugin-file-transfer@1.6.3");
     } else if (minSdkVersion === "16") {
       removedPlugins.push("cordova-plugin-crosswalk-webview");
       removedPlugins.push("cordova-plugin-media");
-
+      removedPlugins.push("cordova-plugin-file-transfer");
     } else if (minSdkVersion === "24") {
       removedPlugins.push("cordova-plugin-media");
+      removedPlugins.push("cordova-plugin-file");
+      removedPlugins.push("cordova-plugin-file-transfer");
       //here we do not have the crosswalk plugin
     }
 
