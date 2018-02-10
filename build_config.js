@@ -17,16 +17,9 @@ var s3 = new AWS.S3();
 
 //READING THE GROUP FROM THE CMD e.g: node build_config.js enGrSuperJuniorAtoB 4.0.0 or 0.0.0
 
-
-var appleEmail = "apps@dwhite.gr";
-var team_id = "4TRRC9DR4F";
 //READING THE GROUP FROM THE CMD e.g: node build_config.js 4.0.0 or 0.0.0
 var group = process.argv[2];
 var version = process.argv[3];
-var skipBuilds = process.argv[4];
-var platformToBuild = process.argv[5];
-var groupApp = {};
-var token;
 
 var iosVersion = "4.5.4";
 var androidBuildVersion = "26.1.1";
