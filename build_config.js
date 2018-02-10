@@ -9,7 +9,6 @@ var exec = require('child_process').exec;
 process.stdin.resume();
 process.stdin.setEncoding('utf-8');
 process.stdout.pipe(process.stdout);
-process.stdin.write("STARTING BUILD THE APP\n");
 var xml2js = require("xml2js");
 var AWS = require("aws-sdk");
 var jf = require('jsonfile');
