@@ -629,17 +629,19 @@ var content = "Group: " + group + "<br>Bundle id: " + bundle_id + "<br>App Name:
 async.waterfall([
   function (waterfallCallback) {
 
-    return waterfallCallback();
+    //return waterfallCallback();
+
     prepareConfigXML("14", waterfallCallback);
 
   }, function (waterfallCallback) {
 
+    //return waterfallCallback();
 
     prepareConfigXML("24", waterfallCallback);
 
   }, function (waterfallCallback) {
 
-    return waterfallCallback();
+    //return waterfallCallback();
 
     prepareConfigXML("16", waterfallCallback);
 
