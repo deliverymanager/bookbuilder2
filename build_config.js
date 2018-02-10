@@ -14,9 +14,7 @@ var AWS = require("aws-sdk");
 var jf = require('jsonfile');
 var s3 = new AWS.S3();
 
-//READING THE GROUP FROM THE CMD e.g: node build_config.js enGrSuperJuniorAtoB 4.0.0 or 0.0.0
 
-//READING THE GROUP FROM THE CMD e.g: node build_config.js 4.0.0 or 0.0.0
 var group = process.argv[2];
 var version = process.argv[3];
 
@@ -621,7 +619,7 @@ var content = "Group: " + group + "<br>Bundle id: " + bundle_id + "<br>App Name:
 async.waterfall([
   function (waterfallCallback) {
 
-    //return waterfallCallback();
+    return waterfallCallback();
 
     prepareConfigXML("14", waterfallCallback);
 
