@@ -19,7 +19,7 @@ var group = process.argv[2];
 var version = process.argv[3];
 
 var iosVersion = "4.5.4";
-var androidBuildVersion = "26.1.1";
+var androidBuildVersion = "26.0.2";
 var groupDirectory = __dirname;
 var projectFolder = path.basename(__dirname);
 var buildsDirectory = process.env.HOME + "/builds/" + group + "/" + projectFolder;
