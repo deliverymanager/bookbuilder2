@@ -20,6 +20,7 @@ var version = process.argv[3];
 
 var iosVersion = "4.5.4";
 var androidBuildVersion = "26.0.2";
+var targetSdkVersion; //26, 23
 var groupDirectory = __dirname;
 var projectFolder = path.basename(__dirname);
 var buildsDirectory = process.env.HOME + "/builds/" + group + "/" + projectFolder;
@@ -75,7 +76,6 @@ console.log("versionCode", versionCode);
 
 var prepareConfigXML = function (minSdkVersion, callback) {
   var versionForVersionCode = "";
-  var targetSdkVersion;
   //var versionForVersionCode = minSdkVersion + versionCode.substr(2,5);
   if (minSdkVersion === "14") {
     versionForVersionCode = minSdkVersion + versionCode;
