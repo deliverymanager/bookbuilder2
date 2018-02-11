@@ -75,11 +75,17 @@ console.log("versionCode", versionCode);
 
 var prepareConfigXML = function (minSdkVersion, callback) {
   var versionForVersionCode = "";
+  var targetSdkVersion;
   //var versionForVersionCode = minSdkVersion + versionCode.substr(2,5);
-  if (minSdkVersion === "14" || minSdkVersion === "16") {
+  if (minSdkVersion === "14") {
     versionForVersionCode = minSdkVersion + versionCode;
+    targetSdkVersion = "23";
+  } else if (minSdkVersion === "16") {
+    versionForVersionCode = minSdkVersion + versionCode;
+    targetSdkVersion = "23";
   } else {
     versionForVersionCode = minSdkVersion + versionCode + "0";
+    targetSdkVersion = "26";
   }
 
   console.log("versionForVersionCode", versionForVersionCode);
@@ -126,11 +132,15 @@ var prepareConfigXML = function (minSdkVersion, callback) {
           preferences.push(pref.$);
         });
 
-        var indexPreference = _.findIndex(preferences, {
+        var indexPreferenceMin = _.findIndex(preferences, {
           name: "android-minSdkVersion"
         });
+        var indexPreferenceTarget = _.findIndex(preferences, {
+          name: "android-targetSdkVersion"
+        });
 
-        result.widget['preference'][indexPreference]['$'].value = minSdkVersion;
+        result.widget['preference'][indexPreferenceMin]['$'].value = minSdkVersion;
+        result.widget['preference'][indexPreferenceTarget]['$'].value = targetSdkVersion;
 
         var builder = new xml2js.Builder();
         var xml = builder.buildObject(result);
