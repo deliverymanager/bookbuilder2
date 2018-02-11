@@ -30,7 +30,7 @@ if (!fs.existsSync(appcerts)) {
   appcerts = process.env.HOME + "/Dropbox/Applications/Certificates";
 }
 var bundle_id = "gr.dwhite." + group;
-var zipalign = process.env.ANDROID_HOME + "/build-tools/" + androidBuildVersion + "/";
+var zipalign = process.env.ANDROID_HOME + "build-tools/" + androidBuildVersion + "/";
 console.log("zipalign", zipalign);
 
 var keyPath = appcerts + "/ANDROID KEYSTORES/DWHITE/anestis/";
