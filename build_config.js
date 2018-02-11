@@ -23,7 +23,7 @@ var androidBuildVersion = "26.0.2";
 var groupDirectory = __dirname;
 var projectFolder = path.basename(__dirname);
 var buildsDirectory = process.env.HOME + "/builds/" + group + "/" + projectFolder;
-var platformAndroidPath = "/platforms/android/build/outputs/apk/";
+var platformAndroidPath = "/platforms/android/app/build/outputs/apk/";  //cordova-android@7.0.0
 var appcerts = process.env.HOME + "/appcerts";
 if (!fs.existsSync(appcerts)) {
   appcerts = process.env.HOME + "/Dropbox/Applications/Certificates";
@@ -182,7 +182,7 @@ var prepareConfigXML = function (minSdkVersion, callback) {
 
 var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallback) {
 
-  var androidVersion = "6.4.0";
+  var androidVersion = "7.0.0";
 
   if (minSdkVersion === "14") {
     androidVersion = "5.2.2";
@@ -228,7 +228,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
             Bucket: "allgroups",
             Key: "supercourse/android/" + group + "_" + versionForVersionCode + ".apk",
             ACL: 'public-read',
-            Body: (minSdkVersion !== "24" ? fs.createReadStream(groupDirectory + platformAndroidPath + "release/" + "android-armv7-debug.apk") : fs.createReadStream(groupDirectory + platformAndroidPath + "release/" + "android-debug.apk"))
+            Body: (minSdkVersion !== "24" ? fs.createReadStream(groupDirectory + platformAndroidPath + "armv7/debug/app-armv7-debug.apk") : fs.createReadStream(groupDirectory + platformAndroidPath + "armv7/debug/app-debug.apk"))
           },
           function (err, dataS3) {
             if (err) {
@@ -287,8 +287,12 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
       },
       function (callback) {
 
-        fs.createReadStream(keyPath + "my-release-key.keystore").pipe(fs.createWriteStream(groupDirectory + platformAndroidPath + "release/" + "my-release-key.keystore"));
-
+        if (minSdkVersion !== "24") {
+          fs.createReadStream(keyPath + "my-release-key.keystore").pipe(fs.createWriteStream(groupDirectory + platformAndroidPath + "armv7/release/" + "my-release-key.keystore"));
+          fs.createReadStream(keyPath + "my-release-key.keystore").pipe(fs.createWriteStream(groupDirectory + platformAndroidPath + "x86/release/" + "my-release-key.keystore"));
+        } else {
+          fs.createReadStream(keyPath + "my-release-key.keystore").pipe(fs.createWriteStream(groupDirectory + platformAndroidPath + "release/" + "my-release-key.keystore"));
+        }
         s3.upload({
             Bucket: "allgroups",
             Key: "supercourse/android/my-release-key.keystore",
@@ -302,7 +306,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
             }
 
             if (minSdkVersion !== "24") {
-              exec("cd " + groupDirectory + platformAndroidPath + "release; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore android-armv7-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+              exec("cd " + groupDirectory + platformAndroidPath + "armv7/release; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore app-armv7-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
                 if (error) {
                   console.log(error);
@@ -312,7 +316,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
               }).stdout.pipe(process.stdout);
 
             } else {
-              exec("cd " + groupDirectory + platformAndroidPath + "release; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore android-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+              exec("cd " + groupDirectory + platformAndroidPath + "release; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore app-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
                 if (error) {
                   console.log(error);
@@ -326,7 +330,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
       function (callback) {
 
         if (minSdkVersion !== "24") {
-          exec("cd " + groupDirectory + platformAndroidPath + "release; rm " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk; " + zipalign + "zipalign -v 4 android-armv7-release-unsigned.apk " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+          exec("cd " + groupDirectory + platformAndroidPath + "armv7/release; rm " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk; " + zipalign + "zipalign -v 4 app-armv7-release-unsigned.apk " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
             if (error) {
               console.log(error);
@@ -336,7 +340,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
           }).stdout.pipe(process.stdout);
         } else {
 
-          exec("cd " + groupDirectory + platformAndroidPath + "release; rm " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk;" + zipalign + "zipalign -v 4 android-release-unsigned.apk " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+          exec("cd " + groupDirectory + platformAndroidPath + "release; rm " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk;" + zipalign + "zipalign -v 4 app-release-unsigned.apk " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
             if (error) {
               console.log(error);
@@ -350,7 +354,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
 
         if (minSdkVersion !== "24") {
 
-          exec("cd " + groupDirectory + platformAndroidPath + "release; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore android-x86-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+          exec("cd " + groupDirectory + platformAndroidPath + "x86/release; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore app-x86-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
             if (error) {
               console.log(error);
@@ -365,7 +369,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
       }, function (callback) {
 
         if (minSdkVersion !== "24") {
-          exec("cd " + groupDirectory + platformAndroidPath + "release; rm " + group + "_86_" + versionForVersionCode.replace(/\./g, '_') + ".apk;" + zipalign + "zipalign -v 4 android-x86-release-unsigned.apk " + group + "_86_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+          exec("cd " + groupDirectory + platformAndroidPath + "x86/release; rm " + group + "_86_" + versionForVersionCode.replace(/\./g, '_') + ".apk;" + zipalign + "zipalign -v 4 app-x86-release-unsigned.apk " + group + "_86_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
             if (error) {
               console.log(error);
@@ -384,7 +388,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
             Bucket: "allgroups",
             Key: "supercourse/android/" + group + "_" + versionForVersionCode + ".apk",
             ACL: 'public-read',
-            Body: fs.createReadStream(groupDirectory + platformAndroidPath + "release/" + group + "_" + versionForVersionCode + ".apk")
+            Body: fs.createReadStream(groupDirectory + platformAndroidPath + (minSdkVersion !== "24" ? "armv7/" : "") + "release/" + group + "_" + versionForVersionCode + ".apk")
           },
           function (err, dataS3) {
             if (err) {
@@ -409,7 +413,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
               Bucket: "allgroups",
               Key: "supercourse/android/" + group + "_86_" + versionForVersionCode + ".apk",
               ACL: 'public-read',
-              Body: fs.createReadStream(groupDirectory + platformAndroidPath + "release/" + group + "_86_" + versionForVersionCode + ".apk")
+              Body: fs.createReadStream(groupDirectory + platformAndroidPath + "x86/release/" + group + "_86_" + versionForVersionCode + ".apk")
             },
             function (err, dataS3) {
               if (err) {
