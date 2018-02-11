@@ -29,7 +29,7 @@ if (!fs.existsSync(appcerts)) {
   appcerts = process.env.HOME + "/Dropbox/Applications/Certificates";
 }
 var bundle_id = "gr.dwhite." + group;
-var zipalign = process.env.ANDROID_HOME + "build-tools/" + androidBuildVersion + "/";
+var zipalign = process.env.ANDROID_HOME + "/build-tools/" + androidBuildVersion + "/";
 console.log("zipalign", zipalign);
 
 var keyPath = appcerts + "/ANDROID KEYSTORES/DWHITE/anestis/";
@@ -325,7 +325,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
       function (callback) {
 
         if (minSdkVersion !== "24") {
-          exec("cd " + groupDirectory + platformAndroidPath + "release; rm " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk;" + zipalign + "zipalign -v 4 android-armv7-release-unsigned.apk " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+          exec("cd " + groupDirectory + platformAndroidPath + "release; rm " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk; " + zipalign + "zipalign -v 4 android-armv7-release-unsigned.apk " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
             if (error) {
               console.log(error);
