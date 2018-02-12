@@ -17,7 +17,10 @@ var s3 = new AWS.S3();
 
 var group = process.argv[2];
 var version = process.argv[3];
-
+var skipBuilds = process.argv[4];
+var platformToBuild = process.argv[5];
+console.log("skipBuilds", skipBuilds);
+console.log("platformToBuild", platformToBuild);
 var iosVersion = "4.5.4";
 var androidBuildVersion = "26.0.2";
 var groupDirectory = __dirname;
@@ -155,23 +158,26 @@ var prepareConfigXML = function (minSdkVersion, callback) {
       return
     }
 
+    if (skipBuilds !== "skipBuilds" && skipBuilds !== "onlyScreenshots" && (platformToBuild === "android/ios" || platformToBuild === "android")) {
+      buildAndroid(versionForVersionCode, minSdkVersion, function (error) {
 
-    buildAndroid(versionForVersionCode, minSdkVersion, function (error) {
+        if (error) {
+          console.log("err", error);
+          return process.exit();
+        }
 
-      if (error) {
-        console.log("err", error);
-        return process.exit();
-      }
+        content += "<br>Android Version Code: " + versionForVersionCode + "&nbsp;</br>";
+        content += "https://s3-eu-west-1.amazonaws.com/allgroups/supercourse/android/" + group + "_" + versionForVersionCode + ".apk<br><br>";
 
-      content += "<br>Android Version Code: " + versionForVersionCode + "&nbsp;</br>";
-      content += "https://s3-eu-west-1.amazonaws.com/allgroups/supercourse/android/" + group + "_" + versionForVersionCode + ".apk<br><br>";
+        if (minSdkVersion !== "24") {
+          content += "https://s3-eu-west-1.amazonaws.com/allgroups/supercourse/android/" + group + "_86_" + versionForVersionCode + ".apk<br><br>";
+        }
+        callback();
 
-      if (minSdkVersion !== "24") {
-        content += "https://s3-eu-west-1.amazonaws.com/allgroups/supercourse/android/" + group + "_86_" + versionForVersionCode + ".apk<br><br>";
-      }
+      });
+    } else {
       callback();
-
-    });
+    }
 
 
   });
@@ -642,26 +648,31 @@ async.waterfall([
 
   }, function (waterfallCallback) {
 
-    buildiOS(function (error) {
+    if (skipBuilds !== "skipBuilds" && skipBuilds !== "onlyScreenshots" && (platformToBuild === "android/ios" || platformToBuild === "ios")) {
+      buildiOS(function (error) {
 
-      if (error) {
-        console.log("err", error);
-        return process.exit();
-      }
-
-      fs.copy(__dirname + "/platforms", buildsDirectory + "/platforms", function (err) {
-
-        if (err) {
-          console.log("err", err);
+        if (error) {
+          console.log("err", error);
           return process.exit();
         }
 
-        console.log('\n\n\n\nSuccess on copied platforms directory!', group);
+        fs.copy(__dirname + "/platforms", buildsDirectory + "/platforms", function (err) {
 
-        waterfallCallback();
+          if (err) {
+            console.log("err", err);
+            return process.exit();
+          }
+
+          console.log('\n\n\n\nSuccess on copied platforms directory!', group);
+
+          waterfallCallback();
+        });
+
       });
+    } else {
+      waterfallCallback();
+    }
 
-    });
   }], function (err, result) {
 
   sendEmailNotification(content, function () {
