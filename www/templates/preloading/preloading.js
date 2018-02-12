@@ -174,7 +174,7 @@ angular.module("bookbuilder2")
           function (preloadingCallback) {
 
             IonicCordova.deploy.init({
-              appId: "5694d278", //This should only change if I have a new binary that uses a new app_id in ionic pro
+              appId: "73f4139a", //This should only change if I have a new binary that uses a new app_id in ionic pro
               channel: $rootScope.developerMode ? "Master" : "Production"
             }, function (res) {
               console.log("IonicCordova.deploy.iniτ success", res);
