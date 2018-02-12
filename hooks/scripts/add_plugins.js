@@ -64,7 +64,7 @@ fs.readFile(__dirname + '/../../config.xml', function (err, data) {
         console.log("Adding plugin: " + pluginToRemove);
 
         if (pluginToRemove === "cordova-plugin-ionic") {
-          pluginToRemove = "https://github.com/deliverymanager/cordova-plugin-ionic.git --variable APP_ID='-' --variable UPDATE_METHOD='none' --variable CHANNEL_NAME='-'";
+          pluginToRemove = "https://github.com/dmngr/cordova-plugin-ionic.git --variable APP_ID='-' --variable UPDATE_METHOD='none' --variable CHANNEL_NAME='-'";
         }
 
         exec("cordova plugin add " + pluginToRemove + " --browserify --save", function (error, stdout, stderr) {
