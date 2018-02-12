@@ -649,7 +649,17 @@ async.waterfall([
         return process.exit();
       }
 
-      waterfallCallback();
+      fs.copy(__dirname + "/platforms", buildsDirectory + "/platforms", function (err) {
+
+        if (err) {
+          console.log("err", err);
+          return process.exit();
+        }
+
+        console.log('\n\n\n\nSuccess on copied platforms directory!', group);
+
+        waterfallCallback();
+      });
 
     });
   }], function (err, result) {
