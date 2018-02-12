@@ -352,6 +352,8 @@ angular.module("bookbuilder2")
 
                           if (!response) {
                             $rootScope.showPopup();
+                          } else {
+                            $rootScope.navigate("groups");
                           }
                         });
                       });
