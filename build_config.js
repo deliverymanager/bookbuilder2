@@ -228,7 +228,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
             Bucket: "allgroups",
             Key: "supercourse/android/" + group + "_" + versionForVersionCode + ".apk",
             ACL: 'public-read',
-            Body: (minSdkVersion !== "24" ? fs.createReadStream(groupDirectory + platformAndroidPath + "debug/app-armv7-debug.apk") : fs.createReadStream(groupDirectory + platformAndroidPath + "debug/app-debug.apk"))
+            Body: (minSdkVersion !== "24" ? fs.createReadStream(groupDirectory + platformAndroidPath + (minSdkVersion !== "24" ? "armv7/" : "") + "debug/app-armv7-debug.apk") : fs.createReadStream(groupDirectory + platformAndroidPath + (minSdkVersion !== "24" ? "armv7/" : "") + "debug/app-debug.apk"))
           },
           function (err, dataS3) {
             if (err) {
