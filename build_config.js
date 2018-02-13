@@ -107,6 +107,7 @@ var prepareConfigXML = function (minSdkVersion, callback) {
 
     } else {
       console.log("skipping ... ");
+      waterfallCallback();
     }
 
   }, function (waterfallCallback) {
