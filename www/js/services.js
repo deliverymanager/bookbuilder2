@@ -25,10 +25,10 @@ angular.module("bookbuilder2")
         duration = duration || 'short';
         position = position || 'center';
 
-        if (window.cordova && window.cordova.platformId == "browser") {
+        if (window.cordova && window.cordova.platformId === "browser") {
           // Use the Cordova Toast plugin
 
-          if (duration == 'short') {
+          if (duration === 'short') {
             duration = 1500;
           } else {
             duration = 3000;
