@@ -91,17 +91,23 @@ var prepareConfigXML = function (minSdkVersion, callback) {
 
   async.waterfall([function (waterfallCallback) {
 
-    console.log("\n\n\nremoveAllPlugins.js");
+    if (skipBuilds !== "skipBuilds" && skipBuilds !== "onlyScreenshots" && (platformToBuild === "android/ios" || platformToBuild === "android")) {
 
-    exec("ionic config set integrations.cordova.enabled true; node hooks/scripts/removeAllPlugins.js;", {maxBuffer: 2000000000000}, function (error, stdout, stderr) {
+      console.log("\n\n\nremoveAllPlugins.js");
 
-      if (error) {
-        console.log("error", error);
-      }
+      exec("ionic config set integrations.cordova.enabled true; node hooks/scripts/removeAllPlugins.js;", {maxBuffer: 2000000000000}, function (error, stdout, stderr) {
 
-      waterfallCallback();
+        if (error) {
+          console.log("error", error);
+        }
 
-    }).stdout.pipe(process.stdout);
+        waterfallCallback();
+
+      }).stdout.pipe(process.stdout);
+
+    } else {
+      console.log("skipping ... ");
+    }
 
   }, function (waterfallCallback) {
 
