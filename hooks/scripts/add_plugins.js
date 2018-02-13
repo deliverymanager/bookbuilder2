@@ -37,7 +37,7 @@ fs.readFile(__dirname + '/../../config.xml', function (err, data) {
     var minSdkVersion = result.widget['preference'][indexPreference]['$'].value;
     console.log("\n\nminSdkVersion", minSdkVersion);
     //"cordova-custom-config", "cordova-ios-requires-fullscreen",
-    var removedPlugins = ["cordova-plugin-console", "cordova-plugin-device", "ionic-plugin-keyboard", "cordova-plugin-statusbar", "cordova-plugin-x-toast", "cordova-plugin-whitelist", "cordova-plugin-ionic", "cordova-plugin-insomnia", "cordova-plugin-app-version", "cordova-plugin-webserver"];
+    var removedPlugins = ["cordova-plugin-console", "cordova-plugin-device", "ionic-plugin-keyboard", "cordova-plugin-statusbar", "cordova-plugin-x-toast", "cordova-plugin-whitelist", "cordova-plugin-ionic", "cordova-plugin-insomnia", "cordova-plugin-webserver"];
 
     if (minSdkVersion === "14") {
       removedPlugins.push("cordova-plugin-crosswalk-webview@1.8.0");
