@@ -58,9 +58,9 @@ angular.module("bookbuilder2")
         template: "DOWNLOADING APP UPDATE 0%"
       });
 
-      IonicCordova.deploy.download(function (res) {
+      Pro.deploy.download(function (res) {
 
-        console.log("IonicCordova.deploy.download res", res);
+        console.log("Pro.deploy.download res", res);
 
         if (res === 'true' || res === 'false') {
 
@@ -69,9 +69,9 @@ angular.module("bookbuilder2")
           });
 
           // We can unzip the latest version
-          IonicCordova.deploy.extract(function (result) {
+          Pro.deploy.extract().then(function (result) {
 
-            console.log("IonicCordova.deploy.extract result", result);
+            console.log("Pro.deploy.extract result", result);
 
             if (result === 'done') {
 
@@ -79,14 +79,7 @@ angular.module("bookbuilder2")
                 template: "RESTARTING APP ..."
               });
               // we're ready to load the new version
-              IonicCordova.deploy.redirect(function (done) {
-
-                console.log("IonicCordova.deploy.redirect success", done);
-
-              }, function (err) {
-                console.log("IonicCordova.deploy.redirect err", err);
-              });
-
+              Pro.deploy.redirect();
             } else {
               $ionicLoading.show({
                 template: "INSTALLING APP UPDATE " + result + "%"
@@ -94,7 +87,7 @@ angular.module("bookbuilder2")
             }
 
           }, function (err) {
-            console.log("IonicCordova.deploy.extract err", err);
+            console.log("Pro.deploy.extract err", err);
 
           });
         } else {
@@ -103,14 +96,14 @@ angular.module("bookbuilder2")
           });
         }
       }, function (err) {
-        console.log("IonicCordova.deploy.download err", err);
+        console.log("Pro.deploy.download err", err);
       });
     };
 
     $rootScope.checkDeployUpdates = function (callback) {
 
-      if (!IonicCordova) {
-        console.log("The plugin IonicCordova does not exist!");
+      if (!Pro) {
+        console.log("The plugin Pro does not exist!");
         $scope.TempGroup = "demo";
         $rootScope.developerMode = true;
         return callback();
@@ -120,8 +113,8 @@ angular.module("bookbuilder2")
           //Getting package name
           function (preloadingCallback) {
 
-            IonicCordova.getAppInfo(function (data) {
-              console.log("IonicCordova getAppInfo", data);
+            Pro.deploy.info().then(function (data) {
+              console.log("Pro info", data);
 
               if (data.bundleName.indexOf("gr.dwhite") === -1) {
 
@@ -173,15 +166,15 @@ angular.module("bookbuilder2")
           },
           function (preloadingCallback) {
 
-            IonicCordova.deploy.init({
+            Pro.deploy.init({
               appId: "73f4139a", //This should only change if I have a new binary that uses a new app_id in ionic pro
               channel: $rootScope.developerMode ? "Master" : "Production"
             }, function (res) {
-              console.log("IonicCordova.deploy.iniτ success", res);
+              console.log("Pro.deploy.iniτ success", res);
 
               preloadingCallback();
             }, function (err) {
-              console.log("IonicCordova.deploy.init err", err);
+              console.log("Pro.deploy.init err", err);
               callback();
             });
           },
@@ -206,7 +199,7 @@ angular.module("bookbuilder2")
           },
           function (preloadingCallback) {
 
-            //Here I will emit the IonicCordova app info to an api in order to see if there is a new bundle in the store
+            //Here I will emit the Pro app info to an api in order to see if there is a new bundle in the store
 
             if ($rootScope.developerMode) {
               console.warn("WE ARE IN DEVELOPER BUNDLE SO I DO NOT SEARCH FOR NEW BUNDLE IN THE STORE!!!");
@@ -225,7 +218,7 @@ angular.module("bookbuilder2")
 
           function (preloadingCallback) {
 
-            //Here I will emit the IonicCordova app info to an api in order to see if there is a new bundle in the store
+            //Here I will emit the Pro app info to an api in order to see if there is a new bundle in the store
 
 
             if ($rootScope.developerMode) {
@@ -234,9 +227,9 @@ angular.module("bookbuilder2")
 
               $scope.checkDeployInterval = $interval(function () {
 
-                IonicCordova.deploy.check(function (hasUpdate) {
+                Pro.deploy.check().then(function (hasUpdate) {
 
-                  console.log("IonicCordova.deploy.check hasUpdate", hasUpdate);
+                  console.log("Pro.deploy.check hasUpdate", hasUpdate);
                   if (hasUpdate === 'true') {
 
                     $interval.cancel($scope.checkDeployInterval);
@@ -248,7 +241,7 @@ angular.module("bookbuilder2")
                     installIonicUpdate();
                   }
                 }, function (err) {
-                  console.log("IonicCordova.deploy.check err", err);
+                  console.log("Pro.deploy.check err", err);
                 });
               }, 8000, 0, true);
 
@@ -257,9 +250,9 @@ angular.module("bookbuilder2")
             } else {
               console.log("WE ARE IN PRODUCTION BUNDLE!!!");
 
-              IonicCordova.deploy.check(function (hasUpdate) {
+              Pro.deploy.check().then(function (hasUpdate) {
 
-                console.log("IonicCordova.deploy.check hasUpdate", hasUpdate);
+                console.log("Pro.deploy.check hasUpdate", hasUpdate);
 
                 if (hasUpdate === 'true') {
 
@@ -278,7 +271,7 @@ angular.module("bookbuilder2")
                   preloadingCallback(null);
                 }
               }, function (err) {
-                console.log("IonicCordova.deploy.check err", err);
+                console.log("Pro.deploy.check err", err);
                 preloadingCallback();
               });
             }
