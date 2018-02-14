@@ -58,45 +58,22 @@ angular.module("bookbuilder2")
         template: "DOWNLOADING APP UPDATE 0%"
       });
 
-      Pro.deploy.download(function (res) {
-
-        console.log("Pro.deploy.download res", res);
-
-        if (res === 'true' || res === 'false') {
-
+      Pro.deploy.download(function (progress) {
+        $ionicLoading.show({
+          template: "DOWNLOADING APP UPDATE " + progress + "%"
+        });
+      }).then(function () {
+        Pro.deploy.extract(function (progress) {
           $ionicLoading.show({
-            template: "INSTALLING APP UPDATE 0%"
+            template: "INSTALLING APP UPDATE " + progress + "%"
           });
-
-          // We can unzip the latest version
-          Pro.deploy.extract().then(function (result) {
-
-            console.log("Pro.deploy.extract result", result);
-
-            if (result === 'done') {
-
-              $ionicLoading.show({
-                template: "RESTARTING APP ..."
-              });
-              // we're ready to load the new version
-              Pro.deploy.redirect();
-            } else {
-              $ionicLoading.show({
-                template: "INSTALLING APP UPDATE " + result + "%"
-              });
-            }
-
-          }, function (err) {
-            console.log("Pro.deploy.extract err", err);
-
-          });
-        } else {
+        }).then(function () {
+          // We're done extracting!
           $ionicLoading.show({
-            template: "DOWNLOADING APP UPDATE " + res + "%"
+            template: "RESTARTING APP ..."
           });
-        }
-      }, function (err) {
-        console.log("Pro.deploy.download err", err);
+          Pro.deploy.redirect();
+        });
       });
     };
 
@@ -113,7 +90,7 @@ angular.module("bookbuilder2")
           //Getting package name
           function (preloadingCallback) {
 
-            Pro.deploy.info().then(function (data) {
+            Pro.deploy.info().then(function(data){
               console.log("Pro info", data);
 
               if (data.bundleName.indexOf("gr.dwhite") === -1) {
@@ -156,11 +133,6 @@ angular.module("bookbuilder2")
 
               console.log("Developer Mode: ", $rootScope.developerMode);
 
-              preloadingCallback(null);
-
-            }, function (err) {
-
-              console.error("There was an error on getting package name(The preloading continues!).  Error: ", err);
               preloadingCallback(null);
             });
           },
@@ -227,10 +199,9 @@ angular.module("bookbuilder2")
 
               $scope.checkDeployInterval = $interval(function () {
 
-                Pro.deploy.check().then(function (hasUpdate) {
-
-                  console.log("Pro.deploy.check hasUpdate", hasUpdate);
-                  if (hasUpdate === 'true') {
+                Pro.deploy.check().then(function(haveUpdate){
+                  console.log("Pro.deploy.check hasUpdate", haveUpdate);
+                  if (haveUpdate) {
 
                     $interval.cancel($scope.checkDeployInterval);
 
@@ -240,8 +211,6 @@ angular.module("bookbuilder2")
 
                     installIonicUpdate();
                   }
-                }, function (err) {
-                  console.log("Pro.deploy.check err", err);
                 });
               }, 8000, 0, true);
 
@@ -250,11 +219,9 @@ angular.module("bookbuilder2")
             } else {
               console.log("WE ARE IN PRODUCTION BUNDLE!!!");
 
-              Pro.deploy.check().then(function (hasUpdate) {
-
-                console.log("Pro.deploy.check hasUpdate", hasUpdate);
-
-                if (hasUpdate === 'true') {
+              Pro.deploy.check().then(function(haveUpdate){
+                console.log("Pro.deploy.check hasUpdate", haveUpdate);
+                if (haveUpdate) {
 
                   $ionicLoading.show({
                     template: "APP UPDATE ..."
@@ -265,14 +232,7 @@ angular.module("bookbuilder2")
                   }
 
                   installIonicUpdate();
-
-                } else {
-                  console.log("There is no update available right now!");
-                  preloadingCallback(null);
                 }
-              }, function (err) {
-                console.log("Pro.deploy.check err", err);
-                preloadingCallback();
               });
             }
           }
