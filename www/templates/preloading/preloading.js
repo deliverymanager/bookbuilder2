@@ -90,8 +90,8 @@ angular.module("bookbuilder2")
           //Getting package name
           function (preloadingCallback) {
 
-            Pro.deploy.info().then(function(data){
-              console.log("Pro info", data);
+            Pro.deploy.getAppInfo().then(function(data){
+              console.log("Pro getAppInfo", data);
 
               if (data.bundleName.indexOf("gr.dwhite") === -1) {
 
