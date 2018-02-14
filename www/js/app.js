@@ -23,6 +23,10 @@ angular.module('bookbuilder2', ['ionic', 'ngCordova', 'ngSanitize', 'com.2fdevs.
           console.warn("Status bar is visible", StatusBar.isVisible);
         }
       });
+
+      Pro.init('73f4139a', {
+        appVersion: '5.0.0'
+      });
     });
   })
 
