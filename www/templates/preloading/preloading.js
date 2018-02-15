@@ -133,25 +133,16 @@ angular.module("bookbuilder2")
 
               console.log("Developer Mode: ", $rootScope.developerMode);
 
+              Pro.deploy.init({
+                appId: "73f4139a", //This should only change if I have a new binary that uses a new app_id in ionic pro
+                channel: $rootScope.developerMode ? "Master" : "Production"
+              });
+
               preloadingCallback(null);
             }, function (err) {
 
               console.error("There was an error on getting package name(The preloading continues!).  Error: ", err);
               preloadingCallback(null);
-            });
-          },
-          function (preloadingCallback) {
-
-            Pro.deploy.init({
-              appId: "73f4139a", //This should only change if I have a new binary that uses a new app_id in ionic pro
-              channel: $rootScope.developerMode ? "Master" : "Production"
-            }, function (res) {
-              console.log("Pro.deploy.iniτ success", res);
-
-              preloadingCallback();
-            }, function (err) {
-              console.log("Pro.deploy.init err", err);
-              callback();
             });
           },
           function (preloadingCallback) {
