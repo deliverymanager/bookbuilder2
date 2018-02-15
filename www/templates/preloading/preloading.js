@@ -90,7 +90,7 @@ angular.module("bookbuilder2")
           //Getting package name
           function (preloadingCallback) {
 
-            IonicCordova.getAppInfo().then(function(data){
+            IonicCordova.getAppInfo(function (data) {
               console.log("Pro getAppInfo", data);
 
               if (data.bundleName.indexOf("gr.dwhite") === -1) {
@@ -133,6 +133,10 @@ angular.module("bookbuilder2")
 
               console.log("Developer Mode: ", $rootScope.developerMode);
 
+              preloadingCallback(null);
+            }, function (err) {
+
+              console.error("There was an error on getting package name(The preloading continues!).  Error: ", err);
               preloadingCallback(null);
             });
           },
@@ -199,7 +203,7 @@ angular.module("bookbuilder2")
 
               $scope.checkDeployInterval = $interval(function () {
 
-                Pro.deploy.check().then(function(haveUpdate){
+                Pro.deploy.check().then(function (haveUpdate) {
                   console.log("Pro.deploy.check hasUpdate", haveUpdate);
                   if (haveUpdate) {
 
@@ -219,7 +223,7 @@ angular.module("bookbuilder2")
             } else {
               console.log("WE ARE IN PRODUCTION BUNDLE!!!");
 
-              Pro.deploy.check().then(function(haveUpdate){
+              Pro.deploy.check().then(function (haveUpdate) {
                 console.log("Pro.deploy.check hasUpdate", haveUpdate);
                 if (haveUpdate) {
 
