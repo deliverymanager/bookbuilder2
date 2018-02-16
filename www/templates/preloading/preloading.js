@@ -214,6 +214,7 @@ angular.module("bookbuilder2")
             } else {
               console.log("WE ARE IN PRODUCTION BUNDLE!!!");
 
+
               Pro.deploy.check().then(function (haveUpdate) {
                 console.log("Pro.deploy.check hasUpdate", haveUpdate);
                 if (haveUpdate) {
@@ -227,6 +228,8 @@ angular.module("bookbuilder2")
                   }
 
                   installIonicUpdate();
+                } else {
+                  preloadingCallback(null);
                 }
               });
             }
