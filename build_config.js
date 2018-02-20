@@ -26,7 +26,7 @@ var androidBuildVersion = "26.0.2";
 var groupDirectory = __dirname;
 var projectFolder = path.basename(__dirname);
 var buildsDirectory = process.env.HOME + "/builds/" + group + "/" + projectFolder;
-var platformAndroidPath = "/platforms/android/app/build/outputs/apk/";  //cordova-android@7.0.0
+var platformAndroidPath;
 var appcerts = process.env.HOME + "/appcerts";
 if (!fs.existsSync(appcerts)) {
   appcerts = process.env.HOME + "/Dropbox/Applications/Certificates";
@@ -79,9 +79,7 @@ console.log("versionCode", versionCode);
 var prepareConfigXML = function (minSdkVersion, callback) {
   var versionForVersionCode = "";
   //var versionForVersionCode = minSdkVersion + versionCode.substr(2,5);
-  if (minSdkVersion === "14") {
-    versionForVersionCode = minSdkVersion + versionCode;
-  } else if (minSdkVersion === "16") {
+  if (minSdkVersion === "14" || minSdkVersion === "16" || minSdkVersion === "19") {
     versionForVersionCode = minSdkVersion + versionCode;
   } else {
     versionForVersionCode = minSdkVersion + versionCode + "0";
@@ -94,7 +92,7 @@ var prepareConfigXML = function (minSdkVersion, callback) {
     if (skipBuilds !== "skipBuilds" && skipBuilds !== "onlyScreenshots" && (platformToBuild === "android/ios" || platformToBuild === "android")) {
 
       console.log("\n\n\nremoveAllPlugins.js");
-
+§
       exec("ionic config set integrations.cordova.enabled true; node hooks/scripts/removeAllPlugins.js;", {maxBuffer: 2000000000000}, function (error, stdout, stderr) {
 
         if (error) {
@@ -195,10 +193,23 @@ var prepareConfigXML = function (minSdkVersion, callback) {
 
 var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallback) {
 
+  //version 24 is android 7.0.0 and does not have crosswalk
+  //version 19 is android 7.0.0 and has latest crosswalk
+  //version 16 is android 6.2.3 and has latest crosswalk but older version of some plugins
+  //version 14 is android 5.2.2 and has older crosswalk and older plugins
+
   var androidVersion = "7.0.0";
 
   if (minSdkVersion === "14") {
     androidVersion = "5.2.2";
+  } else if (minSdkVersion === "16") {
+    androidVersion = "6.2.3";
+  }
+
+  if (androidVersion === "7.0.0") {
+    platformAndroidPath = "/platforms/android/app/build/outputs/apk/";
+  } else {
+    platformAndroidPath = "/platforms/android/build/outputs/apk/";  //cordova-android@7.0.0
   }
 
   if (version === "0.0.0") {
@@ -645,13 +656,19 @@ async.waterfall([
 
     //return waterfallCallback();
 
-    prepareConfigXML("24", waterfallCallback);
+    prepareConfigXML("16", waterfallCallback);
 
   }, function (waterfallCallback) {
 
-    //return waterfallCallback();
+    return waterfallCallback();
 
-    prepareConfigXML("16", waterfallCallback);
+    prepareConfigXML("19", waterfallCallback);
+
+  }, function (waterfallCallback) {
+
+    return waterfallCallback();
+
+    prepareConfigXML("24", waterfallCallback);
 
   }, function (waterfallCallback) {
 
