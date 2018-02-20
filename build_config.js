@@ -660,6 +660,7 @@ var content = "Group: " + group + "<br>Bundle id: " + bundle_id + "<br>App Name:
 async.waterfall([
   function(waterfallCallback){
     exec("mkdir " + groupDirectory + "/resources", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+      fs.createReadStream(groupDirectory + "/splashWhite.png").pipe(fs.createWriteStream(groupDirectory + '/resources/splash.png'));
       waterfallCallback()
     }).stdout.pipe(process.stdout);
   },
