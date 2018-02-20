@@ -72,7 +72,7 @@ fs.readFile(__dirname + '/../../config.xml', function (err, data) {
           pluginToRemove = "https://github.com/deliverymanager/cordova-plugin-ionic.git --variable APP_ID='-' --variable UPDATE_METHOD='none' --variable CHANNEL_NAME='-' --variable WARN_DEBUG='false'";
         }
 
-        exec("cordova plugin add " + pluginToRemove + " --browserify --save", function (error, stdout, stderr) {
+        exec("cordova plugin add " + pluginToRemove + " --save " + ((minSdkVersion === "19" || minSdkVersion === "24") ? '--browserify' : ''), function (error, stdout, stderr) {
           console.log("Plugin added!");
           if (error) {
             console.log(error);
