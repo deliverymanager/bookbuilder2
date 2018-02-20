@@ -45,9 +45,10 @@ fs.readFile(__dirname + '/../../config.xml', function (err, data) {
       pluginsToAdd.push("cordova-plugin-file@4.3.3");
       pluginsToAdd.push("cordova-plugin-file-transfer@1.6.3");
     } else if (minSdkVersion === "16") {
-      pluginsToAdd.push("cordova-plugin-crosswalk-webview");  //latest version
-      pluginsToAdd.push("cordova-plugin-media");              //latest version
-      pluginsToAdd.push("cordova-plugin-file-transfer");      //latest version
+      pluginsToAdd.push("cordova-plugin-crosswalk-webview");
+      pluginsToAdd.push("cordova-plugin-media@3.0.1");
+      pluginsToAdd.push("cordova-plugin-file@4.3.3");
+      pluginsToAdd.push("cordova-plugin-file-transfer@1.6.3");
     } else if (minSdkVersion === "19") {
       pluginsToAdd.push("cordova-plugin-crosswalk-webview");  //latest version
       pluginsToAdd.push("cordova-plugin-media");              //latest version
