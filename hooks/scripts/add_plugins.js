@@ -37,27 +37,32 @@ fs.readFile(__dirname + '/../../config.xml', function (err, data) {
     var minSdkVersion = result.widget['preference'][indexPreference]['$'].value;
     console.log("\n\nminSdkVersion", minSdkVersion);
     //"cordova-custom-config", "cordova-ios-requires-fullscreen",
-    var removedPlugins = ["cordova-plugin-device", "ionic-plugin-keyboard", "cordova-plugin-statusbar", "cordova-plugin-x-toast", "cordova-plugin-whitelist", "cordova-plugin-ionic", "cordova-plugin-insomnia", "cordova-plugin-webserver"];
+    var pluginsToAdd = ["cordova-plugin-device", "ionic-plugin-keyboard", "cordova-plugin-statusbar", "cordova-plugin-x-toast", "cordova-plugin-whitelist", "cordova-plugin-ionic", "cordova-plugin-insomnia", "cordova-plugin-webserver"];
 
     if (minSdkVersion === "14") {
-      removedPlugins.push("cordova-plugin-crosswalk-webview@1.8.0");
-      removedPlugins.push("cordova-plugin-media@2.4.1");
-      removedPlugins.push("cordova-plugin-file@4.3.3");
-      removedPlugins.push("cordova-plugin-file-transfer@1.6.3");
+      pluginsToAdd.push("cordova-plugin-crosswalk-webview@1.8.0");
+      pluginsToAdd.push("cordova-plugin-file@4.3.3");
+      pluginsToAdd.push("cordova-plugin-file-transfer@1.6.3");
+      pluginsToAdd.push("cordova-plugin-media@2.4.1");
     } else if (minSdkVersion === "16") {
-      removedPlugins.push("cordova-plugin-crosswalk-webview");
-      removedPlugins.push("cordova-plugin-media");
-      removedPlugins.push("cordova-plugin-file-transfer");
+      pluginsToAdd.push("cordova-plugin-crosswalk-webview");
+      pluginsToAdd.push("cordova-plugin-file@4.3.3");
+      pluginsToAdd.push("cordova-plugin-file-transfer@1.6.3");
+      pluginsToAdd.push("cordova-plugin-media@3.0.1");
+    } else if (minSdkVersion === "19") {
+      pluginsToAdd.push("cordova-plugin-crosswalk-webview");  //latest version
+      pluginsToAdd.push("cordova-plugin-file-transfer");      //latest version
+      pluginsToAdd.push("cordova-plugin-media");              //latest version
     } else if (minSdkVersion === "24") {
-      removedPlugins.push("cordova-plugin-media");
-      removedPlugins.push("cordova-plugin-file");
-      removedPlugins.push("cordova-plugin-file-transfer");
+      pluginsToAdd.push("cordova-plugin-file");
+      pluginsToAdd.push("cordova-plugin-file-transfer");
+      pluginsToAdd.push("cordova-plugin-media");
       //here we do not have the crosswalk plugin
     }
 
     var waterfallFunctions = [];
 
-    _.each(removedPlugins, function (pluginToRemove, key, list) {
+    _.each(pluginsToAdd, function (pluginToRemove, key, list) {
 
       waterfallFunctions.push(function (callback) {
 

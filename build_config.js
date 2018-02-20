@@ -26,7 +26,7 @@ var androidBuildVersion = "26.0.2";
 var groupDirectory = __dirname;
 var projectFolder = path.basename(__dirname);
 var buildsDirectory = process.env.HOME + "/builds/" + group + "/" + projectFolder;
-var platformAndroidPath = "/platforms/android/app/build/outputs/apk/";  //cordova-android@7.0.0
+var platformAndroidPath;
 var appcerts = process.env.HOME + "/appcerts";
 if (!fs.existsSync(appcerts)) {
   appcerts = process.env.HOME + "/Dropbox/Applications/Certificates";
@@ -79,9 +79,7 @@ console.log("versionCode", versionCode);
 var prepareConfigXML = function (minSdkVersion, callback) {
   var versionForVersionCode = "";
   //var versionForVersionCode = minSdkVersion + versionCode.substr(2,5);
-  if (minSdkVersion === "14") {
-    versionForVersionCode = minSdkVersion + versionCode;
-  } else if (minSdkVersion === "16") {
+  if (minSdkVersion === "14" || minSdkVersion === "16" || minSdkVersion === "19") {
     versionForVersionCode = minSdkVersion + versionCode;
   } else {
     versionForVersionCode = minSdkVersion + versionCode + "0";
@@ -123,6 +121,15 @@ var prepareConfigXML = function (minSdkVersion, callback) {
 
   }, function (waterfallCallback) {
 
+
+    exec("cordova plugins;", {maxBuffer: 2000000000000}, function (error, stdout, stderr) {
+
+      waterfallCallback();
+
+    }).stdout.pipe(process.stdout);
+
+  }, function (waterfallCallback) {
+
     var parser = new xml2js.Parser();
     fs.readFile(__dirname + '/config.xml', function (err, data) {
       parser.parseString(data, function (err, result) {
@@ -146,7 +153,7 @@ var prepareConfigXML = function (minSdkVersion, callback) {
         var builder = new xml2js.Builder();
         var xml = builder.buildObject(result);
         fs.writeFileSync(__dirname + '/config.xml', xml);
-        console.log("config.xml edited!");
+        console.log("config.xml edited!", xml);
 
         fs.createReadStream(group + '/icon.png').pipe(fs.createWriteStream(__dirname + '/resources/icon.png'));
 
@@ -195,10 +202,26 @@ var prepareConfigXML = function (minSdkVersion, callback) {
 
 var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallback) {
 
+  //version 24 is android 7.0.0 and does not have crosswalk
+  //version 19 is android 7.0.0 and has latest crosswalk
+  //version 16 is android 6.2.3 and has latest crosswalk but older version of some plugins
+  //version 14 is android 5.2.2 and has older crosswalk and older plugins
+
   var androidVersion = "7.0.0";
+  var apkPrefix = "app-";
 
   if (minSdkVersion === "14") {
     androidVersion = "5.2.2";
+    apkPrefix = "android-";
+  } else if (minSdkVersion === "16") {
+    androidVersion = "6.2.3";
+    apkPrefix = "android-";
+  }
+
+  if (androidVersion === "7.0.0") {
+    platformAndroidPath = "/platforms/android/app/build/outputs/apk/";
+  } else {
+    platformAndroidPath = "/platforms/android/build/outputs/apk/";  //cordova-android@7.0.0
   }
 
   if (version === "0.0.0") {
@@ -241,7 +264,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
             Bucket: "allgroups",
             Key: "supercourse/android/" + group + "_" + versionForVersionCode + ".apk",
             ACL: 'public-read',
-            Body: (minSdkVersion !== "24" ? fs.createReadStream(groupDirectory + platformAndroidPath + (minSdkVersion !== "24" ? "armv7/" : "") + "debug/app-armv7-debug.apk") : fs.createReadStream(groupDirectory + platformAndroidPath + (minSdkVersion !== "24" ? "armv7/" : "") + "debug/app-debug.apk"))
+            Body: fs.createReadStream(groupDirectory + platformAndroidPath + ((minSdkVersion !== "24") ? "armv7/" : "") + ((minSdkVersion !== "24") ? ((version === "0.0.0" ? "debug/" : "release/") + apkPrefix + "armv7-debug.apk") : ((version === "0.0.0" ? "debug/" : "release/") +apkPrefix + "debug.apk")))
           },
           function (err, dataS3) {
             if (err) {
@@ -301,8 +324,8 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
       function (callback) {
 
         if (minSdkVersion !== "24") {
-          fs.createReadStream(keyPath + "my-release-key.keystore").pipe(fs.createWriteStream(groupDirectory + platformAndroidPath + "armv7/release/" + "my-release-key.keystore"));
-          fs.createReadStream(keyPath + "my-release-key.keystore").pipe(fs.createWriteStream(groupDirectory + platformAndroidPath + "x86/release/" + "my-release-key.keystore"));
+          fs.createReadStream(keyPath + "my-release-key.keystore").pipe(fs.createWriteStream(groupDirectory + platformAndroidPath + (minSdkVersion === "19" ? "armv7/release/" : "") + "my-release-key.keystore"));
+          fs.createReadStream(keyPath + "my-release-key.keystore").pipe(fs.createWriteStream(groupDirectory + platformAndroidPath + (minSdkVersion === "19" ? "x86/release/" : "") + "my-release-key.keystore"));
         } else {
           fs.createReadStream(keyPath + "my-release-key.keystore").pipe(fs.createWriteStream(groupDirectory + platformAndroidPath + "release/" + "my-release-key.keystore"));
         }
@@ -319,7 +342,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
             }
 
             if (minSdkVersion !== "24") {
-              exec("cd " + groupDirectory + platformAndroidPath + "armv7/release; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore app-armv7-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+              exec("cd " + groupDirectory + platformAndroidPath + (minSdkVersion === "19" ? "armv7/release" : "") + "; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore app-armv7-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
                 if (error) {
                   console.log(error);
@@ -329,7 +352,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
               }).stdout.pipe(process.stdout);
 
             } else {
-              exec("cd " + groupDirectory + platformAndroidPath + "release; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore app-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+              exec("cd " + groupDirectory + platformAndroidPath + "release; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore " + apkPrefix + "release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
                 if (error) {
                   console.log(error);
@@ -343,7 +366,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
       function (callback) {
 
         if (minSdkVersion !== "24") {
-          exec("cd " + groupDirectory + platformAndroidPath + "armv7/release; rm " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk; " + zipalign + "zipalign -v 4 app-armv7-release-unsigned.apk " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+          exec("cd " + groupDirectory + platformAndroidPath + (minSdkVersion === "19" ? "armv7/release" : "") + "; rm " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk; " + zipalign + "zipalign -v 4 " + apkPrefix + "armv7-release-unsigned.apk " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
             if (error) {
               console.log(error);
@@ -353,7 +376,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
           }).stdout.pipe(process.stdout);
         } else {
 
-          exec("cd " + groupDirectory + platformAndroidPath + "release; rm " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk;" + zipalign + "zipalign -v 4 app-release-unsigned.apk " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+          exec("cd " + groupDirectory + platformAndroidPath + "release; rm " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk;" + zipalign + "zipalign -v 4 " + apkPrefix + "release-unsigned.apk " + group + "_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
             if (error) {
               console.log(error);
@@ -367,7 +390,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
 
         if (minSdkVersion !== "24") {
 
-          exec("cd " + groupDirectory + platformAndroidPath + "x86/release; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore app-x86-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+          exec("cd " + groupDirectory + platformAndroidPath + (minSdkVersion === "19" ? "x86/release" : "") + "; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore " + apkPrefix + "x86-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
             if (error) {
               console.log(error);
@@ -382,7 +405,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
       }, function (callback) {
 
         if (minSdkVersion !== "24") {
-          exec("cd " + groupDirectory + platformAndroidPath + "x86/release; rm " + group + "_86_" + versionForVersionCode.replace(/\./g, '_') + ".apk;" + zipalign + "zipalign -v 4 app-x86-release-unsigned.apk " + group + "_86_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+          exec("cd " + groupDirectory + platformAndroidPath + (minSdkVersion === "19" ? "x86/release" : "") + "; rm " + group + "_86_" + versionForVersionCode.replace(/\./g, '_') + ".apk;" + zipalign + "zipalign -v 4 " + apkPrefix + "x86-release-unsigned.apk " + group + "_86_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
             if (error) {
               console.log(error);
@@ -401,7 +424,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
             Bucket: "allgroups",
             Key: "supercourse/android/" + group + "_" + versionForVersionCode + ".apk",
             ACL: 'public-read',
-            Body: fs.createReadStream(groupDirectory + platformAndroidPath + (minSdkVersion !== "24" ? "armv7/" : "") + "release/" + group + "_" + versionForVersionCode + ".apk")
+            Body: fs.createReadStream(groupDirectory + platformAndroidPath + ((minSdkVersion !== "24") ? "armv7/" : "") + "release/" + group + "_" + versionForVersionCode + ".apk")
           },
           function (err, dataS3) {
             if (err) {
@@ -426,7 +449,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
               Bucket: "allgroups",
               Key: "supercourse/android/" + group + "_86_" + versionForVersionCode + ".apk",
               ACL: 'public-read',
-              Body: fs.createReadStream(groupDirectory + platformAndroidPath + "x86/release/" + group + "_86_" + versionForVersionCode + ".apk")
+              Body: fs.createReadStream(groupDirectory + platformAndroidPath + (minSdkVersion === "19" ? "x86/release/" : "") + group + "_86_" + versionForVersionCode + ".apk")
             },
             function (err, dataS3) {
               if (err) {
@@ -645,13 +668,19 @@ async.waterfall([
 
     //return waterfallCallback();
 
-    prepareConfigXML("24", waterfallCallback);
+    prepareConfigXML("16", waterfallCallback);
 
   }, function (waterfallCallback) {
 
-    //return waterfallCallback();
+    return waterfallCallback();
 
-    prepareConfigXML("16", waterfallCallback);
+    prepareConfigXML("19", waterfallCallback);
+
+  }, function (waterfallCallback) {
+
+    return waterfallCallback();
+
+    prepareConfigXML("24", waterfallCallback);
 
   }, function (waterfallCallback) {
 
