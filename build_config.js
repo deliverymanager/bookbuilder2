@@ -121,6 +121,15 @@ var prepareConfigXML = function (minSdkVersion, callback) {
 
   }, function (waterfallCallback) {
 
+
+    exec("cordova plugins;", {maxBuffer: 2000000000000}, function (error, stdout, stderr) {
+      
+      waterfallCallback();
+
+    }).stdout.pipe(process.stdout);
+
+  }, function (waterfallCallback) {
+
     var parser = new xml2js.Parser();
     fs.readFile(__dirname + '/config.xml', function (err, data) {
       parser.parseString(data, function (err, result) {
