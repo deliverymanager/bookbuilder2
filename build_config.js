@@ -92,7 +92,7 @@ var prepareConfigXML = function (minSdkVersion, callback) {
     if (skipBuilds !== "skipBuilds" && skipBuilds !== "onlyScreenshots" && (platformToBuild === "android/ios" || platformToBuild === "android")) {
 
       console.log("\n\n\nremoveAllPlugins.js");
-§
+
       exec("ionic config set integrations.cordova.enabled true; node hooks/scripts/removeAllPlugins.js;", {maxBuffer: 2000000000000}, function (error, stdout, stderr) {
 
         if (error) {
