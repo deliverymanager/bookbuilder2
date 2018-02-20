@@ -658,6 +658,11 @@ var sendEmailNotification = function (content, callback) {
 var content = "Group: " + group + "<br>Bundle id: " + bundle_id + "<br>App Name: " + appsJson[index].name + "<br>App Description: " + appsJson[index].description;
 
 async.waterfall([
+  function(waterfallCallback){
+    exec("mkdir " + groupDirectory + "/resources", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+      waterfallCallback()
+    }).stdout.pipe(process.stdout);
+  },
   function (waterfallCallback) {
 
     return waterfallCallback();
