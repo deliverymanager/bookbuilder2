@@ -123,7 +123,7 @@ var prepareConfigXML = function (minSdkVersion, callback) {
 
 
     exec("cordova plugins;", {maxBuffer: 2000000000000}, function (error, stdout, stderr) {
-      
+
       waterfallCallback();
 
     }).stdout.pipe(process.stdout);
@@ -153,7 +153,7 @@ var prepareConfigXML = function (minSdkVersion, callback) {
         var builder = new xml2js.Builder();
         var xml = builder.buildObject(result);
         fs.writeFileSync(__dirname + '/config.xml', xml);
-        console.log("config.xml edited!");
+        console.log("config.xml edited!", xml);
 
         fs.createReadStream(group + '/icon.png').pipe(fs.createWriteStream(__dirname + '/resources/icon.png'));
 
