@@ -342,7 +342,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
             }
 
             if (minSdkVersion !== "24") {
-              exec("cd " + groupDirectory + platformAndroidPath + (minSdkVersion === "19" ? "armv7/release" : "") + "; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore app-armv7-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+              exec("cd " + groupDirectory + platformAndroidPath + (minSdkVersion === "19" ? "armv7/release" : "") + "; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore " + apkPrefix + "armv7-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
                 if (error) {
                   console.log(error);
