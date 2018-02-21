@@ -318,7 +318,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
       },
       function (callback) {
 
-        exec("cd " + groupDirectory + "; node hooks/scripts/add_plugins.js; ionic cordova prepare android -- --browserify; cordova plugins; ionic cordova build android --release -- --browserify;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+        exec("cd " + groupDirectory + "; node hooks/scripts/add_plugins.js; ionic cordova prepare android -- --browserify; cordova plugins; ionic cordova build android --release -- --browserify; ionic cordova platform save;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
           if (error) {
             console.log(error);
