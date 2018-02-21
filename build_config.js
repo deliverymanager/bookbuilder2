@@ -264,7 +264,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
         if (minSdkVersion === "24" || minSdkVersion === "19") { //new cordova-android
           body = fs.createReadStream(groupDirectory + platformAndroidPath + ((minSdkVersion !== "24") ? "armv7/" : "") + ((minSdkVersion !== "24") ? ((version === "0.0.0" ? "debug/" : "release/") + apkPrefix + "armv7-debug.apk") : ((version === "0.0.0" ? "debug/" : "release/") + apkPrefix + "debug.apk")))
         } else if (minSdkVersion === "16" || minSdkVersion === "14") {  //old cordova android
-          body = fs.createReadStream(groupDirectory + platformAndroidPath + apkPrefix + "debug.apk")
+          body = fs.createReadStream(groupDirectory + platformAndroidPath + apkPrefix + "armv7-debug.apk")
         }
 
         s3.upload({
@@ -280,6 +280,38 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
             }
 
             console.log(group + "_" + versionForVersionCode + ".apk was uploaded!");
+
+            callback();
+
+          });
+
+      },
+      function (callback) {
+
+        console.log("\n\nStarted Uploading", group + "_" + versionForVersionCode + ".apk");
+
+        var body;
+        if (minSdkVersion === "19") { //new cordova-android
+          body = fs.createReadStream(groupDirectory + platformAndroidPath + ((minSdkVersion !== "24") ? "x86/" : "") + ((minSdkVersion !== "24") ? ((version === "0.0.0" ? "debug/" : "release/") + apkPrefix + "x86-debug.apk") : ((version === "0.0.0" ? "debug/" : "release/") + apkPrefix + "debug.apk")))
+        } else if (minSdkVersion === "16" || minSdkVersion === "14") {  //old cordova android
+          body = fs.createReadStream(groupDirectory + platformAndroidPath + apkPrefix + "x86-debug.apk")
+        } else {
+          return callback();
+        }
+
+        s3.upload({
+            Bucket: "allgroups",
+            Key: "supercourse/android/" + group + "_86_" + versionForVersionCode + ".apk",
+            ACL: 'public-read',
+            Body: body
+          },
+          function (err, dataS3) {
+            if (err) {
+              console.log(err);
+              return callback(err);
+            }
+
+            console.log(group + "_86_" + versionForVersionCode + ".apk was uploaded!");
 
             callback();
 
