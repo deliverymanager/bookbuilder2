@@ -557,7 +557,7 @@ var buildiOS = function (generalCallback) {
     function (callback) {
 
       console.log("deleting platforms to build for ios");
-      exec("cd " + groupDirectory + "; ionic cordova platform save; ionic doctor check; cordova platform remove browser --save; cordova platform remove android --save; cordova platform remove ios --save; cordova plugins; cordova platforms; ionic cordova platform add ios@" + iosVersion + " --save; ionic cordova resources ios --icon --force; ionic cordova resources ios --splash --force;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+      exec("cd " + groupDirectory + "; cordova platform remove browser --save; cordova platform remove android --save; cordova platform remove ios --save; cordova plugins; cordova platforms; ionic cordova platform save; ionic doctor check; ionic cordova platform add ios@" + iosVersion + " --save; ionic cordova resources ios --icon --force; ionic cordova resources ios --splash --force;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
         if (error) {
           console.log(error);
