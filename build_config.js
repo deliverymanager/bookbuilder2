@@ -260,11 +260,18 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
 
         console.log("\n\nStarted Uploading", group + "_" + versionForVersionCode + ".apk");
 
+        var body;
+        if (minSdkVersion === "24" || minSdkVersion === "19") { //new cordova-android
+          body = fs.createReadStream(groupDirectory + platformAndroidPath + ((minSdkVersion !== "24") ? "armv7/" : "") + ((minSdkVersion !== "24") ? ((version === "0.0.0" ? "debug/" : "release/") + apkPrefix + "armv7-debug.apk") : ((version === "0.0.0" ? "debug/" : "release/") + apkPrefix + "debug.apk")))
+        } else if (minSdkVersion === "16" || minSdkVersion === "14") {  //old cordova android
+          body = fs.createReadStream(groupDirectory + platformAndroidPath + apkPrefix + "debug.apk")
+        }
+
         s3.upload({
             Bucket: "allgroups",
             Key: "supercourse/android/" + group + "_" + versionForVersionCode + ".apk",
             ACL: 'public-read',
-            Body: fs.createReadStream(groupDirectory + platformAndroidPath + ((minSdkVersion !== "24") ? "armv7/" : "") + ((minSdkVersion !== "24") ? ((version === "0.0.0" ? "debug/" : "release/") + apkPrefix + "armv7-debug.apk") : ((version === "0.0.0" ? "debug/" : "release/") +apkPrefix + "debug.apk")))
+            Body: body
           },
           function (err, dataS3) {
             if (err) {
@@ -420,11 +427,18 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
 
         console.log("\n\nStarted Uploading", group + "_" + versionForVersionCode + ".apk");
 
+        var body;
+        if (minSdkVersion === "24" || minSdkVersion === "19") { //new cordova-android
+          body = fs.createReadStream(groupDirectory + platformAndroidPath + ((minSdkVersion !== "24") ? "armv7/" : "") + "release/" + group + "_" + versionForVersionCode + ".apk");
+        } else if (minSdkVersion === "16" || minSdkVersion === "14") {  //old cordova android
+          body = fs.createReadStream(groupDirectory + platformAndroidPath + group + "_" + versionForVersionCode + ".apk")
+        }
+
         s3.upload({
             Bucket: "allgroups",
             Key: "supercourse/android/" + group + "_" + versionForVersionCode + ".apk",
             ACL: 'public-read',
-            Body: fs.createReadStream(groupDirectory + platformAndroidPath + ((minSdkVersion !== "24") ? "armv7/" : "") + "release/" + group + "_" + versionForVersionCode + ".apk")
+            Body: body
           },
           function (err, dataS3) {
             if (err) {
@@ -445,11 +459,18 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
 
           console.log("\n\nStarted Uploading", group + "_86_" + versionForVersionCode + ".apk");
 
+          var body;
+          if (minSdkVersion === "24" || minSdkVersion === "19") { //new cordova-android
+            body = fs.createReadStream(groupDirectory + platformAndroidPath + (minSdkVersion === "19" ? "x86/release/" : "") + group + "_86_" + versionForVersionCode + ".apk");
+          } else if (minSdkVersion === "16" || minSdkVersion === "14") {  //old cordova android
+            body = fs.createReadStream(groupDirectory + platformAndroidPath + group + "_86_" + versionForVersionCode + ".apk")
+          }
+
           s3.upload({
               Bucket: "allgroups",
               Key: "supercourse/android/" + group + "_86_" + versionForVersionCode + ".apk",
               ACL: 'public-read',
-              Body: fs.createReadStream(groupDirectory + platformAndroidPath + (minSdkVersion === "19" ? "x86/release/" : "") + group + "_86_" + versionForVersionCode + ".apk")
+              Body: body
             },
             function (err, dataS3) {
               if (err) {
@@ -658,7 +679,7 @@ var sendEmailNotification = function (content, callback) {
 var content = "Group: " + group + "<br>Bundle id: " + bundle_id + "<br>App Name: " + appsJson[index].name + "<br>App Description: " + appsJson[index].description;
 
 async.waterfall([
-  function(waterfallCallback){
+  function (waterfallCallback) {
     exec("mkdir " + groupDirectory + "/resources", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
       fs.createReadStream(groupDirectory + "/splashWhite.png").pipe(fs.createWriteStream(groupDirectory + '/resources/splash.png'));
       waterfallCallback()
