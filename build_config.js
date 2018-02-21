@@ -405,7 +405,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
       }, function (callback) {
 
         if (minSdkVersion !== "24") {
-          exec("cd " + groupDirectory + platformAndroidPath + (minSdkVersion === "19" ? "x86/release" : "") + "; rm " + group + "_86_" + versionForVersionCode.replace(/\./g, '_') + ".apk;" + zipalign + "zipalign -v 4 " + apkPrefix + "x86-release-unsigned.apk " + group + "_86_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+          exec("cd " + groupDirectory + platformAndroidPath + (minSdkVersion === "19" ? "x86/release" : "") + "; rm " + group + "_86_" + versionForVersionCode.replace(/\./g, '_') + ".apk; " + zipalign + "zipalign -v 4 " + apkPrefix + "x86-release-unsigned.apk " + group + "_86_" + versionForVersionCode.replace(/\./g, '_') + ".apk", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
             if (error) {
               console.log(error);

@@ -124,7 +124,7 @@ if (prepare === "prepare") {
 
     }], function (err, res) {
 
-    console.log("process completed!");
+    console.log("process completed in build_config_browser.js");
     process.exit();
 
   });
@@ -184,7 +184,7 @@ if (prepare === "prepare") {
       }).stdout.pipe(process.stdout);
     }], function (err, res) {
 
-    console.log("process completed!");
+    console.log("process completed in build_config_browser.js!");
     process.exit();
 
   });
