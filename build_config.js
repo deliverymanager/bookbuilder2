@@ -731,13 +731,13 @@ async.waterfall([
 
   }, function (waterfallCallback) {
 
-    return waterfallCallback();
+    //return waterfallCallback();
 
     prepareConfigXML("19", waterfallCallback);
 
   }, function (waterfallCallback) {
 
-    return waterfallCallback();
+    //return waterfallCallback();
 
     prepareConfigXML("24", waterfallCallback);
 
