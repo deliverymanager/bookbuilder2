@@ -40,11 +40,13 @@ fs.readFile(__dirname + '/../../config.xml', function (err, data) {
     var pluginsToAdd = ["cordova-plugin-device", "ionic-plugin-keyboard", "cordova-plugin-statusbar", "cordova-plugin-x-toast", "cordova-plugin-whitelist", "cordova-plugin-ionic", "cordova-plugin-insomnia", "cordova-plugin-webserver"];
 
     if (minSdkVersion === "14") {
+      pluginsToAdd.push("cordova-plugin-console");
       pluginsToAdd.push("cordova-plugin-crosswalk-webview@1.8.0");
       pluginsToAdd.push("cordova-plugin-file@4.3.3");
       pluginsToAdd.push("cordova-plugin-file-transfer@1.6.3");
       pluginsToAdd.push("cordova-plugin-media@2.4.1");
     } else if (minSdkVersion === "16") {
+      pluginsToAdd.push("cordova-plugin-console");
       pluginsToAdd.push("cordova-plugin-crosswalk-webview");
       pluginsToAdd.push("cordova-plugin-file@4.3.3");
       pluginsToAdd.push("cordova-plugin-file-transfer@1.6.3");
