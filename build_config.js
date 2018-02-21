@@ -291,7 +291,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
         console.log("\n\nStarted Uploading", group + "_" + versionForVersionCode + ".apk");
 
         var body;
-        if (minSdkVersion === "19") { //new cordova-android
+        if (minSdkVersion === "19") { //new cordova-android with crosswalk
           body = fs.createReadStream(groupDirectory + platformAndroidPath + ((minSdkVersion !== "24") ? "x86/" : "") + ((minSdkVersion !== "24") ? ((version === "0.0.0" ? "debug/" : "release/") + apkPrefix + "x86-debug.apk") : ((version === "0.0.0" ? "debug/" : "release/") + apkPrefix + "debug.apk")))
         } else if (minSdkVersion === "16" || minSdkVersion === "14") {  //old cordova android
           body = fs.createReadStream(groupDirectory + platformAndroidPath + apkPrefix + "x86-debug.apk")
@@ -557,7 +557,7 @@ var buildiOS = function (generalCallback) {
     function (callback) {
 
       console.log("deleting platforms to build for ios");
-      exec("cd " + groupDirectory + "; ionic doctor check; cordova platform remove browser --save; cordova platform remove android --save; cordova platform remove ios --save; cordova plugins; cordova platforms; ionic cordova platform add ios@" + iosVersion + " --save; ionic cordova resources ios --icon --force; ionic cordova resources ios --splash --force;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+      exec("cd " + groupDirectory + "; ionic cordova platform save; ionic doctor check; cordova platform remove browser --save; cordova platform remove android --save; cordova platform remove ios --save; cordova plugins; cordova platforms; ionic cordova platform add ios@" + iosVersion + " --save; ionic cordova resources ios --icon --force; ionic cordova resources ios --splash --force;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
         if (error) {
           console.log(error);
