@@ -342,7 +342,7 @@ var buildAndroid = function (versionForVersionCode, minSdkVersion, generalCallba
             }
 
             if (minSdkVersion !== "24") {
-              exec("cd " + groupDirectory + platformAndroidPath + (minSdkVersion === "19" ? "armv7/release" : "") + "; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore app-armv7-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+              exec("cd " + groupDirectory + platformAndroidPath + (minSdkVersion === "19" ? "armv7/release" : "") + "; jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore " + apkPrefix + "armv7-release-unsigned.apk alias_name -storepass anestis;", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
 
                 if (error) {
                   console.log(error);
@@ -658,6 +658,12 @@ var sendEmailNotification = function (content, callback) {
 var content = "Group: " + group + "<br>Bundle id: " + bundle_id + "<br>App Name: " + appsJson[index].name + "<br>App Description: " + appsJson[index].description;
 
 async.waterfall([
+  function(waterfallCallback){
+    exec("mkdir " + groupDirectory + "/resources", {maxBuffer: 20000000000}, function (error, stdout, stderr) {
+      fs.createReadStream(groupDirectory + "/splashWhite.png").pipe(fs.createWriteStream(groupDirectory + '/resources/splash.png'));
+      waterfallCallback()
+    }).stdout.pipe(process.stdout);
+  },
   function (waterfallCallback) {
 
     return waterfallCallback();

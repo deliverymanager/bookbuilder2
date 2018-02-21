@@ -3,6 +3,9 @@
 
 node_modules/
 platforms/
+resources/
+resources/icon.png.md5
+resources/splash.png.md5
 plugins/
 .idea/
 www/data/
