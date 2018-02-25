@@ -18,6 +18,7 @@ angular.module("bookbuilder2")
       };
     }
   )
+
   .factory('Toast', function ($ionicLoading) {
     return {
       show: function (message, duration, position) {
@@ -27,9 +28,10 @@ angular.module("bookbuilder2")
 
         if (window.cordova && window.cordova.platformId === "browser") {
           // Use the Cordova Toast plugin
-
+          //
           if (duration === 'short') {
             duration = 1500;
+
           } else {
             duration = 3000;
           }
